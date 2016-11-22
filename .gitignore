@@ -1,0 +1,90 @@
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# =========================
+# Operating System Files #
+# =========================
+
+# OSX
+# =========================
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# =========================
+# Compiled source #
+# =========================
+*.pyc
+
+# =========================
+# LaTeX Files #
+# =========================
+doc/*/*.aux
+doc/*/*.bbl
+doc/*/*.bcf
+doc/*/*.blg
+doc/*/*.dvi
+doc/*/*.gz
+doc/*/*.hst
+doc/*/*.lof
+doc/*/*.log
+doc/*/*.lot
+doc/*/*.out
+doc/*/*.pdf
+doc/*/*.run.xml
+doc/*/*.toc
+doc/*/*.tcp
+doc/*/*.tps
+doc/*/*.ver
+
+# beamer files
+doc/*/*.nav
+doc/*/*.snm
+doc/*/*.vrb
+
+# =========================
+# PyCharm Files #
+# =========================
+.idea/*
+
+# =========================
+# Folder/Files #
+# =========================
+coverage_html_report/
+.coverage
+output/*
+results/*
+temp/*
+apps/bac_gui/*.pkl
+apps/bac_gui/*.png
+!apps/bac_gui/bac_gui.png
