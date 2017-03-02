@@ -26,7 +26,7 @@ from dstauffman2.archery.tournaments.constants import \
 from dstauffman2.archery.tournaments.utils import \
     generic_html_start, generic_html_end
 
-#%% Functions (Private) - _set_seeds
+#%% Functions - _set_seeds
 def _set_seeds(data, max_seed=None):
     r"""
     Sorts the dataFrame by total score and total X count and gives a 1 to N seed number.

@@ -22,7 +22,7 @@ o = ttt.PLAYER['o']
 x = ttt.PLAYER['x']
 n = ttt.PLAYER['none']
 
-#%% Private Functions
+#%% Functions - _make_board
 def _make_board():
     r"""Makes a board and returns the figure and axis for use in testing."""
     plt.ioff()
