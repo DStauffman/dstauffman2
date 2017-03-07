@@ -99,8 +99,8 @@ if __name__ == '__main__':
     ix_uninfected1 = tb_status < 0
     ix_uninfected2 = get_those_uninfected(tb_status)
 
-    np.testing.assert_equal(ix_infected1, ix_infected2)
-    np.testing.assert_equal(ix_uninfected1, ix_uninfected2)
+    np.testing.assert_array_equal(ix_infected1, ix_infected2)
+    np.testing.assert_array_equal(ix_uninfected1, ix_uninfected2)
 
     # normal Enums
     print('Normal')

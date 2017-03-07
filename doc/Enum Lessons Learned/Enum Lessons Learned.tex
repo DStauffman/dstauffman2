@@ -268,7 +268,7 @@ Now the print(TbStatus) becomes a clean version (i.e. no \textless \textgreater 
 TbStatus.uninfected: -1
 \end{Python}
 
-In order to override the methods on the class, we actually have to modify the metaclass that it is derived from.  So let's derive our own metaclass, and then derive our own enum class from that.  
+In order to override the methods on the class, we actually have to modify the metaclass that it is derived from.  So let's derive our own metaclass, and then derive our own enum class from that.
 
 \begin{Python}
 #%% Meta Class
@@ -466,8 +466,8 @@ if __name__ == '__main__':
     ix_uninfected1 = tb_status < 0
     ix_uninfected2 = get_those_uninfected(tb_status)
 
-    np.testing.assert_equal(ix_infected1, ix_infected2)
-    np.testing.assert_equal(ix_uninfected1, ix_uninfected2)
+    np.testing.assert_array_equal(ix_infected1, ix_infected2)
+    np.testing.assert_array_equal(ix_uninfected1, ix_uninfected2)
 
     # normal Enums
     print('Normal')

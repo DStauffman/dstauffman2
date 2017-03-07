@@ -988,7 +988,7 @@ if __name__ == '__main__':
             soln2 = 0
             for i in range(NUM_PIECES):
                 soln2 = soln2 + piece_combos[i][this_soln[i]]
-            np.testing.assert_equal(soln, soln2)
+            np.testing.assert_array_equal(soln, soln2)
 
         # print/save solution sets
         unsort_ix = np.argsort(sort_ix)
