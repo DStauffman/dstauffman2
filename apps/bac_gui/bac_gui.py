@@ -92,7 +92,7 @@ class BacGui(QMainWindow):
 
     def __init__(self):
         # call super method
-        super(BacGui, self).__init__()
+        super().__init__()
         # initialize the state data
         #self.initialize_state(filename, board, cur_move, cur_game, game_hist)
         # call init method to instantiate the GUI

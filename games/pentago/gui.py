@@ -38,7 +38,7 @@ class RotationButton(QPushButton):
     Custom QPushButton to allow drawing multiple images on the buttons for plotting possible winning rotations.
     """
     def __init__(self, text, parent, quadrant, direction):
-        super(RotationButton, self).__init__(text, parent)
+        super().__init__(text, parent)
         self.quadrant  = quadrant
         self.direction = direction
         self.overlay   = None
@@ -69,7 +69,7 @@ class PentagoGui(QWidget):
     """
     def __init__(self, **kwargs):
         # call super method
-        super(PentagoGui, self).__init__(**kwargs)
+        super().__init__(**kwargs)
         # initialized the state data
         self.initialize_state()
         # load the image data
