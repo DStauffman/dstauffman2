@@ -16,11 +16,7 @@ import re
 import unittest
 from dstauffman2 import get_root_dir as dcs_root_dir
 from dstauffman2 import get_data_dir as dcs_data_dir
-from dstauffman2.games.scrabble.classes   import Options
-from dstauffman2.games.scrabble.constants import LETTERS
-
-#%% Option instance
-OPTS = Options()
+from dstauffman2.games.scrabble.constants import BOARD_SYMBOLS, LETTERS
 
 #%% get_root_dir
 def get_root_dir():
@@ -52,6 +48,9 @@ def get_enable_path():
 
 #%% get_raw_dictionary
 def get_raw_dictionary(filename=None):
+    r"""
+    Loads the entire dictionary into a Python set.
+    """
     if filename is None:
         filename = get_enable_path()
     words = set()
@@ -92,6 +91,9 @@ def create_dict(filename, min_len=2, max_len=20):
 
 #%% count_num_words
 def count_num_words(words):
+    r"""
+    Counts the number of keys and words in the dictionary.
+    """
     num_keys = 0
     num_words = 0
     for (key, value) in words.items():
@@ -160,6 +162,118 @@ def find_all_words(tiles, words, pattern=''):
 
     # sort the output words
     out.sort(key=lambda item: (-len(item), item))
+    return out
+
+#%% Functions - validate_board
+def validate_board(board):
+    r"""
+    Validates a given board.
+    """
+    num_squares = len(board)
+    rows = board.split('\n')
+    num_rows = len(rows)
+    temp_cols = set(len(x) for x in rows)
+    # board assertions
+    if len(temp_cols) != 1:
+        raise ValueError('Board does not have an equal number of columns in each row.')
+    num_cols = temp_cols.pop()
+    if num_squares != num_rows * (num_cols+1) - 1:
+        raise ValueError('Board is not sized properly, check for extra newline characters.')
+    if not all(x in BOARD_SYMBOLS for x in board):
+        raise ValueError('Invalid board characters')
+    return (num_rows, num_cols)
+
+#%% Functions - score_move
+def score_move(board, played, move):
+    r"""
+    Scores a given move based on a board layout and played tiles.
+    """
+    # initialize output
+    score = 0
+    # TODO: write this
+    return score
+
+#%% Functions - get_board_played
+def get_board_played(played):
+    r"""
+    Finds the indices to positions that have been played.
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import get_board_played
+    >>> played = '     \n     \n cat \n     \n     '
+    >>> out = get_board_played(played)
+    >>> print(sorted(list(out)))
+    [13, 14, 15]
+
+    """
+    out = {ix for (ix, char) in enumerate(played) if (char != ' ' and char != '\n')}
+    return out
+
+#%% Functions - get_board_open
+def get_board_open(played):
+    r"""
+    Finds the indices to positions that are open to play.
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import get_board_open
+    >>> played = '     \n     \n cat \n     \n     '
+    >>> out = get_board_open(played)
+    >>> print(sorted(list(out)))
+    [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 16, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28]
+
+    """
+    out = {ix for (ix, char) in enumerate(played) if char == ' '}
+    return out
+
+#%% Functions - get_board_must_play
+def get_board_must_play(board, num_rows, num_cols, played):
+    r"""
+    Finds the indices to positions that are open to play.
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import get_board_must_play
+    >>> board    = '.....\n.....\n..s..\n.....\n.....'
+    >>> played   = '     \n     \n cat \n     \n     '
+    >>> num_rows = 5
+    >>> num_cols = 5
+    >>> out      = get_board_must_play(board, num_rows, num_cols, played)
+    >>> print(sorted(list(out)))
+    [7, 8, 9, 12, 16, 19, 20, 21]
+
+    """
+    # check for special case of an empty board
+    if all(char in {' ','\n'} for char in played):
+        out = {ix for (ix, char) in enumerate(board) if char == 's'}
+        return out
+    # find the currently occupied places
+    occupied = get_board_played(played)
+    # alias the stride for each row
+    stride = num_cols + 1
+    # initialize the output
+    out = set()
+    # loop through the board
+    for row in range(num_rows):
+        for col in range(num_cols):
+            # alias this index
+            ix = col * stride + row
+            # check if it's already occupied
+            if ix in occupied:
+                continue
+            # check to the left, right, above, and below for occupied squares
+            if (row > 0) and (col * stride + row - 1 in occupied):
+                out.add(ix)
+            elif (row < num_rows - 1) and (col * stride + row + 1 in occupied):
+                out.add(ix)
+            elif (col > 0) and ((col - 1) * stride + row in occupied):
+                out.add(ix)
+            elif (col < num_cols - 1) and ((col + 1) * stride + row in occupied):
+                out.add(ix)
     return out
 
 #%% Unit test

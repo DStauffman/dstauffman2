@@ -20,11 +20,13 @@ COLOR['board']    = (0.5, 0.5, 1.0)
 COLOR['edge']     = (0.0, 0.0, 0.0)
 
 # all possible letters
-LETTERS = frozenset('abcdefghijklmnopqrstuvwxyz')
+LETTERS = frozenset('abcdefghijklmnopqrstuvwxyz?')
 
 VOWELS  = frozenset('aeiou')
 
-CONSONANTS = frozenset(LETTERS - VOWELS)
+CONSONANTS = frozenset(LETTERS - VOWELS - {'?'})
+
+BOARD_SYMBOLS = frozenset('.dstDT\n')
 
 # Board Layout
 BOARD = r"""
@@ -43,7 +45,7 @@ T..t...D...t..T
 .d..d.....d..d.
 ..d..D...D..d..
 ...T..t.t..T...
-"""
+""".strip()
 
 # Letter values
 SCORES = {'a': 1, 'b': 4, 'c': 4, 'd': 2, 'e': 1, 'f': 4, 'g': 3, 'h': 3, 'i': 1, 'j': 10, \
@@ -68,7 +70,7 @@ T.d.d.d.d.T
 T.d.d.d.d.T
 .D...D...D.
 t.T.....T.t
-"""
+""".strip()
 
 # TODO: update these smaller counts
 SMALL_COUNTS = {'a': 9, 'b': 2, 'c': 2, 'd': 5, 'e': 13, 'f': 2, 'g': 3, 'h': 4, 'i': 8, 'j': 1, \

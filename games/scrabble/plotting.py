@@ -14,7 +14,7 @@ import unittest
 from dstauffman2.games.scrabble.constants import COLOR
 
 #%% plot_board
-def plot_board(ax, board):
+def plot_board(ax, board, played):
     r"""
     Plots the board.
 

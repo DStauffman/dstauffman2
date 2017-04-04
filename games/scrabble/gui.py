@@ -10,34 +10,63 @@ Notes
 #%% Imports
 # normal imports
 import doctest
-import logging
 from matplotlib.pyplot import Axes
 from matplotlib.figure import Figure
-import numpy as np
+import os
+import pickle
 import sys
 import unittest
 # Qt imports
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QWidget, QToolTip, QPushButton, QLabel, QMessageBox, \
-    QMainWindow, QAction
+from PyQt5.QtWidgets import QApplication, QGridLayout, QHBoxLayout, QLabel, QLineEdit, \
+    QMainWindow, QPushButton, QToolTip, QWidget, QVBoxLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # model imports
-from dstauffman2.games.scrabble.classes  import Options
-from dstauffman2.games.scrabble.plotting import plot_board
-
-#%% Logging options
-# logger = logging.getLogger()
-# logger.setLevel(logging.DEBUG)
+from dstauffman import pprint_dict
+from dstauffman2.games.scrabble.classes   import Options
+from dstauffman2.games.scrabble.constants import BOARD
+from dstauffman2.games.scrabble.plotting  import plot_board
+from dstauffman2.games.scrabble.utils     import get_root_dir, validate_board
 
 #%% Option instance
 OPTS = Options()
+
+#%% Classes - GuiSettings
+class GuiSettings(object):
+    r"""
+    Settings that capture the current state of the GUI.
+    """
+    def __init__(self):
+        self.board = BOARD
+        (self.num_rows, self.num_cols) = validate_board(self.board)
+        self.played = ((' ' * self.num_cols) + '\n') * self.num_rows
+
+    def pprint(self, indent=2, align=True):
+        r"""Prints all the settings outs."""
+        pprint_dict(self.__dict__, name=self.__class__.__name__, indent=indent, align=align)
+
+    @staticmethod
+    def load(filename):
+        r"""Loads a instance of the class from a given filename."""
+        with open(filename, 'rb') as file:
+            gui_settings = pickle.load(file)
+        assert isinstance(gui_settings, GuiSettings)
+        return gui_settings
+
+    def save(self, filename):
+        r"""Saves an instance of the class to the given filename."""
+        with open(filename, 'wb') as file:
+            pickle.dump(self, file)
 
 #%% Classes - ScrabbleGui
 class ScrabbleGui(QMainWindow):
     r"""
     The Scrabble GUI.
     """
-    def __init__(self, filename=None, board=None, cur_move=None, cur_game=None, game_hist=None):
+    # Create GUI setting defaults for the class
+    gui_settings = GuiSettings()
+
+    def __init__(self):
         # call super method
         super().__init__()
         # call init method to instantiate the GUI
@@ -46,7 +75,164 @@ class ScrabbleGui(QMainWindow):
     #%% GUI initialization
     def init(self):
         r"""Initializes the GUI."""
-        pass
+        # Check to see if the Default profile exists, and if so load it, else create it
+        folder = get_root_dir()
+        filename = os.path.join(folder, 'Default.pkl')
+        if os.path.isfile(filename): # pragma: no cover
+            self.gui_settings = GuiSettings.load(filename)
+        else: # pragma: no cover
+            self.gui_settings.save(filename)
+
+        # initialize time
+        self.time = QtCore.QTimer(self)
+
+        # properties
+        QToolTip.setFont(QtGui.QFont('SanSerif', 10))
+
+        # Central Widget
+        self.gui_widget  = QWidget(self)
+        self.setCentralWidget(self.gui_widget)
+
+        # Panels
+        self.grp_tiles  = QWidget()
+        self.grp_moves  = QWidget()
+        self.grp_left   = QWidget()
+        self.grp_center = QWidget()
+        self.grp_right  = QWidget()
+        self.grp_main   = QWidget()
+
+        #%% Layouts
+        layout_gui    = QVBoxLayout(self.gui_widget)
+        layout_main   = QHBoxLayout(self.grp_main)
+        layout_left   = QVBoxLayout(self.grp_left)
+        layout_center = QVBoxLayout(self.grp_center)
+        layout_right  = QVBoxLayout(self.grp_right)
+        layout_tiles  = QHBoxLayout(self.grp_tiles)
+        layout_moves  = QGridLayout(self.grp_moves)
+
+        for layout in [layout_gui, layout_main, layout_left, layout_center, layout_right, layout_tiles, layout_moves]:
+            layout.setAlignment(QtCore.Qt.AlignCenter)
+
+        #%% Labels
+        lbl_title      = QLabel('Scrabble & Words With Friends Cheater')
+        lbl_tile_bag   = QLabel('Tile Bag')
+        lbl_draw_stats = QLabel('Draw Stats')
+        lbl_strength   = QLabel('Move Strength')
+        lbl_moves      = QLabel('Best Moves')
+
+        for label in [lbl_title, lbl_tile_bag, lbl_draw_stats, lbl_strength, lbl_moves]:
+            label.setAlignment(QtCore.Qt.AlignCenter)
+
+        #%% Axes
+        # board
+        fig = Figure(figsize=(4.2, 4.2), dpi=100, frameon=False)
+        self.board_canvas = FigureCanvas(fig)
+        #self.board_canvas.setParent(self.grp_center) # TODO: layout instead?
+        self.board_canvas.mpl_connect('button_release_event', lambda event: self.mouse_click_callback(event))
+        self.board_axes = Axes(fig, [0., 0., 1., 1.])
+        self.board_axes.invert_yaxis()
+        fig.add_axes(self.board_axes)
+
+        # draw stats
+        fig = Figure(figsize=(2.2, 1.1), dpi=100, frameon=False)
+        self.draw_stats_canvas = FigureCanvas(fig)
+        #self.draw_stats_canvas.setParent(self.grp_left) # TODO: layout instead?
+        self.draw_stats_axes = Axes(fig, [0., 0., 1., 1.])
+        fig.add_axes(self.draw_stats_axes)
+
+        # move strength
+        fig = Figure(figsize=(2.2, 2.2), dpi=100, frameon=False)
+        self.strength_canvas = FigureCanvas(fig)
+        #self.strength_canvas.setParent(self.grp_right) # TODO: layout instead?
+        self.strength_axes = Axes(fig, [0., 0., 1., 1.])
+        fig.add_axes(self.strength_axes)
+
+        #%% Buttons
+        self.btn_play = QPushButton('PLAY')
+        self.btn_play.setToolTip('Ploy the current move.')
+        self.btn_play.setMaximumWidth(200)
+        self.btn_play.setStyleSheet('color: black; background-color: #00bfbf; font: bold;')
+        self.btn_play.clicked.connect(self.btn_play_func)
+
+        for ix in range(7):
+            temp = QPushButton('')
+            temp.setMaximumWidth(20)
+            temp.setStyleSheet('color: black; background-color: #00bfbf;')
+            temp.clicked.connect(lambda state, x=ix: self.btn_tile_func(x))
+            setattr(self, f'btn_tile{ix}', temp)
+
+        for ix in range(10):
+            temp = QPushButton('')
+            temp.setMaximumWidth(20)
+            temp.setStyleSheet('color: black; background-color: #00bfbf;')
+            temp.clicked.connect(lambda state, x=ix: self.btn_move_func(x))
+            setattr(self, f'btn_move{ix}', temp)
+
+        #%% Populate Widgets
+        # tiles
+        layout_tiles.addWidget(self.btn_tile0)
+        layout_tiles.addWidget(self.btn_tile1)
+        layout_tiles.addWidget(self.btn_tile2)
+        layout_tiles.addWidget(self.btn_tile3)
+        layout_tiles.addWidget(self.btn_tile4)
+        layout_tiles.addWidget(self.btn_tile5)
+        layout_tiles.addWidget(self.btn_tile6)
+
+        # best moves
+        layout_moves.addWidget(self.btn_move0, 0, 0)
+        layout_moves.addWidget(self.btn_move1, 0, 1)
+        layout_moves.addWidget(self.btn_move2, 0, 2)
+        layout_moves.addWidget(self.btn_move3, 0, 3)
+        layout_moves.addWidget(self.btn_move4, 0, 4)
+        layout_moves.addWidget(self.btn_move5, 1, 0)
+        layout_moves.addWidget(self.btn_move6, 1, 1)
+        layout_moves.addWidget(self.btn_move7, 1, 2)
+        layout_moves.addWidget(self.btn_move8, 1, 3)
+        layout_moves.addWidget(self.btn_move9, 1, 4)
+
+        # left
+        layout_left.addWidget(lbl_tile_bag)
+        # TODO: tile bag LNE?
+        layout_left.addWidget(lbl_draw_stats)
+        layout_left.addWidget(self.draw_stats_canvas)
+
+        # center
+        layout_center.addWidget(self.board_canvas)
+        layout_center.addWidget(self.grp_tiles)
+
+        # right
+        layout_right.addWidget(lbl_strength)
+        layout_right.addWidget(self.strength_canvas)
+        layout_right.addWidget(lbl_moves)
+        layout_right.addWidget(self.grp_moves)
+        layout_right.addWidget(self.btn_play)
+
+        # main
+        layout_main.addWidget(self.grp_left)
+        layout_main.addWidget(self.grp_center)
+        layout_main.addWidget(self.grp_right)
+
+        # main GUI
+        layout_gui.addWidget(lbl_title)
+        layout_gui.addWidget(self.grp_main)
+
+        #%% Finalization
+        # Call wrapper to initialize GUI
+        self.wrapper()
+
+        # GUI final layout properties
+        self.center()
+        self.setWindowTitle('Cheater GUI')
+        self.setWindowIcon(QtGui.QIcon(os.path.join(get_root_dir(), 'scrabble_gui.png')))
+        self.show()
+
+    #%% Wrapper
+    def wrapper(self):
+        r"""
+        Acts as a wrapper to everything the GUI needs to do.
+        """
+        # TODO: update buttons, board, everything...
+        plot_board(self.board_axes, self.gui_settings.board, self.gui_settings.played)
 
     #%% Other callbacks - closing
     def closeEvent(self, event):
@@ -61,6 +247,19 @@ class ScrabbleGui(QMainWindow):
         center_point = QApplication.desktop().screenGeometry(screen).center()
         frame_gm.moveCenter(center_point)
         self.move(frame_gm.topLeft())
+
+    #%% Other callbacks - Play Button
+    def btn_play_func(self):
+        r"""Plays the current move."""
+        pass
+
+    def btn_tile_func(self, tile):
+        r"""Function for button click."""
+        pass
+
+    def btn_move_func(self, move):
+        r"""Function for move click."""
+        pass
 
 #%% Unit Test
 if __name__ == '__main__':

@@ -15,11 +15,13 @@ logger.setLevel(logging.WARNING)
 
 #%% Imports
 from .classes   import Options
-from .constants import MAX_LEN, COLOR, LETTERS, VOWELS, CONSONANTS, BOARD, SCORES, COUNTS, \
-                           SMALL_BOARD, SMALL_COUNTS
-from .gui       import ScrabbleGui
+from .constants import MAX_LEN, COLOR, LETTERS, VOWELS, CONSONANTS, BOARD_SYMBOLS, BOARD, SCORES, \
+                           COUNTS, SMALL_BOARD, SMALL_COUNTS
+from .gui       import GuiSettings, ScrabbleGui
 from .plotting  import plot_board, plot_tile, plot_letter
-from .utils     import get_root_dir, get_enable_path, create_dict, count_num_words, find_all_words
+from .utils     import get_root_dir, get_enable_path, create_dict, count_num_words, \
+                           find_all_words, validate_board, score_move, get_board_played, \
+                           get_board_open, get_board_must_play
 
 #%% Unit Test
 if __name__ == '__main__':
