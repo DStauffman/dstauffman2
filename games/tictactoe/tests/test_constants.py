@@ -26,7 +26,7 @@ class Test_COLOR(unittest.TestCase):
         self.expected_keys = set(['board', 'win', 'o', 'x', 'edge', 'win_o', 'win_x', 'win_ox'])
 
     def test_expected(self):
-        keys = set(ttt.COLOR.keys())
+        keys = set(ttt.COLOR)
         self.assertEqual(keys, self.expected_keys)
 
 #%% PLAYER
@@ -39,7 +39,7 @@ class Test_PLAYER(unittest.TestCase):
         self.expected_keys = set(['o', 'x', 'none', 'draw'])
 
     def test_expected(self):
-        keys = set(ttt.PLAYER.keys())
+        keys = set(ttt.PLAYER)
         self.assertEqual(keys, self.expected_keys)
 
 #%% SCORING
@@ -52,7 +52,7 @@ class Test_SCORING(unittest.TestCase):
         self.expected_keys = set(['win', 'block_win', 'win_in_two', 'block_in_two', 'normal_line', 'block_line'])
 
     def test_expected(self):
-        keys = set(ttt.SCORING.keys())
+        keys = set(ttt.SCORING)
         self.assertEqual(keys, self.expected_keys)
 
 #%% SIZES
@@ -65,7 +65,7 @@ class Test_SIZES(unittest.TestCase):
         self.expected_keys = set(['piece', 'square', 'board'])
 
     def test_expected(self):
-        keys = set(ttt.SIZES.keys())
+        keys = set(ttt.SIZES)
         self.assertEqual(keys, self.expected_keys)
 
 #%% WIN

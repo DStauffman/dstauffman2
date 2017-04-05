@@ -528,8 +528,8 @@ class Test_char_board_to_nums(unittest.TestCase):
         Extra empty line char board to nums
     """
     def setUp(self):
-        self.nums        = knight.NUM_DICT.keys()
-        self.chars       = knight.CHAR_DICT.keys()
+        self.nums        = list(knight.NUM_DICT)
+        self.chars       = list(knight.CHAR_DICT)
         self.enums       = knight.Piece.__members__.values()
         self.char_board  = '. S E K W\nR B T L x'
         self.board       = np.array([[0, 1, 2, 3, 4], [5, 6, 7, 8, 9]])

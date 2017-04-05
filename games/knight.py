@@ -1142,10 +1142,10 @@ def _initialize_data(board):
     >>> board[0, 0] = Piece.start
     >>> board[0, 4] = Piece.final
     >>> data = _initialize_data(board)
-    >>> print(sorted(data.keys())[:6])
+    >>> print(sorted(data)[:6])
     ['all_boards', 'all_moves', 'best_costs', 'best_moves', 'costs', 'current_cost']
 
-    >>> print(sorted(data.keys())[6:])
+    >>> print(sorted(data)[6:])
     ['final_loc', 'is_solved', 'moves', 'original_board', 'pred_costs', 'transports']
 
     """

@@ -67,7 +67,7 @@ class Test_GuiSettings(unittest.TestCase):
     def test_save_and_load(self):
         self.gui_settings.save(self.filename)
         gui_settings2 = bac.GuiSettings.load(self.filename)
-        for key in vars(self.gui_settings).keys():
+        for key in vars(self.gui_settings):
             self.assertEqual(getattr(self.gui_settings, key), getattr(gui_settings2, key))
 
     def tearDown(self):
@@ -86,7 +86,7 @@ class Test_BacGui(unittest.TestCase):
 
     def _compare(self, gui_settings):
         equal = True
-        for key in vars(self.gui_settings).keys():
+        for key in vars(self.gui_settings):
             if getattr(self.gui_settings, key) != getattr(gui_settings, key):
                 equal = False
         return equal

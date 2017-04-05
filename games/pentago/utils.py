@@ -105,7 +105,7 @@ def check_for_win(board):
     if winner == PLAYER['none']:
         win_mask = np.zeros((SIZES['board'],SIZES['board']), dtype=bool)
     else:
-        logging.debug('Win detected.  Winner is {}.'.format(list(PLAYER.keys())[list(PLAYER.values()).index(winner)]))
+        logging.debug('Win detected.  Winner is {}.'.format(list(PLAYER)[list(PLAYER.values()).index(winner)]))
         win_mask = np.reshape(np.sum(WIN[:, white], axis=1) + np.sum(WIN[:, black], axis=1), (SIZES['board'], SIZES['board'])) != 0
 
     return (winner, win_mask)
