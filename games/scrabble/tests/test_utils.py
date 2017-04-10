@@ -14,7 +14,7 @@ import unittest
 import dstauffman2.games.scrabble as scrab
 
 #%% Support
-words = scrab.create_dict(scrab.get_enable_path())
+words = scrab.create_dict(scrab.get_dict_path())
 
 #%% find_all_words
 class Test_find_all_words(unittest.TestCase):
@@ -55,12 +55,6 @@ class Test_find_all_words(unittest.TestCase):
             'aa', 'ab', 'ad', 'ae', 'ag', 'ah', 'ai', 'al', 'am', 'an', 'ar', 'as', 'at', 'aw', \
             'ax', 'ay', 'ba', 'be', 'bi', 'bo', 'by', 'da', 'fa', 'ha', 'ka', 'la', 'ma', 'na', \
             'pa', 'ta', 'ya', 'za']
-        extra = set(expected) - set(out)
-        print('Extra = ', sep='')
-        print(extra)
-        missing = set(out) - set(expected)
-        print('Missing = ', sep='')
-        print(missing)
         np.testing.assert_array_equal(out, expected)
 
     def test_two_blanks(self):
@@ -80,12 +74,6 @@ class Test_find_all_words(unittest.TestCase):
             'oh', 'oi', 'om', 'on', 'op', 'or', 'os', 'ow', 'ox', 'oy', 'pa', 'pe', 'pi', 'qi', \
             're', 'sh', 'si', 'so', 'ta', 'ti', 'to', 'uh', 'um', 'un', 'up', 'us', 'ut', 'we',
             'wo', 'xi', 'xu', 'ya', 'ye', 'yo', 'za']
-        extra = set(expected) - set(out)
-        print('Extra = ', sep='')
-        print(extra)
-        missing = set(out) - set(expected)
-        print('Missing = ', sep='')
-        print(missing)
         np.testing.assert_array_equal(out, expected)
 
 #%% Unit test execution

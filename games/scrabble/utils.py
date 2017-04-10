@@ -16,7 +16,7 @@ import re
 import unittest
 from dstauffman2 import get_root_dir as dcs_root_dir
 from dstauffman2 import get_data_dir as dcs_data_dir
-from dstauffman2.games.scrabble.constants import BOARD_SYMBOLS, LETTERS
+from dstauffman2.games.scrabble.constants import BOARD_SYMBOLS, DICT, LETTERS
 
 #%% get_root_dir
 def get_root_dir():
@@ -38,12 +38,15 @@ def get_root_dir():
     folder = os.path.join(dcs_root_dir(), 'games', 'scrabble')
     return folder
 
-#%% get_enable_path
-def get_enable_path():
+#%% get_data_dir
+get_data_dir = dcs_data_dir
+
+#%% get_dict_path
+def get_dict_path(name=DICT):
     r"""
-    Gets the full path to the ENABLE2K text dictionary.
+    Gets the full path to the specified or default dictionary.
     """
-    path = os.path.join(dcs_data_dir(), 'enable2k.txt')
+    path = os.path.join(get_data_dir(), name)
     return path
 
 #%% get_raw_dictionary
@@ -52,7 +55,7 @@ def get_raw_dictionary(filename=None):
     Loads the entire dictionary into a Python set.
     """
     if filename is None:
-        filename = get_enable_path()
+        filename = get_dict_path()
     words = set()
     with open(filename, 'rt') as file:
         for line in file.readlines():
@@ -76,8 +79,8 @@ def create_dict(filename, min_len=2, max_len=20):
     --------
 
     >>> from dstauffman2 import get_data_dir
-    >>> from dstauffman2.games.scrabble import create_dict, get_enable_path
-    >>> filename = get_enable_path()
+    >>> from dstauffman2.games.scrabble import create_dict, get_dict_path
+    >>> filename = get_dict_path()
     >>> words = create_dict(filename)
 
     """
@@ -109,10 +112,10 @@ def find_all_words(tiles, words, pattern=''):
     Examples
     --------
 
-    >>> from dstauffman2.games.scrabble import create_dict, find_all_words, get_enable_path
+    >>> from dstauffman2.games.scrabble import create_dict, find_all_words, get_dict_path
     >>> from dstauffman2 import get_data_dir
     >>> tiles    = ['w', 'o', 'r', 'd', 's']
-    >>> filename = get_enable_path()
+    >>> filename = get_dict_path()
     >>> words    = create_dict(filename)
     >>> out = find_all_words(tiles, words)
 
@@ -281,7 +284,7 @@ if __name__ == '__main__':
     unittest.main(module='dstauffman2.games.scrabble.tests.test_utils', exit=False)
     doctest.testmod(verbose=False)
 
-    #filename = get_enable_path()
+    #filename = get_dict_path()
     #words = create_dict(filename)
     #(num_keys, num_words) = count_num_words(words)
 
