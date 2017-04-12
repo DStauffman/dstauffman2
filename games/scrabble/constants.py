@@ -37,15 +37,17 @@ SCRAB_COUNTS = {}
 
 #%% color definitions
 COLOR          = {}
-COLOR['board'] = (0.5, 0.5, 1.0)
-COLOR['edge']  = (0.0, 0.0, 0.0)
-COLOR['tile']  = ()
-COLOR['.']     = ()
-COLOR['d']     = ()
-COLOR['s']     = ()
-COLOR['t']     = ()
-COLOR['D']     = ()
-COLOR['T']     = ()
+COLOR['board'] = (0.753, 0.780, 0.812) #c0c7cf
+COLOR['edge']  = (0.000, 0.000, 0.000) #000000
+COLOR['tile']  = (0.961, 0.729, 0.227) #f5ba3a
+COLOR['board_text'] = (1.000, 1.000, 1.000) #ffffff
+COLOR['tile_text']  = (0.000, 0.000, 0.000) #000000
+COLOR['.']     = (0.847, 0.851, 0.867) #d8d9dd
+COLOR['d']     = (0.051, 0.541, 0.800) #0d8acc
+COLOR['s']     = (0.494, 0.157, 0.302) #7e284d
+COLOR['t']     = (0.345, 0.616, 0.125) #589d20
+COLOR['D']     = (0.761, 0.384, 0.337) #c26256
+COLOR['T']     = (0.882, 0.600, 0.302) #e1994d
 
 #%% Board layouts
 MAX_LEN = 15

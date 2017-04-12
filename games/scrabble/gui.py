@@ -12,6 +12,7 @@ Notes
 import doctest
 from matplotlib.pyplot import Axes
 from matplotlib.figure import Figure
+from matplotlib import colors
 import os
 import pickle
 import sys
@@ -24,7 +25,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # model imports
 from dstauffman import pprint_dict
 from dstauffman2.games.scrabble.classes   import Options
-from dstauffman2.games.scrabble.constants import BOARD
+from dstauffman2.games.scrabble.constants import BOARD, COLOR
 from dstauffman2.games.scrabble.plotting  import plot_board
 from dstauffman2.games.scrabble.utils     import get_root_dir, validate_board
 
@@ -88,6 +89,9 @@ class ScrabbleGui(QMainWindow):
 
         # properties
         QToolTip.setFont(QtGui.QFont('SanSerif', 10))
+
+        # alias some colors
+        tile_color = colors.to_hex(COLOR['tile'])
 
         # Central Widget
         self.gui_widget  = QWidget(self)
@@ -157,14 +161,14 @@ class ScrabbleGui(QMainWindow):
         for ix in range(7):
             temp = QPushButton('')
             temp.setMaximumWidth(20)
-            temp.setStyleSheet('color: black; background-color: #00bfbf;')
+            temp.setStyleSheet(f'color: black; background-color: {tile_color};')
             temp.clicked.connect(lambda state, x=ix: self.btn_tile_func(x))
             setattr(self, f'btn_tile{ix}', temp)
 
         for ix in range(10):
             temp = QPushButton('')
             temp.setMaximumWidth(20)
-            temp.setStyleSheet('color: black; background-color: #00bfbf;')
+            temp.setStyleSheet(f'color: black; background-color: {tile_color};')
             temp.clicked.connect(lambda state, x=ix: self.btn_move_func(x))
             setattr(self, f'btn_move{ix}', temp)
 
@@ -223,7 +227,7 @@ class ScrabbleGui(QMainWindow):
         # GUI final layout properties
         self.center()
         self.setWindowTitle('Cheater GUI')
-        self.setWindowIcon(QtGui.QIcon(os.path.join(get_root_dir(), 'scrabble_gui.png')))
+        self.setWindowIcon(QtGui.QIcon(os.path.join(get_root_dir(), 'scrabble.png')))
         self.show()
 
     #%% Wrapper

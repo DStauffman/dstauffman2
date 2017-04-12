@@ -9,7 +9,7 @@ Notes
 
 #%% Imports
 import doctest
-from matplotlib.patches import Rectangle, Wedge, Polygon
+from matplotlib.patches import Rectangle
 import unittest
 from dstauffman2.games.scrabble.constants import COLOR
 
@@ -28,58 +28,72 @@ def plot_board(ax, board, played):
     Examples
     --------
 
-    >>> from dstauffman2.games.scrabble import plot_board, BOARD
+    >>> from dstauffman2.games.scrabble import plot_board, BOARD, validate_board
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()
     >>> fig = plt.figure()
     >>> ax = fig.add_subplot(111, aspect='equal')
-    >>> _ = ax.set_xlim(-0.5, 14.5)
-    >>> _ = ax.set_ylim(-0.5, 14.5)
     >>> ax.invert_yaxis()
     >>> board = BOARD
-    >>> plot_board(ax, board)
+    >>> (num_rows, num_cols) = validate_board(board)
+    >>> played = (' ' * num_cols + '\n') * num_rows
+    >>> played = played[:136] + 'sword' + played[141:]
+    >>> plot_board(ax, board, played)
     >>> plt.show(block=False) # doctest: +SKIP
 
     >>> plt.close()
 
     """
     # get axes limits
-    rows = board.strip().split('\n')
-    m = len(rows[0])
-    n = len(rows)
-    s = 0.5
-    xmin = 0 - s
-    xmax = m - 1 + s
-    ymin = 0 - s
-    ymax = n - 1 + s
+    spots = board.split('\n')
+    m = len(spots[0])
+    n = len(spots)
+    hs = 0.5
+    xmin = 0 - hs
+    xmax = m - 1 + hs
+    ymin = 0 - hs
+    ymax = n - 1 + hs
+    tiles = played.split('\n')
 
     # fill background
     ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR['board'], \
         edgecolor=None))
 
     # draw horizontal lines
-    for i in range(1, n):
-        ax.plot([i-s, i-s], [ymin, ymax], color=COLOR['edge'], linewidth=1)
+    for i in range(0, n+1):
+        ax.plot([i-hs, i-hs], [ymin, ymax], color=COLOR['edge'], linewidth=1)
     # draw vertical lines
-    for i in range(1, m):
-        ax.plot([xmin, xmax], [i-s, i-s], color=COLOR['edge'], linewidth=1)
+    for i in range(0, m+1):
+        ax.plot([xmin, xmax], [i-hs, i-hs], color=COLOR['edge'], linewidth=1)
 
     # loop through and place pieces
     for i in range(m):
         for j in range(n):
-            plot_tile(ax, i, j, rows[i][j])
+            this_spot = spots[i][j]
+            plot_tile(ax, i, j, this_spot, color=COLOR[this_spot], textcolor=COLOR['board_text'])
+            this_tile = tiles[i][j]
+            if this_tile != ' ':
+                plot_letter(ax, i, j, this_tile, color=COLOR['tile'], textcolor=COLOR['tile_text'])
+
+    # make sure the limits are good
+    ax.set_xlim(xmin, xmax)
+    ax.set_ylim(ymin, ymax)
 
 #%% plot_tile
-def plot_tile(ax, x, y, piece, size=1, color=(0, 0, 0)):
+def plot_tile(ax, x, y, piece, size=1, color=(0, 0, 0), textcolor=(1, 1, 1)):
     map_ = {'.': '', 'd': 'DL', 'D':'DW', 't': 'TL', 'T': 'TW', 's': ''}
     text = map_[piece]
     if text:
-        pass
-    # TODO: finish function
+        ax.annotate(text, xy=(x, y), xycoords='data', horizontalalignment='center', \
+            verticalalignment='center', fontsize=10, color=textcolor)
+    ax.add_patch(Rectangle((x-size/2, y-size/2), size, size, facecolor=color, edgecolor=None))
 
 #%% plot_letter
-def plot_letter(ax, x, y, letter, size=1, color=(0.8, 0.8, 0)):
-    pass
+def plot_letter(ax, x, y, letter, size=1, color=(0, 0, 0), textcolor=(1, 1, 1)):
+    text = letter.upper()
+    ax.annotate(text, xy=(x, y), xycoords='data', horizontalalignment='center', \
+        verticalalignment='center', fontsize=15, color=textcolor)
+    ax.add_patch(Rectangle((x-size/2, y-size/2), size, size, facecolor=color, edgecolor=None))
 
 #%% Unit Test
 if __name__ == '__main__':
