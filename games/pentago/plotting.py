@@ -76,7 +76,7 @@ def plot_piece(ax, vc, hc, r, c, half=False):
     >>> obj = plot_piece(ax, 1, 1, 0.45, (0, 0, 1))
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
 
@@ -161,7 +161,7 @@ def plot_win(ax, mask):
     >>> plot_win(ax, mask)
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     (m, n) = mask.shape
@@ -195,7 +195,7 @@ def plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_g
     >>> plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_game) # doctest: +SKIP
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     # find set of positions to plot

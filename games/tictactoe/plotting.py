@@ -38,7 +38,7 @@ def plot_cur_move(ax, move):
     >>> plot_cur_move(ax, PLAYER['x'])
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     # local alias
@@ -95,7 +95,7 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
     >>> _ = plot_piece(ax, 1, 1, 0.9, (0, 0, 1), PLAYER['x'])
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     if thick:
@@ -157,7 +157,7 @@ def plot_board(ax, board):
     >>> plot_board(ax, board)
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     # get axes limits
@@ -223,7 +223,7 @@ def plot_win(ax, mask, board):
     >>> plot_win(ax, mask, board)
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     (m, n) = mask.shape
@@ -254,7 +254,7 @@ def plot_possible_win(ax, o_moves, x_moves):
     >>> plot_possible_win(ax, o_moves, x_moves)
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     # find set of winning positions to plot
@@ -299,7 +299,7 @@ def plot_powers(ax, board, o_moves, x_moves):
     >>> plot_powers(ax, board, o_moves, x_moves)
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     for this_move in o_moves:

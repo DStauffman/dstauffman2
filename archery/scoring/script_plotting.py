@@ -13,6 +13,8 @@ from dstauffman import Opts, setup_plots, get_output_dir
 
 #%% Script
 if __name__ == '__main__':
+    # turn interactive plotting off
+    plt.ioff()
 
     #%% folder and file locations
     username        = getpass.getuser()
@@ -69,9 +71,6 @@ if __name__ == '__main__':
     for (ix, this_score) in enumerate(act_range):
         outer10_acts[ix] = np.count_nonzero(outer10 == this_score) / num_scores
         inner10_acts[ix] = np.count_nonzero(inner10 == this_score) / num_scores
-
-    # turn interactive plotting off
-    plt.ioff()
 
     #%% Tulare
     # create figure

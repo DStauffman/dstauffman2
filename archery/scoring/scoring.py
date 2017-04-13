@@ -212,8 +212,6 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     for (ix, score) in enumerate(act_range):
         nfaa_acts[ix] = np.count_nonzero(nfaa_score == score) / num_scores
         usaa_acts[ix] = np.count_nonzero(usaa_score == score) / num_scores
-    # turn interactive plotting off
-    plt.ioff()
     # create figure
     fig = plt.figure()
     fig.canvas.set_window_title('Score Distribution')
@@ -226,12 +224,12 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     if PLOT_ACTUALS:
         ax.bar(act_range, num2per*usaa_acts, color='b', label='USAA Actuals')
     # add labels and legends
-    plt.xlabel('Score')
-    plt.ylabel('Distribution [%]')
-    plt.title(fig.canvas.get_window_title())
-    plt.xlim(PLOT_LIMITS)
-    plt.legend()
-    plt.grid(True)
+    ax.set_xlabel('Score')
+    ax.set_ylabel('Distribution [%]')
+    ax.set_title(fig.canvas.get_window_title())
+    ax.set_xlim(PLOT_LIMITS)
+    ax.legend()
+    ax.grid(True)
     # optionally save and format plot
     setup_plots(fig, opts, 'dist_no_y_scale')
     return fig

@@ -547,9 +547,6 @@ def plot_bac(gui_settings, legal_limit=None):
     # calculate the BAC
     bac = ratio2per * calculate_bac(time_drinks, drinks, time_out, body_weight)
 
-    # turn interactive plotting off
-    plt.ioff()
-
     # create the figure and axis
     fig = plt.figure(facecolor='w')
     this_title = 'BAC vs. Time for {}'.format(name)
@@ -574,6 +571,8 @@ def plot_bac(gui_settings, legal_limit=None):
 
 #%% Unit Test
 if __name__ == '__main__':
+    # turn interactive plotting off
+    plt.ioff()
     # open a qapp
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)

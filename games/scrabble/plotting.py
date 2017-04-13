@@ -39,7 +39,7 @@ def plot_board(ax, board):
     >>> plot_board(ax, board)
     >>> plt.show(block=False) # doctest: +SKIP
 
-    >>> plt.close()
+    >>> plt.close(fig)
 
     """
     # get board details and size limits
