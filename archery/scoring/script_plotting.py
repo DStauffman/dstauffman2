@@ -100,27 +100,27 @@ if __name__ == '__main__':
         this_patch = Rectangle((this_score, 0), 0.8, num2per*val*num_this_one, facecolor='#D35E60', label=label)
         patches.append(this_patch)
         ax.add_patch(this_patch)
-        plt.text(this_score+0.1, 0.25, 'Session {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
+        ax.text(this_score+0.1, 0.25, 'Session {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
             fontsize=12, color='w', fontweight='bold')
 
     # add labels and legends
-    plt.xlabel('Score', fontsize=14)
-    plt.ylabel('Distribution [%]', fontsize=14)
-    plt.title(fig.canvas.get_window_title(), fontsize=20)
-    plt.xlim(265, 290)
+    ax.set_xlabel('Score', fontsize=14)
+    ax.set_ylabel('Distribution [%]', fontsize=14)
+    ax.set_title(fig.canvas.get_window_title(), fontsize=20)
+    ax.set_xlim(265, 290)
     (handles, labels) = ax.get_legend_handles_labels()
     order = [0, 2, 1]
     ax.legend([handles[i] for i in order], [labels[i] for i in order])
 
     # add more information
-    plt.text(266, 14.5, 'N = 21 samples from Oct 2015 to Jan 2016', fontsize=10)
-    plt.text(266, 13.8, 'Inner 10 scoring', fontsize=10)
-    plt.text(266, 13.1, 'Mean = {:1.1f}'.format(inner10_mean), fontsize=10)
-    plt.text(266, 12.4, 'Std Dev = {:1.1f}'.format(inner10_std), fontsize=10)
+    ax.text(266, 14.5, 'N = 21 samples from Oct 2015 to Jan 2016', fontsize=10)
+    ax.text(266, 13.8, 'Inner 10 scoring', fontsize=10)
+    ax.text(266, 13.1, 'Mean = {:1.1f}'.format(inner10_mean), fontsize=10)
+    ax.text(266, 12.4, 'Std Dev = {:1.1f}'.format(inner10_std), fontsize=10)
 
-    plt.text(283, 11.0, 'Goal: 276 ave. to beat 1103 PR', fontsize=10)
-    plt.text(283, 10.3, 'Stretch Goal: 280 ave. for 1120', fontsize=10)
-    plt.text(283,  9.6, 'Result: 1084.  Failed Miserably!', fontsize=10)
+    ax.text(283, 11.0, 'Goal: 276 ave. to beat 1103 PR', fontsize=10)
+    ax.text(283, 10.3, 'Stretch Goal: 280 ave. for 1120', fontsize=10)
+    ax.text(283,  9.6, 'Result: 1084.  Failed Miserably!', fontsize=10)
 
     # optionally save and format plot
     setup_plots(fig, opts, 'dist_no_y_scale')
@@ -153,28 +153,28 @@ if __name__ == '__main__':
         this_patch = Rectangle((this_score, 0), 0.8, num2per*val*num_this_one, facecolor='#D35E60', label=label)
         patches.append(this_patch)
         ax.add_patch(this_patch)
-        plt.text(this_score+0.1, 0.25, 'Day {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
+        ax.text(this_score+0.1, 0.25, 'Day {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
             fontsize=12, color='w', fontweight='bold')
 
     # add labels and legends
-    plt.xlabel('Score', fontsize=14)
-    plt.ylabel('Distribution [%]', fontsize=14)
-    plt.title(fig.canvas.get_window_title(), fontsize=20)
-    plt.xlim(275, 300)
+    ax.set_xlabel('Score', fontsize=14)
+    ax.set_ylabel('Distribution [%]', fontsize=14)
+    ax.set_title(fig.canvas.get_window_title(), fontsize=20)
+    ax.set_xlim(275, 300)
     (handles, labels) = ax.get_legend_handles_labels()
     order = [0, 2, 1]
     ax.legend([handles[i] for i in order], [labels[i] for i in order])
 
     # add more information
-    plt.text(275.5, 17.5, 'N = 21 samples from Oct 2015 to Jan 2016', fontsize=10)
-    plt.text(275.5, 16.8, 'Outer 10 scoring', fontsize=10)
-    plt.text(275.5, 16.1, 'Mean = {:1.1f}'.format(outer10_mean), fontsize=10)
-    plt.text(275.5, 15.4, 'Std Dev = {:1.1f}'.format(outer10_std), fontsize=10)
+    ax.text(275.5, 17.5, 'N = 21 samples from Oct 2015 to Jan 2016', fontsize=10)
+    ax.text(275.5, 16.8, 'Outer 10 scoring', fontsize=10)
+    ax.text(275.5, 16.1, 'Mean = {:1.1f}'.format(outer10_mean), fontsize=10)
+    ax.text(275.5, 15.4, 'Std Dev = {:1.1f}'.format(outer10_std), fontsize=10)
 
-    plt.text(293, 13.0, 'Goal: 290 average for 870', fontsize=10)
-    plt.text(293, 12.3, 'Stretch Goal: Beat PR.', fontsize=10)
-    plt.text(293, 11.6, '  (Needs 292+ ave. for >876)', fontsize=10)
-    plt.text(293, 10.9, 'Result: 865.  Won $65.  Meh.', fontsize=10)
+    ax.text(293, 13.0, 'Goal: 290 average for 870', fontsize=10)
+    ax.text(293, 12.3, 'Stretch Goal: Beat PR.', fontsize=10)
+    ax.text(293, 11.6, '  (Needs 292+ ave. for >876)', fontsize=10)
+    ax.text(293, 10.9, 'Result: 865.  Won $65.  Meh.', fontsize=10)
 
     # optionally save and format plot
     setup_plots(fig, opts, 'dist_no_y_scale')

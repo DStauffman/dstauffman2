@@ -560,11 +560,11 @@ def plot_bac(gui_settings, legal_limit=None):
             label='Legal Limit', color='red', linewidth=2)
 
     # add some labels and such
-    plt.title(this_title)
-    plt.xlabel('Time [hr]')
-    plt.ylabel('BAC [%]')
-    plt.grid(True)
-    plt.legend()
+    ax.set_title(this_title)
+    ax.set_xlabel('Time [hr]')
+    ax.set_ylabel('BAC [%]')
+    ax.grid(True)
+    ax.legend()
     plt.show(block=False)
 
     return fig

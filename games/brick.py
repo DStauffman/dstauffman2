@@ -643,7 +643,7 @@ def plot_cube(piece, title=None, opts=None):
     # set the title
     if title is not None:
         fig.canvas.set_window_title(title)
-        plt.title(title)
+        ax.set_title(title)
     # draw each of the 27 cubes
     for i in range(3):
         for j in range(3):

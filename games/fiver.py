@@ -712,7 +712,7 @@ def plot_board(board, title, opts=None):
     ax = fig.add_subplot(111)
     # set the title
     fig.canvas.set_window_title(title)
-    plt.title(title)
+    ax.set_title(title)
     # draw each square
     for i in range(board.shape[0]):
         for j in range(board.shape[1]):
@@ -720,10 +720,10 @@ def plot_board(board, title, opts=None):
             ax.add_patch(Rectangle((box_size*i,box_size*j),box_size, box_size, \
                 facecolor=COLORS[board[i,j]], edgecolor='k'))
     # make square
-    plt.axis('equal')
+    ax.set_aspect('equal')
     # set limits
-    plt.xlim(0, board.shape[0])
-    plt.ylim(0, board.shape[1])
+    ax.set_xlim(0, board.shape[0])
+    ax.set_ylim(0, board.shape[1])
     # flip the vertical axis
     ax.invert_yaxis()
 
