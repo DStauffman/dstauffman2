@@ -186,6 +186,13 @@ def validate_board(board):
         raise ValueError('Invalid board characters')
     return (num_rows, num_cols)
 
+#%% Functions - validate_move
+def validate_move(board, played, move):
+    r"""
+    Validates whether the desired move is legal.
+    """
+    return True # TODO: write this
+
 #%% Functions - score_move
 def score_move(board, played, move):
     r"""

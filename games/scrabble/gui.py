@@ -19,18 +19,16 @@ import sys
 import unittest
 # Qt imports
 from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QGridLayout, QHBoxLayout, QLabel, QLineEdit, \
+from PyQt5.QtWidgets import QAction, QApplication, QGridLayout, QHBoxLayout, QLabel, QLineEdit, \
     QMainWindow, QPushButton, QToolTip, QWidget, QVBoxLayout
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 # model imports
 from dstauffman import pprint_dict
-from dstauffman2.games.scrabble.classes   import Options
-from dstauffman2.games.scrabble.constants import BOARD, COLOR
-from dstauffman2.games.scrabble.plotting  import plot_board
-from dstauffman2.games.scrabble.utils     import get_root_dir, validate_board
-
-#%% Option instance
-OPTS = Options()
+from dstauffman2.games.scrabble.classes   import Board, Move
+from dstauffman2.games.scrabble.constants import COLOR, COUNTS, DICT, SCORES
+from dstauffman2.games.scrabble.plotting  import plot_board, plot_draw_stats, plot_move_strength, \
+                                                     display_tile_bag
+from dstauffman2.games.scrabble.utils     import get_root_dir
 
 #%% Classes - GuiSettings
 class GuiSettings(object):
@@ -38,9 +36,15 @@ class GuiSettings(object):
     Settings that capture the current state of the GUI.
     """
     def __init__(self):
-        self.board = BOARD
-        (self.num_rows, self.num_cols) = validate_board(self.board)
-        self.played = ((' ' * self.num_cols) + '\n') * self.num_rows
+        self.board     = Board()
+        self.dict_name = DICT
+        self.words     = {}
+        self.scores    = SCORES
+        self.counts    = COUNTS
+        self.tiles     = ''
+        self.move_list = []
+        self.move      = Move()
+        self.pot_moves = []
 
     def pprint(self, indent=2, align=True):
         r"""Prints all the settings outs."""
@@ -127,6 +131,9 @@ class ScrabbleGui(QMainWindow):
         for label in [lbl_title, lbl_tile_bag, lbl_draw_stats, lbl_strength, lbl_moves]:
             label.setAlignment(QtCore.Qt.AlignCenter)
 
+        #%% Text Edit Boxes
+        self.lne_tile_bag = QLineEdit('')
+
         #%% Axes
         # board
         fig = Figure(figsize=(4.2, 4.2), dpi=100, frameon=False)
@@ -196,7 +203,7 @@ class ScrabbleGui(QMainWindow):
 
         # left
         layout_left.addWidget(lbl_tile_bag)
-        # TODO: tile bag LNE?
+        layout_left.addWidget(self.lne_tile_bag)
         layout_left.addWidget(lbl_draw_stats)
         layout_left.addWidget(self.draw_stats_canvas)
 
@@ -220,6 +227,31 @@ class ScrabbleGui(QMainWindow):
         layout_gui.addWidget(lbl_title)
         layout_gui.addWidget(self.grp_main)
 
+        #%% File Menu
+        # actions - new game
+        act_new_game = QAction('New Game', self)
+        act_new_game.setShortcut('Ctrl+N')
+        act_new_game.setStatusTip('Starts a new game.')
+        act_new_game.triggered.connect(self.act_new_game_func)
+        # actions - options
+        act_options = QAction('Options', self)
+        act_options.setShortcut('Ctrl+O')
+        act_options.setStatusTip('Opens the advanced option settings.')
+        act_options.triggered.connect(self.act_options_func)
+        # actions - quit game
+        act_quit = QAction('Exit', self)
+        act_quit.setShortcut('Ctrl+Q')
+        act_quit.setStatusTip('Exits the application.')
+        act_quit.triggered.connect(self.close)
+
+        # menubar
+        self.statusBar()
+        menu_bar = self.menuBar()
+        file_menu = menu_bar.addMenu('&File')
+        file_menu.addAction(act_new_game)
+        file_menu.addAction(act_options)
+        file_menu.addAction(act_quit)
+
         #%% Finalization
         # Call wrapper to initialize GUI
         self.wrapper()
@@ -235,8 +267,15 @@ class ScrabbleGui(QMainWindow):
         r"""
         Acts as a wrapper to everything the GUI needs to do.
         """
-        # TODO: update buttons, board, everything...
-        plot_board(self.board_axes, self.gui_settings.board, self.gui_settings.played)
+        # plot the board
+        plot_board(self.board_axes, self.gui_settings.board)
+        # display tile bag
+        display_tile_bag(self.lne_tile_bag, self.gui_settings.counts, self.gui_settings.tiles)
+        # display draw statistic
+        plot_draw_stats(self.draw_stats_axes, self.gui_settings.counts, self.gui_settings.tiles, \
+            self.gui_settings.move)
+        # Show current move strength
+        plot_move_strength(self.strength_axes, self.gui_settings.move, self.gui_settings.pot_moves)
 
     #%% Other callbacks - closing
     def closeEvent(self, event):
@@ -264,6 +303,21 @@ class ScrabbleGui(QMainWindow):
     def btn_move_func(self, move):
         r"""Function for move click."""
         pass
+
+    def btn_new_function(self):
+        r"""Function that executes on new game button press."""
+
+    #%% Menu action callbacks
+    def act_new_game_func(self):
+        r"""Function that executes on new game menu selection."""
+        # reset Gui Settings
+
+        # call GUI wrapper
+        self.wrapper()
+
+    def act_options_func(self):
+        r"""Function that executes on options menu selection."""
+        pass # TODO: write this
 
 #%% Unit Test
 if __name__ == '__main__':
