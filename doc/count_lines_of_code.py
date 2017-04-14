@@ -12,15 +12,23 @@ Notes
 import os
 import json
 import subprocess
+from dstauffman import get_root_dir
 
 #%% Functions
 def process_repo(name, root, tests, exclude):
     r"""
     Processes the given repository for a line of code count.
+
+    Notes
+    -----
+    #.  All lines in the tests folder are considered "tests".
+    #.  All lines in .tex, .xml, and .md files are considered "docs".
     """
     # hard-coded values
-    langs = frozenset({'Python', 'TeX', 'XML', 'MATLAB', 'Markdown', 'DOS Batch'})
+    langs = frozenset({'Python', 'MATLAB', 'DOS Batch'})
     exclu = frozenset({'header', 'SUM'})
+    docs  = frozenset({'TeX', 'XML', 'Markdown'})
+    types = frozenset({'blank', 'comment', 'code'})
 
     # get test folder results
     test_root = os.path.join(root, tests)
@@ -30,11 +38,11 @@ def process_repo(name, root, tests, exclude):
     data      = json.loads(json_text)
 
     # check that nothing unexpected was found
-    assert len(set(data.keys()) - langs - exclu) == 0
+    assert len(set(data.keys()) - langs - exclu - docs) == 0
 
     # get the total number of test lines of code
-    lines_tests = sum(data['SUM'][x] for x in ['blank', 'comment', 'code'])
-    files_tests = data['SUM']['nFiles']
+    lines = {'tests': sum(data['SUM'][x] for x in types)}
+    files = {'tests': data['SUM']['nFiles']}
 
     # get root results with applied exclusions
     dirs = []
@@ -47,36 +55,35 @@ def process_repo(name, root, tests, exclude):
     data      = json.loads(json_text)
 
     # check that nothing unexpected was found
-    assert len(set(data.keys()) - langs - exclu) == 0
+    assert len(set(data.keys()) - langs - exclu - docs) == 0
 
     # get the line counts
-    lines_total = sum(data['SUM'][x] for x in ['blank', 'comment', 'code']) + lines_tests
-    lines_codes = data['SUM']['code']
-    lines_commt = data['SUM']['comment']
-    lines_blank = data['SUM']['blank']
-    files_total = data['SUM']['nFiles'] + files_tests
+    # TODO: pull out the documentation lines from the rest
+    lines['total']   = sum(data['SUM'][subkey] for subkey in types) + lines['tests']
+    lines['code']    = sum(data[key]['code'] for key in langs if key in data)
+    lines['comment'] = sum(data[key]['comment'] for key in langs if key in data)
+    lines['docs']    = sum(data[key][subkey] for key in docs for subkey in types if key in data)
+    lines['blank']   = sum(data[key]['blank'] for key in langs if key in data)
+    files['total']   = data['SUM']['nFiles'] + files['tests']
 
     # organize output
-    keys = ['name', 'lines_total', 'lines_codes', 'lines_tests', 'lines_commt', 'lines_blank', 'files_total', 'files_tests']
-    temp = locals()
-    out  = {key: temp[key] for key in keys}
+    out = {'name': name, 'lines': lines, 'files': files}
 
     # print results
-    print_results(out)
+    print_results(**out)
 
     return out
 
 #%% Functions - print_results
-def print_results(out):
+def print_results(name, lines, files):
     r"""Prints the results from the given dictionary."""
-    print(f"******** {out['name']} ********")
-    print(f" Files: {out['files_total']}, ({100*out['files_tests']/out['files_total']:.1f}% tests)")
-    print(f" Total lines of code: {out['lines_total']}")
-    print('  Code: {} ({:.1f}%), Tests: {} ({:.1f}%), Comments: {} ({:.1f}%), Blank: {} ({:.1f}%)'.format(\
-         out['lines_codes'], 100*out['lines_codes']/out['lines_total'], \
-         out['lines_tests'], 100*out['lines_tests']/out['lines_total'], \
-         out['lines_commt'], 100*out['lines_commt']/out['lines_total'], \
-         out['lines_blank'], 100*out['lines_blank']/out['lines_total']))
+    print(f"******** {name} ********")
+    print(f" Files: {files['total']}, ({100*files['tests']/files['total']:.1f}% tests)")
+    print(f" Total lines of code: {lines['total']}")
+    print('  Code: {} ({:.1f}%), Comments: {} ({:.1f}%), Blank: {} ({:.1f}%), Tests: {} ({:.1f}%), Documentation: {} ({:.1f}%)'.format(\
+         lines['code'], 100*lines['code']/lines['total'], lines['tests'], 100*lines['tests']/lines['total'], \
+         lines['comment'], 100*lines['comment']/lines['total'], lines['blank'], 100*lines['blank']/lines['total'], \
+         lines['docs'], 100*lines['docs']/lines['total']))
     print('')
 
 #%% Functions - combine_results
@@ -87,15 +94,17 @@ def combine_results(out1, out2):
         if key == 'name':
             out[key] = out1[key] + '+' + out2[key]
         else:
-            out[key] = out1[key] + out2[key]
+            out[key] = {}
+            for subkey in out1[key]:
+                out[key][subkey] = out1[key][subkey] + out2[key][subkey]
     return out
 
 #%% Script
 if __name__ == '__main__':
     # Constants
     # location of cloc utility
-    cloc  = r'C:\Users\dcstauff\Documents\GitHub\cloc-1.70.exe'
-    root  = r'C:\Users\dcstauff\Documents\GitHub'
+    root  = os.path.sep.join(get_root_dir().split(os.path.sep)[:-1])
+    cloc  = os.path.join(root, 'cloc-1.70.exe')
     # repositories to process
     repos = {k:{} for k in ['cromo', 'dstauffman', 'ghap']}
 
@@ -122,8 +131,8 @@ if __name__ == '__main__':
 
     # cromo and dstauffman
     out['cromo+dstauffman'] = combine_results(out['cromo'], out['dstauffman'])
-    print_results(out['cromo+dstauffman'])
+    print_results(**out['cromo+dstauffman'])
 
     # ghap and dstauffman
     out['ghap+dstauffman'] = combine_results(out['ghap'], out['dstauffman'])
-    print_results(out['ghap+dstauffman'])
+    print_results(**out['ghap+dstauffman'])
