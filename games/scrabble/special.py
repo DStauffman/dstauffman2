@@ -15,14 +15,67 @@ from dstauffman2.games.scrabble.utils     import get_raw_dictionary
 
 #%% Support function
 def find_all(words=None, func=None):
+    r"""
+    Finds all the valid words using the provided function, `func`
+
+    Paramters
+    ---------
+    words : set, optional
+        List of all valid words as a Python set
+    func : function
+        Function to use as criterion for valid words
+
+    Returns
+    -------
+    out : list
+        List of valid words
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import find_all, get_raw_dictionary
+    >>> words = get_raw_dictionary()
+    >>> out = find_all(words, func=lambda x: len(x) == 20)
+    >>> print(out[:3])
+    ['acetylcholinesterase', 'adrenocorticosteroid', 'adrenocorticotrophic']
+
+    >>> print(len(out))
+    160
+
+    """
+    # if not given, load the default word list
     if words is None:
         words = get_raw_dictionary()
+    # apply the given function as a filter to the word list
     out = list(filter(func, words))
+    # sort the output based on the length of the words, longest first, then alphabetically
     out.sort(key=lambda item: (-len(item), item))
     return out
 
 #%% find_all_two_letter_words
 def find_all_two_letter_words(words=None):
+    r"""
+    Finds all the two letter valid words
+
+    Paramters
+    ---------
+    words : set, optional
+        List of all valid words as a Python set
+
+    Returns
+    -------
+    out : list
+        List of valid two letter words
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import find_all_two_letter_words
+    >>> out = find_all_two_letter_words()
+    >>> print(out[:10])
+    ['aa', 'ab', 'ad', 'ae', 'ag', 'ah', 'ai', 'al', 'am', 'an']
+
+    """
     return find_all(words, func=lambda x: len(x) == 2)
 
 #%% find_all_three_letter_words

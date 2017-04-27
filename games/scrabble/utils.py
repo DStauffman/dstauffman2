@@ -39,20 +39,83 @@ def get_root_dir():
     return folder
 
 #%% get_data_dir
-get_data_dir = dcs_data_dir
+get_data_dir = dcs_data_dir # TODO: override docstring?
 
 #%% get_dict_path
 def get_dict_path(name=DICT):
     r"""
     Gets the full path to the specified or default dictionary.
+
+    Parameters
+    ----------
+    name : str, optional
+        Name of the dictionary to load from the data folder
+
+    Returns
+    -------
+    path : str
+        Full path to the word list
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import get_dict_path
+    >>> path = get_dict_path()
+    >>> print(path) # doctest: +SKIP
+
+    >>> path2 = get_dict_path('sowpods.txt')
+    >>> print(path2) # doctest: +SKIP
+
     """
     path = os.path.join(get_data_dir(), name)
     return path
 
 #%% get_raw_dictionary
-def get_raw_dictionary(filename=None):
+def get_raw_dictionary(filename=None, min_len=2, max_len=20):
     r"""
     Loads the entire dictionary into a Python set.
+
+    Parameters
+    ----------
+    filename : str, optional
+        Full path to the desired word list
+    min_len : int, optional
+        Minimum length of word to include
+    max_len : int, optional
+        Maximum length of word to include
+
+    Returns
+    -------
+    words : set
+        List of all valid words as a Python set
+
+    Notes
+    -----
+    #.  This function returns the list of words as a set, which can sometimes be convenient,
+        although the anagram solver instead uses the form where each key is a sorted version of the
+        letters that form those words.
+
+    Examples
+    --------
+
+    >>> from dstauffman2.games.scrabble import get_raw_dictionary
+    >>> words = get_raw_dictionary()
+    >>> assert isinstance(words, set)
+    >>> print(len(words))
+    173003
+
+    >>> words2 = get_raw_dictionary(min_len=0, max_len=10000)
+    >>> print(len(words2))
+    173122
+
+    >>> min_len_word = min(len(x) for x in words2)
+    >>> print(min_len_word)
+    2
+
+    >>> max_len_word = max(len(x) for x in words2)
+    >>> print(max_len_word)
+    28
+
     """
     if filename is None:
         filename = get_dict_path()
@@ -60,14 +123,28 @@ def get_raw_dictionary(filename=None):
     with open(filename, 'rt') as file:
         for line in file.readlines():
             word = line.rstrip('\n')
-            if word:
+            if min_len <= len(word) <= max_len:
                 words.add(word)
     return words
 
 #%% create_dictionary_from_text
 def create_dict(filename, min_len=2, max_len=20):
     r"""
-    Reads in the ENABLE2K or similar data file and creates a Python words dictionary.
+    Reads in the word list and creates a Python words dictionary by anagrammed keys.
+
+    Parameters
+    ----------
+    filename : str, optional
+        Full path to the desired word list
+    min_len : int, optional
+        Minimum length of word to include
+    max_len : int, optional
+        Maximum length of word to include
+
+    Returns
+    -------
+    words : dict
+        Dictionary of words by sorted, anagrammed keys
 
     Notes
     -----
@@ -82,6 +159,8 @@ def create_dict(filename, min_len=2, max_len=20):
     >>> from dstauffman2.games.scrabble import create_dict, get_dict_path
     >>> filename = get_dict_path()
     >>> words = create_dict(filename)
+    >>> print(len(words))
+    156532
 
     """
     raw_words = get_raw_dictionary(filename)
@@ -95,19 +174,73 @@ def create_dict(filename, min_len=2, max_len=20):
 #%% count_num_words
 def count_num_words(words):
     r"""
-    Counts the number of keys and words in the dictionary.
+    Counts the number of keys, words, and words by length in the dictionary.
+
+    Parameters
+    ----------
+    words : dict
+        Dictionary of words by sorted, anagrammed keys
+
+    Returns
+    -------
+    num_keys : int
+        Number of keys in the dictionary
+    num_words : int
+        Number of words in the dictionary, since keys can have more than one word
+    len_count : dict
+        Dictionary of number of words by word length, which are the keys
+
+    Examples
+    --------
+
+    >>> from dstauffman2 import get_data_dir
+    >>> from dstauffman2.games.scrabble import create_dict, get_dict_path, count_num_words
+    >>> filename = get_dict_path()
+    >>> words = create_dict(filename)
+    >>> (num_keys, num_words, len_count) = count_num_words(words)
+    >>> print(num_keys)
+    156532
+
+    >>> print(num_words)
+    173003
+
+    >>> print(sorted(len_count.keys()))
+    [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+
+    >>> assert sum(len_count[key] for key in len_count) == num_words
+
     """
-    num_keys = 0
-    num_words = 0
+    num_keys   = 0
+    num_words  = 0
+    temp_count = defaultdict(int)
     for (key, value) in words.items():
+        new_words = len(value)
         num_keys += 1
-        num_words += len(value)
-    return (num_keys, num_words)
+        num_words += new_words
+        len_key = len(key)
+        temp_count[len_key] += new_words
+    # reorganize dictionary
+    len_count = {key:temp_count[key] for key in sorted(temp_count.keys())}
+    return (num_keys, num_words, len_count)
 
 #%% find_all_words
 def find_all_words(tiles, words, pattern=''):
     r"""
     Finds all the anagrams of the given tiles.
+
+    Parameters
+    ----------
+    tiles : str or list of chars
+        Letters to anagram
+    words : dict
+        Dictionary of words by sorted, anagrammed keys
+    pattern : str, optional
+        Regular expression pattern to apply to matching
+
+    Returns
+    -------
+    out : list of str
+        List of valid words based on the given tiles, words, and pattern
 
     Examples
     --------
@@ -118,6 +251,18 @@ def find_all_words(tiles, words, pattern=''):
     >>> filename = get_dict_path()
     >>> words    = create_dict(filename)
     >>> out = find_all_words(tiles, words)
+    >>> print(out[:11])
+    ['sword', 'words', 'dors', 'dows', 'rods', 'rows', 'sord', 'word', 'dor', 'dos', 'dow']
+
+    >>> print(out[11:])
+    ['ods', 'ors', 'rod', 'row', 'sod', 'sow', 'wos', 'do', 'od', 'or', 'os', 'ow', 'so', 'wo']
+
+    >>> out2 = find_all_words(tiles='words', words=words, pattern='a..$')
+    >>> print(out2[:10])
+    ['draws', 'roads', 'sward', 'woads', 'daws', 'oars', 'rads', 'raws', 'sard', 'wads']
+
+    >>> print(out2[10:])
+    ['ward', 'wars', 'ado', 'ads', 'ars']
 
     """
     def wrapped(tiles, words):
@@ -290,12 +435,3 @@ def get_board_must_play(board, num_rows, num_cols, played):
 if __name__ == '__main__':
     unittest.main(module='dstauffman2.games.scrabble.tests.test_utils', exit=False)
     doctest.testmod(verbose=False)
-
-    #filename = get_dict_path()
-    #words = create_dict(filename)
-    #(num_keys, num_words) = count_num_words(words)
-
-    #tiles = ['w', 'o', 'r', 'd', 's']
-    #out = find_all_words(tiles, words)
-
-    #out2 = find_all_words(tiles, words, pattern='a..$')
