@@ -853,7 +853,7 @@ def _sort_best_moves(board, moves, costs, transports, start_x, start_y):
 
     """
     # initialize the costs
-    pred_costs = np.nan * np.ones(len(moves))
+    pred_costs = np.full(len(moves), np.nan, dtype=float)
     pred_costs.fill(np.nan)
     for (ix, move) in enumerate(moves):
         (_, _, (new_x, new_y)) = _get_new_position(start_x, start_y, move, transports)
