@@ -19,8 +19,8 @@ import unittest
 from dstauffman import setup_dir
 
 #%% Local Constants
-ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif'])
-PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif'])
+ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif', '.nef'])
+PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef'])
 
 #%% Functions - find_missing_nums
 def find_missing_nums(folder, old_picasa=True, digit_check=True, \
