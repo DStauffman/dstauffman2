@@ -101,8 +101,8 @@ def check_for_win(board):
 
     """
     # find wins
-    o = np.nonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['o'], axis=1) * WIN, axis=0) == 3)[0]
-    x = np.nonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['x'], axis=1) * WIN, axis=0) == 3)[0]
+    o = np.flatnonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['o'], axis=1) * WIN, axis=0) == 3)
+    x = np.flatnonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['x'], axis=1) * WIN, axis=0) == 3)
 
     # determine winner
     if len(o) == 0:
@@ -200,12 +200,12 @@ def find_moves(board):
     x_win_in_one = rem_x_wins[:, np.sum(big_board * rem_x_wins, axis=0) == -2]
     o_pos = np.logical_and(np.logical_xor(np.abs(big_board), o_win_in_one), o_win_in_one)
     x_pos = np.logical_and(np.logical_xor(np.abs(big_board), x_win_in_one), x_win_in_one)
-    o_win = np.nonzero(o_pos)[0]
-    x_win = np.nonzero(x_pos)[0]
+    o_win = np.flatnonzero(o_pos)
+    x_win = np.flatnonzero(x_pos)
 
     # find win in two moves
-    o_win_in_two = np.nonzero(np.sum(rem_o_wins[:, np.sum(big_board * rem_o_wins, axis=0) == 1], axis=1) > 1)[0]
-    x_win_in_two = np.nonzero(np.sum(rem_x_wins[:, np.sum(big_board * rem_x_wins, axis=0) == -1], axis=1) > 1)[0]
+    o_win_in_two = np.flatnonzero(np.sum(rem_o_wins[:, np.sum(big_board * rem_o_wins, axis=0) == 1], axis=1) > 1)
+    x_win_in_two = np.flatnonzero(np.sum(rem_x_wins[:, np.sum(big_board * rem_x_wins, axis=0) == -1], axis=1) > 1)
 
     # create the list of moves and incorporate the score
     o_moves = []

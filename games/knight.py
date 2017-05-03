@@ -300,6 +300,8 @@ def _get_transports(board):
         assert len(ix) == 2, 'Must be a 2D board.'
         assert len(ix[0]) == 0 or len(ix[0]) == 2, 'There must be 0 or exactly 2 transports.'
         transports = [(ix[0][i], ix[1][i]) for i in range(len(ix[0]))]
+        # TODO: use this instead of tuples
+        # transports = np.argwhere(board == Piece.transport)
     else:
         transports = None
     return transports

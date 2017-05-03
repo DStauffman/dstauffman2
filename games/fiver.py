@@ -257,7 +257,7 @@ def _get_unique_pieces(pieces):
         # alias this piece
         this_piece = pieces[ix]
         # find the indices in the single vector version of the array and convert to a unique set
-        inds = set(np.nonzero(this_piece.ravel())[0])
+        inds = set(np.flatnonzero(this_piece.ravel()))
         # see if this set is in the master set
         if inds not in sets:
             # if not, then this is a new unique piece, so keep it
@@ -641,39 +641,39 @@ def solve_puzzle(board, locations, find_all=False):
     ix0 = np.arange(locations[0].shape[0])
     for i0 in ix0:
         np.add(this_board, locations[0][i0], this_board)
-        ix1 = np.nonzero(is_valid(this_board, locations[1]))[0]
+        ix1 = np.flatnonzero(is_valid(this_board, locations[1]))
         for i1 in ix1:
             np.add(this_board, locations[1][i1], this_board)
-            ix2 = np.nonzero(is_valid(this_board, locations[2]))[0]
+            ix2 = np.flatnonzero(is_valid(this_board, locations[2]))
             for i2 in ix2:
                 np.add(this_board, locations[2][i2], this_board)
-                ix3 = np.nonzero(is_valid(this_board, locations[3]))[0]
+                ix3 = np.flatnonzero(is_valid(this_board, locations[3]))
                 for i3 in ix3:
                     # display progress
                     last_ratio = _display_progress(np.array([i0, i1, i2, i3]), nums, last_ratio)
                     np.add(this_board, locations[3][i3], this_board)
-                    ix4 = np.nonzero(is_valid(this_board, locations[4]))[0]
+                    ix4 = np.flatnonzero(is_valid(this_board, locations[4]))
                     for i4 in ix4:
                         np.add(this_board, locations[4][i4], this_board)
-                        ix5 = np.nonzero(is_valid(this_board, locations[5]))[0]
+                        ix5 = np.flatnonzero(is_valid(this_board, locations[5]))
                         for i5 in ix5:
                             np.add(this_board, locations[5][i5], this_board)
-                            ix6 = np.nonzero(is_valid(this_board, locations[6]))[0]
+                            ix6 = np.flatnonzero(is_valid(this_board, locations[6]))
                             for i6 in ix6:
                                 np.add(this_board, locations[6][i6], this_board)
-                                ix7 = np.nonzero(is_valid(this_board, locations[7]))[0]
+                                ix7 = np.flatnonzero(is_valid(this_board, locations[7]))
                                 for i7 in ix7:
                                     np.add(this_board, locations[7][i7], this_board)
-                                    ix8 = np.nonzero(is_valid(this_board, locations[8]))[0]
+                                    ix8 = np.flatnonzero(is_valid(this_board, locations[8]))
                                     for i8 in ix8:
                                         np.add(this_board, locations[8][i8], this_board)
-                                        ix9 = np.nonzero(is_valid(this_board, locations[9]))[0]
+                                        ix9 = np.flatnonzero(is_valid(this_board, locations[9]))
                                         for i9 in ix9:
                                             np.add(this_board, locations[9][i9], this_board)
-                                            ix10 = np.nonzero(is_valid(this_board, locations[10]))[0]
+                                            ix10 = np.flatnonzero(is_valid(this_board, locations[10]))
                                             for i10 in ix10:
                                                 np.add(this_board, locations[10][i10], this_board)
-                                                ix11 = np.nonzero(is_valid(this_board, locations[11]))[0]
+                                                ix11 = np.flatnonzero(is_valid(this_board, locations[11]))
                                                 for i11 in ix11:
                                                     np.add(this_board, locations[11][i11], this_board)
                                                     # keep solution

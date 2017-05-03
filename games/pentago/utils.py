@@ -82,8 +82,8 @@ def check_for_win(board):
     Checks for a win.
     """
     # find white and black wins
-    white = np.nonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['white'], axis=1) * WIN, axis=0) == 5)[0]
-    black = np.nonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['black'], axis=1) * WIN, axis=0) == 5)[0]
+    white = np.flatnonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['white'], axis=1) * WIN, axis=0) == 5)
+    black = np.flatnonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['black'], axis=1) * WIN, axis=0) == 5)
 
     # determine winner
     if len(white) == 0:
@@ -185,12 +185,12 @@ def find_moves(board):
     score = np.sum(test, axis=0)
 
     # find white and black rotate to win moves
-    rot_white = np.nonzero(score >=  5)[0]
-    rot_black = np.nonzero(score <= -5)[0]
+    rot_white = np.flatnonzero(score >=  5)
+    rot_black = np.flatnonzero(score <= -5)
 
     # find white and black one off potentials
-    white = np.nonzero((score >=  4) & (score <  5))[0]
-    black = np.nonzero((score <= -4) & (score > -5))[0]
+    white = np.flatnonzero((score >=  4) & (score <  5))
+    black = np.flatnonzero((score <= -4) & (score > -5))
 
     # see if the remaining piece is an open square
     if len(white) > 0:
@@ -217,7 +217,7 @@ def find_moves(board):
     black_rotations = get_move_from_one_off(big_board, rot_black, ONE_OFF)
 
     # fill in all available row and columns positions for the rotate to win moves
-    empty = np.nonzero(big_board == PLAYER['none'])[0]
+    empty = np.flatnonzero(big_board == PLAYER['none'])
     for ix in empty:
         this_row = ix // SIZES['board']
         this_col = np.mod(ix, SIZES['board'])

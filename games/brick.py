@@ -742,7 +742,7 @@ def apply_solution_to_combos(soln, combos):
     # convert solution to vector
     soln_row = soln.ravel()
     # compare the pieces to the solution
-    valid_ix = np.nonzero(np.all((all_rows == soln_row) | (all_rows == N), axis=1))[0]
+    valid_ix = np.flatnonzero(np.all((all_rows == soln_row) | (all_rows == N), axis=1))
     # save only the valid combinations and return
     valid = [combos[x] for x in valid_ix]
     return valid
@@ -813,44 +813,44 @@ def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
     for i0 in range(len(r_comb[0])):
         # check for all possible combinations of the next piece that work.
         soln1 = _get_solution_sum(0) * r_comb[1]
-        ix1 = np.nonzero(np.sum(soln1, axis=1) == 0)[0]
+        ix1 = np.flatnonzero(np.sum(soln1, axis=1) == 0)
         # if no pieces work, then continue to the next base piece
         if ix1.shape[0] == 0:
             continue
         # otherwise continue down the spiral of pieces
         for i1 in ix1:
             soln2 = _get_solution_sum(1) * r_comb[2]
-            ix2 = np.nonzero(np.sum(soln2, axis=1) == 0)[0]
+            ix2 = np.flatnonzero(np.sum(soln2, axis=1) == 0)
             if ix2.shape[0] == 0:
                 continue
             for i2 in ix2:
                 soln3 = _get_solution_sum(2) * r_comb[3]
-                ix3 = np.nonzero(np.sum(soln3, axis=1) == 0)[0]
+                ix3 = np.flatnonzero(np.sum(soln3, axis=1) == 0)
                 if ix3.shape[0] == 0:
                     continue
                 for i3 in ix3:
                     soln4 = _get_solution_sum(3) * r_comb[4]
-                    ix4 = np.nonzero(np.sum(soln4, axis=1) == 0)[0]
+                    ix4 = np.flatnonzero(np.sum(soln4, axis=1) == 0)
                     if ix4.shape[0] == 0:
                         continue
                     for i4 in ix4:
                         soln5 = _get_solution_sum(4) * r_comb[5]
-                        ix5 = np.nonzero(np.sum(soln5, axis=1) == 0)[0]
+                        ix5 = np.flatnonzero(np.sum(soln5, axis=1) == 0)
                         if ix5.shape[0] == 0:
                             continue
                         for i5 in ix5:
                             soln6 = _get_solution_sum(5) * r_comb[6]
-                            ix6 = np.nonzero(np.sum(soln6, axis=1) == 0)[0]
+                            ix6 = np.flatnonzero(np.sum(soln6, axis=1) == 0)
                             if ix6.shape[0] == 0:
                                 continue
                             for i6 in ix6:
                                 soln7 = _get_solution_sum(6) * r_comb[7]
-                                ix7 = np.nonzero(np.sum(soln7, axis=1) == 0)[0]
+                                ix7 = np.flatnonzero(np.sum(soln7, axis=1) == 0)
                                 if ix7.shape[0] == 0:
                                     continue
                                 for i7 in ix7:
                                     soln8 = _get_solution_sum(7) * r_comb[8]
-                                    ix8 = np.nonzero(np.sum(soln8, axis=1) == 0)[0]
+                                    ix8 = np.flatnonzero(np.sum(soln8, axis=1) == 0)
                                     if ix8.shape[0] == 0:
                                         continue
                                     # potential solution found, but must check seams!

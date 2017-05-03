@@ -135,7 +135,7 @@ class Test_normal_curve(unittest.TestCase):
     def test_no_std(self):
         y = arch.normal_curve(self.x, 3.3, 0)
         out = np.zeros(self.x.shape)
-        ix = np.nonzero(y == 3.3)[0]
+        ix = np.flatnonzero(y == 3.3)
         out[ix] = 1
         np.testing.assert_array_almost_equal(y, out)
 

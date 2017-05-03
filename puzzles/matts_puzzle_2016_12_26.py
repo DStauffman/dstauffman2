@@ -50,7 +50,7 @@ def find_equilibriums(x):
     cs2 = np.cumsum(x[::-1])[::-1]
 
     # calculate results
-    y = np.nonzero(cs1 == cs2)[0]
+    y = np.flatnonzero(cs1 == cs2)
 
     # if empty, return -1 instead
     if y.size == 0:

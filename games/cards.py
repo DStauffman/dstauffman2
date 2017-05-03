@@ -250,7 +250,7 @@ class Hand(object):
         # check for straight flush
         #elif np.any(suits_count) >= 5 and np.any(straight_count) >= 5:
         #    # check that cards from the straight also make the flush
-        #    straight_ix = np.nonzero(straight_count == 5)[0]
+        #    straight_ix = np.flatnonzero(straight_count == 5)
         #    for this_straight in straight_ix[::-1]:
         #        for this_suit in NUM_SUITS:
         #            has_all_ranks = True
