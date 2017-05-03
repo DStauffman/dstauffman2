@@ -231,7 +231,7 @@ def _board_to_costs(board):
 
     >>> from dstauffman2.games.knight import _board_to_costs, Piece
     >>> import numpy as np
-    >>> board = Piece.null * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), Piece.null, dtype=int)
     >>> board[0, 0] = Piece.water
     >>> board[1, 1] = Piece.start
     >>> board[2, 2] = Piece.barrier
@@ -242,7 +242,7 @@ def _board_to_costs(board):
      [      1       1 1000000]]
 
     """
-    costs = COST_DICT['invalid'] * np.ones(board.shape, dtype=int)
+    costs = np.full(board.shape, COST_DICT['invalid'], dtype=int)
     for i in range(costs.shape[0]):
         for j in range(costs.shape[1]):
             this_piece = board[i, j]
@@ -286,7 +286,7 @@ def _get_transports(board):
 
     >>> from dstauffman2.games.knight import _get_transports, Piece
     >>> import numpy as np
-    >>> board = Piece.null * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), Piece.null, dtype=int)
     >>> board[0, 1] = Piece.transport
     >>> board[2, 2] = Piece.transport
     >>> transport = _get_transports(board)
@@ -1163,7 +1163,7 @@ def _initialize_data(board):
     # crudely predict all the costs
     data['pred_costs'] = _predict_cost(board)
     # initialize best costs on first run
-    data['best_costs'] = LARGE_INT * np.ones(board.shape, dtype=int)
+    data['best_costs'] = np.full(board.shape, LARGE_INT, dtype=int)
     # initialize best solution
     data['best_moves'] = None
     # initialize moves array and solved status

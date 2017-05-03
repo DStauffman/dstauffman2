@@ -139,7 +139,7 @@ def find_moves(board):
         Turns the given index into a Move instance.
         """
         # preallocate x & y to NaNs in case the winning move is just a rotation
-        row = INT_TOKEN * np.ones(len(ix), dtype=int)
+        row = np.full(len(ix), INT_TOKEN, dtype=int)
         column = row.copy()
 
         # find missing piece
@@ -161,7 +161,7 @@ def find_moves(board):
         quadrant = modd(num, 4)
 
         # pull out rotation direction
-        direction = -1 * np.ones(len(ix), dtype=int)
+        direction = np.full(len(ix), -1, dtype=int)
         direction[num < 5] = 1
 
         # convert to a move class
@@ -251,7 +251,7 @@ def create_board_from_moves(moves, first_player):
     # make sure the first player is valid
     assert first_player == PLAYER['white'] or first_player == PLAYER['black']
     # create the initial board
-    board = PLAYER['none'] * np.ones((SIZES['board'], SIZES['board']), dtype=int)
+    board = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
     # alias this player
     this_player = first_player
     # loop through the move history

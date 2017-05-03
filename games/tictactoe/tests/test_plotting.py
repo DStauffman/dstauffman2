@@ -93,13 +93,13 @@ class Test_plot_board(unittest.TestCase):
         (self.fig, self.ax) = _make_board()
 
     def test_nominal(self):
-        board = n * np.ones((3, 3), dtype=int)
+        board = np.full((3, 3), n, dtype=int)
         board[0, 0:2] = x
         board[1, 1] = o
         ttt.plot_board(self.ax, board)
 
     def test_bad_board_position(self):
-        board = n * np.ones((3, 3), dtype=int)
+        board = np.full((3, 3), n, dtype=int)
         board[1, 1] = 999
         with self.assertRaises(ValueError):
             ttt.plot_board(self.ax, board)
@@ -119,7 +119,7 @@ class Test_plot_win(unittest.TestCase):
     def test_nominal(self):
         mask = np.zeros((3, 3), dtype=bool)
         mask[0, 0:2] = True
-        board = n * np.ones((3, 3), dtype=int)
+        board = np.full((3, 3), n, dtype=int)
         board[0, 0:2] = x
         ttt.plot_win(self.ax, mask, board)
 

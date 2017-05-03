@@ -90,7 +90,7 @@ class Test_check_for_win(unittest.TestCase):
         draw with simultaneous wins
     """
     def setUp(self):
-        self.board = n * np.ones((3, 3), dtype=int)
+        self.board = np.full((3, 3), n, dtype=int)
         self.win_mask = np.zeros((3, 3), dtype=bool)
 
     def test_no_moves(self):
@@ -272,7 +272,7 @@ class Test_make_move(unittest.TestCase):
     """
     def setUp(self):
         (self.fig, self.ax) = _make_board()
-        self.board = n * np.ones((3, 3), dtype=int)
+        self.board = np.full((3, 3), n, dtype=int)
 
     def test_first_and_second_move(self):
         board = self.board.copy()
@@ -325,7 +325,7 @@ class Test_play_ai_game(unittest.TestCase):
     """
     def setUp(self):
         (self.fig, self.ax) = _make_board()
-        self.board = n * np.ones((3, 3), dtype=int)
+        self.board = np.full((3, 3), n, dtype=int)
         self.cur_move = Counter(0)
         self.cur_game = Counter(0)
         self.game_hist = [ttt.GameStats(1, o)]
@@ -378,7 +378,7 @@ class Test_create_board_from_moves(unittest.TestCase):
     """
     def setUp(self):
         self.moves = [ttt.Move(0, 0), ttt.Move(1, 1), ttt.Move(2, 1)]
-        self.board = n * np.ones((3, 3), dtype=int)
+        self.board = np.full((3, 3), n, dtype=int)
 
     def test_o_first(self):
         first_player     = o

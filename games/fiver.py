@@ -33,11 +33,11 @@ NUM_ORIENTS = 8
 cm = ColorMap('Paired', 0, NUM_PIECES-1)
 COLORS = ['w'] + [cm.get_color(i) for i in range(NUM_PIECES)] + ['k']
 # make boards
-BOARD1 = (NUM_PIECES+1)*np.ones((14, 18), dtype=int)
-BOARD1[4:10,4:14] = 0
-BOARD2 = (NUM_PIECES+1)*np.ones((16, 16), dtype=int)
+BOARD1             = np.full((14, 18), NUM_PIECES+1, dtype=int)
+BOARD1[4:10,4:14]  = 0
+BOARD2             = np.full((16, 16), NUM_PIECES+1, dtype=int)
 BOARD2[4:12, 4:12] = 0
-BOARD2[7:9, 7:9] = NUM_PIECES+1
+BOARD2[7:9, 7:9]   = NUM_PIECES+1
 
 #%% Functions - _pad_piece
 def _pad_piece(piece, max_size, pad_value=0):
@@ -87,10 +87,10 @@ def _pad_piece(piece, max_size, pad_value=0):
     new_piece = piece.copy()
     # pad the horizontal direction
     if j < max_size[0]:
-        new_piece = np.hstack((new_piece, pad_value*np.ones((i, max_size[1]-j), dtype=int)))
+        new_piece = np.hstack((new_piece, np.full((i, max_size[1]-j), pad_value, dtype=int)))
     # pad the vertical direction
     if i < max_size[1]:
-        new_piece = np.vstack((new_piece, pad_value*np.ones((max_size[0]-i, max_size[1]), dtype=int)))
+        new_piece = np.vstack((new_piece, np.full((max_size[0]-i, max_size[1]), pad_value, dtype=int)))
     # return the resulting piece
     return new_piece
 
@@ -477,7 +477,7 @@ def make_all_pieces():
         [1, 1, 0], \
         [1, 0, 0]])
     # preallocate output
-    pieces = -1 * np.ones((NUM_PIECES, SIZE_PIECES, SIZE_PIECES), dtype=int);
+    pieces = np.full((NUM_PIECES, SIZE_PIECES, SIZE_PIECES), -1, dtype=int);
     for (ix, this_piece) in enumerate([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12]):
         # pad each piece
         new_piece = _pad_piece(this_piece, SIZE_PIECES)
@@ -517,7 +517,7 @@ def make_all_permutations(pieces):
     # loop through all the pieces
     for ix in range(NUM_PIECES):
         # preallocate the array
-        all_this_piece = -1 * np.ones((NUM_ORIENTS, SIZE_PIECES, SIZE_PIECES), dtype=int)
+        all_this_piece = np.full((NUM_ORIENTS, SIZE_PIECES, SIZE_PIECES), -1, dtype=int)
         # alias this piece
         this_piece = pieces[ix]
         # find the number of rotations (4)

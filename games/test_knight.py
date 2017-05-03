@@ -49,7 +49,7 @@ class _get_transports(unittest.TestCase):
         Invalid transports
     """
     def setUp(self):
-        self.board = knight.Piece.null * np.ones((3, 3), dtype=int)
+        self.board = np.full((3, 3), knight.Piece.null, dtype=int)
         self.transports = [(0, 1), (2, 2)]
 
     def test_valid_transports(self):
@@ -77,7 +77,7 @@ class Test__get_current_position(unittest.TestCase):
         Multiple current pieces
     """
     def setUp(self):
-        self.board = knight.Piece.null * np.ones((2, 5), dtype=int)
+        self.board = np.full((2, 5), knight.Piece.null, dtype=int)
         self.x = 0
         self.y = 2
         self.board[self.x, self.y] = knight.Piece.current
@@ -217,7 +217,7 @@ class Test__classify_move(unittest.TestCase):
         Lava
     """
     def setUp(self):
-        self.board      = knight.Piece.null * np.ones((2, 5), dtype=int)
+        self.board      = np.full((2, 5), knight.Piece.null, dtype=int)
         self.move       = 2 # (2 right and 1 down, so end at [1, 4]
         self.move_type  = knight.Move.normal
         self.transports = knight._get_transports(self.board)
@@ -293,10 +293,10 @@ class Test__update_board(unittest.TestCase):
         self.move        = 2 # 2 right and 1 down
         self.new_x       = 1
         self.new_y       = 4
-        self.board       = knight.Piece.null * np.ones((2, 5), dtype=int)
+        self.board       = np.full((2, 5), knight.Piece.null, dtype=int)
         self.board[self.old_x, self.old_y] = knight.Piece.current
         self.cost        = 5
-        self.costs       = self.cost * np.ones(self.board.shape, dtype=int)
+        self.costs       = np.full(self.board.shape, self.cost, dtype=int)
         self.transports  = knight._get_transports(self.board)
 
     def test_normal(self):
@@ -339,10 +339,10 @@ class Test__undo_move(unittest.TestCase):
         Transport
     """
     def setUp(self):
-        self.board       = knight.Piece.null * np.ones((2, 5), dtype=int)
+        self.board       = np.full((2, 5), knight.Piece.null, dtype=int)
         self.board[0, 2] = knight.Piece.visited
         self.last_move   = 2 # 2 right and 1 down
-        self.original_board       = knight.Piece.null * np.ones((2, 5), dtype=int)
+        self.original_board       = np.full((2, 5), knight.Piece.null, dtype=int)
         self.original_board[0, 2] = knight.Piece.start
         self.transports  = knight._get_transports(self.original_board)
         self.start_x     = 1
@@ -574,7 +574,7 @@ class Test_check_valid_sequence(unittest.TestCase):
         Good, but extra moves in sequence
     """
     def setUp(self):
-        self.board       = knight.Piece.null * np.ones((3, 5), dtype=int)
+        self.board       = np.full((3, 5), knight.Piece.null, dtype=int)
         self.board[0, 0] = knight.Piece.start
         self.board[2, 4] = knight.Piece.final
         self.moves       = [2, 2]
@@ -642,7 +642,7 @@ class Test_print_sequence(unittest.TestCase):
         Invalid sequence
     """
     def setUp(self):
-        self.board       = knight.Piece.null * np.ones((3, 5), dtype=int)
+        self.board       = np.full((3, 5), knight.Piece.null, dtype=int)
         self.board[0, 0] = knight.Piece.start
         self.board[2, 4] = knight.Piece.final
         self.moves       = [2, 2]
@@ -686,7 +686,7 @@ class Test_solve_min_puzzle(unittest.TestCase):
         No final position
     """
     def setUp(self):
-        self.board       = knight.Piece.null * np.ones((3, 5), dtype=int)
+        self.board       = np.full((3, 5), knight.Piece.null, dtype=int)
         self.board[0, 0] = knight.Piece.start
         self.board[0, 4] = knight.Piece.final
         self.moves       = [2, -2]
@@ -701,7 +701,7 @@ class Test_solve_min_puzzle(unittest.TestCase):
         self.assertEqual(output[:len(expected_output_start)], expected_output_start)
 
     def test_no_solution(self):
-        board = knight.Piece.null * np.ones((2, 5), dtype=int)
+        board = np.full((2, 5), knight.Piece.null, dtype=int)
         board[0, 0] = knight.Piece.start
         board[1, 4] = knight.Piece.final
         with capture_output() as out:
@@ -729,7 +729,7 @@ class Test_solve_max_puzzle(unittest.TestCase):
         Unsolvable
     """
     def setUp(self):
-        self.board       = knight.Piece.null * np.ones((3, 5), dtype=int)
+        self.board       = np.full((3, 5), knight.Piece.null, dtype=int)
         self.board[0, 0] = knight.Piece.start
         self.board[0, 4] = knight.Piece.final
         self.moves       = [2, -2] # TODO: should be 8 moves long?
@@ -745,7 +745,7 @@ class Test_solve_max_puzzle(unittest.TestCase):
         self.assertEqual(output[:len(expected_output_start)], expected_output_start)
 
     def test_no_solution(self):
-        board = knight.Piece.null * np.ones((2, 5), dtype=int)
+        board = np.full((2, 5), knight.Piece.null, dtype=int)
         board[0, 0] = knight.Piece.start
         board[1, 4] = knight.Piece.final
         with capture_output() as out:

@@ -87,7 +87,7 @@ def check_for_win(board):
 
     >>> from dstauffman2.games.tictactoe import check_for_win, PLAYER
     >>> import numpy as np
-    >>> board = PLAYER['none'] * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
     >>> board[0:3, 0] = PLAYER['x']
     >>> board[1:3, 1] = PLAYER['o']
     >>> (winner, win_mask) = check_for_win(board)
@@ -144,7 +144,7 @@ def find_moves(board):
 
     >>> from dstauffman2.games.tictactoe import find_moves, PLAYER, SIZES
     >>> import numpy as np
-    >>> board = PLAYER['none'] * np.ones((SIZES['board'], SIZES['board']), dtype=int)
+    >>> board = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
     >>> board[0, 0] = PLAYER['o']
     >>> board[0, 1] = PLAYER['o']
     >>> board[1, 1] = PLAYER['o']
@@ -262,7 +262,7 @@ def make_move(ax, board, x, y, cur_move, cur_game, game_hist):
     >>> _ = ax.set_xlim(-0.5, 2.5)
     >>> _ = ax.set_ylim(-0.5, 2.5)
     >>> ax.invert_yaxis()
-    >>> board = PLAYER['none'] * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
     >>> x = 1
     >>> y = 0
     >>> cur_move = Counter(0)
@@ -343,7 +343,7 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist):
     >>> _ = ax.set_xlim(-0.5, 2.5)
     >>> _ = ax.set_ylim(-0.5, 2.5)
     >>> ax.invert_yaxis()
-    >>> board = PLAYER['none'] * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
     >>> cur_move = Counter(0)
     >>> cur_game = Counter(0)
     >>> game_hist = [GameStats(1, PLAYER['o'])]
@@ -413,7 +413,7 @@ def create_board_from_moves(moves, first_player):
     # make sure the first player is valid
     assert first_player == PLAYER['x'] or first_player == PLAYER['o']
     # create the initial board
-    board = PLAYER['none'] * np.ones((SIZES['board'], SIZES['board']), dtype=int)
+    board = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
     # alias this player
     this_player = first_player
     # loop through the move history

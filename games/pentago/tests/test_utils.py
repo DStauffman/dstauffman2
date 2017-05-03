@@ -167,7 +167,7 @@ class Test__check_for_win(unittest.TestCase):
         TBD
     """
     def setUp(self):
-        self.board = pentago.PLAYER['none'] * np.ones((6, 6), dtype=int)
+        self.board = np.full((6, 6), pentago.PLAYER['none'], dtype=int)
         self.win_mask = np.zeros((6, 6), dtype=bool)
 
     def test_no_moves(self):

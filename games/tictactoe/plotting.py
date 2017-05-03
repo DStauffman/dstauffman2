@@ -152,7 +152,7 @@ def plot_board(ax, board):
     >>> _ = ax.set_xlim(-0.5, 2.5)
     >>> _ = ax.set_ylim(-0.5, 2.5)
     >>> ax.invert_yaxis()
-    >>> board = PLAYER['none'] * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
     >>> board[0, 0:2] = PLAYER['x']
     >>> plot_board(ax, board)
     >>> plt.show(block=False) # doctest: +SKIP
@@ -218,7 +218,7 @@ def plot_win(ax, mask, board):
     >>> ax.invert_yaxis()
     >>> mask = np.zeros((3, 3), dtype=bool)
     >>> mask[0, 0:2] = True
-    >>> board = PLAYER['none'] * np.ones((3, 3), dtype=int)
+    >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
     >>> board[0, 0:2] = PLAYER['x']
     >>> plot_win(ax, mask, board)
     >>> plt.show(block=False) # doctest: +SKIP

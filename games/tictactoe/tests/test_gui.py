@@ -49,7 +49,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         # press the reset button
         self.gui.state.cur_game = Counter(0)
         self.gui.state.cur_move = Counter(0)
-        self.gui.state.board    = n * np.ones((3, 3), dtype=int)
+        self.gui.state.board    = np.full((3, 3), n, dtype=int)
         self._default()
 
     def _place_piece(self, row, col):

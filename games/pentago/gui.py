@@ -383,7 +383,7 @@ class PentagoGui(QWidget):
         self.state.cur_game += 1
         self.state.cur_move = Counter(0)
         self.state.game_hist.append(GameStats(number=self.state.cur_game, first_move=next_lead, winner=PLAYER['none']))
-        self.state.board = PLAYER['none'] * np.ones((SIZES['board'], SIZES['board']), dtype=int)
+        self.state.board = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
         # call GUI wrapper
         self.wrapper()
 

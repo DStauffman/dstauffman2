@@ -124,7 +124,7 @@ def _rotate_board(board, quadrant, direction, inplace=True):
 
     >>> from dstauffman2.games.pentago.constants import _rotate_board, PLAYER
     >>> import numpy as np
-    >>> board = PLAYER['none'] * np.ones((6, 6), dtype=int)
+    >>> board = np.full((6, 6), PLAYER['none'], dtype=int)
     >>> board[1, 0:3] = PLAYER['white']
     >>> print(board[0:3, 0:3])
     [[0 0 0]

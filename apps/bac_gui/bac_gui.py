@@ -556,7 +556,7 @@ def plot_bac(gui_settings, legal_limit=None):
     # plot the data
     ax.plot(time_out, bac, '.-', label='BAC')
     if legal_limit is not None:
-        ax.plot(np.array([time_out[0], time_out[-1]]), ratio2per*legal_limit*np.ones(2), '--', \
+        ax.plot(np.array([time_out[0], time_out[-1]]), np.full(2, ratio2per*legal_limit), '--', \
             label='Legal Limit', color='red', linewidth=2)
 
     # add some labels and such

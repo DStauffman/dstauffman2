@@ -42,7 +42,7 @@ class State(Frozen):
     Class that keeps track of the GUI state.
     """
     def __init__(self):
-        self.board     = PLAYER['none'] * np.ones((3, 3), dtype=int)
+        self.board     = np.full((3, 3), PLAYER['none'], dtype=int)
         self.cur_move  = Counter(0)
         self.cur_game  = Counter(0)
         self.game_hist = [GameStats(number=self.cur_game, first_move=PLAYER['o'])]
