@@ -1,0 +1,56 @@
+**********************************
+Using Numpy in1d with a precision:
+
+# instead of:
+slice_ix = np.flatnonzero(np.in1d(time, slice_years))
+
+# use this:
+slice_ix = np.flatnonzero(np.any(np.abs(time[:, np.newaxis] - slice_years) < 1e-8, axis=1))
+
+
+
+****************************************
+One line creation of a class named self:
+
+self = type('Temp', (object,), {})
+
+
+
+***************************
+Future potential functions?
+
+#%% plot_position
+def plot_position(figs):
+    r"""
+    Moves the plot to the desired position.
+
+    Examples
+    --------
+
+    >>> from dstauffman import plot_position
+    >>> import matplotlib.pyplot as plt
+    >>> fig = plt.figure()
+    >>> ax = fig.add_subplot(111)
+    >>> plot_position(fig)
+    >>> plt.show(block=False)
+
+    >>> plt.close(fig)
+
+    """
+    def move_window():
+        wm = plt.get_current_fig_manager()
+        geom = wm.window.geometry()
+        if geom.left() > 1920:
+            geom.moveLeft(geom.left() % 1920)
+        # hack to get screen size:
+        #wm.window.full_screen_toggle()
+        #screen = wm.window.geometry()
+    if not isinstance(figs, list):
+        # single figure
+        plt.figure(figs.number)
+        move_window()
+    else:
+        # multiple figures
+        for fig in figs:
+            plt.figure(fig.number)
+            move_window()
