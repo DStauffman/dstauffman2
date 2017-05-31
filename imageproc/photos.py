@@ -80,7 +80,7 @@ def find_missing_nums(folder, old_picasa=True, digit_check=True, \
             nums = [int(s) for s in strs]
             if len(nums) > 1:
                 print('Weird numbering: "{}"'.format(os.path.join(root, name)))
-                break
+                continue
             elif len(nums) == 0:
                 print('No number found: "{}"'.format(os.path.join(root, name)))
                 continue

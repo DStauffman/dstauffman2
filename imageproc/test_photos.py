@@ -53,10 +53,16 @@ class Test_find_missing_nums(unittest.TestCase):
         output = out.getvalue().strip()
         out.close()
         lines = output.split('\n')
-        self.assertTrue(lines[0].startswith('Old Picasa file: "'))
-        self.assertTrue(lines[1].startswith('Weird numbering: "'))
+        if lines[0][0] == 'O':
+            ix0 = 0
+            ix1 = 1
+        else:
+            ix0 = 1
+            ix1 = 0
+        self.assertTrue(lines[ix0].startswith('Old Picasa file: "'))
+        self.assertTrue(lines[ix1].startswith('Weird numbering: "'))
         self.assertTrue(lines[2].startswith('Missing: "'))
-        self.assertTrue(lines[2].endswith('": {3, 5}') or lines[2].endswith('": set([3, 5])'))
+        self.assertTrue(lines[2].endswith('": {3, 5}'))
         self.assertTrue(lines[3].startswith('Inconsistent digits: "'))
         self.assertTrue(lines[4].startswith('No number found: "'))
 
@@ -66,10 +72,16 @@ class Test_find_missing_nums(unittest.TestCase):
         output = out.getvalue().strip()
         out.close()
         lines = output.split('\n')
-        self.assertTrue(lines[0].startswith('Old Picasa file: "'))
-        self.assertTrue(lines[1].startswith('Weird numbering: "'))
+        if lines[0][0] == 'O':
+            ix0 = 0
+            ix1 = 1
+        else:
+            ix0 = 1
+            ix1 = 0
+        self.assertTrue(lines[ix0].startswith('Old Picasa file: "'))
+        self.assertTrue(lines[ix1].startswith('Weird numbering: "'))
         self.assertTrue(lines[2].startswith('Missing: "'))
-        self.assertTrue(lines[2].endswith('": {3, 5}') or lines[2].endswith('": set([3, 5])'))
+        self.assertTrue(lines[2].endswith('": {3, 5}'))
         self.assertTrue(lines[3].startswith('Inconsistent digits: "'))
         self.assertTrue(len(lines) < 5)
 
@@ -79,10 +91,16 @@ class Test_find_missing_nums(unittest.TestCase):
         output = out.getvalue().strip()
         out.close()
         lines = output.split('\n')
-        self.assertTrue(lines[0].startswith('Old Picasa file: "'))
-        self.assertTrue(lines[1].startswith('Weird numbering: "'))
+        if lines[0][0] == 'O':
+            ix0 = 0
+            ix1 = 1
+        else:
+            ix0 = 1
+            ix1 = 0
+        self.assertTrue(lines[ix0].startswith('Old Picasa file: "'))
+        self.assertTrue(lines[ix1].startswith('Weird numbering: "'))
         self.assertTrue(lines[2].startswith('Missing: "'))
-        self.assertTrue(lines[2].endswith('": {3, 5}') or lines[2].endswith('": set([3, 5])'))
+        self.assertTrue(lines[2].endswith('": {3, 5}'))
         self.assertFalse(lines[3].startswith('Inconsistent digits: "'))
 
     def test_nothing_missing(self):
