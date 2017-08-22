@@ -6,7 +6,6 @@ Notes
 -----
 #.  Written by David C. Stauffer in March 2015.
 """
-# pylint: disable=E1101, C0326
 
 #%% Imports
 # normal imports

@@ -71,7 +71,6 @@ Level 4: Now repeat the Level 3 task for this 32x32 board.  Also, modify
 Level 5 [HARD]: Compute the longest sequence of moves to complete Level 3 without
     visiting the same square twice.  Use the 32x32 board.
 """
-# pylint: disable=C0326, C0103, C0301, E1101
 
 #%% Imports
 # regular imports

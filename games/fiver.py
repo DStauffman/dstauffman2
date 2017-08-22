@@ -9,7 +9,6 @@ Notes
 #.  Written by David C. Stauffer in October 2015 when he found the puzzle on his dresser while
     acquiring and rearranging some furniture.
 """
-# pylint: disable=E1101, C0326, C0103
 
 #%% Imports
 # regular imports

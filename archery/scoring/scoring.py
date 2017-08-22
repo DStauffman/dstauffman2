@@ -10,7 +10,6 @@ Notes
 #.  Adapted into dstauffman library by David C. Stauffer in October 2015.
 #.  Moved into dstauffman2 library by David C. Stauffer in November 2016.
 """
-# pylint: disable=C0326, C0103, E1101
 
 #%% Imports
 from datetime import datetime, timedelta

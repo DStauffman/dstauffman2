@@ -7,7 +7,6 @@ Notes
 -----
 #.  Written by David C. Stauffer in January 2015.
 """
-# pylint: disable=C0301, C0326
 
 #%% Imports
 # normal imports
@@ -154,7 +153,7 @@ def determine_seed_winners(data, seeds, waves):
             last_pair1 = last_seed[2*j]
             last_pair2 = last_seed[2*j+1]
             # get the key to find the data within the dataframe
-            key = eval('COL_{:02}_WIN'.format(2**(waves-1-i))) #pylint: disable=W0123
+            key = eval('COL_{:02}_WIN'.format(2**(waves-1-i))) # pylint: disable=W0123
             # pull out the results
             results = data[key]
             # find the results of pairings and determine who won

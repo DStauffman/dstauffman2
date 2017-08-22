@@ -26,7 +26,7 @@ def process_repo(name, root, tests, exclude):
     """
     # hard-coded values
     langs = frozenset({'Python', 'MATLAB', 'DOS Batch'})
-    exclu = frozenset({'header', 'SUM'})
+    exclu = frozenset({'header', 'SUM'}) # set(data.keys()) - langs - exclu - docs
     docs  = frozenset({'TeX', 'XML', 'Markdown'})
     types = frozenset({'blank', 'comment', 'code'})
 

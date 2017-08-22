@@ -24,7 +24,6 @@ Notes
 #.  Ported to the "dstauffman" library by David C. Stauffer in June 2015.
 #.  Moved to the "dstauffman2" library by David C. Stauffer in November 2016.
 """
-# pylint: disable=C0301
 
 #%% Relative imports
 from .bales       import assign_bales, validate_bales

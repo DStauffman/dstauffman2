@@ -7,7 +7,6 @@ Notes
 -----
 #.  Written by David C. Stauffer in June 2015 after he crashed his bike and had nothing to do for a bit.
 """
-# pylint: disable=E1101, C0326, C0103
 
 #%% Imports
 # plotting imports

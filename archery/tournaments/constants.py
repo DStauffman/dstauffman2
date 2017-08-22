@@ -6,7 +6,6 @@ Notes
 -----
 #.  Written by David C. Stauffer in February 2015.
 """
-# pylint: disable=C0326
 
 #%% Constants
 # genders, divisions and possible bale positions
