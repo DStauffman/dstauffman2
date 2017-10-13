@@ -73,13 +73,13 @@ Level 5 [HARD]: Compute the longest sequence of moves to complete Level 3 withou
 """
 
 #%% Imports
-# regular imports
 import doctest
-from enum import unique, IntEnum
 import logging
-import numpy as np
 import time
 import unittest
+from enum import IntEnum, unique
+
+import numpy as np
 
 #%% Pyrex imports
 use_cython = False # TODO: try to use Cython eventually?

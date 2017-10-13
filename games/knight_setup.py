@@ -1,6 +1,6 @@
-from distutils.core import setup
-from Cython.Build import cythonize
 import numpy
+from Cython.Build import cythonize
+from distutils.core import setup
 
 setup(
     name = "Knight app",

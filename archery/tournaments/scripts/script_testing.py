@@ -8,9 +8,8 @@ Created on Mon Dec 15 13:21:07 2014
 """
 
 #%% Imports
-# normal imports
 import os
-# model imports
+
 from dstauffman import setup_dir
 import dstauffman2.archery.tournaments as arch
 

@@ -34,8 +34,9 @@ Report your runtime along with your algorithm/code.
 """
 
 #%% Imports
-import numpy as np
 import random
+
+import numpy as np
 
 #%% Functions - find_equilibriums
 def find_equilibriums(x):

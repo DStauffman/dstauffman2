@@ -9,11 +9,10 @@ Notes
 """
 
 #%% Imports
-# regular imports
 import doctest
-from math import factorial
 import os
-# model imports
+from math import factorial
+
 from dstauffman2 import get_root_dir
 
 #%% Constants

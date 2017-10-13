@@ -9,11 +9,11 @@ Notes
 """
 
 #%% Imports
-from collections import Counter
 import doctest
-from enum import unique, IntEnum
-from random import shuffle as shuffle_func
 import unittest
+from collections import Counter
+from enum import IntEnum, unique
+from random import shuffle as shuffle_func
 
 #%% Enums - Suit
 @unique

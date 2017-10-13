@@ -9,8 +9,10 @@ Notes
 
 #%% Imports
 import doctest
-from matplotlib.patches import Rectangle
 import unittest
+
+from matplotlib.patches import Rectangle
+
 from dstauffman2.games.scrabble.constants import COLOR
 
 #%% plot_board

@@ -9,9 +9,11 @@ Notes
 """
 
 #%% Imports
-import numpy as np
 import os
 import unittest
+
+import numpy as np
+
 import dstauffman2.games.tictactoe as ttt
 
 #%% Aliases

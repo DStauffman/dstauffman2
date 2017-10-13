@@ -12,15 +12,15 @@ Notes
 # normal imports
 import math
 import os
+
 # model imports
 from dstauffman import read_text_file, write_text_file
-from dstauffman2.archery.tournaments.constants import \
-    GENDERS, DIVISIONS, COL_LASTNAME, COL_FIRSTNAME, COL_GENDER, COL_DIVISION, MAX_WAVES, \
-    COL_32_WIN, COL_16_WIN, COL_08_WIN, COL_04_WIN, COL_02_WIN, COL_01_WIN
-from dstauffman2.archery.tournaments.utils import \
-    import_from_excel, export_to_excel, display_info
-from dstauffman2.archery.tournaments.bales import \
-    assign_bales, validate_bales
+from dstauffman2.archery.tournaments.bales import assign_bales, validate_bales
+from dstauffman2.archery.tournaments.constants import COL_01_WIN, COL_02_WIN, COL_04_WIN, \
+    COL_08_WIN, COL_16_WIN, COL_32_WIN, COL_DIVISION, COL_FIRSTNAME, COL_GENDER, COL_LASTNAME, \
+    DIVISIONS, GENDERS, MAX_WAVES
+from dstauffman2.archery.tournaments.utils import display_info, export_to_excel, import_from_excel
+
 
 #%% Functions - write_brackets
 def write_brackets(data, filename='', team='indiv', display=True):

@@ -9,19 +9,18 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import copy
 import inspect
-import matplotlib.pyplot as plt
-import numpy as np
 import os
 import sys
 import unittest
-# Qt imports
+
+import matplotlib.pyplot as plt
+import numpy as np
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication
 from PyQt5.QtTest import QTest
-# model imports
+from PyQt5.QtWidgets import QApplication
+
 import dstauffman2.apps.bac_gui as bac
 
 #%% Constants

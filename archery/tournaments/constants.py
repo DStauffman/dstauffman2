@@ -89,4 +89,3 @@ MAX_WAVES = 5 # (1/16 round with 32 people as maximum starting round)
 #%% Unit test
 if __name__ == '__main__':
     pass
-

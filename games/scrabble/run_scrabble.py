@@ -8,7 +8,9 @@ Written by David C. Stauffer in March 2017.
 
 #%% Imports
 import sys
+
 from PyQt5.QtWidgets import QApplication
+
 from dstauffman2.games.scrabble import ScrabbleGui
 
 #%% Execution

@@ -9,10 +9,12 @@ Notes
 
 #%% Imports
 import doctest
-import numpy as np
 import pickle
 import unittest
-from dstauffman import Frozen, Counter
+
+import numpy as np
+
+from dstauffman import Counter, Frozen
 from dstauffman2.games.tictactoe.constants import PLAYER
 
 #%% Options

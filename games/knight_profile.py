@@ -10,10 +10,12 @@ Notes
 
 #%% Imports
 import os
-import pprofile
 import timeit
-import dstauffman2.games.knight as knight
+
+import pprofile
+
 from dstauffman2 import get_output_dir, setup_dir
+import dstauffman2.games.knight as knight
 
 #%% Script
 if __name__ == '__main__':

@@ -9,16 +9,15 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import copy
-import numpy as np
 import sys
 import unittest
-# Qt imports
+
+import numpy as np
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QPushButton
 from PyQt5.QtTest import QTest
-# model imports
+from PyQt5.QtWidgets import QApplication, QPushButton
+
 from dstauffman import Counter
 import dstauffman2.games.tictactoe as ttt
 

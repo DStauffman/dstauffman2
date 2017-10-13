@@ -9,6 +9,7 @@ Notes
 
 #%% Imports
 import nose
+
 import dstauffman2.games.pentago as pentago
 
 if __name__ == '__main__':

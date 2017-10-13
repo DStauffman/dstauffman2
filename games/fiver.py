@@ -11,17 +11,17 @@ Notes
 """
 
 #%% Imports
-# regular imports
-from datetime import datetime
 import doctest
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
-import numpy as np
 import os
 import pickle
 import unittest
-# model imports
-from dstauffman  import ColorMap, Opts, setup_dir, setup_plots
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Rectangle
+
+from dstauffman import ColorMap, Opts, setup_dir, setup_plots
 from dstauffman2 import get_root_dir
 
 #%% Hard-coded values

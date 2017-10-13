@@ -13,9 +13,11 @@ Notes
 #%% Imports
 import doctest
 import os
-from PIL import Image
 import shutil
 import unittest
+
+from PIL import Image
+
 from dstauffman import setup_dir
 
 #%% Local Constants

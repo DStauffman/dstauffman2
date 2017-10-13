@@ -9,8 +9,10 @@ Notes
 
 #%% Imports
 import doctest
-from matplotlib.patches import Rectangle, Wedge, Polygon
 import unittest
+
+from matplotlib.patches import Polygon, Rectangle, Wedge
+
 from dstauffman2.games.tictactoe.constants import COLOR, PLAYER, SIZES
 
 #%% plot_cur_move

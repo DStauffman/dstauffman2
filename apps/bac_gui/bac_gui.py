@@ -8,21 +8,20 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import doctest
-from enum import Enum, unique
 import glob
-import matplotlib.pyplot as plt
-import numpy as np
 import os
 import pickle
 import sys
 import unittest
-# Qt imports
-from PyQt5 import QtGui, QtCore
+from enum import Enum, unique
+
+import matplotlib.pyplot as plt
+import numpy as np
+from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QComboBox, QFormLayout, QGridLayout, QGroupBox, \
-    QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QRadioButton, QToolTip, QWidget, \
-    QVBoxLayout
+    QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QRadioButton, QToolTip, QVBoxLayout, \
+    QWidget
 
 #%% Constants
 GUI_TOKEN   = -1

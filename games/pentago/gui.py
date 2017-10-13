@@ -8,27 +8,26 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import doctest
 import logging
-from matplotlib.pyplot import Axes
-from matplotlib.figure import Figure
-import numpy as np
 import os
 import sys
 import unittest
-# Qt imports
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QWidget, QToolTip, QPushButton, QLabel, QMessageBox
+
+import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# model imports
-from dstauffman import get_images_dir, get_output_dir, Counter
-from dstauffman2.games.pentago.classes   import Move, GameStats, State
-from dstauffman2.games.pentago.constants import COLOR, PLAYER, OPTIONS, SIZES
-from dstauffman2.games.pentago.plotting  import plot_board, plot_cur_move, plot_piece, \
-                                               plot_possible_win, plot_win
-from dstauffman2.games.pentago.utils     import calc_cur_move, check_for_win, create_board_from_moves, \
-                                               find_moves, rotate_board
+from matplotlib.figure import Figure
+from matplotlib.pyplot import Axes
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QToolTip, QWidget
+
+from dstauffman import Counter, get_images_dir, get_output_dir
+from dstauffman2.games.pentago.classes import GameStats, Move, State
+from dstauffman2.games.pentago.constants import COLOR, OPTIONS, PLAYER, SIZES
+from dstauffman2.games.pentago.plotting import plot_board, plot_cur_move, plot_piece, \
+    plot_possible_win, plot_win
+from dstauffman2.games.pentago.utils import calc_cur_move, check_for_win, create_board_from_moves, \
+    find_moves, rotate_board
 
 # TODO: add boxes for flipping settings
 

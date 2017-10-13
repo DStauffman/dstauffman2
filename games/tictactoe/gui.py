@@ -8,30 +8,28 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import doctest
 import logging
-from matplotlib.pyplot import Axes
-from matplotlib.figure import Figure
-import numpy as np
 import os
 import sys
 import unittest
-# Qt imports
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QApplication, QWidget, QToolTip, QPushButton, QLabel, QMessageBox, \
-    QMainWindow, QAction
+
+import numpy as np
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# model imports
-from dstauffman  import Counter
+from matplotlib.figure import Figure
+from matplotlib.pyplot import Axes
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QAction, QApplication, QLabel, QMainWindow, QMessageBox, QPushButton, \
+    QToolTip, QWidget
+
+from dstauffman import Counter
 from dstauffman2 import get_images_dir, get_output_dir
-from dstauffman2.games.tictactoe.classes   import GameStats, Options, State
+from dstauffman2.games.tictactoe.classes import GameStats, Options, State
 from dstauffman2.games.tictactoe.constants import PLAYER, SIZES
-from dstauffman2.games.tictactoe.plotting  import plot_board, plot_cur_move, plot_possible_win, \
-                                                 plot_powers, plot_win
-from dstauffman2.games.tictactoe.utils     import calc_cur_move, check_for_win, \
-                                                 create_board_from_moves, find_moves, make_move, \
-                                                 play_ai_game
+from dstauffman2.games.tictactoe.plotting import plot_board, plot_cur_move, plot_possible_win, \
+    plot_powers, plot_win
+from dstauffman2.games.tictactoe.utils import calc_cur_move, check_for_win, \
+    create_board_from_moves, find_moves, make_move, play_ai_game
 
 # TODO: make into grid layout
 # TODO: add boxes for flipping settings

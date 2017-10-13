@@ -6,18 +6,19 @@ Created on Thu Apr 13 11:04:53 2017
 """
 
 #%% Imports
-from matplotlib.figure import Figure
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
-#import matplotlib.pyplot as plt
-import numpy as np
 import os
-from dstauffman import get_images_dir, close_all
 
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QWidget, QVBoxLayout
-from PyQt5.QtGui import QIcon
+import numpy as np
+from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
 from PyQt5.QtCore import QSize
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
 
+from dstauffman import close_all, get_images_dir
+
+#%% Constants
 plt = None
 
 #%% Classes - _HoverButton

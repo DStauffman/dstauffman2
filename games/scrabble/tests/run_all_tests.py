@@ -8,9 +8,11 @@ Notes
 """
 
 #%% Imports
-import nose
 import sys
+
+import nose
 from PyQt5.QtWidgets import QApplication
+
 import dstauffman2.games.scrabble as scrab
 
 #%% Script

@@ -10,6 +10,7 @@ Notes
 #%% Imports
 import sys
 import unittest
+
 from PyQt5.QtWidgets import QApplication
 
 #%% Tests

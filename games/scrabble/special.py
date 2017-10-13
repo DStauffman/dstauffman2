@@ -10,8 +10,9 @@ Notes
 #%% Imports
 import doctest
 import unittest
+
 from dstauffman2.games.scrabble.constants import CONSONANTS, MAX_LEN, VOWELS
-from dstauffman2.games.scrabble.utils     import get_raw_dictionary
+from dstauffman2.games.scrabble.utils import get_raw_dictionary
 
 #%% Support function
 def find_all(words=None, func=None):

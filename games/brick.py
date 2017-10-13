@@ -9,17 +9,16 @@ Notes
 """
 
 #%% Imports
-# plotting imports
-from mpl_toolkits.mplot3d.art3d import Poly3DCollection, Line3DCollection
-import matplotlib.pyplot as plt
-# regular imports
-from datetime import datetime
 import doctest
-import numpy as np
 import os
 import shutil
-# model imports
-from dstauffman  import Opts, setup_plots, setup_dir
+from datetime import datetime
+
+import matplotlib.pyplot as plt
+import numpy as np
+from mpl_toolkits.mplot3d.art3d import Line3DCollection, Poly3DCollection
+
+from dstauffman import Opts, setup_dir, setup_plots
 from dstauffman2 import get_root_dir
 
 #%% Hard-coded values

@@ -9,8 +9,10 @@ Notes
 """
 
 #%% Imports
-import numpy as np
 import unittest
+
+import numpy as np
+
 from dstauffman import capture_output
 import dstauffman2.games.fiver as fiver
 

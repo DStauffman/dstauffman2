@@ -10,6 +10,7 @@ Notes
 #%% Imports
 import doctest
 import os
+
 import dstauffman2.games.pentago as pentago
 
 #%% Locals

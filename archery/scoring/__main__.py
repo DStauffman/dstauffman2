@@ -15,8 +15,9 @@ import getpass
 import os
 import sys
 import unittest
-import dstauffman2.archery.scoring as score
+
 from dstauffman import Opts
+import dstauffman2.archery.scoring as score
 
 #%% Argument parsing
 if len(sys.argv) > 1:

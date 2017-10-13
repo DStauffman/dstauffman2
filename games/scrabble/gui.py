@@ -8,27 +8,26 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import doctest
-from matplotlib.pyplot import Axes
-from matplotlib.figure import Figure
-from matplotlib import colors
 import os
 import pickle
 import sys
 import unittest
-# Qt imports
-from PyQt5 import QtGui, QtCore
-from PyQt5.QtWidgets import QAction, QApplication, QGridLayout, QHBoxLayout, QLabel, QLineEdit, \
-    QMainWindow, QPushButton, QToolTip, QWidget, QVBoxLayout
+
+from matplotlib import colors
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-# model imports
+from matplotlib.figure import Figure
+from matplotlib.pyplot import Axes
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QAction, QApplication, QGridLayout, QHBoxLayout, QLabel, QLineEdit, \
+    QMainWindow, QPushButton, QToolTip, QVBoxLayout, QWidget
+
 from dstauffman import pprint_dict
-from dstauffman2.games.scrabble.classes   import Board, Move
+from dstauffman2.games.scrabble.classes import Board, Move
 from dstauffman2.games.scrabble.constants import COLOR, COUNTS, DICT, SCORES
-from dstauffman2.games.scrabble.plotting  import plot_board, plot_draw_stats, plot_move_strength, \
-                                                     display_tile_bag
-from dstauffman2.games.scrabble.utils     import get_root_dir
+from dstauffman2.games.scrabble.plotting import display_tile_bag, plot_board, plot_draw_stats, \
+    plot_move_strength
+from dstauffman2.games.scrabble.utils import get_root_dir
 
 #%% Classes - GuiSettings
 class GuiSettings(object):

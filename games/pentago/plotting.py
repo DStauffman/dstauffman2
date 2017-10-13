@@ -9,10 +9,12 @@ Notes
 
 #%% Imports
 import doctest
-from matplotlib.patches import Circle, Rectangle, Wedge
 import unittest
+
+from matplotlib.patches import Circle, Rectangle, Wedge
+
 from dstauffman2.games.pentago.constants import COLOR, PLAYER, SIZES
-from dstauffman2.games.pentago.utils     import calc_cur_move
+from dstauffman2.games.pentago.utils import calc_cur_move
 
 #%% plot_cur_move
 def plot_cur_move(ax, move):

@@ -6,8 +6,9 @@ Created on Thu Apr 13 21:59:34 2017
 """
 
 #%% Imports
-import abjad as ab
 import copy
+
+import abjad as ab
 
 #%% Script
 if __name__ == '__main__':

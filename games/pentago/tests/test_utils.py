@@ -9,8 +9,10 @@ Notes
 """
 
 #%% Imports
-import numpy as np
 import unittest
+
+import numpy as np
+
 import dstauffman2.games.pentago as pentago
 
 #%% Aliases

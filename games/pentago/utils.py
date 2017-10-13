@@ -10,13 +10,16 @@ Notes
 #%% Imports
 import doctest
 import logging
-import numpy as np
 import os
 import unittest
+
+import numpy as np
+
 from dstauffman import modd
 from dstauffman2 import get_root_dir as dcs_root_dir
-from dstauffman2.games.pentago.classes   import Move
-from dstauffman2.games.pentago.constants import INT_TOKEN, PLAYER, ONE_OFF, SIZES, WIN, _rotate_board
+from dstauffman2.games.pentago.classes import Move
+from dstauffman2.games.pentago.constants import INT_TOKEN, ONE_OFF, PLAYER, SIZES, WIN, \
+    _rotate_board
 
 #%% get_root_dir
 def get_root_dir():

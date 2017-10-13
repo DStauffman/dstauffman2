@@ -8,7 +8,8 @@ Notes
 """
 
 #%% Imports
-from enum import IntEnum, Enum, unique, EnumMeta
+from enum import Enum, EnumMeta, IntEnum, unique
+
 import numpy as np
 
 #%% Meta Class

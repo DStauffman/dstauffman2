@@ -10,6 +10,7 @@ Notes
 #%% Imports
 import doctest
 import os
+
 from dstauffman2 import get_root_dir
 
 #%% Locals

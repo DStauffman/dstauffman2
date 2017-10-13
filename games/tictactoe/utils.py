@@ -10,13 +10,15 @@ Notes
 #%% Imports
 import doctest
 import logging
-import numpy as np
 import os
 import unittest
+
+import numpy as np
+
 from dstauffman2 import get_root_dir as dcs_root_dir
-from dstauffman2.games.tictactoe.classes   import Move, Options
+from dstauffman2.games.tictactoe.classes import Move, Options
 from dstauffman2.games.tictactoe.constants import COLOR, PLAYER, SCORING, SIZES, WIN
-from dstauffman2.games.tictactoe.plotting  import plot_piece
+from dstauffman2.games.tictactoe.plotting import plot_piece
 
 #%% Option instance
 OPTS = Options()

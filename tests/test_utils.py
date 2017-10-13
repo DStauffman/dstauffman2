@@ -12,6 +12,7 @@ Notes
 import inspect
 import os
 import unittest
+
 import dstauffman2 as dcs2
 
 #%% get_root_dir

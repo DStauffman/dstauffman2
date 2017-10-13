@@ -10,9 +10,10 @@ Notes
 #%% Imports
 import doctest
 import unittest
+
 from dstauffman import Frozen
 from dstauffman2.games.scrabble.constants import BOARD
-from dstauffman2.games.scrabble.utils     import validate_board, validate_move
+from dstauffman2.games.scrabble.utils import validate_board, validate_move
 
 #%% Board
 class Board(Frozen):

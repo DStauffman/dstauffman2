@@ -8,14 +8,15 @@ Notes
 """
 
 #%% Imports
-from collections import defaultdict
 import doctest
 import itertools
 import os
 import re
 import unittest
-from dstauffman2 import get_root_dir as dcs_root_dir
+from collections import defaultdict
+
 from dstauffman2 import get_data_dir as dcs_data_dir
+from dstauffman2 import get_root_dir as dcs_root_dir
 from dstauffman2.games.scrabble.constants import BOARD_SYMBOLS, DICT, LETTERS
 
 #%% get_root_dir

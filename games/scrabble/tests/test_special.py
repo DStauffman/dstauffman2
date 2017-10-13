@@ -10,6 +10,7 @@ Notes
 
 #%% Imports
 import unittest
+
 import dstauffman2.games.scrabble as scrab
 
 #%% Unit test execution

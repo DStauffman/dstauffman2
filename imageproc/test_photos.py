@@ -9,10 +9,12 @@ Notes
 """
 
 #%% Imports
-import numpy as np
 import os
-from PIL import Image
 import unittest
+
+import numpy as np
+from PIL import Image
+
 from dstauffman import capture_output, setup_dir, write_text_file
 from dstauffman2 import get_data_dir, get_images_dir, get_tests_dir
 import dstauffman2.imageproc as dip

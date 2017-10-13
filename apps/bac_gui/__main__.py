@@ -14,7 +14,9 @@ import doctest
 import os
 import sys
 import unittest
+
 from PyQt5.QtWidgets import QApplication
+
 import dstauffman2.apps.bac_gui as bac
 
 #%% Argument parsing

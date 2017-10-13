@@ -9,14 +9,13 @@ Notes
 """
 
 #%% Imports
-# normal imports
 import sys
 import unittest
-# Qt imports
+
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QApplication, QPushButton
 from PyQt5.QtTest import QTest
-# model imports
+from PyQt5.QtWidgets import QApplication, QPushButton
+
 import dstauffman2.games.scrabble as scrab
 
 #%% Unit test execution

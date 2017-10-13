@@ -12,15 +12,16 @@ Notes
 """
 
 #%% Imports
-from datetime import datetime, timedelta
 import doctest
 import os
-import numpy as np
-import matplotlib.pyplot as plt
-import pandas as pd
 import unittest
-# library imports
-from dstauffman import setup_dir, Opts, setup_plots
+from datetime import datetime, timedelta
+
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+
+from dstauffman import Opts, setup_dir, setup_plots
 
 #%% Constants
 PLOT_LIMITS  = [250,300]

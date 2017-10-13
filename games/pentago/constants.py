@@ -9,8 +9,9 @@ Notes
 
 #%% Imports
 import doctest
-import numpy as np
 import unittest
+
+import numpy as np
 
 #%% Constants
 # color definitions

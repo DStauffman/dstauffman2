@@ -3,13 +3,15 @@
 
 #%% Imports
 import getpass
-import matplotlib.pyplot as plt
-from matplotlib.patches import Rectangle
-import numpy as np
 import os
+
+import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
+from matplotlib.patches import Rectangle
+
+from dstauffman import Opts, get_output_dir, setup_plots
 import dstauffman2.archery.scoring as score
-from dstauffman import Opts, setup_plots, get_output_dir
 
 #%% Script
 if __name__ == '__main__':

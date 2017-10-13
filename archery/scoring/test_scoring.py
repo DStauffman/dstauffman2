@@ -9,9 +9,11 @@ Notes
 """
 
 #%% Imports
+import unittest
+
 import matplotlib.pyplot as plt
 import numpy as np
-import unittest
+
 import dstauffman2.archery.scoring as arch
 
 #%% get_root_dir

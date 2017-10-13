@@ -9,9 +9,10 @@ Notes
 """
 
 #%% Imports
-import os
 import json
+import os
 import subprocess
+
 from dstauffman import get_root_dir, make_conclusion, make_preamble
 
 #%% Functions

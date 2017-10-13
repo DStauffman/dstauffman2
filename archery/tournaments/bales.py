@@ -10,8 +10,10 @@ Notes
 
 #%% Imports
 import random
-from dstauffman2.archery.tournaments.constants import \
-    DIVISIONS, GENDERS, COL_GENDER, COL_DIVISION, COL_BALE, BALE_POS
+
+from dstauffman2.archery.tournaments.constants import BALE_POS, COL_BALE, COL_DIVISION, \
+    COL_GENDER, DIVISIONS, GENDERS
+
 
 #%% Functions - assign_bales
 def assign_bales(data):
@@ -69,4 +71,3 @@ def validate_bales(data):
 #%% Unit test
 if __name__ == '__main__':
     pass
-

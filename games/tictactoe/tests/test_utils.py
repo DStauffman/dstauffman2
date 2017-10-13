@@ -10,10 +10,12 @@ Notes
 
 #%% Imports
 import inspect
-import matplotlib.pyplot as plt
-import numpy as np
 import os
 import unittest
+
+import matplotlib.pyplot as plt
+import numpy as np
+
 from dstauffman import Counter
 import dstauffman2.games.tictactoe as ttt
 
