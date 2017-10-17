@@ -87,7 +87,7 @@ class ScrabbleGui(QMainWindow):
         else: # pragma: no cover
             self.gui_settings.save(filename)
 
-        # initialize time
+        # initialize timer
         self.time = QtCore.QTimer(self)
 
         # properties
