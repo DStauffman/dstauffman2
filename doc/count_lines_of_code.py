@@ -27,7 +27,7 @@ def process_repo(name, root, tests, exclude):
     """
     # hard-coded values
     langs = frozenset({'Python', 'MATLAB', 'DOS Batch'})
-    exclu = frozenset({'header', 'SUM'}) # set(data.keys()) - langs - exclu - docs
+    exclu = frozenset({'header', 'SUM', 'CSS', 'HTML', 'JSON', 'JavaScript'}) # set(data.keys()) - langs - exclu - docs
     docs  = frozenset({'TeX', 'XML', 'Markdown'})
     types = frozenset({'blank', 'comment', 'code'})
 
@@ -39,7 +39,8 @@ def process_repo(name, root, tests, exclude):
     data      = json.loads(json_text)
 
     # check that nothing unexpected was found
-    assert len(set(data.keys()) - langs - exclu - docs) == 0
+    temp = set(data.keys()) - langs - exclu - docs
+    assert len(temp) == 0, 'Extra data was found: {}'.format(temp)
 
     # get the total number of test lines of code
     lines = {'tests': sum(data['SUM'][x] for x in types)}
@@ -133,24 +134,24 @@ def print_latex_tables(out, keys):
 if __name__ == '__main__':
     # Constants
     # location of cloc utility
-    root  = os.path.sep.join(get_root_dir().split(os.path.sep)[:-1])
+    root  = os.path.sep.join(get_root_dir().split(os.path.sep)[:-2])
     cloc  = os.path.join(root, 'cloc-1.70.exe')
     # repositories to process
     repos = {k:{} for k in ['cromo', 'dstauffman', 'ghap']}
 
     # test folder and other exclusion settings
     repos['cromo']['name']    = 'cromo'
-    repos['cromo']['root']    = os.path.join(root, 'cromo')
+    repos['cromo']['root']    = os.path.join(root, 'cromo', 'cromo')
     repos['cromo']['tests']   = 'tests'
     repos['cromo']['exclude'] = ['output']
 
     repos['dstauffman']['name']    = 'dstauffman'
-    repos['dstauffman']['root']    = os.path.join(root, 'dstauffman')
+    repos['dstauffman']['root']    = os.path.join(root, 'dstauffman', 'dstauffman')
     repos['dstauffman']['tests']   = 'tests'
     repos['dstauffman']['exclude'] = ['data', 'images', 'output', 'results' ,'temp']
 
     repos['ghap']['name']    = 'ghap'
-    repos['ghap']['root']    = os.path.join(root, 'ghap')
+    repos['ghap']['root']    = os.path.join(root, 'ghap', 'ghap')
     repos['ghap']['tests']   = 'tests'
     repos['ghap']['exclude'] = ['data', 'output']
 
