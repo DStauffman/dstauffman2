@@ -355,7 +355,7 @@ def read_from_excel_datafile(filename):
 
     """
     # read data from excel into DataFrame
-    data = pd.io.excel.read_excel(filename, sheetname='Scorecard', parse_cols='B:AT', skiprows=2)
+    data = pd.read_excel(filename, sheet_name='Scorecard', parse_cols='B:AT', skiprows=2)
 
     # get index to rows with valid scores
     ix = (data['Archer'].notnull())

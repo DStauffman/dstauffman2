@@ -34,10 +34,8 @@ def import_from_excel(filename, sheet=SHEET_NAME_INDIV):
     r"""
     Reads the spreadsheet data in from the given filename.
     """
-    # create Excel file object
-    xls = pd.ExcelFile(filename)
-    # parse data and return
-    data = xls.parse(sheet, index_col=None, na_values=['NA'])
+    # read data and return
+    data = pd.read_excel(filename, sheet_name=sheet, index_col=None, na_values=['NA'])
     return data
 
 #%% Functions - export_to_excel
