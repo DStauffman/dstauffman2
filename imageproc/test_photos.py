@@ -238,6 +238,7 @@ class Test_batch_resize(unittest.TestCase):
         with open(cls.source, 'rb') as file:
             img = Image.open(file)
             img.load()
+            img = img.convert('RGB') # remove transparency (alpha) channel to allow JPG saving
         new_img = img.resize((cls.size1, cls.size1), Image.ANTIALIAS)
         new_img.save(os.path.join(cls.folder, cls.name1))
         new_img.save(os.path.join(cls.folder, cls.name6))
@@ -430,6 +431,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
         with open(cls.source, 'rb') as file:
             img = Image.open(file)
             img.load()
+            img = img.convert('RGB') # remove transparency (alpha) channel to allow JPG saving
         new_img = img.resize((cls.size1, cls.size1), Image.ANTIALIAS)
         new_img.save(os.path.join(cls.folder, cls.name1))
         new_img.save(os.path.join(cls.folder, cls.name6))
