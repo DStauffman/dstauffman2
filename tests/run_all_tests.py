@@ -8,10 +8,12 @@ Notes
 """
 
 #%% Imports
+import pytest
 import sys
-import unittest
 
 from PyQt5.QtWidgets import QApplication
+
+from dstauffman2 import get_root_dir
 
 #%% Tests
 if __name__ == '__main__':
@@ -20,15 +22,7 @@ if __name__ == '__main__':
         qapp = QApplication(sys.argv)
     else:
         qapp = QApplication.instance()
-    # get a loader
-    loader = unittest.TestLoader()
-    # find all the test cases
-    test_suite = loader.discover('dstauffman2.apps')
-    test_suite.addTests(loader.discover('dstauffman2.archery'))
-    test_suite.addTests(loader.discover('dstauffman2.games'))
-    test_suite.addTests(loader.discover('dstauffman2.imageproc'))
-    test_suite.addTests(loader.discover('dstauffman2.tests'))
     # run the tests
-    unittest.TextTestRunner(verbosity=1).run(test_suite)
+    pytest.main([get_root_dir()])
     # close the qapp
     qapp.closeAllWindows()
