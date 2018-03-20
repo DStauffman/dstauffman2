@@ -19,8 +19,8 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import Axes
 from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QAction, QApplication, QLabel, QMainWindow, QMessageBox, QPushButton, \
-    QToolTip, QWidget
+from PyQt5.QtWidgets import QAction, QApplication, QGridLayout, QHBoxLayout, QLabel, QMainWindow, \
+    QMessageBox, QPushButton, QToolTip, QVBoxLayout, QWidget
 
 from dstauffman import Counter
 from dstauffman2 import get_images_dir, get_output_dir
@@ -31,7 +31,6 @@ from dstauffman2.games.tictactoe.plotting import plot_board, plot_cur_move, plot
 from dstauffman2.games.tictactoe.utils import calc_cur_move, check_for_win, \
     create_board_from_moves, find_moves, make_move, play_ai_game
 
-# TODO: make into grid layout
 # TODO: add boxes for flipping settings
 
 #%% Logging options
@@ -94,63 +93,80 @@ class TicTacToeGui(QMainWindow):
     #%% GUI initialization
     def init(self):
         r"""Initializes the GUI."""
-        #%% properties
+        # properties
         QToolTip.setFont(QtGui.QFont('SansSerif', 10))
+
+        # Central Widget
+        self.gui_widget = QWidget(self)
+        self.setCentralWidget(self.gui_widget)
+
+        # Panels
+        self.grp_score   = QWidget()
+        self.grp_move    = QWidget()
+        self.grp_buttons = QWidget()
+        self.grp_board   = QWidget()
+        self.grp_main    = QWidget()
+
+        #%% Layouts
+        layout_gui     = QVBoxLayout(self.gui_widget)
+        layout_main    = QHBoxLayout(self.grp_main)
+        layout_board   = QVBoxLayout(self.grp_board)
+        layout_buttons = QHBoxLayout(self.grp_buttons)
+        layout_score   = QGridLayout(self.grp_score)
+        layout_move    = QVBoxLayout(self.grp_move)
+
+        for layout in [layout_gui, layout_main, layout_board, layout_buttons, layout_score, layout_move]:
+            layout.setAlignment(QtCore.Qt.AlignCenter)
 
         #%% Text
         # Tic Tac Toe
-        lbl_tictactoe = QLabel('Tic Tac Toe', self)
-        lbl_tictactoe.setGeometry(360, 51, 220, 40)
-        lbl_tictactoe.setAlignment(QtCore.Qt.AlignCenter)
+        lbl_tictactoe = QLabel('Tic Tac Toe')
         lbl_tictactoe.setStyleSheet('font-size: 18pt; font: bold;')
+        lbl_tictactoe.setMinimumWidth(220)
         # Score
-        lbl_score = QLabel('Score:', self)
-        lbl_score.setGeometry(50, 220, 220, 40)
-        lbl_score.setAlignment(QtCore.Qt.AlignCenter)
+        lbl_score = QLabel('Score:')
         lbl_score.setStyleSheet('font-size: 12pt; font: bold;')
+        lbl_score.setMinimumWidth(220)
         # Move
-        lbl_move = QLabel('Move:', self)
-        lbl_move.setGeometry(740, 220, 220, 40)
-        lbl_move.setAlignment(QtCore.Qt.AlignCenter)
+        lbl_move = QLabel('Move:')
         lbl_move.setStyleSheet('font-size: 12pt; font: bold;')
+        lbl_move.setMinimumWidth(220)
         # O Wins
-        lbl_o = QLabel('O Wins:', self)
-        lbl_o.setGeometry(50, 280, 80, 20)
+        lbl_o = QLabel('O Wins:')
+        lbl_o.setMinimumWidth(80)
         # X Wins
-        lbl_x = QLabel('X Wins:', self)
-        lbl_x.setGeometry(50, 310, 80, 20)
+        lbl_x = QLabel('X Wins:')
+        lbl_x.setMinimumWidth(80)
         # Games Tied
-        lbl_games = QLabel('Games Tied:', self)
-        lbl_games.setGeometry(50, 340, 80, 20)
+        lbl_games = QLabel('Games Tied:')
+        lbl_games.setMinimumWidth(80)
+
+        for label in [lbl_tictactoe, lbl_score, lbl_move, lbl_o, lbl_x, lbl_games]:
+            label.setAlignment(QtCore.Qt.AlignCenter)
+
         # Changeable labels
-        self.lbl_o_wins = QLabel('0', self)
-        self.lbl_o_wins.setGeometry(140, 280, 60, 20)
-        self.lbl_o_wins.setAlignment(QtCore.Qt.AlignRight)
-        self.lbl_x_wins = QLabel('0', self)
-        self.lbl_x_wins.setGeometry(140, 310, 60, 20)
-        self.lbl_x_wins.setAlignment(QtCore.Qt.AlignRight)
-        self.lbl_games_tied = QLabel('0', self)
-        self.lbl_games_tied.setGeometry(140, 340, 60, 20)
-        self.lbl_games_tied.setAlignment(QtCore.Qt.AlignRight)
+        self.lbl_o_wins = QLabel('0')
+        self.lbl_x_wins = QLabel('0')
+        self.lbl_games_tied = QLabel('0')
+
+        for label in [self.lbl_o_wins, self.lbl_x_wins, self.lbl_games_tied]:
+            label.setAlignment(QtCore.Qt.AlignRight)
+            label.setMinimumWidth(60)
 
         #%% Axes
         # board
-        self.wid_board = QWidget(self)
-        self.wid_board.setGeometry(260, 140, 420, 420)
         fig = Figure(figsize=(4.2, 4.2), dpi=100, frameon=False)
         self.board_canvas = FigureCanvas(fig)
-        self.board_canvas.setParent(self.wid_board)
         self.board_canvas.mpl_connect('button_release_event', lambda event: self.mouse_click_callback(event))
+        self.board_canvas.setMinimumSize(420, 420)
         self.board_axes = Axes(fig, [0., 0., 1., 1.])
         self.board_axes.invert_yaxis()
         fig.add_axes(self.board_axes)
 
         # current move
-        self.wid_move = QWidget(self)
-        self.wid_move.setGeometry(780, 279, 70, 70)
-        fig = Figure(figsize=(.7, .7), dpi=100, frameon=False)
+        fig = Figure(figsize=(0.7, 0.7), dpi=100, frameon=False)
         self.move_canvas = FigureCanvas(fig)
-        self.move_canvas.setParent(self.wid_move)
+        self.move_canvas.setMinimumSize(70, 70)
         self.move_axes = Axes(fig, [0., 0., 1., 1.])
         self.move_axes.set_xlim(-SIZES['square']/2, SIZES['square']/2)
         self.move_axes.set_ylim(-SIZES['square']/2, SIZES['square']/2)
@@ -159,23 +175,60 @@ class TicTacToeGui(QMainWindow):
 
         #%% Buttons
         # Undo button
-        self.btn_undo = QPushButton('Undo', self)
+        self.btn_undo = QPushButton('Undo')
         self.btn_undo.setToolTip('Undoes the last move.')
-        self.btn_undo.setGeometry(350, 600, 60, 30)
+        self.btn_undo.setMinimumSize(60, 30)
         self.btn_undo.setStyleSheet('color: yellow; background-color: #990000; font: bold;')
         self.btn_undo.clicked.connect(self.btn_undo_function)
         # New Game button
-        self.btn_new = QPushButton('New Game', self)
+        self.btn_new = QPushButton('New Game')
         self.btn_new.setToolTip('Starts a new game.')
-        self.btn_new.setGeometry(430, 600, 80, 50)
+        self.btn_new.setMinimumSize(60, 50)
         self.btn_new.setStyleSheet('color: yellow; background-color: #006633; font: bold;')
         self.btn_new.clicked.connect(self.btn_new_function)
         # Redo button
-        self.btn_redo = QPushButton('Redo', self)
+        self.btn_redo = QPushButton('Redo')
         self.btn_redo.setToolTip('Redoes the last move.')
-        self.btn_redo.setGeometry(530, 600, 60, 30)
+        self.btn_redo.setMinimumSize(60, 30)
         self.btn_redo.setStyleSheet('color: yellow; background-color: #000099; font: bold;')
         self.btn_redo.clicked.connect(self.btn_redo_function)
+
+        for btn in [self.btn_undo, self.btn_new, self.btn_redo]:
+            not_resize = btn.sizePolicy()
+            not_resize.setRetainSizeWhenHidden(True)
+            btn.setSizePolicy(not_resize)
+
+        #%% Populate Widgets
+        # score
+        layout_score.addWidget(lbl_score, 0, 0, 1, 2)
+        layout_score.addWidget(lbl_o, 1, 0)
+        layout_score.addWidget(self.lbl_o_wins, 1, 1)
+        layout_score.addWidget(lbl_x, 2, 0)
+        layout_score.addWidget(self.lbl_x_wins, 2, 1)
+        layout_score.addWidget(lbl_games, 3, 0)
+        layout_score.addWidget(self.lbl_games_tied)
+
+        # move
+        layout_move.addWidget(lbl_move)
+        layout_move.addWidget(self.move_canvas)
+
+        # buttons
+        layout_buttons.addWidget(self.btn_undo)
+        layout_buttons.addWidget(self.btn_new)
+        layout_buttons.addWidget(self.btn_redo)
+
+        # board
+        layout_board.addWidget(self.board_canvas)
+        layout_board.addWidget(self.grp_buttons)
+
+        # main
+        layout_main.addWidget(self.grp_score)
+        layout_main.addWidget(self.grp_board)
+        layout_main.addWidget(self.grp_move)
+
+        # main GUI
+        layout_gui.addWidget(lbl_tictactoe)
+        layout_gui.addWidget(self.grp_main)
 
         #%% File Menu
         # actions - new game
@@ -202,11 +255,11 @@ class TicTacToeGui(QMainWindow):
         file_menu.addAction(act_options)
         file_menu.addAction(act_quit)
 
-        #%% Call wrapper to initialize GUI
+        #%% Finalization
+        # Call wrapper to initialize GUI
         self.wrapper()
 
-        #%% GUI properties
-        self.resize(1000, 700)
+        # GUI final layout properties
         self.center()
         self.setWindowTitle('Tic Tac Toe')
         self.setWindowIcon(QtGui.QIcon(os.path.join(get_images_dir(), 'tictactoe.png')))
