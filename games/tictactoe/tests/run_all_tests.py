@@ -8,12 +8,10 @@ Notes
 """
 
 #%% Imports
+import pytest
 import sys
 
-import nose
 from PyQt5.QtWidgets import QApplication
-
-import dstauffman2.games.tictactoe as ttt
 
 #%% Script
 if __name__ == '__main__':
@@ -23,6 +21,6 @@ if __name__ == '__main__':
     else:
         qapp = QApplication.instance()
     # run the tests
-    nose.run(ttt)
+    pytest.main()
     # close the qapp
     qapp.closeAllWindows()
