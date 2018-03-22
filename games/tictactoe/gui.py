@@ -410,6 +410,8 @@ class TicTacToeGui(QMainWindow):
             """
             # clean up an existing artifacts
             self.board_axes.clear()
+            if np.less(*self.board_axes.get_ylim()):
+                self.board_axes.invert_yaxis()
             self.move_axes.clear()
 
             # plot the current move
