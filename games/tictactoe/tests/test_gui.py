@@ -55,7 +55,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         board_width = self.gui.board_canvas.size().width()
         board_height = self.gui.board_canvas.size().height()
         pos = QtCore.QPoint((2*col + 1) * (board_width // 6), (2*row + 1) * (board_height // 6))
-        QTest.mouseClick(self.gui.board_canvas, QtCore.Qt.LeftButton, pos=pos)
+        QTest.mouseClick(self.gui.board_canvas, QtCore.Qt.LeftButton, pos=pos, delay=1)
 
     def test_sequence(self):
         # set Options
