@@ -81,22 +81,22 @@ class Test_TicTacToeGui(unittest.TestCase):
         np.testing.assert_array_equal(self.gui.state.board, new_board)
         self.assertEqual(self.gui.state.cur_move, 2)
         # undo second move
-        QTest.mouseClick(self.gui.btn_undo, QtCore.Qt.LeftButton)
+        QTest.mouseClick(self.gui.btn_undo, QtCore.Qt.LeftButton, delay=1)
         new_board[1, 0] = n
         np.testing.assert_array_equal(self.gui.state.board, new_board)
         self.assertEqual(self.gui.state.cur_move, 1)
         # undo first move
-        QTest.mouseClick(self.gui.btn_undo, QtCore.Qt.LeftButton)
+        QTest.mouseClick(self.gui.btn_undo, QtCore.Qt.LeftButton, delay=1)
         new_board[0, 0] = n
         np.testing.assert_array_equal(self.gui.state.board, new_board)
         self.assertEqual(self.gui.state.cur_move, 0)
         # redo first move
-        QTest.mouseClick(self.gui.btn_redo, QtCore.Qt.LeftButton)
+        QTest.mouseClick(self.gui.btn_redo, QtCore.Qt.LeftButton, delay=1)
         new_board[0, 0] = o
         np.testing.assert_array_equal(self.gui.state.board, new_board)
         self.assertEqual(self.gui.state.cur_move, 1)
         # redo second move
-        QTest.mouseClick(self.gui.btn_redo, QtCore.Qt.LeftButton)
+        QTest.mouseClick(self.gui.btn_redo, QtCore.Qt.LeftButton, delay=1)
         new_board[1, 0] = x
         np.testing.assert_array_equal(self.gui.state.board, new_board)
         self.assertEqual(self.gui.state.cur_move, 2)
@@ -114,7 +114,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         np.testing.assert_array_equal(self.gui.state.board, new_board)
         self.assertEqual(self.gui.state.cur_move, 5)
         # start new game
-        QTest.mouseClick(self.gui.btn_new, QtCore.Qt.LeftButton)
+        QTest.mouseClick(self.gui.btn_new, QtCore.Qt.LeftButton, delay=1)
         new_board = self.state.board.copy()
         self.assertEqual(self.gui.state.cur_move, 0)
         self.assertEqual(self.gui.state.cur_game, 1)
@@ -158,7 +158,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         buttons = self.gui.load_widget.findChildren(QPushButton)
         print(buttons)
         # click on Yes button
-        QTest.mouseClick(self.load_widget, QtCore.Qt.LeftButton)
+        QTest.mouseClick(self.load_widget, QtCore.Qt.LeftButton, delay=1)
 
         self._place_piece(1, 1)
         self.assertTrue(self.gui.state.board[1, 1] != n)
