@@ -164,9 +164,9 @@ class TicTacToeGui(QMainWindow):
         fig.add_axes(self.board_axes)
 
         # current move
-        fig = Figure(figsize=(0.7, 0.7), dpi=100, frameon=False)
+        fig = Figure(figsize=(1.05, 1.05), dpi=100, frameon=False)
         self.move_canvas = FigureCanvas(fig)
-        self.move_canvas.setMinimumSize(70, 70)
+        self.move_canvas.setMinimumSize(105, 105)
         self.move_axes = Axes(fig, [0., 0., 1., 1.])
         self.move_axes.set_xlim(-SIZES['square']/2, SIZES['square']/2)
         self.move_axes.set_ylim(-SIZES['square']/2, SIZES['square']/2)
@@ -280,6 +280,22 @@ class TicTacToeGui(QMainWindow):
         center_point = QApplication.desktop().screenGeometry(screen).center()
         frame_gm.moveCenter(center_point)
         self.move(frame_gm.topLeft())
+
+    #%% Other callbacks - setup_axes
+    def setup_axes(self):
+        r"""Sets up the axes for the board and move."""
+        # setup board axes
+        self.board_axes.clear()
+        if np.less(*self.board_axes.get_ylim()):
+            self.board_axes.invert_yaxis()
+        self.board_axes.set_xlim(-0.5, 2.5)
+        self.board_axes.set_ylim(2.5, -0.5)
+        self.board_axes.set_aspect('equal')
+        # setup move axes
+        self.move_axes.clear()
+        self.move_axes.set_xlim(-0.5, 0.5)
+        self.move_axes.set_ylim(-0.5, 0.5)
+        self.move_axes.set_aspect('equal')
 
     #%% Other callbacks - display_controls
     def display_controls(self):
@@ -408,11 +424,8 @@ class TicTacToeGui(QMainWindow):
             r"""
             Sub-wrapper so that the wrapper can call itself for making AI moves.
             """
-            # clean up an existing artifacts
-            self.board_axes.clear()
-            if np.less(*self.board_axes.get_ylim()):
-                self.board_axes.invert_yaxis()
-            self.move_axes.clear()
+            # clean up an existing artifacts and reset axes
+            self.setup_axes()
 
             # plot the current move
             current_player = calc_cur_move(self.state.cur_move, self.state.cur_game)
