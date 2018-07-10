@@ -21,8 +21,8 @@ from PIL import Image
 from dstauffman import setup_dir
 
 #%% Local Constants
-ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif', '.nef'])
-PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef'])
+ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif', '.nef', '.arw'])
+PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef', '.arw'])
 
 #%% Functions - find_missing_nums
 def find_missing_nums(folder, old_picasa=True, digit_check=True, \
