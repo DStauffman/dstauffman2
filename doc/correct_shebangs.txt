@@ -1,0 +1,13 @@
+For Python 3
+#!/usr/bin/env python3
+
+For Python 2
+#!/usr/bin/env python2
+
+For code that runs on 2 or 3
+#!/usr/bin/env python
+
+
+With UTF-8
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
