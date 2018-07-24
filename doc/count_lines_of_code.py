@@ -26,7 +26,7 @@ def process_repo(name, root, tests, exclude):
     #.  All lines in .tex, .xml, and .md files are considered "docs".
     """
     # hard-coded values
-    langs = frozenset({'Python', 'MATLAB', 'DOS Batch'})
+    langs = frozenset({'Python', 'MATLAB', 'DOS Batch', 'Bourne Shell'})
     exclu = frozenset({'header', 'SUM', 'CSS', 'HTML', 'JSON', 'JavaScript'}) # set(data.keys()) - langs - exclu - docs
     docs  = frozenset({'TeX', 'XML', 'Markdown'})
     types = frozenset({'blank', 'comment', 'code'})
