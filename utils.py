@@ -140,5 +140,5 @@ def get_output_dir():
 
 #%% Unit test
 if __name__ == '__main__':
-    unittest.main(module='tests.test_utils', exit=False)
+    unittest.main(module='dstauffman2.tests.test_utils', exit=False)
     doctest.testmod(verbose=False)
