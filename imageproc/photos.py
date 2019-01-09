@@ -13,10 +13,18 @@ Notes
 #%% Imports
 import doctest
 import os
+import re
 import shutil
 import unittest
 
 from PIL import Image
+from PIL.ExifTags import TAGS
+
+try:
+    import exifread
+    HAS_EXIFREAD = True
+except ImportError:
+    HAS_EXIFREAD = False
 
 from dstauffman import setup_dir
 
@@ -623,6 +631,136 @@ def number_files(folder, prefix='Image ', start=1, digits=2, process_extensions=
         counter = counter + 1
 
     print('Batch processing complete.')
+
+#%% read_exif_data
+def read_exif_data(filename, field=None):
+    r"""
+    Reads the EXIF data from the specified image.
+
+    Parameters
+    ----------
+    filename : str
+        Name of the image to read the EXIF data from
+    field : str, optional
+        Name of EXIF tag to read from image
+
+    Returns
+    -------
+    exif : dict
+        EXIF data by tag as keys
+
+    Examples
+    --------
+
+    >>> from dstauffman2 import get_images_dir
+    >>> from dstauffman2.imageproc import read_exif_data
+    >>> import os
+    >>> filename = os.path.join(get_images_dir(), 'python.png')
+    >>> # TODO: get jpg with EXIF metadata
+    >>> exif = read_exif_data(filename) # doctest: +SKIP
+
+    """
+    # open the image
+    with Image.open(filename) as img:
+        # read the exif data
+        exif_data = img._getexif()
+        # convert to dictionary based on EXIF tag
+        exif = {TAGS[k]: v for k, v in exif_data.items() if k in TAGS}
+
+    # return all the data, or just the specified field name
+    if field is None:
+        return exif
+    else:
+        return exif[field]
+
+#%% get_image_datetime
+def get_image_datetime(filename):
+    r"""
+    Get the image date-time information from the given file.
+
+    Examples
+    --------
+
+    >>> from dstauffman2 import get_images_dir
+    >>> from dstauffman2.imageproc import get_image_datetime
+    >>> import os
+    >>> filename = os.path.join(folder, 'python.png')
+    >>> # TODO: needs jpg with metadata
+    >>> time_stamp = get_image_datetime(filename) # doctest: +SKIP
+
+    """
+    if False:
+        # using PIL
+        time_stamp = read_exif_data(filename, 'DateTime')
+    else:
+        # using exifread
+        assert HAS_EXIFREAD, 'Must have the exifread library to run this code.'
+        with open(filename, 'rb') as file:
+            tags = exifread.process_file(file, stop_tag='DateTime', strict=True)
+        temp = tags['Image DateTime']
+        result = re.search(r'.*=(.*) @.*', repr(temp))
+        time_stamp = result.group(1)
+    return time_stamp
+
+#%% get_raw_file_from_datetime
+def get_raw_file_from_datetime(folder, raw_folder, dry_run=False):
+    r"""
+    Finds the RAW file that matches the images in the given folder based on a matching time stamp,
+    and then copies them in and renames them appropriately.
+
+    Examples
+    --------
+
+    >>> from dstauffman2 import get_images_dir
+    >>> from dstauffman2.imageproc import get_raw_file_from_datetime
+    >>> folder = get_images_dir()
+    >>> raw_folder = get_images_dir()
+    >>> # TODO: add working example with new image files
+    >>> get_raw_file_from_datetime(folder, raw_folder) # doctest: +SKIP
+
+    """
+    # hard-coded values
+    img_extension = '.jpg'
+    raw_extension = '.arw'
+
+    # read data from each image in the given folder
+    img_times = {}
+    img_names = {}
+    for image in os.listdir(folder):
+        image_fullpath = os.path.join(folder, image)
+        # check if valid image file
+        if os.path.isdir(image_fullpath):
+            continue
+        elif not image_fullpath.endswith(img_extension):
+            print(' Skipping file   : "{}"'.format(image))
+            continue
+        # read exif data
+        time_stamp = get_image_datetime(image_fullpath)
+        img_times[time_stamp] = image_fullpath
+        img_names[time_stamp] = image
+
+    # read data from raw files for comparison
+    raw_times = {}
+    for image in os.listdir(raw_folder):
+        raw_fullpath = os.path.join(raw_folder, image)
+        if os.path.isdir(raw_fullpath):
+            continue
+        elif not image.endswith(raw_extension):
+            continue
+        raw_time_stamp = get_image_datetime(raw_fullpath)
+        raw_times[raw_time_stamp] = raw_fullpath
+
+    # find the matches and print those missing, too
+    for name in img_times.keys():
+        if name in raw_times:
+            old_file = raw_times[name]
+            new_file = os.path.join(folder, img_names[name].replace(img_extension, raw_extension))
+            print(' File: "{}" has a time stamp of {} and was matched to "{}".'.format(img_times[name], name, raw_times[name]))
+            print('  Copying "{}" to "{}".'.format(old_file, new_file))
+            if not dry_run:
+                shutil.copyfile(old_file, new_file)
+        else:
+            print(' File: "{}" has a time stamp of {} and was not matched to anything in the raw folder.'.format(img_times[name], name))
 
 #%% Unit test
 if __name__ == '__main__':
