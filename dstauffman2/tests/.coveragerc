@@ -3,7 +3,7 @@
 branch = True
 omit =
     *tests/*
-    *dstauffman/*
+    *dstauffman/* # TODO: figure out how to skip dstauffman without skipping dstauffman2
 
 [report]
 # Regexes for lines to exclude from consideration
