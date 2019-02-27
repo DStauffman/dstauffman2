@@ -1,76 +1,25 @@
 #####################
 In settings, change:
 
-Syntax coloring:
-Color scheme, Custom: (Can be changed in "C:\Programs\WinPython-64bit-3.6.3.0\settings\.spyder-py3\spyder.ini")
-[color_schemes]
-custom_names = ['custom-0']
-custom-0/background = #000000
-custom-0/currentline = #000000
-custom-0/currentcell = #000000
-custom-0/occurrence = #cc0000
-custom-0/ctrlclick = #55ffff
-custom-0/sideareas = #181818
-custom-0/matched_p = #355835
-custom-0/unmatched_p = #9c171e
-custom-0/normal = ('#ffffff', False, False)
-custom-0/keyword = ('#00bfff', False, False)
-custom-0/builtin = ('#ff55ff', False, False)
-custom-0/definition = ('#ffffff', True, False)
-custom-0/comment = ('#00ff00', False, True)
-custom-0/string = ('#ffff7f', False, False)
-custom-0/number = ('#ff7979', False, False)
-custom-0/instance = ('#ffff00', False, True)
-custom-0/name = DStauffman
+General, Appearance
+Enable auto high DPI scaling (when on 4K monitors)
+
+Syntax coloring, see colors further below
 
 Editor, Display
 Show vertical line after 100 characters
 Don't wrap lines
-Syntax color scheme: Custom
 
 Editor, Advanced settings
 Undo all the automatic insertions
 Uncheck intelligent backspace
 Check automatically remove trailing spaces when saving files
 
-Console, Dislay
-Uncheck Light background
-
-Console, External modules
-Check: GUI backend: Qt5Agg
-
 IPython console, Display
-Select Dark background
+Uncheck Display initial baner
 
 IPython console, Graphics
 Backend: Qt5
-
-Object inspector
-Syntax color scheme: Custom
-
-
-#####################
-In "C:\Programs\WinPython-64bit-3.4.2.4\python-3.4.2.amd64\Lib\site-packages\spyderlib\widgets\externalshell\sitecustomize.py"
-Or "C:\Programs\WinPython-64bit-3.5.2.3Qt5b3\python-3.5.2.amd64\Lib\site-packages\spyder\utils\site\sitecustomize.py"
-
-Add an __init__ method to the SpyderLib class.  Include nosigint.
-
-class SpyderPdb(pdb.Pdb):
-    def __init__(self, completekey='tab', stdin=None, stdout=None, skip=None, nosigint=False):
-        super(pdb.Pdb, self).__init__()
-
-
-######################
-In "C:\Programs\WinPython-64bit-3.5.2.3Qt5b3\python-3.5.2.amd64\Lib\site-packages\matplotlib\ticker.py"
-
-Modify line 500 or 540-ish
-
-Was:
-if np.absolute(ave_oom - range_oom) >= 3:  # four sig-figs
-
-Is:
-if np.absolute(ave_oom - range_oom) >= 4:  # five sig-figs
-
 
 ######################
 In "C:\Programs\WinPython-64bit-3.6.3.0Qt5\python-3.6.3.amd64\Lib\site-packages\matplotlib\mpl-data\matplotlibrc"
