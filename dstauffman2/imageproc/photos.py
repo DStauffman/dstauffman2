@@ -16,6 +16,7 @@ import os
 import re
 import shutil
 import unittest
+import warnings
 
 from PIL import Image
 from PIL.ExifTags import TAGS
@@ -59,7 +60,6 @@ def find_missing_nums(folder, old_picasa=True, digit_check=True, \
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import find_missing_nums
     >>> folder = get_data_dir()
@@ -140,7 +140,6 @@ def find_unexpected_ext(folder, allowable_extensions=ALLOWABLE_EXTENSIONS):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import find_unexpected_ext
     >>> folder = get_data_dir()
@@ -179,7 +178,6 @@ def rename_old_picasa_files(folder):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import rename_old_picasa_files
     >>> folder = get_data_dir()
@@ -228,7 +226,6 @@ def rename_upper_ext(folder, allowable_extensions=ALLOWABLE_EXTENSIONS):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import rename_upper_ext
     >>> folder = get_data_dir()
@@ -279,7 +276,6 @@ def find_long_filenames(folder):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import find_long_filenames
     >>> folder = get_data_dir()
@@ -357,7 +353,6 @@ def batch_resize(folder, max_width=8192, max_height=8192, \
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import batch_resize
     >>> folder = get_data_dir()
@@ -473,7 +468,6 @@ def convert_tif_to_jpg(folder, max_width=8192, max_height=8192, replace=False, e
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.imageproc import convert_tif_to_jpg
     >>> folder = get_data_dir()
@@ -651,7 +645,6 @@ def read_exif_data(filename, field=None):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_images_dir
     >>> from dstauffman2.imageproc import read_exif_data
     >>> import os
@@ -678,9 +671,13 @@ def get_image_datetime(filename):
     r"""
     Get the image date-time information from the given file.
 
+    Parameters
+    ----------
+    filename : str
+        Name of file to read the time stamp from
+
     Examples
     --------
-
     >>> from dstauffman2 import get_images_dir
     >>> from dstauffman2.imageproc import get_image_datetime
     >>> import os
@@ -703,25 +700,42 @@ def get_image_datetime(filename):
     return time_stamp
 
 #%% get_raw_file_from_datetime
-def get_raw_file_from_datetime(folder, raw_folder, dry_run=False):
+def get_raw_file_from_datetime(folder, raw_folder, dry_run=False, img_extension='.jpg', raw_extension='.arw'):
     r"""
     Finds the RAW file that matches the images in the given folder based on a matching time stamp,
     and then copies them in and renames them appropriately.
 
+    Parameters
+    ----------
+    folder : str
+        Name of folder to read jpegs from to try and match to raw files
+    raw_folder : str
+        Name of folder that contains the raw files
+    dry_run : bool, optional
+        If true, then only show what would happen without actually doing it, default is False
+    img_extension : str, optional, default is .jpg
+        File extension to process
+    raw_extension : str, optional, default is .arw
+        File extension for the raw files
+
+    Returns
+    -------
+    missed : list of str
+        Names of files that couldn't be matched to a raw file
+    possibly_wrong : list of str
+        Names of files that couldn't be uniquely determined and might be wrong (usually due to
+        multiple frames within one second)
+
     Examples
     --------
-
     >>> from dstauffman2 import get_images_dir
     >>> from dstauffman2.imageproc import get_raw_file_from_datetime
     >>> folder = get_images_dir()
     >>> raw_folder = get_images_dir()
     >>> # TODO: add working example with new image files
-    >>> get_raw_file_from_datetime(folder, raw_folder) # doctest: +SKIP
+    >>> (missed, possibly_wrong) = get_raw_file_from_datetime(folder, raw_folder) # doctest: +SKIP
 
     """
-    # hard-coded values
-    img_extension = '.jpg'
-    raw_extension = '.arw'
 
     # read data from each image in the given folder
     img_times = {}
@@ -741,6 +755,7 @@ def get_raw_file_from_datetime(folder, raw_folder, dry_run=False):
 
     # read data from raw files for comparison
     raw_times = {}
+    duplicates = set()
     for image in os.listdir(raw_folder):
         raw_fullpath = os.path.join(raw_folder, image)
         if os.path.isdir(raw_fullpath):
@@ -748,19 +763,36 @@ def get_raw_file_from_datetime(folder, raw_folder, dry_run=False):
         elif not image.endswith(raw_extension):
             continue
         raw_time_stamp = get_image_datetime(raw_fullpath)
-        raw_times[raw_time_stamp] = raw_fullpath
+        if raw_time_stamp not in raw_times:
+            raw_times[raw_time_stamp] = raw_fullpath
+        else:
+            duplicates.add(raw_time_stamp)
 
     # find the matches and print those missing, too
+    missed = []
+    possibly_wrong = []
     for name in img_times.keys():
         if name in raw_times:
             old_file = raw_times[name]
             new_file = os.path.join(folder, img_names[name].replace(img_extension, raw_extension))
+            if name in duplicates:
+                possibly_wrong.append(new_file)
             print(' File: "{}" has a time stamp of {} and was matched to "{}".'.format(img_times[name], name, raw_times[name]))
             print('  Copying "{}" to "{}".'.format(old_file, new_file))
             if not dry_run:
                 shutil.copyfile(old_file, new_file)
         else:
+            missed.append(old_file)
             print(' File: "{}" has a time stamp of {} and was not matched to anything in the raw folder.'.format(img_times[name], name))
+
+    # give a warning for those that were missed or could be wrong
+    if missed:
+        message = 'The following files did not match any raw file and were skipped:\n' + '\n'.join((' {}'.format(x) for x in missed))
+        warnings.warn(message)
+    if possibly_wrong:
+        message = 'The following files could not be uniquely determined and might be wrong:\n' + '\n'.join((' {}'.format(x) for x in possibly_wrong))
+        warnings.warn(message)
+    return (missed, possibly_wrong)
 
 #%% Unit test
 if __name__ == '__main__':
