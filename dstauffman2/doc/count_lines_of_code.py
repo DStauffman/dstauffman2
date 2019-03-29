@@ -6,6 +6,7 @@ ghap repositories.
 Notes
 -----
 #.  Written by David C. Stauffer in April 2017.
+#.  Updated by David C. Stauffer in March 2019 to process pyhesat.
 """
 
 #%% Imports
@@ -137,37 +138,27 @@ if __name__ == '__main__':
     root  = os.path.sep.join(get_root_dir().split(os.path.sep)[:-2])
     cloc  = os.path.join(root, 'cloc-1.70.exe')
     # repositories to process
-    repos = {k:{} for k in ['cromo', 'dstauffman', 'ghap']}
+    repos = {k:{} for k in ['dstauffman', 'hesat']}
 
     # test folder and other exclusion settings
-    repos['cromo']['name']    = 'cromo'
-    repos['cromo']['root']    = os.path.join(root, 'cromo', 'cromo')
-    repos['cromo']['tests']   = 'tests'
-    repos['cromo']['exclude'] = ['output']
-
     repos['dstauffman']['name']    = 'dstauffman'
     repos['dstauffman']['root']    = os.path.join(root, 'dstauffman', 'dstauffman')
     repos['dstauffman']['tests']   = 'tests'
     repos['dstauffman']['exclude'] = ['data', 'images', 'output', 'results' ,'temp']
 
-    repos['ghap']['name']    = 'ghap'
-    repos['ghap']['root']    = os.path.join(root, 'ghap', 'ghap')
-    repos['ghap']['tests']   = 'tests'
-    repos['ghap']['exclude'] = ['data', 'output']
+    repos['hesat']['name']    = 'hesat'
+    repos['hesat']['root']    = os.path.join(root, 'pyhesat', 'hesat')
+    repos['hesat']['tests']   = 'tests'
+    repos['hesat']['exclude'] = ['data', 'output']
 
     # process repos
     out = {}
     for key in repos:
         out[key] = process_repo(**repos[key])
 
-    # cromo and dstauffman
-    out['cromo+dstauffman'] = combine_results(out['cromo'], out['dstauffman'])
-    print_results(**out['cromo+dstauffman'])
-
-    # ghap and dstauffman
-    out['ghap+dstauffman'] = combine_results(out['ghap'], out['dstauffman'])
-    print_results(**out['ghap+dstauffman'])
+    # hesat and dstauffman
+    out['hesat+dstauffman'] = combine_results(out['hesat'], out['dstauffman'])
+    print_results(**out['hesat+dstauffman'])
 
     # print the LaTeX tables
-    print_latex_tables(out, ['dstauffman', 'cromo', 'cromo+dstauffman'])
-    print_latex_tables(out, ['dstauffman', 'ghap', 'ghap+dstauffman'])
+    print_latex_tables(out, ['dstauffman', 'hesat', 'hesat+dstauffman'])
