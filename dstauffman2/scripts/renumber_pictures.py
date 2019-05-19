@@ -8,6 +8,8 @@ Notes
 """
 
 #%% Imports
+import re
+
 import dstauffman2.imageproc as dip
 
 #%% Test script
@@ -15,8 +17,11 @@ if __name__ == '__main__':
     # folder to process
     folder = r'C:\Users\DStauffman\Downloads\Chrome'
 
+    name = re.match(r'.* - (?P<name>\w* \w*) - \w', folder)
+
     # command
-    dip.number_files(folder, prefix='misc ', start=1, digits=3)
+    if name:
+        dip.number_files(folder, prefix='Misc - ' + name['name'] + ' ', start=1, digits=3)
 
     # checks
     dip.rename_upper_ext(folder)
