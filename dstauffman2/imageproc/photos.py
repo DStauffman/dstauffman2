@@ -27,8 +27,6 @@ try:
 except ImportError:
     HAS_EXIFREAD = False
 
-from dstauffman import setup_dir
-
 #%% Local Constants
 ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif', '.nef', '.arw'])
 PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef', '.arw'])
@@ -427,8 +425,9 @@ def batch_resize(folder, max_width=8192, max_height=8192, \
         new_img = img.resize((new_width, new_height), Image.ANTIALIAS)
 
         # Create the output folder if necessary
+		# (Avoid using setup_dir, as this is currently the only dstauffman dependency)
         if not os.path.isdir(os.path.join(folder, 'resized')):
-            setup_dir(os.path.join(folder, 'resized'))
+            os.makedirs(os.path.join(folder, 'resized'))
 
         # Save it back to disk.
         new_img.save(os.path.join(folder, 'resized', image))
