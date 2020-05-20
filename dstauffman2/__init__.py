@@ -9,7 +9,8 @@ Notes
 """
 
 #%% Imports
-from .utils import get_root_dir, get_tests_dir, get_data_dir, get_images_dir, get_output_dir
+from .parser    import main
+from .paths     import get_root_dir, get_tests_dir, get_data_dir, get_images_dir, get_output_dir
 
 #%% Unit test
 if __name__ == '__main__':

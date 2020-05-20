@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 r"""
-Utils module file for the "dstauffman2" library.  It contains generic utilities that can be
+Paths module file for the "dstauffman2" library.  It contains path related utilities that can be
 independently defined and used by other modules.
 
 Notes
 -----
 #.  Written by David C. Stauffer in November 2016.
+#.  Renamed to paths by David C. Stauffer in May 2020.
 """
 
 #%% Imports
@@ -140,5 +141,5 @@ def get_output_dir():
 
 #%% Unit test
 if __name__ == '__main__':
-    unittest.main(module='dstauffman2.tests.test_utils', exit=False)
+    unittest.main(module='dstauffman2.tests.test_paths', exit=False)
     doctest.testmod(verbose=False)
