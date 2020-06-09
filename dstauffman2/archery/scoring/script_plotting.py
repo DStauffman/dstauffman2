@@ -125,7 +125,7 @@ if __name__ == '__main__':
     ax.text(283,  9.6, 'Result: 1084.  Failed Miserably!', fontsize=10)
 
     # optionally save and format plot
-    setup_plots(fig, opts, 'dist_no_y_scale')
+    setup_plots(fig, opts)
 
     #%% Vegas
     # create figure
@@ -179,4 +179,4 @@ if __name__ == '__main__':
     ax.text(293, 10.9, 'Result: 865.  Won $65.  Meh.', fontsize=10)
 
     # optionally save and format plot
-    setup_plots(fig, opts, 'dist_no_y_scale')
+    setup_plots(fig, opts)

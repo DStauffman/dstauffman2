@@ -231,7 +231,7 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     ax.legend()
     ax.grid(True)
     # optionally save and format plot
-    setup_plots(fig, opts, 'dist_no_y_scale')
+    setup_plots(fig, opts)
     return fig
 
 #%% Functions - normal_curve
