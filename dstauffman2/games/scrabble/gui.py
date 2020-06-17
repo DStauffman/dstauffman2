@@ -45,9 +45,11 @@ class GuiSettings(object):
         self.move      = Move()
         self.pot_moves = []
 
-    def pprint(self, indent=2, align=True):
-        r"""Prints all the settings outs."""
-        pprint_dict(self.__dict__, name=self.__class__.__name__, indent=indent, align=align)
+    def pprint(self, return_text=False, **kwargs):
+        r"""Displays a pretty print version of the class."""
+        name = kwargs.pop('name') if 'name' in kwargs else self.__class__.__name__
+        text = pprint_dict(self.__dict__, name=name, **kwargs)
+        return text if return_text else None
 
     @staticmethod
     def load(filename):
