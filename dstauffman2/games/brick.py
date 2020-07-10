@@ -558,9 +558,8 @@ def get_all_positions(piece):
         """
         # convert to N positions by 27 element linear array
         all_rows  = np.array([x.ravel() for x in all_pos])
-        # find the unique rows by converting to a tuple set (not super efficient)
-        uniq_rows = {tuple(row) for row in all_rows}
-        uniq_rows = np.vstack(tuple(uniq_rows))
+        # find the unique rows
+        uniq_rows = np.unique(all_rows, axis=0)
         # convert back to N element list of 3x3x3 pieces
         pieces = []
         for i in range(uniq_rows.shape[0]):
@@ -977,14 +976,17 @@ if __name__ == '__main__':
         # print/save solution sets
         unsort_ix = np.argsort(sort_ix)
         for j in range(len(soln_pieces)):
-            setup_dir(os.path.join(opts.save_path, 'soln{}'.format(j+1)))
+            if make_plots:
+                setup_dir(os.path.join(opts.save_path, 'soln{}'.format(j+1)))
             print('Solution #{}'.format(j+1))
             for i in range(NUM_PIECES):
                 print('Piece {}, position {}'.format(i+1,soln_pieces[j][unsort_ix[i]]+1))
-                old_name = os.path.join(opts.save_path, '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
-                new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
-                shutil.copyfile(old_name, new_name)
+                if make_plots:
+                    old_name = os.path.join(opts.save_path, '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
+                    new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
+                    shutil.copyfile(old_name, new_name)
             print('')
-            old_name = os.path.join(opts.save_path, '{} - Final Solution.png'.format(opts.case_name))
-            new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - Final Solution.png'.format(opts.case_name))
-            shutil.copyfile(old_name, new_name)
+            if make_plots:
+                old_name = os.path.join(opts.save_path, '{} - Final Solution.png'.format(opts.case_name))
+                new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - Final Solution.png'.format(opts.case_name))
+                shutil.copyfile(old_name, new_name)
