@@ -27,8 +27,8 @@ except ImportError:
     HAS_EXIFREAD = False
 
 #%% Local Constants
-ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif', '.nef', '.arw'])
-PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef', '.arw'])
+ALLOWABLE_EXTENSIONS = frozenset(['.jpg', '.ini', '.png', '.gif', '.nef', '.arw', '.heic', '.avif'])
+PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef', '.arw', '.heic', '.avif'])
 
 #%% Functions - find_missing_nums
 def find_missing_nums(folder, old_picasa=True, digit_check=True, \

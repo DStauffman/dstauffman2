@@ -559,7 +559,8 @@ def get_all_positions(piece):
         # convert to N positions by 27 element linear array
         all_rows  = np.array([x.ravel() for x in all_pos])
         # find the unique rows by converting to a tuple set (not super efficient)
-        uniq_rows = np.vstack([tuple(row) for row in all_rows])
+        uniq_rows = {tuple(row) for row in all_rows}
+        uniq_rows = np.vstack(tuple(uniq_rows))
         # convert back to N element list of 3x3x3 pieces
         pieces = []
         for i in range(uniq_rows.shape[0]):
@@ -616,6 +617,7 @@ def plot_cube(piece, title=None, opts=None):
     >>> fig = plot_cube(piece, title='Test Plot')
 
     Close plot
+    >>> import matplotlib.pyplot as plt
     >>> plt.close(fig)
 
     """
@@ -628,7 +630,7 @@ def plot_cube(piece, title=None, opts=None):
     fig = plt.figure()
     # create the axis
     ax = fig.add_subplot(111, projection='3d')
-    ax.set_aspect('equal')
+    # TODO: put back once MPL is fixed: ax.set_aspect('equal')
     # set the title
     if title is not None:
         fig.canvas.set_window_title(title)

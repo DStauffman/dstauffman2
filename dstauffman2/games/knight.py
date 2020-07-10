@@ -777,8 +777,8 @@ def _predict_cost(board):
     >>> board[0, 4] = Piece.final
     >>> costs = _predict_cost(board)
     >>> print(costs) # doctest: +NORMALIZE_WHITESPACE
-    [[ 2.   1.5  1.   0.5  0. ]
-     [ 2.   1.5  1.   1.   0.5]]
+    [[2.   1.5  1.   0.5  0. ]
+     [2.   1.5  1.   1.   0.5]]
 
     """
     # find the final position
