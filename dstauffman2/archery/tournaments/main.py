@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Main module file for the "dstauffman2.archery" library.  It defines the main update and display
 functions.
@@ -46,9 +45,7 @@ def _set_seeds(data, max_seed=None):
 
 #%% Functions - write_registered_archers
 def write_registered_archers(data, filename='', show_bales=True):
-    r"""
-    Writes the list of registered archers out to an html file.
-    """
+    r"""Writes the list of registered archers out to an html file."""
     # check that a non-empty filename was specified
     if len(filename) == 0:
         raise ValueError('A filename must be specified.')
@@ -71,9 +68,7 @@ def write_registered_archers(data, filename='', show_bales=True):
 
 #%% Functions - write_indiv_results
 def write_indiv_results(data, filename=''):
-    r"""
-    Writes the individual archer results out to an html file.
-    """
+    r"""Writes the individual archer results out to an html file."""
     # check that a non-empty filename was specified
     if len(filename) == 0:
         raise ValueError('A filename must be specified.')
@@ -95,9 +90,7 @@ def write_indiv_results(data, filename=''):
 
 #%% Functions - update_indiv
 def update_indiv(data, use_gender=True):
-    r"""
-    Updates the individual results with a seed number by division and gender.
-    """
+    r"""Updates the individual results with a seed number by division and gender."""
     if use_gender:
         # apply the seed when grouped by division and gender
         data_out = data.groupby([COL_DIVISION, COL_GENDER], group_keys=False).apply(_set_seeds)

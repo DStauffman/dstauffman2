@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "apps" submodule within the "dstauffman2" module is a playground for developing stand-alone apps.
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Scrabble or Words With Friends Solver with graphics support.
 

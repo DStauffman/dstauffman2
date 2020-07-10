@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "puzzles" submodule within the "dstauffman2" module is a playground for simulating and solving
 different logic puzzles.

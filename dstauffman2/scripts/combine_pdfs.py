@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Script for combining some PDFs together.
 

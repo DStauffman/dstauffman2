@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The main module file for the BAC GUI.  It defines the GUI and it's behavior and plotting.
 
@@ -31,17 +30,13 @@ BMI_CONV    = 703.0704
 #%% Classes - Gender
 @unique
 class Gender(Enum):
-    r"""
-    Enumerator definitions for the possible gender conditions.
-    """
+    r"""Enumerator definitions for the possible gender conditions."""
     male   = 1 # uncircumcised male
     female = 2 # female
 
 #%% Classes - GuiSettings
 class GuiSettings(object):
-    r"""
-    Settings that capture the current state of the GUI.
-    """
+    r"""Settings that capture the current state of the GUI."""
     def __init__(self):
         self.profile     = 'Default'
         self.height      = GUI_TOKEN
@@ -65,7 +60,7 @@ class GuiSettings(object):
 
     @staticmethod
     def get_text_fields():
-        r"""Returns the names of all the line edit widgets"""
+        r"""Returns the names of all the line edit widgets."""
         return ['height', 'weight', 'age', 'bmi', 'hr1', 'hr2', 'hr3', 'hr4', 'hr5', 'hr6']
 
     @staticmethod
@@ -83,9 +78,7 @@ class GuiSettings(object):
 
 #%% Classes - BacGui
 class BacGui(QMainWindow):
-    r"""
-    The BAC GUI.
-    """
+    r"""The BAC GUI."""
     # Create GUI setting defaults for the class
     gui_settings = GuiSettings()
 
@@ -246,9 +239,7 @@ class BacGui(QMainWindow):
 
     #%% wrapper
     def wrapper(self):
-        r"""
-        Acts as a wrapper to everything the GUI needs to do.
-        """
+        r"""Acts as a wrapper to everything the GUI needs to do."""
         # Note: nothing is done to update the profile field, it's assumed to correct already
         # loop through and update the text fields
         for field in self.gui_settings.get_text_fields():
@@ -403,7 +394,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2.apps.bac_gui import get_root_dir
     >>> folder = get_root_dir()
 
@@ -415,8 +405,7 @@ def get_root_dir():
 #%% Functions - calculate_bmi
 def calculate_bmi(height, weight, gender, conv=BMI_CONV):
     r"""
-    Calculates the BMI (Body Mass Index) for someone based on their height and weight (and maybe
-    eventually gender).
+    Calculates the BMI (Body Mass Index) for someone based on their height and weight.
 
     Parameters
     ----------
@@ -434,9 +423,12 @@ def calculate_bmi(height, weight, gender, conv=BMI_CONV):
     bmi : float
         Body mass index
 
+    Notes
+    -----
+    #.  Should this eventually include gender?
+
     Examples
     --------
-
     >>> from dstauffman2.apps.bac_gui import calculate_bmi, Gender
     >>> height = 69
     >>> weight = 161
@@ -457,7 +449,6 @@ def calculate_bac(time_drinks, drinks, time_out, body_weight):
 
     Examples
     --------
-
     >>> from dstauffman2.apps.bac_gui import calculate_bac
     >>> import numpy as np
     >>> time_drinks = np.array([1, 2, 3, 4, 5, 6])
@@ -466,7 +457,7 @@ def calculate_bac(time_drinks, drinks, time_out, body_weight):
     >>> body_weight = 105
     >>> bac = calculate_bac(time_drinks, drinks, time_out, body_weight)
     >>> print(bac) # doctest: +NORMALIZE_WHITESPACE
-    [ 0.00020714  0.00059286  0.00122857  0.00125714  0.00110714  0.00095714]
+    [0.00020714 0.00059286 0.00122857 0.00125714 0.00110714 0.00095714]
 
     """
     # hard-coded values
@@ -514,7 +505,6 @@ def plot_bac(gui_settings, legal_limit=None):
 
     Examples
     --------
-
     >>> from dstauffman2.apps.bac_gui import GuiSettings, plot_bac, Gender
     >>> import matplotlib.pyplot as plt
     >>> gui_settings = GuiSettings()

@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 r"""
-Paths module file for the "dstauffman2" library.  It contains path related utilities that can be
-independently defined and used by other modules.
+Paths module file for the "dstauffman2" library.  It contains path related utilities.
+These files are designed to be used independently of the other modules.
 
 Notes
 -----
@@ -30,7 +29,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2 import get_root_dir
     >>> folder = get_root_dir()
 
@@ -55,7 +53,6 @@ def get_tests_dir():
 
     Examples
     --------
-
     >>> from dstauffman2 import get_tests_dir
     >>> folder = get_tests_dir()
 
@@ -80,7 +77,6 @@ def get_data_dir():
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> folder = get_data_dir()
 
@@ -105,7 +101,6 @@ def get_images_dir():
 
     Examples
     --------
-
     >>> from dstauffman2 import get_images_dir
     >>> folder = get_images_dir()
 
@@ -130,7 +125,6 @@ def get_output_dir():
 
     Examples
     --------
-
     >>> from dstauffman2 import get_output_dir
     >>> folder = get_output_dir()
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Test file to execute all the docstrings within the tictactoe code.
 

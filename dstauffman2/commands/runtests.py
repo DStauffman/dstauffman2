@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Functions related to running all the included tests.
 

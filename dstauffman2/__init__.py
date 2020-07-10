@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "dstauffman2" module is a collection of games, applications, extended utilities and
 miscellaneous documentation that I (David C. Stauffer) have found useful.

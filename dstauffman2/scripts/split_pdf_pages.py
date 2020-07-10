@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Feb 15 17:26:49 2018
+Splits the given pages of a PDF file into a new output file.
 
-@author: DStauffman
+Notes
+-----
+#.  Written by David C. Stauffer in February 2018.
 """
 
 #%% Imports

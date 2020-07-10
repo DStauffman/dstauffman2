@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Simulations module file for the "dstauffman2.archery" library.  It defines constants.
 
@@ -21,9 +20,7 @@ MAX_CUM         = 150
 
 #%% Functions - simulate_individual_scores
 def simulate_individual_scores(data):
-    r"""
-    Simulates the individual scoring rounds.
-    """
+    r"""Simulates the individual scoring rounds."""
     # get the number of archers
     num_archers           = len(data)
     # generate random scores and X counts
@@ -44,9 +41,7 @@ def simulate_individual_scores(data):
 
 #%% Functions - simulate_bracket_scores
 def simulate_bracket_scores(data, round_=''):
-    r"""
-    Simulates the bracket scores, round by round.
-    """
+    r"""Simulates the bracket scores, round by round."""
     if len(round_) == 0:
         return
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Constants module file for the "scrabble" game.  It defines constants.
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Utils module file for the "pentago" game.  It defines the generic utility functions.
 
@@ -37,7 +36,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2.games.pentago import get_root_dir
     >>> folder = get_root_dir()
 
@@ -81,9 +79,7 @@ def calc_cur_move(cur_move, cur_game):
 
 #%% check_for_win
 def check_for_win(board):
-    r"""
-    Checks for a win.
-    """
+    r"""Checks for a win."""
     # find white and black wins
     white = np.flatnonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['white'], axis=1) * WIN, axis=0) == 5)
     black = np.flatnonzero(np.sum(np.expand_dims(board.ravel() == PLAYER['black'], axis=1) * WIN, axis=0) == 5)
@@ -124,7 +120,6 @@ def find_moves(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.pentago import find_moves
     >>> import numpy as np
     >>> board = np.reshape(np.hstack((np.array([0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1]), np.zeros(24, dtype=int))), (6, 6))
@@ -138,9 +133,7 @@ def find_moves(board):
     """
     #%% get_move_from_one_off
     def get_move_from_one_off(big_board, ix, ONE_OFF):
-        r"""
-        Turns the given index into a Move instance.
-        """
+        r"""Turns the given index into a Move instance."""
         # preallocate x & y to NaNs in case the winning move is just a rotation
         row = np.full(len(ix), INT_TOKEN, dtype=int)
         column = row.copy()
@@ -248,9 +241,7 @@ def find_moves(board):
 
 #%% create_board_from_moves
 def create_board_from_moves(moves, first_player):
-    r"""
-    Recreates a board from a move history.
-    """
+    r"""Recreates a board from a move history."""
     # make sure the first player is valid
     assert first_player == PLAYER['white'] or first_player == PLAYER['black']
     # create the initial board

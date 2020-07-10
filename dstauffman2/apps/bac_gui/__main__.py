@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 BAC GUI __main__ function that runs on model execution.
 

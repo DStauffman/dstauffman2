@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Plotting module file for the "tictactoe" game.  It defines the plotting functions.
 
@@ -29,7 +28,6 @@ def plot_cur_move(ax, move):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import plot_cur_move, PLAYER
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()
@@ -85,7 +83,6 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import plot_piece, PLAYER
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()
@@ -241,7 +238,6 @@ def plot_possible_win(ax, o_moves, x_moves):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import plot_possible_win, find_moves
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
@@ -285,7 +281,6 @@ def plot_powers(ax, board, o_moves, x_moves):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import plot_powers, find_moves, plot_board
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np

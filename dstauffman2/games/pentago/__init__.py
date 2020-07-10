@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Pentago board game as a Python GUI.
 

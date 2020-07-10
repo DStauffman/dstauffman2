@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Parser used to parse all commands from the terminal and pass to the revelant command functions.
 

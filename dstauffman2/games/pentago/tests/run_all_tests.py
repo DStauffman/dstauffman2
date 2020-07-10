@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Test file to execute all the tests from the unittest library within the pentago code using nose.
 

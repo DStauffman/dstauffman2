@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The "fiver" file solves the geometric puzzle with twelve pieces made of all unique combinations of
 five squares that share adjacent edges.  Then these 12 pieces are layed out into boards of sixty
@@ -63,7 +62,6 @@ def _pad_piece(piece, max_size, pad_value=0):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import _pad_piece
     >>> import numpy as np
     >>> piece = np.array([[1, 1, 1, 1], [0, 0, 0, 1]], dtype=int)
@@ -114,7 +112,6 @@ def _shift_piece(piece):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import _shift_piece
     >>> import numpy as np
     >>> x = np.zeros((5,5), dtype=int)
@@ -157,7 +154,6 @@ def _rotate_piece(piece):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import _rotate_piece
     >>> import numpy as np
     >>> x = np.arange(25).reshape((5, 5))
@@ -197,7 +193,6 @@ def _flip_piece(piece):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import _flip_piece
     >>> import numpy as np
     >>> x = np.arange(25).reshape((5, 5))
@@ -234,7 +229,6 @@ def _get_unique_pieces(pieces):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import _get_unique_pieces, _rotate_piece
     >>> import numpy as np
     >>> pieces = np.zeros((3, 5, 5), dtype=int)
@@ -287,7 +281,6 @@ def _display_progress(ix, nums, last_ratio=0):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import _display_progress
     >>> import numpy as np
     >>> ix = np.array([1, 0, 4, 0])
@@ -313,9 +306,7 @@ def _display_progress(ix, nums, last_ratio=0):
 
 #%% Functions - _blobbing
 def _blobbing(board):
-    r"""
-    Blobbing algorithm 2.  Checks that all empty blobs are multiples of 5 squares.
-    """
+    r"""Blobbing algorithm 2.  Checks that all empty blobs are multiples of 5 squares."""
     # set sizes
     (m, n) = board.shape
     # initialize some lists, labels and counter
@@ -377,9 +368,7 @@ def _blobbing(board):
 
 #%% Functions - _save_solution
 def _save_solution(solutions, this_board):
-    r"""
-    Saves the given solution if it's unique.
-    """
+    r"""Saves the given solution if it's unique."""
     if len(solutions) == 0:
         # if this is the first solution, then simply save it
         solutions.append(this_board.copy())
@@ -422,7 +411,6 @@ def make_all_pieces():
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import make_all_pieces
     >>> pieces = make_all_pieces()
     >>> print(pieces[0])
@@ -505,7 +493,6 @@ def make_all_permutations(pieces):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import make_all_pieces, make_all_permutations
     >>> pieces = make_all_pieces()
     >>> all_pieces = make_all_permutations(pieces)
@@ -562,7 +549,6 @@ def is_valid(board, piece, use_blobbing=True):
 
     Examples
     --------
-
     >>> from dstauffman2.games.fiver import is_valid
     >>> import numpy as np
     >>> board = np.ones((5, 5), dtype=int)
@@ -596,9 +582,7 @@ def is_valid(board, piece, use_blobbing=True):
 
 #%% Functions - find_all_valid_locations
 def find_all_valid_locations(board, all_pieces):
-    r"""
-    Finds all the valid locations for each piece on the board.
-    """
+    r"""Finds all the valid locations for each piece on the board."""
     (m, n) = board.shape
     max_pieces = (m - SIZE_PIECES - 1)*(n - SIZE_PIECES - 1) * NUM_ORIENTS
     locations = []
@@ -626,9 +610,7 @@ def find_all_valid_locations(board, all_pieces):
 
 #%% Functions - solve_puzzle
 def solve_puzzle(board, locations, find_all=False):
-    r"""
-    Solves the puzzle for the given board and all possible piece locations.
-    """
+    r"""Solves the puzzle for the given board and all possible piece locations."""
     # initialize the solutions
     solutions = []
     # create a working board
@@ -695,9 +677,7 @@ def solve_puzzle(board, locations, find_all=False):
 
 #%% Functions - plot_board
 def plot_board(board, title, opts=None):
-    r"""
-    Plots the board or the individual pieces.
-    """
+    r"""Plots the board or the individual pieces."""
     # hard-coded square size
     box_size = 1
     # check for opts
@@ -734,9 +714,7 @@ def plot_board(board, title, opts=None):
 
 #%% Functions - test_docstrings
 def test_docstrings():
-    r"""
-    Tests the docstrings within this file.
-    """
+    r"""Tests the docstrings within this file."""
     unittest.main(module='dstauffman2.games.test_fiver', exit=False)
     doctest.testmod(verbose=False)
 

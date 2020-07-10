@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-Created on Mon Dec 26 12:38:44 2016
+Created on Mon Dec 26 12:38:44 2016.
 
 @author: David C. Stauffer
 
@@ -30,7 +29,6 @@ Return an equilibrium index or -1 if none exist.
 Do it fast.
 Don't spend more than 1 hour.
 Report your runtime along with your algorithm/code.
-
 """
 
 #%% Imports
@@ -40,9 +38,7 @@ import numpy as np
 
 #%% Functions - find_equilibriums
 def find_equilibriums(x):
-    r"""
-    Find the equilibrium points.
-    """
+    r"""Find the equilibrium points."""
     # force input to be array
     x = np.asanyarray(x)
 
@@ -60,9 +56,7 @@ def find_equilibriums(x):
 
 #%% Functions - boring_version
 def boring_version(x, early=False):
-    r"""
-    Find the equilibrium points without using NumPy.
-    """
+    r"""Find the equilibrium points without using NumPy."""
     # initialize output
     y = []
 
@@ -113,12 +107,12 @@ if __name__ == '__main__':
     %timeit I3  = find_equilibriums(worst)
     %timeit I3b = find_equilibriums(worst2)
 
-    # Approximately 0.0005s (500 microseconds) on my work computer.  Go numpy!
+    # Approximately 0.00042s (420 microseconds) on my work computer.  Go numpy!
     # Note: takes 6ms if worst input is not already a numpy array
 
     %timeit I1 = boring_version(A)
     %timeit I2 = boring_version(rand)
     %timeit I3 = boring_version(worst)
 
-    # Approximately 0.018s (18 milliseconds) on my work computer. (36X slower than numpy...)
+    # Approximately 0.0134s (13.4 milliseconds) on my work computer. (32X slower than numpy...)
     """

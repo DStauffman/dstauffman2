@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-This script moves the files from any folders up to the root level.
+Moves the files from any folders up to the root level.
 
 Notes
 -----

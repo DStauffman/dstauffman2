@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Utils module file for the "scrabble" game.  It defines the generic utility functions.
 
@@ -31,7 +30,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import get_root_dir
     >>> folder = get_root_dir()
 
@@ -59,7 +57,6 @@ def get_dict_path(name=DICT):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import get_dict_path
     >>> path = get_dict_path()
     >>> print(path) # doctest: +SKIP
@@ -98,7 +95,6 @@ def get_raw_dictionary(filename=None, min_len=2, max_len=20):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import get_raw_dictionary
     >>> words = get_raw_dictionary()
     >>> assert isinstance(words, set)
@@ -155,7 +151,6 @@ def create_dict(filename, min_len=2, max_len=20):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.games.scrabble import create_dict, get_dict_path
     >>> filename = get_dict_path()
@@ -193,7 +188,6 @@ def count_num_words(words):
 
     Examples
     --------
-
     >>> from dstauffman2 import get_data_dir
     >>> from dstauffman2.games.scrabble import create_dict, get_dict_path, count_num_words
     >>> filename = get_dict_path()
@@ -245,7 +239,6 @@ def find_all_words(tiles, words, pattern=''):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import create_dict, find_all_words, get_dict_path
     >>> from dstauffman2 import get_data_dir
     >>> tiles    = ['w', 'o', 'r', 'd', 's']
@@ -315,9 +308,7 @@ def find_all_words(tiles, words, pattern=''):
 
 #%% Functions - validate_board
 def validate_board(board):
-    r"""
-    Validates a given board.
-    """
+    r"""Validates a given board."""
     num_squares = len(board)
     rows = board.split('\n')
     num_rows = len(rows)
@@ -334,16 +325,12 @@ def validate_board(board):
 
 #%% Functions - validate_move
 def validate_move(board, played, move):
-    r"""
-    Validates whether the desired move is legal.
-    """
+    r"""Validates whether the desired move is legal."""
     return True # TODO: write this
 
 #%% Functions - score_move
 def score_move(board, played, move):
-    r"""
-    Scores a given move based on a board layout and played tiles.
-    """
+    r"""Scores a given move based on a board layout and played tiles."""
     # initialize output
     score = 0
     # TODO: write this
@@ -356,7 +343,6 @@ def get_board_played(played):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import get_board_played
     >>> played = '     \n     \n cat \n     \n     '
     >>> out = get_board_played(played)
@@ -374,7 +360,6 @@ def get_board_open(played):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import get_board_open
     >>> played = '     \n     \n cat \n     \n     '
     >>> out = get_board_open(played)
@@ -392,7 +377,6 @@ def get_board_must_play(board, num_rows, num_cols, played):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import get_board_must_play
     >>> board    = '.....\n.....\n..s..\n.....\n.....'
     >>> played   = '     \n     \n cat \n     \n     '

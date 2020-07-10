@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 GUI module file for the "scrabble" game.  It defines the GUI.
 
@@ -31,9 +30,7 @@ from dstauffman2.games.scrabble.utils import get_root_dir
 
 #%% Classes - GuiSettings
 class GuiSettings(object):
-    r"""
-    Settings that capture the current state of the GUI.
-    """
+    r"""Settings that capture the current state of the GUI."""
     def __init__(self):
         self.board     = Board()
         self.dict_name = DICT
@@ -66,9 +63,7 @@ class GuiSettings(object):
 
 #%% Classes - ScrabbleGui
 class ScrabbleGui(QMainWindow):
-    r"""
-    The Scrabble GUI.
-    """
+    r"""The Scrabble GUI."""
     # Create GUI setting defaults for the class
     gui_settings = GuiSettings()
 
@@ -265,9 +260,7 @@ class ScrabbleGui(QMainWindow):
 
     #%% Wrapper
     def wrapper(self):
-        r"""
-        Acts as a wrapper to everything the GUI needs to do.
-        """
+        r"""Acts as a wrapper to everything the GUI needs to do."""
         # plot the board
         plot_board(self.board_axes, self.gui_settings.board)
         # display tile bag

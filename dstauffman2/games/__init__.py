@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "games" submodule within the "dstauffman2" module is a playground for simulating and solving
 different types of games.

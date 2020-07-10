@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The "knight" file solves the Knight Board puzzle given to Matt Beck during a job interview.
 
@@ -172,10 +171,7 @@ MOVES = [-4, -3, -2, -1, 1, 2, 3, 4]
 #%% Classes - Piece
 @unique
 class Piece(IntEnum):
-    r"""
-    Enumerator for all the possible types of squares within the board, including start and end
-    positions
-    """
+    r"""Enumerator for all the possible types of squares within the board, including start and end positions."""
     null      = 0 # Empty square that has never been used
     start     = 1 # Original starting position
     final     = 2 # Final ending position
@@ -190,9 +186,7 @@ class Piece(IntEnum):
 #%% Classes - Move
 @unique
 class Move(IntEnum):
-    r"""
-    Enumerator for all the cost outcomes for moving a piece.
-    """
+    r"""Enumerator for all the cost outcomes for moving a piece."""
     off_board = -2
     blocked   = -1
     visited   = 0
@@ -227,7 +221,6 @@ def _board_to_costs(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _board_to_costs, Piece
     >>> import numpy as np
     >>> board = np.full((3, 3), Piece.null, dtype=int)
@@ -282,7 +275,6 @@ def _get_transports(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _get_transports, Piece
     >>> import numpy as np
     >>> board = np.full((3, 3), Piece.null, dtype=int)
@@ -328,7 +320,6 @@ def _get_current_position(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _get_current_position, Piece
     >>> import numpy as np
     >>> board = np.zeros((5,5), dtype=int)
@@ -381,7 +372,6 @@ def _get_new_position(x, y, move, transports):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _get_new_position
     >>> x = 2
     >>> y = 3
@@ -469,7 +459,6 @@ def _check_board_boundaries(x, y, xmax, ymax):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _check_board_boundaries
     >>> x = 2
     >>> y = 5
@@ -517,7 +506,6 @@ def _classify_move(board, move, transports, start_x, start_y):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _classify_move, Piece
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)
@@ -609,7 +597,6 @@ def _update_board(board, move, costs, transports, start_x, start_y):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _update_board, print_board, Piece
     >>> import numpy as np
     >>> board = np.zeros((2, 5), dtype=int)
@@ -727,7 +714,7 @@ def _undo_move(board, last_move, original_board, transports, start_x, start_y):
 #%% _get_move_inverse
 def _get_move_inverse(move):
     r"""
-    Gets the inverse move to go back where you were:
+    Gets the inverse move to go back where you were.
         -/+1 <-> -/+3
         -/+2 <-> -/+4
 
@@ -783,14 +770,13 @@ def _predict_cost(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _predict_cost, Piece
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)
     >>> board[0, 0] = Piece.start
     >>> board[0, 4] = Piece.final
     >>> costs = _predict_cost(board)
-    >>> print(costs)
+    >>> print(costs) # doctest: +NORMALIZE_WHITESPACE
     [[ 2.   1.5  1.   0.5  0. ]
      [ 2.   1.5  1.   1.   0.5]]
 
@@ -837,7 +823,6 @@ def _sort_best_moves(board, moves, costs, transports, start_x, start_y):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _sort_best_moves, Piece, MOVES, _predict_cost
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)
@@ -884,7 +869,6 @@ def print_board(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import print_board, Piece
     >>> import numpy as np
     >>> board = np.zeros((5,5), dtype=int)
@@ -929,7 +913,6 @@ def char_board_to_nums(char_board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import char_board_to_nums
     >>> char_board = '. . S . .\n. . . . E'
     >>> board = char_board_to_nums(char_board)
@@ -980,7 +963,6 @@ def check_valid_sequence(board, moves, print_status=False, allow_repeats=False):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import check_valid_sequence, Piece, _board_to_costs
     >>> import numpy as np
     >>> board = np.zeros((3, 5), dtype=int)
@@ -1053,7 +1035,6 @@ def print_sequence(board, moves):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import print_sequence, Piece
     >>> import numpy as np
     >>> board = np.zeros((3, 5), dtype=int)
@@ -1136,7 +1117,6 @@ def _initialize_data(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _initialize_data, Piece
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)
@@ -1203,7 +1183,6 @@ def _solve_next_move(board, data, start_x, start_y):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import _solve_next_move, Piece, _initialize_data
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)
@@ -1287,7 +1266,6 @@ def solve_min_puzzle(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import solve_min_puzzle, Piece
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)
@@ -1362,7 +1340,6 @@ def solve_max_puzzle(board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight import solve_max_puzzle, Piece
     >>> import numpy as np
     >>> board = np.zeros((2,5), dtype=int)

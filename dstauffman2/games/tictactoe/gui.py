@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 GUI module file for the "tictactoe" game.  It defines the GUI.
 
@@ -42,9 +41,7 @@ OPTS = Options()
 
 #%% Classes - TicTacToeGui
 class TicTacToeGui(QMainWindow):
-    r"""
-    The Tic Tac Toe GUI.
-    """
+    r"""The Tic Tac Toe GUI."""
     def __init__(self, filename=None, board=None, cur_move=None, cur_game=None, game_hist=None):
         # call super method
         super().__init__()
@@ -55,9 +52,7 @@ class TicTacToeGui(QMainWindow):
 
     #%% State initialization
     def initialize_state(self, filename, board, cur_move, cur_game, game_hist): # TODO: use these other arguments
-        r"""
-        Loads the previous game based on settings and whether the file exists.
-        """
+        r"""Loads the previous game based on settings and whether the file exists."""
         # preallocate to not load
         load_game = False
         self.load_widget = None
@@ -299,9 +294,7 @@ class TicTacToeGui(QMainWindow):
 
     #%% Other callbacks - display_controls
     def display_controls(self):
-        r"""
-        Determines what controls to display on the GUI.
-        """
+        r"""Determines what controls to display on the GUI."""
         # show/hide New Game Button
         if self.state.game_hist[self.state.cur_game].winner == PLAYER['none']:
             self.btn_new.hide()
@@ -322,9 +315,7 @@ class TicTacToeGui(QMainWindow):
 
     #%% Other callbacks - update_game_stats
     def update_game_stats(self, results):
-        r"""
-        Updates the game stats on the left of the GUI.
-        """
+        r"""Updates the game stats on the left of the GUI."""
         # calculate the number of wins
         o_wins     = np.count_nonzero(results == PLAYER['o'])
         x_wins     = np.count_nonzero(results == PLAYER['x'])
@@ -386,9 +377,7 @@ class TicTacToeGui(QMainWindow):
 
     #%% mouse_click_callback
     def mouse_click_callback(self, event):
-        r"""
-        Function that executes on mouse click on the board axes.  Ends up placing a piece on the board.
-        """
+        r"""Function that executes on mouse click on the board axes.  Ends up placing a piece on the board."""
         # ignore events that are outside the axes
         if event.xdata is None or event.ydata is None:
             logging.debug('Click is off the board.')
@@ -417,13 +406,9 @@ class TicTacToeGui(QMainWindow):
 
     #%% wrapper
     def wrapper(self):
-        r"""
-        Acts as a wrapper to everything the GUI needs to do.
-        """
+        r"""Acts as a wrapper to everything the GUI needs to do."""
         def sub_wrapper(self):
-            r"""
-            Sub-wrapper so that the wrapper can call itself for making AI moves.
-            """
+            r"""Sub-wrapper so that the wrapper can call itself for making AI moves."""
             # clean up an existing artifacts and reset axes
             self.setup_axes()
 

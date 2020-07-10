@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-r"""
-Codefight challenge (digitSumInverse), 2017-02-21, by DStauffman.
-"""
+r"""Codefight challenge (digitSumInverse), 2017-02-21, by DStauffman."""
 
 #%% Imports
 import doctest

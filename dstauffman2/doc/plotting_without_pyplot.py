@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Apr 13 11:04:53 2017
+Demonstrates how to make a plot without ever importing matplotlib.pyplot.
 
-@author: DStauffman
+Notes
+-----
+#.  Written by David C. Stauffer in April 2017.
 """
 
 #%% Imports
@@ -51,7 +52,6 @@ class MyCustomToolbar():
 
     Examples
     --------
-
     >>> from dstauffman import MyCustomToolbar
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np

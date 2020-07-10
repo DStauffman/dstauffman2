@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Utils module file for the "tictactoe" game.  It defines the generic utility functions.
 
@@ -35,7 +34,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import get_root_dir
     >>> folder = get_root_dir()
 
@@ -80,13 +78,12 @@ def check_for_win(board):
     Checks for a win.
 
     Parameters
-    ---------
+    ----------
     board : 2D int ndarray
         Board position
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import check_for_win, PLAYER
     >>> import numpy as np
     >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
@@ -137,13 +134,12 @@ def find_moves(board):
     Finds the best current move.
 
     Parameters
-    ---------
+    ----------
     board : 2D int ndarray
         Board position
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import find_moves, PLAYER, SIZES
     >>> import numpy as np
     >>> board = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
@@ -231,7 +227,7 @@ def make_move(ax, board, x, y, cur_move, cur_game, game_hist):
     Does the actual move.
 
     Parameters
-    ---------
+    ----------
     ax : object
         Axis to plot on
     board : 2D int ndarray
@@ -253,7 +249,6 @@ def make_move(ax, board, x, y, cur_move, cur_game, game_hist):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import make_move, PLAYER, GameStats
     >>> from dstauffman import Counter
     >>> import numpy as np
@@ -316,7 +311,7 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist):
     Computer AI based play.
 
     Parameters
-    ---------
+    ----------
     ax : object
         Axis to plot on
     board : 2D int ndarray
@@ -334,7 +329,6 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import play_ai_game, PLAYER, GameStats, Options
     >>> from dstauffman import Counter
     >>> import numpy as np
@@ -401,7 +395,6 @@ def create_board_from_moves(moves, first_player):
 
     Examples
     --------
-
     >>> from dstauffman2.games.tictactoe import create_board_from_moves, Move, PLAYER
     >>> moves = [Move(0, 0), Move(1, 1), Move(2, 2)]
     >>> first_player = PLAYER['x']

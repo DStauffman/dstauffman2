@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 BAC GUI as a Python GUI.
 

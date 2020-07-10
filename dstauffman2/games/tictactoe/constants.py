@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Constants module file for the "tictactoe" game.  It defines constants.
 

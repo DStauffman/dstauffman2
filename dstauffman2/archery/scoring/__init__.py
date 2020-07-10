@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 "scoring"  is a collection of Archery scoring code developed by David C. Stauffer.
 

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Test file for the `dstauffman2.apps.bac_gui.bac_gui` module.  It is intented to contain test cases to
 demonstrate functionaliy and correct outcomes for all the classes and functions within the module.

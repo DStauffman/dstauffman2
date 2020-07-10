@@ -1,14 +1,11 @@
-# -*- coding: utf-8 -*-
-r"""
-Iteratively solves a cube for given sums by rows, columns and diagonals.
-"""
+r"""Iteratively solves a cube for given sums by rows, columns and diagonals."""
 
 #%% Imports
 import numpy as np
 
 #%% Functions - is_done
 def is_done(A, h, v, d):
-    # checks if the solution has been found
+    r"""Checks if the solution has been found."""
     temp = (np.sum(A, axis=1) == h) & (np.sum(A, axis=0) == v) & (np.sum(A[d1]) == d[0]) & (np.sum(A[d2]) == d[1])
     out  = np.all(temp)
     return out
@@ -26,7 +23,7 @@ def print_sums(A, h, v, d):
 
 #%% Functions - enforce_minmax
 def enforce_minmax(A):
-    # enforces and minimum and maximum constraint
+    r"""Enforces and minimum and maximum constraint."""
     out = np.maximum(np.minimum(A, 9), 1)
     return out
 

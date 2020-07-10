@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Special module file for the "scrabble" game.  It defines the functions that find special words.
 
@@ -33,7 +32,6 @@ def find_all(words=None, func=None):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import find_all, get_raw_dictionary
     >>> words = get_raw_dictionary()
     >>> out = find_all(words, func=lambda x: len(x) == 20)
@@ -56,7 +54,7 @@ def find_all(words=None, func=None):
 #%% find_all_two_letter_words
 def find_all_two_letter_words(words=None):
     r"""
-    Finds all the two letter valid words
+    Finds all the two letter valid words.
 
     Paramters
     ---------
@@ -70,7 +68,6 @@ def find_all_two_letter_words(words=None):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import find_all_two_letter_words
     >>> out = find_all_two_letter_words()
     >>> print(out[:10])

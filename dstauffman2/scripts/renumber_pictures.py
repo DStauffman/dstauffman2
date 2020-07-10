@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 r"""
-This script renumbers the pictures in the given folder with a new prefix.
+Renumbers the pictures in the given folder with a new prefix.
 
 Notes
 -----

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Plotting module file for the "scrabble" game.  It defines the plotting functions.
 
@@ -29,7 +28,6 @@ def plot_board(ax, board):
 
     Examples
     --------
-
     >>> from dstauffman2.games.scrabble import plot_board, Board
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()

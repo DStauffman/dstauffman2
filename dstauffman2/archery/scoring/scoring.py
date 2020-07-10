@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 "scoring"  is a collection of Archery scoring code developed by David C. Stauffer.
 
@@ -43,7 +42,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import get_root_dir
     >>> folder = get_root_dir()
 
@@ -75,7 +73,6 @@ def score_text_to_number(text, flag='nfaa'):
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import score_text_to_number
     >>> text = ['X', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1', 'M']
     >>> nums = [score_text_to_number(x) for x in text]
@@ -128,7 +125,6 @@ def convert_data_to_scores(scores):
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import convert_data_to_scores
     >>> scores = [10*['X', 10, 9], 10*[9, 9, 9]]
     >>> (nfaa_score, usaa_score) = convert_data_to_scores(scores)
@@ -174,7 +170,6 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import plot_mean_and_std
     >>> import matplotlib.pyplot as plt
     >>> scores = [10*['X', 10, 9], 10*[9, 9, 9]]
@@ -259,7 +254,6 @@ def normal_curve(x, mu=0, sigma=1):
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import normal_curve
     >>> import numpy as np
     >>> x = np.arange(-3, 3.01, 0.01)
@@ -295,7 +289,6 @@ def excel_date_to_str(excel_num):
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import excel_date_to_str
     >>> excel_num = 36526
     >>> date = excel_date_to_str(excel_num)
@@ -339,7 +332,6 @@ def read_from_excel_datafile(filename):
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import read_from_excel_datafile, get_root_dir
     >>> import os
     >>> filename = os.path.join(get_root_dir(), 'test_score_template.xlsx')
@@ -355,7 +347,7 @@ def read_from_excel_datafile(filename):
 
     """
     # read data from excel into DataFrame
-    data = pd.read_excel(filename, sheet_name='Scorecard', parse_cols='B:AT', skiprows=2)
+    data = pd.read_excel(filename, sheet_name='Scorecard', usecols='B:AT', skiprows=2)
 
     # get index to rows with valid scores
     ix = (data['Archer'].notnull())
@@ -370,7 +362,7 @@ def read_from_excel_datafile(filename):
     cols = sorted(np.concatenate((range(1,40,4),range(2,40,4),range(3,40,4))))
 
     # pull out scores
-    scores = subdata[cols].values
+    scores = subdata.iloc[:, cols].values
 
     # pull out names
     names = subdata['Archer'].values
@@ -408,7 +400,6 @@ def create_scoresheet(filename, scores, names, plotname='Score Distribution.png'
 
     Examples
     --------
-
     >>> from dstauffman2.archery.scoring import create_scoresheet
     >>> filename = ''
     >>> scores = [10*['X', 10, 9], 10*[9, 9, 9]]
@@ -421,7 +412,6 @@ def create_scoresheet(filename, scores, names, plotname='Score Distribution.png'
     <title>Score Sheet</title>
 
     """
-
     # determine if making a file
     if filename == "":
         make_file = False

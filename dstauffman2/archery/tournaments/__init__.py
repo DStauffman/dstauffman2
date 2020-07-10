@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "archery.tournaments" module is a collection of code to support tournament scoring, bracket
 generation and field layout.

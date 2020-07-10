@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 r"""
-This script copies in the raw files based on the time stamps from the given jpg's.
+Copies in the raw files based on the time stamps from the given jpg's.
 
 Notes
 -----

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Classes module file for the "pentago" game.  It defines the classes used by the rest of the game.
 
@@ -19,9 +18,7 @@ from dstauffman2.games.pentago.constants import PLAYER, SIZES
 
 #%% Classes - State
 class State(Frozen):
-    r"""
-    Class that keeps track of the GUI state.
-    """
+    r"""Class that keeps track of the GUI state."""
     def __init__(self):
         self.board       = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
         self.cur_move    = Counter(0)
@@ -31,9 +28,7 @@ class State(Frozen):
 
 #%% Classes - Move
 class Move(Frozen):
-    r"""
-    Class that keeps track of each individual move.
-    """
+    r"""Class that keeps track of each individual move."""
     def __init__(self, row, column, quadrant, direction, power=None):
         self.row       = row
         self.column    = column
@@ -100,9 +95,7 @@ class Move(Frozen):
 
 #%% Classes - GameStats
 class GameStats(Frozen):
-    r"""
-    Class that keeps track of all the moves in a game.
-    """
+    r"""Class that keeps track of all the moves in a game."""
     def __init__(self, number, first_move, winner=PLAYER['none'], move_list=None):
         self.number     = number
         self.first_move = first_move

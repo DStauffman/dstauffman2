@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Plotting module file for the "pentago" game.  It defines the plotting functions.
 
@@ -18,9 +17,7 @@ from dstauffman2.games.pentago.utils import calc_cur_move
 
 #%% plot_cur_move
 def plot_cur_move(ax, move):
-    r"""
-    Plots the piece corresponding the current players move.
-    """
+    r"""Plots the piece corresponding the current players move."""
     # local alias
     box_size = SIZES['square']
 
@@ -81,7 +78,6 @@ def plot_piece(ax, vc, hc, r, c, half=False):
     >>> plt.close(fig)
 
     """
-
     # theta angle to sweep out 2*pi
     if half:
         piece = Wedge((hc, vc), r, 270, 90, facecolor=c, edgecolor='k')
@@ -94,9 +90,7 @@ def plot_piece(ax, vc, hc, r, c, half=False):
 
 #%% plot_board
 def plot_board(ax, board):
-    r"""
-    Plots the board (and the current player move).
-    """
+    r"""Plots the board (and the current player move)."""
     # get axes limits
     (m, n) = board.shape
     s = SIZES['square']/2
@@ -179,7 +173,6 @@ def plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_g
 
     Examples
     --------
-
     >>> from dstauffman2.games.pentago import plot_possible_win, find_moves
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np

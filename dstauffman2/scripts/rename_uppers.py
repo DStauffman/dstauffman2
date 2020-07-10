@@ -1,6 +1,5 @@
-# -*- coding: utf-8 -*-
 r"""
-This script copies changes any *.JPG to *.jpg and shows any missing numbers.
+Copies changes any *.JPG to *.jpg and shows any missing numbers.
 
 Notes
 -----

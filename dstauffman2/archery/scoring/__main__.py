@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Archery scoring __main__ function that runs on execution.
 

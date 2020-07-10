@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Constants module file for the "pentago" game.  It defines constants.
 
@@ -122,7 +121,6 @@ def _rotate_board(board, quadrant, direction, inplace=True):
 
     Example
     -------
-
     >>> from dstauffman2.games.pentago.constants import _rotate_board, PLAYER
     >>> import numpy as np
     >>> board = np.full((6, 6), PLAYER['none'], dtype=int)

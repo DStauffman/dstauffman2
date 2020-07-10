@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Utils module file for the "dstauffman2.archery" library.  It defines common utilities for use in
 the rest of the code.
@@ -18,9 +17,7 @@ from dstauffman2.archery.tournaments.constants import COL_DIVISION, COL_GENDER, 
 
 #%% Functions - display_info
 def display_info(data):
-    r"""
-    Displays summary information about the registered archers.
-    """
+    r"""Displays summary information about the registered archers."""
     # find numbers of each gender/division
     for div in DIVISIONS:
         for sex in GENDERS:
@@ -31,18 +28,14 @@ def display_info(data):
 
 #%% Functions - import_from_excel
 def import_from_excel(filename, sheet=SHEET_NAME_INDIV):
-    r"""
-    Reads the spreadsheet data in from the given filename.
-    """
+    r"""Reads the spreadsheet data in from the given filename."""
     # read data and return
     data = pd.read_excel(filename, sheet_name=sheet, index_col=None, na_values=['NA'])
     return data
 
 #%% Functions - export_to_excel
 def export_to_excel(data, filename, sheet=SHEET_NAME_INDIV):
-    r"""
-    Writes the spreadsheet data out to the give filename.
-    """
+    r"""Writes the spreadsheet data out to the give filename."""
     # force inputs to always be lists
     if not isinstance(data, list):
         data = [data]
@@ -108,7 +101,6 @@ def get_root_dir():
 
     Examples
     --------
-
     >>> from dstauffman2.archery.tournaments import get_root_dir
     >>> folder = get_root_dir()
 

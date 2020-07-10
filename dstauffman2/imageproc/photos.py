@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Photos module file for the "dstauffman2" library.  It contains a collection of commands that are
 useful for maintaining photo galleries.
@@ -35,12 +34,12 @@ PROCESS_EXTENSIONS   = frozenset(['.jpg', '.png', '.gif', '.nef', '.arw'])
 def find_missing_nums(folder, old_picasa=True, digit_check=True, \
         process_extensions=PROCESS_EXTENSIONS, folder_exclusions=None):
     r"""
-    Finds the missing numbers in a file sequence:
-    Photos 001.jpg
-    Photos 002.jpg
-    Photos 004.jpg
+    Finds the missing numbers in a file sequence.
+        Photos 001.jpg
+        Photos 002.jpg
+        Photos 004.jpg
 
-    Finds missing Photos 003.jpg
+        Finds missing Photos 003.jpg
 
     Parameters
     ----------

@@ -1,11 +1,9 @@
-# -*- coding: utf-8 -*-
 r"""
 Packaging setup file for Pypi and installation via pip.
 
 Notes
 -----
 #.  Written by David C. Stauffer in January 2019.
-
 """
 
 #%% Import

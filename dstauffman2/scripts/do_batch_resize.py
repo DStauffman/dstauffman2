@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 r"""
-THis script resizes all the photos within the given folder to a maximum height and width while
-maintaining the aspect ratio.
+Resizes all the photos within the given folder to a maximum height and width while maintaining the aspect ratio.
 
 Notes
 -----

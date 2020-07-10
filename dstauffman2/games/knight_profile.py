@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 """
-The "profile_knight" file solves runs a subset of knight code using 'pprofile' to do a line by
-line profiling.
+The "profile_knight" file runs a subset of knight code using 'pprofile' to do a line by line profiling.
 
 Notes
 -----

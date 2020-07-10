@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Scrabble board game __main__ function that runs on model execution.
 

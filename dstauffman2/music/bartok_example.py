@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Apr 13 21:59:34 2017
+r"""
+Script provides an example for how to use bartok and abjad.
 
-@author: DStauffman
+Notes
+-----
+#.  Written by David C. Stauffer in April 2017.
 """
 
 #%% Imports

@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-# script_plotting makes the plots for Tulare and Vegas scores relative to season standard deviations
+"""script_plotting makes the plots for Tulare and Vegas scores relative to season standard deviations."""
 
 #%% Imports
 import getpass

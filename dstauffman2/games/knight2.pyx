@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The "knight.pyx" file contains Cython versions of their Python counterparts, enabling automatic
 compilation to C, and hopefully faster runtimes.
@@ -41,7 +40,6 @@ def check_board_boundaries(int x, int y, int xmax, int ymax):
 
     Examples
     --------
-
     >>> from dstauffman2.games.knight2 import check_board_boundaries
     >>> x = 2
     >>> y = 5

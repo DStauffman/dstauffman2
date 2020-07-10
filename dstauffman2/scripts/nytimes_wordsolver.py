@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Example script for how to solve one of the puzzles in the New York Times Sunday paper.
 

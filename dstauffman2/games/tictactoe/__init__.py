@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Tic Tac Toe board game as a Python GUI.
 

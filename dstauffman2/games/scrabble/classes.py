@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Classes module file for the "scrabble" game.  It defines the classes used by the rest of the game.
 
@@ -17,9 +16,7 @@ from dstauffman2.games.scrabble.utils import validate_board, validate_move
 
 #%% Board
 class Board(Frozen):
-    r"""
-    Class that holds the board.
-    """
+    r"""Class that holds the board."""
     def __init__(self, board=BOARD, played=None):
         (num_rows, num_cols) = validate_board(board)
         self.board    = board
@@ -31,6 +28,7 @@ class Board(Frozen):
             self.played = played
 
     def make_move(self, move):
+        r"""Makes the given move to the board."""
         # check if the move is not null
         if not move.word:
             return
@@ -52,9 +50,7 @@ class Board(Frozen):
 
 #%% Move
 class Move(Frozen):
-    r"""
-    Class that contains an individual move.
-    """
+    r"""Class that contains an individual move."""
     def __init__(self, word='', row=0, col=0, dir_=0, score=0):
         self.word  = word
         self.row   = row

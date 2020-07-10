@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 GUI module file for the "pentago" game.  It defines the GUI.
 
@@ -33,9 +32,7 @@ from dstauffman2.games.pentago.utils import calc_cur_move, check_for_win, create
 
 #%% Classes - RotationButton
 class RotationButton(QPushButton):
-    r"""
-    Custom QPushButton to allow drawing multiple images on the buttons for plotting possible winning rotations.
-    """
+    r"""Custom QPushButton to allow drawing multiple images on the buttons for plotting possible winning rotations."""
     def __init__(self, text, parent, quadrant, direction):
         super().__init__(text, parent)
         self.quadrant  = quadrant
@@ -63,9 +60,7 @@ class RotationButton(QPushButton):
 
 #%% Classes - PentagoGui
 class PentagoGui(QWidget):
-    r"""
-    The Pentago GUI.
-    """
+    r"""The Pentago GUI."""
     def __init__(self, **kwargs):
         # call super method
         super().__init__(**kwargs)
@@ -78,9 +73,7 @@ class PentagoGui(QWidget):
 
     #%% State initialization
     def initialize_state(self):
-        r"""
-        Loads the previous game based on settings and whether the file exists.
-        """
+        r"""Loads the previous game based on settings and whether the file exists."""
         # preallocate to not load
         load_game = False
         if OPTIONS['load_previous_game'] == 'No':
@@ -322,9 +315,7 @@ class PentagoGui(QWidget):
 
     #%% Other callbacks - display_controls
     def display_controls(self):
-        r"""
-        Determines what controls to display on the GUI.
-        """
+        r"""Determines what controls to display on the GUI."""
         # show/hide New Game Button
         if self.state.game_hist[self.state.cur_game].winner == PLAYER['none']:
             self.btn_new.hide()
@@ -345,9 +336,7 @@ class PentagoGui(QWidget):
 
     #%% update_game_stats
     def update_game_stats(self, results):
-        r"""
-        Updates the game stats on the left of the GUI.
-        """
+        r"""Updates the game stats on the left of the GUI."""
         # calculate the number of wins
         white_wins = np.count_nonzero(results == PLAYER['white'])
         black_wins = np.count_nonzero(results == PLAYER['black'])
@@ -411,9 +400,7 @@ class PentagoGui(QWidget):
 
     #%% mouse_click_callback
     def mouse_click_callback(self, event):
-        r"""
-        Function that executes on mouse click on the board axes.  Ends up placing a piece on the board.
-        """
+        r"""Function that executes on mouse click on the board axes.  Ends up placing a piece on the board."""
         # ignore events that are outside the axes
         if event.xdata is None or event.ydata is None:
             logging.debug('Click is off the board.')
@@ -460,9 +447,7 @@ class PentagoGui(QWidget):
 
     #%% execute_move
     def execute_move(self, *, quadrant, direction):
-        r"""
-        Tests and then executes a move.
-        """
+        r"""Tests and then executes a move."""
         if self.state.move_status['ok']:
             logging.debug('Rotating Quadrant {} in Direction {}.'.format(quadrant, direction))
             # delete gray piece
@@ -492,9 +477,7 @@ class PentagoGui(QWidget):
 
     #%% wrapper
     def wrapper(self):
-        r"""
-        Acts as a wrapper to everything the GUI needs to do.
-        """
+        r"""Acts as a wrapper to everything the GUI needs to do."""
         # clean up an existing artifacts
         self.board_axes.clear()
         self.move_axes.clear()

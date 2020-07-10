@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 File containing useful custom iPython magic commands.
 

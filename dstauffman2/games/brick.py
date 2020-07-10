@@ -1,7 +1,6 @@
-# -*- coding: utf-8 -*-
 """
-The "brick" file solves the 3D red and gray brick puzzle that I have.  I don't actually remember
-the original name of the puzzle.
+The "brick" file solves the 3D red and gray brick puzzle that I have.
+(I don't actually remember the original name of the puzzle.)
 
 Notes
 -----
@@ -96,7 +95,6 @@ def _get_color(value):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import _get_color, R
     >>> color = _get_color(R)
     >>> print(color)
@@ -168,7 +166,6 @@ def _draw_cube(ax, xs=0, ys=0, zs=0, color='k'):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import _draw_cube
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()
@@ -219,7 +216,6 @@ def _check_seams(piece_combos, this_soln):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import apply_solution_to_combos, pieces, get_all_positions, R, \
     ...     soln, solve_puzzle, _check_seams
     >>> soln[1,1,1] = R
@@ -289,7 +285,6 @@ def solve_center(pieces):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import solve_center, pieces
     >>> center = solve_center(pieces)
     >>> print(center)
@@ -339,7 +334,6 @@ def rot_piece(piece, axis):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import rot_piece, N, R
     >>> import numpy as np
     >>> piece = np.array([\
@@ -404,7 +398,6 @@ def trans_piece(piece, axis, step):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import trans_piece, R, N
     >>> import numpy as np
     >>> piece = np.array([\
@@ -484,7 +477,6 @@ def get_all_positions(piece):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import get_all_positions, R, N
     >>> import numpy as np
     >>> piece = np.array([\
@@ -567,7 +559,7 @@ def get_all_positions(piece):
         # convert to N positions by 27 element linear array
         all_rows  = np.array([x.ravel() for x in all_pos])
         # find the unique rows by converting to a tuple set (not super efficient)
-        uniq_rows = np.vstack({tuple(row) for row in all_rows})
+        uniq_rows = np.vstack([tuple(row) for row in all_rows])
         # convert back to N element list of 3x3x3 pieces
         pieces = []
         for i in range(uniq_rows.shape[0]):
@@ -615,7 +607,6 @@ def plot_cube(piece, title=None, opts=None):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import plot_cube, R, N
     >>> import numpy as np
     >>> piece = np.array([\
@@ -680,7 +671,6 @@ def print_combos(piece_combos, text):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import print_combos, pieces, get_all_positions
     >>> piece_combos = [get_all_positions(piece) for piece in pieces]
     >>> text = 'testing'
@@ -724,7 +714,6 @@ def apply_solution_to_combos(soln, combos):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import apply_solution_to_combos, pieces, get_all_positions, soln, solve_center
     >>> soln[1,1,1] = solve_center(pieces)
     >>> combos = [get_all_positions(piece) for piece in pieces]
@@ -770,7 +759,6 @@ def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
 
     Examples
     --------
-
     >>> from dstauffman2.games.brick import apply_solution_to_combos, pieces, get_all_positions, R, \
     ...     soln, solve_puzzle
     >>> soln[1,1,1] = R
@@ -866,9 +854,7 @@ def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
 
 #%% Funccions - discard_symmetric_duplicates
 def discard_symmetric_duplicates(soln_pieces, piece_combos):
-    r"""
-    Discards solutions that are only rotations of other solutions
-    """
+    r"""Discards solutions that are only rotations of other solutions."""
     def _make_equal_solns(piece):
         # initialize output and counter
         pieces_array = np.empty((27,8), dtype=int)
@@ -913,9 +899,7 @@ def discard_symmetric_duplicates(soln_pieces, piece_combos):
 
 #%% Functions - test_docstrings
 def test_docstrings():
-    r"""
-    Tests the docstrings within this file.
-    """
+    r"""Tests the docstrings within this file."""
     file = os.path.join(get_root_dir(), 'games', 'brick.py')
     doctest.testfile(file, report=True, verbose=False, module_relative=True)
 

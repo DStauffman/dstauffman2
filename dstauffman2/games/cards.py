@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Cards module file for the "dstauffman2" library.  It contains classes and routines specific to card
 games such as poker.
@@ -18,9 +17,7 @@ from random import shuffle as shuffle_func
 #%% Enums - Suit
 @unique
 class Suit(IntEnum):
-    r"""
-    Enumerator definitions for the possible card suits.
-    """
+    r"""Enumerator definitions for the possible card suits."""
     CLUBS    = 0
     DIAMONDS = 1
     HEARTS   = 2
@@ -29,9 +26,7 @@ class Suit(IntEnum):
 #%% Enums - Rank
 @unique
 class Rank(IntEnum):
-    r"""
-    Enumerator definitions for the possible hand ranks.
-    """
+    r"""Enumerator definitions for the possible hand ranks."""
     TWO   = 0
     THREE = 1
     FOUR  = 2
@@ -75,19 +70,13 @@ STRAIGHTS = [set(range(i, i+5)) for i in range(9)]
 
 #%% Classes - Card
 class Card(object):
-    r"""
-    A Single card.
-    """
+    r"""A Single card."""
     def __init__(self, rank, suit):
-        r"""
-        Initialize the card.
-        """
+        r"""Initialize the card."""
         self._card = self._ranksuit2card(rank, suit)
 
     def __str__(self):
-        r"""
-        Return a text based version of the card.
-        """
+        r"""Return a text based version of the card."""
         suit = self.get_suit()
         rank = self.get_rank()
         text = RANK_SYMBOL[rank] + SUIT_SYMBOL[suit]
@@ -113,46 +102,32 @@ class Card(object):
 
     @staticmethod
     def _card2rank(card):
-        r"""
-        Converts a given numeric card to it's rank.
-        """
+        r"""Converts a given numeric card to it's rank."""
         return card % NUM_RANKS
 
     @staticmethod
     def _card2suit(card):
-        r"""
-        Converts a given numeric card to it's suit.
-        """
+        r"""Converts a given numeric card to it's suit."""
         return card // NUM_RANKS
 
     @staticmethod
     def _ranksuit2card(rank, suit):
-        r"""
-        Converts a given rank and suit to a numeric card.
-        """
+        r"""Converts a given rank and suit to a numeric card."""
         return rank + NUM_RANKS*suit
 
     def get_rank(self):
-        r"""
-        Gets the rank of the current card.
-        """
+        r"""Gets the rank of the current card."""
         return self._card2rank(self._card)
 
     def get_suit(self):
-        r"""
-        Gets the suit of the current card.
-        """
+        r"""Gets the suit of the current card."""
         return self._card2suit(self._card)
 
 #%% Classes - Deck
 class Deck(object):
-    r"""
-    Standard Poker Deck.  52 Cards, no wilds.
-    """
+    r"""Standard Poker Deck.  52 Cards, no wilds."""
     def __init__(self, shuffle=False):
-        r"""
-        Initialize the deck.
-        """
+        r"""Initialize the deck."""
         self._cards = [Card(rank, suit) for suit in Suit for rank in Rank]
         if shuffle:
             shuffle_func(self._cards)
@@ -175,9 +150,7 @@ class Deck(object):
 
 #%% Classes - Card
 class Hand(object):
-    r"""
-    Poker hand
-    """
+    r"""Poker hand."""
     def __init__(self, cards=None):
         r"""Creates the initial empty hand."""
         self._cards = []
@@ -260,14 +233,10 @@ class Hand(object):
 
 #%% Classes - WarGame
 class WarGame(object):
-    r"""
-    The game of War implemented as a class.
-    """
+    r"""The game of War implemented as a class."""
     war_downs = 3
     def __init__(self):
-        r"""
-        Deal the cards to start the game.
-        """
+        r"""Deal the cards to start the game."""
         # display a banner
         print('************')
         print('Playing war!')
@@ -286,9 +255,7 @@ class WarGame(object):
             self._hand2.add_card(deck.get_next_card())
 
     def play_move(self):
-        r"""
-        Make a single move.
-        """
+        r"""Make a single move."""
         # increment the move number
         self.move += 1
         # get the two cards to play
@@ -316,9 +283,7 @@ class WarGame(object):
             self._play_war()
 
     def _check_shuffle(self):
-        r"""
-        Checks to see a player is out of cards, and if so shuffles their hold cards.
-        """
+        r"""Checks to see a player is out of cards, and if so shuffles their hold cards."""
         # If you have no cards in your hand, then shuffle your hold cards and then transfer them to
         # the hand
         if self._hand1.num_cards == 0:
@@ -331,9 +296,7 @@ class WarGame(object):
                 self._hand2.add_card(self._hold2.play_card())
 
     def _play_war(self):
-        r"""
-        Plays the down cards when a war happens.
-        """
+        r"""Plays the down cards when a war happens."""
         print(' Down cards (x{})'.format(self.war_downs), end='')
         for i in range(self.war_downs):
             self._pot.add_card(self._hand1.play_card())
@@ -346,15 +309,12 @@ class WarGame(object):
         self.play_move()
 
     def is_winner(self):
-        r"""
-        Determines if their is a winner (because someone is out of cards)
-        """
+        r"""Determines if there is a winner (because someone is out of cards)."""
         return self._hand1.num_cards == 0 or self._hand2.num_cards == 0
 
     def who_won(self):
         r"""
-        Determines who won (based on someone being out of cards, and someone else
-        still having cards.
+        Determines who won (based on someone being out of cards, and someone else still having cards).
 
         Notes
         -----
@@ -374,17 +334,13 @@ class WarGame(object):
             raise ValueError('Undetermined winner!')
 
     def play_game(self):
-        r"""
-        Wrapper function that plays a game until a winner is determined.
-        """
+        r"""Wrapper function that plays a game until a winner is determined."""
         while not self.is_winner():
             self.play_move()
         print(self.who_won())
 
     def print_card_count(self):
-        r"""
-        Prints the current number of cards that each player has.
-        """
+        r"""Prints the current number of cards that each player has."""
         print(' ({} to {})'.format(self._hand1.num_cards+self._hold1.num_cards, \
             self._hand2.num_cards+self._hold2.num_cards))
 

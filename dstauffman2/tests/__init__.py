@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "tests" submodule within the "dstauffman2" library is a full test suite based on the Python
 `unittest` library.

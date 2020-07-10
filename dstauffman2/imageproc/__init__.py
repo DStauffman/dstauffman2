@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 The "imageproc" submodule within the "dstauffman2" library is a subset of tools used for processing
 and manipulating images.

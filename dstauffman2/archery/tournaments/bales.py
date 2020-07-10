@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Bales module file for the "dstauffman2.archery.tournaments" library.  It defines functions to assign
 bales based on the list of registered archers.
@@ -17,9 +16,7 @@ from dstauffman2.archery.tournaments.constants import BALE_POS, COL_BALE, COL_DI
 
 #%% Functions - assign_bales
 def assign_bales(data):
-    r"""
-    Randomly assigns the archers to bales based on division and gender.
-    """
+    r"""Randomly assigns the archers to bales based on division and gender."""
     # find sub data frame for each division/gender combination
     counter = 0
     n_pos   = len(BALE_POS)
@@ -46,9 +43,7 @@ def assign_bales(data):
 
 #%% Functions - validate_bales
 def validate_bales(data):
-    r"""
-    Error checks the bale assignments and displays any problems.
-    """
+    r"""Error checks the bale assignments and displays any problems."""
     # get bale, spot on bale and corresponding index
     bales = [int(x[0:-1]) for x in data[COL_BALE].values]
     # spots = [x[-1] for x in data['Bale'].values]

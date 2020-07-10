@@ -1,8 +1,9 @@
-# -*- coding: utf-8 -*-
 """
-Created on Thu Apr 13 21:59:34 2017
+Creates sheet music for the song "O My Beloved Father".
 
-@author: DStauffman
+Notes
+-----
+#.  Written by David C. Stauffer in April 2017.
 """
 
 #%% Imports

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Brackets module file for the "dstauffman2.archery" library.  It defines functions to generate
 brackets based on individual seed order.
@@ -24,9 +23,7 @@ from dstauffman2.archery.tournaments.utils import display_info, export_to_excel,
 
 #%% Functions - write_brackets
 def write_brackets(data, filename='', team='indiv', display=True):
-    r"""
-    Writes out the brackets based on scores from earlier competition.
-    """
+    r"""Writes out the brackets based on scores from earlier competition."""
     # initializ the bracket list
     brackets = []
     # loop through all the divisions
@@ -93,9 +90,7 @@ def write_brackets(data, filename='', team='indiv', display=True):
 
 #%% Functions - build_seed_order
 def build_seed_order(waves):
-    r"""
-    Creates the order of indices for the given number of waves in the bracket.
-    """
+    r"""Creates the order of indices for the given number of waves in the bracket."""
     # initialize the list
     x = []
     # start with the number one for anything with one or more waves (zero waves returns an empty list)
@@ -116,9 +111,7 @@ def build_seed_order(waves):
 
 #%% Functions - determine_seed_winners
 def determine_seed_winners(data, seeds, waves):
-    r"""
-    Expands the initial round of seed numbers into successive rounds based on the True/False value in the "Win" column.
-    """
+    r"""Expands the initial round of seed numbers into successive rounds based on the True/False value in the "Win" column."""
     # subfunction
     def _winner_of_pair(results, pair, flip=False):
         # find the results of pairing 1 and determine who won
@@ -178,9 +171,7 @@ def determine_seed_winners(data, seeds, waves):
 
 #%% Functions - get_name_by_index
 def get_name_by_index(data, index):
-    r"""
-    Returns the name of the desired person, or an empty string if the person does not exist.
-    """
+    r"""Returns the name of the desired person, or an empty string if the person does not exist."""
     # check that the index exists, or return an empty string
     if index >= len(data):
         return ''
@@ -190,17 +181,13 @@ def get_name_by_index(data, index):
 
 #%% Functions - validate_brackets
 def validate_brackets(data, team='indiv'):
-    r"""
-    Error checks the bracket results and displays any problems.
-    """
+    r"""Error checks the bracket results and displays any problems."""
     # TODO: Include individual and team and mixed team bracket validation and check the bales for all of them.
     pass
 
 #%% Functions - build_bracket_html_template
 def build_bracket_html_template(waves):
-    r"""
-    Builds a generic HTML template to later use and replace on "Text_A1" etc. strings.
-    """
+    r"""Builds a generic HTML template to later use and replace on "Text_A1" etc. strings."""
     # get the root location of the module
     folder = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     # get filename for bracket template
@@ -216,9 +203,7 @@ def build_bracket_html_template(waves):
 
 #%% Functions - replace_css
 def replace_css(txt, css):
-    r"""
-    Replaces the text/css link in the html file with the contents of the css file directly embedded.
-    """
+    r"""Replaces the text/css link in the html file with the contents of the css file directly embedded."""
     # build the text token for the old link
     token = r'<link rel="stylesheet" type="text/css" href="bracket.css" />'
     # find the relative link to the style sheet
@@ -232,9 +217,7 @@ def replace_css(txt, css):
 
 #%% Functions - replace_bracket_tokens
 def replace_bracket_tokens(html, title, names=[]):
-    r"""
-    Replaces the "Text_A1" tokens with the given text lists
-    """
+    r"""Replaces the "Text_A1" tokens with the given text lists."""
     # replace the title
     html = html.replace('Text_Title_X1', title)
     # loop through the 2D list of names

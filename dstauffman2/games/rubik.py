@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 The "rubik" file contains code related to Rubik's Cubes.
 
@@ -46,7 +45,6 @@ def rubiks_cube_permutations(size=3):
 
     Examples
     --------
-
     >>> from dstauffman2.games.rubik import rubiks_cube_permutations
     >>> perms = rubiks_cube_permutations(3)
     >>> print(perms)
@@ -82,9 +80,7 @@ def rubiks_cube_permutations(size=3):
 
 #%% Functions - test_docstrings
 def test_docstrings():
-    r"""
-    Tests the docstrings within this file.
-    """
+    r"""Tests the docstrings within this file."""
     file = os.path.join(get_root_dir(), 'games', 'rubik.py')
     doctest.testfile(file, report=True, verbose=False, module_relative=True)
 

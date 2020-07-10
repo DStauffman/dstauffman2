@@ -1,7 +1,4 @@
-# -*- coding: utf-8 -*-
-r"""
-Codefight challenge (stringsRearrangement), 2017-01-17, by DStauffman.
-"""
+r"""Codefight challenge (stringsRearrangement), 2017-01-17, by DStauffman."""
 
 #%% Functions - is_str_one_off
 def is_str_one_off(str1, str2):
@@ -22,7 +19,7 @@ def is_str_one_off(str1, str2):
 
     Examples
     --------
-
+    >>> from dstauffman2.puzzles.codefights_2017_01_17 import *
     >>> print(is_str_one_off('abc', 'axc'))
     True
 
@@ -70,7 +67,7 @@ def find_one_offs(key, input_array):
 
     Examples
     --------
-
+    >>> from dstauffman2.puzzles.codefights_2017_01_17 import *
     >>> print(find_one_offs('abc', ['abc', 'aac', 'aby']))
     [1, 2]
 
@@ -96,7 +93,7 @@ def stringsRearrangement(input_array):
 
     Examples
     --------
-
+    >>> from dstauffman2.puzzles.codefights_2017_01_17 import *
     >>> print(stringsRearrangement(['ab', 'bb', 'aa']))
     True
 

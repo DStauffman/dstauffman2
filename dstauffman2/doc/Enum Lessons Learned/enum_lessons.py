@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 r"""
 Enum lessons learned examples.
 
@@ -14,10 +13,7 @@ import numpy as np
 
 #%% Meta Class
 class _EnumMetaPlus(EnumMeta):
-    r"""
-    Overrides the repr/str methods of the EnumMeta class to display all possible
-    values.
-    """
+    r"""Overrides the repr/str methods of the EnumMeta class to display all possible values."""
     def __repr__(cls):
         text = [repr(field) for field in cls]
         return '\n'.join(text)
@@ -29,8 +25,7 @@ class _EnumMetaPlus(EnumMeta):
 @unique
 class _IntEnumPlus(int, Enum, metaclass=_EnumMetaPlus):
     r"""
-    Custom IntEnum class based on _EnumMetaPlus metaclass to get more details from
-    repr/str.
+    Custom IntEnum class based on _EnumMetaPlus metaclass to get more details from repr/str.
 
     Also forces all values to be unique.
     """
@@ -56,9 +51,7 @@ class TbStatus(_IntEnumPlus):
     active_treated =  4 # active TB, on effective treatment
 
 class TbStatus2(IntEnum):
-    r"""
-    Standard Enumerator
-    """
+    r"""Standard Enumerator."""
     null           =  0
     uninfected     = -1
     recovered      = -2
@@ -69,18 +62,14 @@ class TbStatus2(IntEnum):
 
 #%% Functions
 def get_those_infected(tb_status):
-    r"""
-    Finds anyone who is infected with TB.
-    """
+    r"""Finds anyone who is infected with TB."""
     ix_infected = (tb_status == TbStatus.latent_recent) | (tb_status == \
         TbStatus.latent_remote) | (tb_status == TbStatus.active_treated) | \
         (tb_status == TbStatus.active_untreat)
     return ix_infected
 
 def get_those_uninfected(tb_status):
-    r"""
-    Finds anyone who is not infected with TB.
-    """
+    r"""Finds anyone who is not infected with TB."""
     ix_uninfected = (tb_status == TbStatus.uninfected) | \
         (tb_status == TbStatus.recovered)
     return ix_uninfected

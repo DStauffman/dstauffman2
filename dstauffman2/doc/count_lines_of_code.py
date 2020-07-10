@@ -1,7 +1,5 @@
-# -*- coding: utf-8 -*-
 r"""
-This script uses the CLOC utility to produce a lines of code count for the cromo, dstauffman, and
-ghap repositories.
+Uses the CLOC utility to produce a lines of code count for the dstauffman and hesat repos.
 
 Notes
 -----
@@ -105,7 +103,6 @@ def combine_results(out1, out2):
 #%% Functions - print_latex_tables
 def print_latex_tables(out, keys):
     r"""Prints the tables for inclusion in our LaTeX documents."""
-
     cols = ['total', 'code', 'comment', 'blank', 'tests', 'docs']
 
     text = []
