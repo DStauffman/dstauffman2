@@ -65,18 +65,18 @@ class RotationButton(QPushButton):
 #%% Classes - PentagoGui
 class PentagoGui(QWidget):
     r"""The Pentago GUI."""
-    def __init__(self, **kwargs):
+    def __init__(self, filename=None, **kwargs):
         # call super method
         super().__init__(**kwargs)
-        # initialized the state data
-        self.initialize_state()
+        # initialize the state data
+        self.initialize_state(filename=filename)
         # load the image data
         self.load_images()
         # call init method to instantiate the GUI
         self.init()
 
     #%% State initialization
-    def initialize_state(self):
+    def initialize_state(self, filename):
         r"""Loads the previous game based on settings and whether the file exists."""
         # preallocate to not load
         load_game = False
@@ -96,8 +96,10 @@ class PentagoGui(QWidget):
             raise ValueError('Unexpected value for the load_previous_game option.')
         # initialize outputs
         self.state = State()
+        # load previous game
         if load_game:
-            filename  = os.path.join(get_output_dir(), 'pentago.pkl')
+            if filename is None:
+                filename  = os.path.join(get_output_dir(), 'pentago.pkl')
             if os.path.isfile(filename):
                 self.state.game_hist   = GameStats.load(filename)
                 self.state.cur_game    = Counter(len(self.state.game_hist)-1)
@@ -105,6 +107,8 @@ class PentagoGui(QWidget):
                 self.state.board       = create_board_from_moves(self.state.game_hist[-1].move_list, \
                     self.state.game_hist[-1].first_move)
                 self.state.move_status = {'ok': False, 'pos': None, 'patch_object': None}
+            else:
+                raise ValueError(f'Could not find file: "{filename}"') # pragma: no cover
 
     #%% load_images
     def load_images(self):
@@ -191,7 +195,7 @@ class PentagoGui(QWidget):
         self.board_canvas.mpl_connect('button_release_event', lambda event: self.mouse_click_callback(event))
         self.board_axes = Axes(fig, [0., 0., 1., 1.])
         self.board_axes.invert_yaxis()
-        self.board_axes.set_axis_off()
+        #self.board_axes.set_axis_off() # TODO: do I need this line, or handled in self.setup_axes()?
         fig.add_axes(self.board_axes)
 
         # current move
@@ -279,10 +283,11 @@ class PentagoGui(QWidget):
         self.rot_buttons = {'1L':self.btn_1L, '2L':self.btn_2L, '3L':self.btn_3L, '4L':self.btn_4L, \
             '1R':self.btn_1R, '2R':self.btn_2R, '3R':self.btn_3R, '4R':self.btn_4R}
 
-        #%% Call wrapper to initialize GUI
+        #%% Finalization
+        # Call wrapper to initialize GUI
         self.wrapper()
 
-        #%% GUI properties
+        # GUI final layout properties
         self.resize(1000, 700)
         self.center()
         self.setWindowTitle('Pentago')
@@ -291,7 +296,7 @@ class PentagoGui(QWidget):
 
     #%% Other callbacks - closing
     def closeEvent(self, event):
-        """Things in here happen on GUI closing."""
+        r"""Things in here happen on GUI closing."""
         close_immediately = True
         filename = os.path.join(get_output_dir(), 'pentago.pkl')
         if close_immediately:
@@ -311,11 +316,27 @@ class PentagoGui(QWidget):
     #%% Other callbacks - center the GUI on the screen
     def center(self):
         r"""Makes the GUI centered on the active screen."""
-        frameGm = self.frameGeometry()
+        frame_gm = self.frameGeometry()
         screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
-        centerPoint = QApplication.desktop().screenGeometry(screen).center()
-        frameGm.moveCenter(centerPoint)
-        self.move(frameGm.topLeft())
+        center_point = QApplication.desktop().screenGeometry(screen).center()
+        frame_gm.moveCenter(center_point)
+        self.move(frame_gm.topLeft())
+
+    #%% Other callbacks - setup_axes
+    def setup_axes(self):
+        r"""Sets up the axes for the board and move."""
+        # setup board axes
+        self.board_axes.clear()
+        if np.less(*self.board_axes.get_ylim()):
+            self.board_axes.invert_yaxis()
+        self.board_axes.set_xlim(-SIZES['square']/2, SIZES['board']-SIZES['square']/2)
+        self.board_axes.set_ylim(SIZES['board']-SIZES['square']/2, -SIZES['square']/2)
+        self.board_axes.set_aspect('equal')
+        # setup move axes
+        self.move_axes.clear()
+        self.move_axes.set_xlim(-SIZES['square']/2, SIZES['square']/2)
+        self.move_axes.set_ylim(-SIZES['square']/2, SIZES['square']/2)
+        self.move_axes.set_aspect('equal')
 
     #%% Other callbacks - display_controls
     def display_controls(self):
@@ -338,7 +359,7 @@ class PentagoGui(QWidget):
         else:
             self.btn_redo.hide()
 
-    #%% update_game_stats
+    #%% Other callbacks - update_game_stats
     def update_game_stats(self, results):
         r"""Updates the game stats on the left of the GUI."""
         # calculate the number of wins
@@ -353,10 +374,10 @@ class PentagoGui(QWidget):
 
     #%% Button callbacks
     def btn_undo_function(self):
-        r"""Functions that executes on undo button press."""
+        r"""Function that executes on undo button press."""
         # get last move
         last_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move-1]
-        logger.debug('Undoing move = {}'.format(last_move))
+        logger.debug(f'Undoing move = {last_move}')
         # undo rotation
         rotate_board(self.state.board, last_move.quadrant, -last_move.direction)
         # delete piece
@@ -367,25 +388,27 @@ class PentagoGui(QWidget):
         self.wrapper()
 
     def btn_new_function(self):
-        r"""Functions that executes on new game button press."""
+        r"""Function that executes on new game button press."""
         # update values
         last_lead = self.state.game_hist[self.state.cur_game].first_move
         next_lead = PLAYER['black'] if last_lead == PLAYER['white'] else PLAYER['white']
         assert len(self.state.game_hist) == self.state.cur_game + 1
         self.state.cur_game += 1
         self.state.cur_move = Counter(0)
-        self.state.game_hist.append(GameStats(number=self.state.cur_game, first_move=next_lead, winner=PLAYER['none']))
+        self.state.game_hist.append(GameStats(number=self.state.cur_game, first_move=next_lead, \
+            winner=PLAYER['none']))
         self.state.board = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
         # call GUI wrapper
         self.wrapper()
 
     def btn_redo_function(self):
-        r"""Functions that executes on redo button press."""
+        r"""Function that executes on redo button press."""
         # get next move
         redo_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move]
-        logger.debug('Redoing move = {}'.format(redo_move))
+        logger.debug(f'Redoing move = {redo_move}')
         # place piece
-        self.state.board[redo_move.row, redo_move.column] = calc_cur_move(self.state.cur_move, self.state.cur_game)
+        self.state.board[redo_move.row, redo_move.column] = calc_cur_move(self.state.cur_move, \
+            self.state.cur_game)
         # redo rotation
         rotate_board(self.state.board, redo_move.quadrant, redo_move.direction)
         # update current move
@@ -401,6 +424,9 @@ class PentagoGui(QWidget):
         self.execute_move(quadrant=button.quadrant, direction=button.direction)
         # call GUI wrapper
         self.wrapper()
+
+    #%% Menu action callbacks
+    pass # TODO: write this
 
     #%% mouse_click_callback
     def mouse_click_callback(self, event):
@@ -418,7 +444,7 @@ class PentagoGui(QWidget):
         # alias the rounded values of the mouse click location
         x = np.round(event.ydata).astype(int)
         y = np.round(event.xdata).astype(int)
-        logger.debug('Clicked on (x,y) = ({}, {})'.format(x, y))
+        logger.debug(f'Clicked on (x,y) = ({x}, {y})')
         # get axes limits
         (m, n) = self.state.board.shape
         # ignore values that are outside the board
@@ -483,8 +509,7 @@ class PentagoGui(QWidget):
     def wrapper(self):
         r"""Acts as a wrapper to everything the GUI needs to do."""
         # clean up an existing artifacts
-        self.board_axes.clear()
-        self.move_axes.clear()
+        self.setup_axes()
 
         # plot the current move
         plot_cur_move(self.move_axes, calc_cur_move(self.state.cur_move, self.state.cur_game))

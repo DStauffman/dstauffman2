@@ -32,9 +32,8 @@ from dstauffman2.games.tictactoe.utils import calc_cur_move, check_for_win, \
 
 # TODO: add boxes for flipping settings
 
-#%% Logging options
-# logger = logging.getLogger()
-# logger.setLevel(logging.DEBUG)
+#%% Globals
+logger = logging.getLogger(__name__)
 
 #%% Option instance
 OPTS = Options()
@@ -83,12 +82,12 @@ class TicTacToeGui(QMainWindow):
                 self.state.board       = create_board_from_moves(self.state.game_hist[-1].move_list, \
                     self.state.game_hist[-1].first_move)
             else:
-                raise ValueError('Could not find file: "{}"'.format(filename)) # pragma: no cover
+                raise ValueError(f'Could not find file: "{filename}"') # pragma: no cover
 
     #%% GUI initialization
     def init(self):
         r"""Initializes the GUI."""
-        # properties
+        #%% properties
         QToolTip.setFont(QtGui.QFont('SansSerif', 10))
 
         # Central Widget
@@ -283,13 +282,13 @@ class TicTacToeGui(QMainWindow):
         self.board_axes.clear()
         if np.less(*self.board_axes.get_ylim()):
             self.board_axes.invert_yaxis()
-        self.board_axes.set_xlim(-0.5, 2.5)
-        self.board_axes.set_ylim(2.5, -0.5)
+        self.board_axes.set_xlim(-SIZES['square']/2, SIZES['board']-SIZES['square']/2)
+        self.board_axes.set_ylim(SIZES['board']-SIZES['square']/2, -SIZES['square']/2)
         self.board_axes.set_aspect('equal')
         # setup move axes
         self.move_axes.clear()
-        self.move_axes.set_xlim(-0.5, 0.5)
-        self.move_axes.set_ylim(-0.5, 0.5)
+        self.move_axes.set_xlim(-SIZES['square']/2, SIZES['square']/2)
+        self.move_axes.set_ylim(-SIZES['square']/2, SIZES['square']/2)
         self.move_axes.set_aspect('equal')
 
     #%% Other callbacks - display_controls
@@ -331,7 +330,7 @@ class TicTacToeGui(QMainWindow):
         r"""Function that executes on undo button press."""
         # get last move
         last_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move-1]
-        logging.debug('Undoing move = %s', last_move)
+        logger.debug(f'Undoing move = {last_move}')
         # delete piece
         self.state.board[last_move.row, last_move.column] = PLAYER['none']
         # update current move
@@ -357,7 +356,7 @@ class TicTacToeGui(QMainWindow):
         r"""Function that executes on redo button press."""
         # get next move
         redo_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move]
-        logging.debug('Redoing move = %s', redo_move)
+        logger.debug(f'Redoing move = {redo_move}')
         # place piece
         self.state.board[redo_move.row, redo_move.column] = calc_cur_move(self.state.cur_move, \
             self.state.cur_game)
@@ -380,21 +379,21 @@ class TicTacToeGui(QMainWindow):
         r"""Function that executes on mouse click on the board axes.  Ends up placing a piece on the board."""
         # ignore events that are outside the axes
         if event.xdata is None or event.ydata is None:
-            logging.debug('Click is off the board.')
+            logger.debug('Click is off the board.')
             return
         # test for a game that has already been concluded
         if self.state.game_hist[self.state.cur_game].winner != PLAYER['none']:
-            logging.debug('Game is over.')
+            logger.debug('Game is over.')
             return
         # alias the rounded values of the mouse click location
         x = np.round(event.ydata).astype(int)
         y = np.round(event.xdata).astype(int)
-        logging.debug('Clicked on (x,y) = (%s, %s)', x, y)
+        logger.debug(f'Clicked on (x,y) = ({x}, {y})')
         # get axes limits
         (m, n) = self.state.board.shape
         # ignore values that are outside the board
         if x < 0 or y < 0 or x >= m or y >= n: # pragma: no cover
-            logging.debug('Click is outside playable board.')
+            logger.debug('Click is outside playable board.')
             return
         # check that move is on a free square
         if self.state.board[x, y] == PLAYER['none']:
