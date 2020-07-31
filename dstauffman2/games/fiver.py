@@ -20,7 +20,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib.patches import Rectangle
 
-from dstauffman import ColorMap, Opts, setup_dir, setup_plots
+from dstauffman import setup_dir
+from dstauffman.plotting import ColorMap, Opts, setup_plots
 from dstauffman2 import get_root_dir
 
 #%% Hard-coded values

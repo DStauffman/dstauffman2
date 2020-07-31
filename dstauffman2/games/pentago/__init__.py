@@ -6,10 +6,6 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Logging
-import logging
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
-
 #%% Imports
 from .classes   import GameStats, Move, State # TODO: update these
 from .constants import COLOR, INT_TOKEN, PLAYER, ONE_OFF, OPTIONS, SIZES, WIN

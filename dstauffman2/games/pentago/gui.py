@@ -20,7 +20,8 @@ from matplotlib.pyplot import Axes
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QToolTip, QWidget
 
-from dstauffman import Counter, get_images_dir, get_output_dir
+from dstauffman import Counter
+from dstauffman2 import get_images_dir, get_output_dir
 from dstauffman2.games.pentago.classes import GameStats, Move, State
 from dstauffman2.games.pentago.constants import COLOR, OPTIONS, PLAYER, SIZES
 from dstauffman2.games.pentago.plotting import plot_board, plot_cur_move, plot_piece, \
@@ -29,6 +30,9 @@ from dstauffman2.games.pentago.utils import calc_cur_move, check_for_win, create
     find_moves, rotate_board
 
 # TODO: add boxes for flipping settings
+
+#%% Globals
+logger = logging.getLogger(__name__)
 
 #%% Classes - RotationButton
 class RotationButton(QPushButton):
@@ -352,7 +356,7 @@ class PentagoGui(QWidget):
         r"""Functions that executes on undo button press."""
         # get last move
         last_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move-1]
-        logging.debug('Undoing move = {}'.format(last_move))
+        logger.debug('Undoing move = {}'.format(last_move))
         # undo rotation
         rotate_board(self.state.board, last_move.quadrant, -last_move.direction)
         # delete piece
@@ -379,7 +383,7 @@ class PentagoGui(QWidget):
         r"""Functions that executes on redo button press."""
         # get next move
         redo_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move]
-        logging.debug('Redoing move = {}'.format(redo_move))
+        logger.debug('Redoing move = {}'.format(redo_move))
         # place piece
         self.state.board[redo_move.row, redo_move.column] = calc_cur_move(self.state.cur_move, self.state.cur_game)
         # redo rotation
@@ -403,32 +407,32 @@ class PentagoGui(QWidget):
         r"""Function that executes on mouse click on the board axes.  Ends up placing a piece on the board."""
         # ignore events that are outside the axes
         if event.xdata is None or event.ydata is None:
-            logging.debug('Click is off the board.')
+            logger.debug('Click is off the board.')
             return
         # test for a game that has already been concluded
         if self.state.game_hist[self.state.cur_game].winner != PLAYER['none']:
-            logging.debug('Game is over.')
+            logger.debug('Game is over.')
             self.state.move_status['ok'] = False
             self.state.move_status['pos'] = None
             return
         # alias the rounded values of the mouse click location
         x = np.round(event.ydata).astype(int)
         y = np.round(event.xdata).astype(int)
-        logging.debug('Clicked on (x,y) = ({}, {})'.format(x, y))
+        logger.debug('Clicked on (x,y) = ({}, {})'.format(x, y))
         # get axes limits
         (m, n) = self.state.board.shape
         # ignore values that are outside the board
         if x < 0 or y < 0 or x >= m or y >= n:
-            logging.debug('Click is outside playable board.')
+            logger.debug('Click is outside playable board.')
             return
         if self.state.board[x, y] == PLAYER['none']:
             # check for previous good move
             if self.state.move_status['ok']:
-                logging.debug('removing previous piece.')
+                logger.debug('removing previous piece.')
                 self.state.move_status['patch_object'].remove()
             self.state.move_status['ok'] = True
             self.state.move_status['pos'] = (x, y)
-            logging.debug('Placing current piece.')
+            logger.debug('Placing current piece.')
             current_player = calc_cur_move(self.state.cur_move, self.state.cur_game)
             if current_player == PLAYER['white']:
                 self.state.move_status['patch_object'] = plot_piece(self.board_axes, x, y, SIZES['piece'], COLOR['next_wht'])
@@ -449,7 +453,7 @@ class PentagoGui(QWidget):
     def execute_move(self, *, quadrant, direction):
         r"""Tests and then executes a move."""
         if self.state.move_status['ok']:
-            logging.debug('Rotating Quadrant {} in Direction {}.'.format(quadrant, direction))
+            logger.debug('Rotating Quadrant {} in Direction {}.'.format(quadrant, direction))
             # delete gray piece
             self.state.move_status['patch_object'].remove()
             self.state.move_status['patch_object'] = None
@@ -473,7 +477,7 @@ class PentagoGui(QWidget):
             self.state.move_status['ok'] = False
             self.state.move_status['pos'] = None
         else:
-            logging.debug('No move to execute.')
+            logger.debug('No move to execute.')
 
     #%% wrapper
     def wrapper(self):

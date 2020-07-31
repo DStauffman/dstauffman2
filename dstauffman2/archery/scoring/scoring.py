@@ -20,7 +20,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from dstauffman import Opts, setup_dir, setup_plots
+from dstauffman import setup_dir
+from dstauffman.plotting import Opts, setup_plots
 
 #%% Constants
 PLOT_LIMITS  = [250,300]

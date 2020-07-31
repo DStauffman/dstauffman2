@@ -8,9 +8,13 @@ Notes
 
 #%% Imports
 import doctest
+import logging
 import unittest
 
 import numpy as np
+
+from dstauffman import activate_logging
+activate_logging(logging.WARNING, log_format='%(levelname)s:%(message)s')
 
 #%% Constants
 # color definitions

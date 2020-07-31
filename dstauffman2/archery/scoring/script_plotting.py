@@ -9,7 +9,8 @@ import numpy as np
 import pandas as pd
 from matplotlib.patches import Rectangle
 
-from dstauffman import Opts, get_output_dir, setup_plots
+from dstauffman.plotting import Opts, setup_plots
+from dstauffman2 import get_output_dir
 import dstauffman2.archery.scoring as score
 
 #%% Script
