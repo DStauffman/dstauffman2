@@ -77,7 +77,8 @@ if __name__ == '__main__':
     #%% Tulare
     # create figure
     fig = plt.figure(facecolor='w')
-    fig.canvas.set_window_title('Tulare Score Distribution vs. Expectation')
+    title = 'Tulare Score Distribution vs. Expectation'
+    fig.canvas.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines
@@ -108,7 +109,7 @@ if __name__ == '__main__':
     # add labels and legends
     ax.set_xlabel('Score', fontsize=14)
     ax.set_ylabel('Distribution [%]', fontsize=14)
-    ax.set_title(fig.canvas.get_window_title(), fontsize=20)
+    ax.set_title(title, fontsize=20)
     ax.set_xlim(265, 290)
     (handles, labels) = ax.get_legend_handles_labels()
     order = [0, 2, 1]
@@ -130,7 +131,8 @@ if __name__ == '__main__':
     #%% Vegas
     # create figure
     fig = plt.figure(facecolor='w')
-    fig.canvas.set_window_title('Vegas Score Distribution vs. Expectation')
+    title = 'Vegas Score Distribution vs. Expectation'
+    fig.canvas.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines
@@ -161,7 +163,7 @@ if __name__ == '__main__':
     # add labels and legends
     ax.set_xlabel('Score', fontsize=14)
     ax.set_ylabel('Distribution [%]', fontsize=14)
-    ax.set_title(fig.canvas.get_window_title(), fontsize=20)
+    ax.set_title('Vegas Score Distribution vs. Expectation', fontsize=20)
     ax.set_xlim(275, 300)
     (handles, labels) = ax.get_legend_handles_labels()
     order = [0, 2, 1]

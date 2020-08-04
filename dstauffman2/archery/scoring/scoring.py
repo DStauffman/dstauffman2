@@ -210,7 +210,8 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
         usaa_acts[ix] = np.count_nonzero(usaa_score == score) / num_scores
     # create figure
     fig = plt.figure()
-    fig.canvas.set_window_title('Score Distribution')
+    title = 'Score Distribution'
+    fig.canvas.set_window_title(title)
     ax = fig.add_subplot(111)
     # plot data
     ax.plot(score_range, num2per*normal_curve(score_range, nfaa_mean, nfaa_std), 'r', label='NFAA Normal')
@@ -222,7 +223,7 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     # add labels and legends
     ax.set_xlabel('Score')
     ax.set_ylabel('Distribution [%]')
-    ax.set_title(fig.canvas.get_window_title())
+    ax.set_title(title)
     ax.set_xlim(PLOT_LIMITS)
     ax.legend()
     ax.grid(True)
