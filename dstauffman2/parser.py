@@ -17,7 +17,7 @@ from dstauffman import ReturnCodes
 import dstauffman2.commands as commands
 
 #%% Constants
-_VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'man', 'tests'})
+_VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'photos', 'man', 'tests'})
 
 #%% Functions - _print_bad_command
 def _print_bad_command(command):

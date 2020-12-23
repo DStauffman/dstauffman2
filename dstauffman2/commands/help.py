@@ -10,15 +10,16 @@ Notes
 import argparse
 import doctest
 import os
+from typing import List
 import unittest
 
 from dstauffman import ReturnCodes
 from dstauffman2.paths import get_root_dir
 
 #%% Functions - print_help
-def print_help():
+def print_help() -> int:
     r"""
-    Prints the contents of the READMD.rst file.
+    Prints the contents of the README.rst file.
 
     Returns
     -------
@@ -33,7 +34,7 @@ def print_help():
     """
     help_file = os.path.join(get_root_dir(), '..', 'README.rst')
     if not os.path.isfile(help_file): # pragma: no cover
-        print('Warning: help file at "{}" was not found.'.format(help_file))
+        print(f'Warning: help file at "{help_file}" was not found.')
         return ReturnCodes.bad_help_file
     with open(help_file) as file:
         text = file.read()
@@ -41,7 +42,7 @@ def print_help():
     return ReturnCodes.clean
 
 #%% Functions - parse_help
-def parse_help(input_args):
+def parse_help(input_args: List[str]) -> argparse.Namespace:
     r"""
     Parser for help command.
 
@@ -70,7 +71,7 @@ def parse_help(input_args):
     return args
 
 #%% Functions - execute_help
-def execute_help(args):
+def execute_help(args: argparse.Namespace) -> int:
     r"""
     Executes the help command.
 
