@@ -14,9 +14,9 @@ import os
 import unittest
 
 #%% Functions - get_root_dir
-def get_root_dir():
+def get_root_dir() -> str:
     r"""
-    Returns the folder that contains this source file and thus the root folder for the whole code.
+    Return the folder that contains this source file and thus the root folder for the whole code.
 
     Returns
     -------
@@ -38,9 +38,9 @@ def get_root_dir():
     return folder
 
 #%% Functions - get_tests_dir
-def get_tests_dir():
+def get_tests_dir() -> str:
     r"""
-    Returns the default test folder location.
+    Return the default test folder location.
 
     Returns
     -------
@@ -62,9 +62,9 @@ def get_tests_dir():
     return folder
 
 #%% Functions - get_data_dir
-def get_data_dir():
+def get_data_dir() -> str:
     r"""
-    Returns the default data folder location.
+    Return the default data folder location.
 
     Returns
     -------
@@ -86,9 +86,9 @@ def get_data_dir():
     return folder
 
 #%% Functions - get_images_dir
-def get_images_dir():
+def get_images_dir() -> str:
     r"""
-    Returns the default data folder location.
+    Return the default data folder location.
 
     Returns
     -------
@@ -110,9 +110,9 @@ def get_images_dir():
     return folder
 
 #%% Functions - get_output_dir
-def get_output_dir():
+def get_output_dir() -> str:
     r"""
-    Returns the default output folder location.
+    Return the default output folder location.
 
     Returns
     -------

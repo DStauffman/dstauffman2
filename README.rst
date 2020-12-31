@@ -18,6 +18,7 @@ Built-in libraries
 
 The following built-in Python libraries are used within the dstauffman2 library.
 
+* argparse
 * collections
 * copy
 * datetime

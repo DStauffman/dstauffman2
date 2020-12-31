@@ -30,6 +30,7 @@ setup(
     author_email='dstauffman@yahoo.com',
     license='LGPLv3',
     packages=['dstauffman2'],
+    package_data={'dstauffman2': ['py.typed']},
     install_requires=[
         'h5py',
         'matplotlib',

@@ -8,8 +8,11 @@ Notes
 """
 
 #%% Imports
+from __future__ import annotations
+import argparse
 import doctest
 import sys
+from typing import List, Optional, Tuple
 import unittest
 
 from dstauffman import ReturnCodes
@@ -20,12 +23,12 @@ import dstauffman2.commands as commands
 _VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'photos', 'man', 'tests', 'version'})
 
 #%% Functions - _print_bad_command
-def _print_bad_command(command):
+def _print_bad_command(command: str) -> None:
     r"""Prints to the command line when a command name is not understood."""
     print('Command "{}" is not understood.'.format(command))
 
 #%% Functions - main
-def main():
+def main() -> int:
     r"""Main function called when executed using the command line api."""
     try:
         (command, args) = parse_wrapper(sys.argv[1:])
@@ -36,7 +39,7 @@ def main():
     return sys.exit(rc)
 
 #%% Functions - parse_wrapper
-def parse_wrapper(args):
+def parse_wrapper(args: List[str]) -> Tuple[str, argparse.Namespace]:
     r"""Wrapper function to parse out the command name from the rest of the arguments."""
     # check for no command option
     if len(args) >= 1:
@@ -53,7 +56,7 @@ def parse_wrapper(args):
     return (command, parsed_args)
 
 #%% Functions - parse_commands
-def parse_commands(command, args):
+def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
     r"""
     Splits the parsing based on the name of the command.
 
@@ -81,19 +84,19 @@ def parse_commands(command, args):
     if command in _VALID_COMMANDS:
         # If valid, then parse the arguments with the appropiate method, so help calls parse_help etc.
         func = getattr(commands, 'parse_' + command)
-        parsed_args = func(args)
+        parsed_args: argparse.Namespace = func(args)
     else:
         raise ValueError('Unexpected command "{}".'.format(command))
     return parsed_args
 
 #%% Functions - execute_command
-def execute_command(command, args):
+def execute_command(command: str, args: argparse.Namespace) -> int:
     r"""Executes the given command."""
     # check for valid commands
     if command in _VALID_COMMANDS:
         # If valid, then call the appropriate method, so help calls execute_help etc.
         func = getattr(commands, 'execute_' + command)
-        rc = func(args)
+        rc: Optional[int] = func(args)
     else:
         _print_bad_command(command)
         rc = ReturnCodes.bad_command

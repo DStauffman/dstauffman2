@@ -45,12 +45,26 @@ Temporary Items
 # Compiled source #
 # =========================
 *.pyc
+*.nbc
+*.nbi
+
+# =========================
+# Installation Artifacts #
+# =========================
+dstauffman2.egg-info/*
 
 # =========================
 # Pytest logs #
 # =========================
 .pytest_cache/*
 .cache/*
+**/.pylint.d/*
+
+# =========================
+# MyPy #
+# =========================
+.mypy_cache/*
+.mypy_report/*
 
 # =========================
 # LaTeX Files #
