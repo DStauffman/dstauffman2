@@ -31,6 +31,7 @@ class Test_parse_photos(unittest.TestCase):
         self.expected.picasa = False
         self.expected.long = False
         self.expected.resize = False
+        self.expected.pause = False
 
     def test_nominal(self):
         args = commands.parse_photos([self.folder])
@@ -53,7 +54,7 @@ class Test_parse_photos(unittest.TestCase):
 
     def test_picasa(self):
         self.expected.picasa = True
-        args = commands.parse_photos([self.folder, '-p'])
+        args = commands.parse_photos([self.folder, '-c'])
         self.assertEqual(args, self.expected)
 
     def test_long(self):
@@ -66,6 +67,11 @@ class Test_parse_photos(unittest.TestCase):
         args = commands.parse_photos([self.folder, '-r'])
         self.assertEqual(args, self.expected)
 
+    def test_pause(self):
+        self.expected.pause = True
+        args = commands.parse_photos([self.folder, '-p'])
+        self.assertEqual(args, self.expected)
+
 #%% commands.execute_photos
 class Test_execute_photos(unittest.TestCase):
     r"""
@@ -76,7 +82,7 @@ class Test_execute_photos(unittest.TestCase):
     def setUp(self):
         self.folder = dcs2.get_root_dir()
         self.args = argparse.Namespace(folder=self.folder, upper=False, missing=False, unexpected_ext=False, \
-            picasa=False, long=False, resize=False)
+            picasa=False, long=False, resize=False, pause=False)
 
     def test_nominal(self):
         commands.execute_photos(self.args)
@@ -116,6 +122,12 @@ class Test_execute_photos(unittest.TestCase):
         self.args.resize = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder, max_width=1024, max_height=768)
+
+    @patch('dstauffman2.commands.camera.breakpoint')
+    def test_pause(self, mocker):
+        self.args.pause = True
+        commands.execute_photos(self.args)
+        mocker.assert_called_once_with()
 
 #%% Unit test execution
 if __name__ == '__main__':

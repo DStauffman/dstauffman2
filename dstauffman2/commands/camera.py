@@ -41,7 +41,7 @@ def parse_photos(input_args: List[str]) -> argparse.Namespace:
     >>> input_args = ['.']
     >>> args = parse_photos(input_args)
     >>> print(args)
-    Namespace(folder='.', upper=False, missing=False, unexpected_ext=False, picasa=False, long=False, resize=False)
+    Namespace(folder='.', upper=False, missing=False, unexpected_ext=False, picasa=False, long=False, resize=False, pause=False)
 
     """
     parser = argparse.ArgumentParser(prog='dcs2 photos', description='Batch processes digital photos.')
@@ -54,11 +54,13 @@ def parse_photos(input_args: List[str]) -> argparse.Namespace:
 
     parser.add_argument('-x', '--unexpected-ext', help='Find any unexpected file extensions in the folder(s).', action='store_true')
 
-    parser.add_argument('-p', '--picasa', help='Rename any old picasa ini files', action='store_true')
+    parser.add_argument('-c', '--picasa', help='Rename any old picasa ini files', action='store_true')
 
     parser.add_argument('-l', '--long', help='Find long filenames', action='store_true')
 
     parser.add_argument('-r', '--resize', help='Resize the photos to max width and height', action='store_true')  # TODO: group with two other arguments
+
+    parser.add_argument('-p', '--pause', help='Pause within the python environment at the end of execution.', action='store_true')
 
     args = parser.parse_args(input_args)
     return args
@@ -87,7 +89,7 @@ def execute_photos(args: argparse.Namespace) -> int:
     --------
     >>> from dstauffman2.commands import execute_photos
     >>> from argparse import Namespace
-    >>> args = Namespace(folder='.', long=False, missing=False, picasa=False, resize=False, unexpected_ext=False, upper=False)
+    >>> args = Namespace(folder='.', long=False, missing=False, pause=False, picasa=False, resize=False, unexpected_ext=False, upper=False)
     >>> execute_photos(args) # doctest: +SKIP
 
     """
@@ -99,6 +101,7 @@ def execute_photos(args: argparse.Namespace) -> int:
     picasa    = args.picasa
     list_long = args.long
     resize    = args.resize
+    pause     = args.pause
 
     if upper:
         rename_upper_ext(folder)
@@ -112,6 +115,8 @@ def execute_photos(args: argparse.Namespace) -> int:
         rename_old_picasa_files(folder)
     if resize:
         batch_resize(folder, max_width=1024, max_height=768)
+    if pause:
+        breakpoint()
 
 #%% Unit test
 if __name__ == '__main__':
