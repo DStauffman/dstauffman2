@@ -17,7 +17,7 @@ from dstauffman import ReturnCodes
 import dstauffman2.commands as commands
 
 #%% Constants
-_VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'photos', 'man', 'tests'})
+_VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'photos', 'man', 'tests', 'version'})
 
 #%% Functions - _print_bad_command
 def _print_bad_command(command):
@@ -46,6 +46,8 @@ def parse_wrapper(args):
     # check for alternative forms of help with the base dcs command
     if command in {'--help', '-h'}:
         command = 'help'
+    elif command in {'--version', '-v'}:
+        command = 'version'
     # pass the command and remaining arguments to the command parser
     parsed_args = parse_commands(command, args[1:])
     return (command, parsed_args)

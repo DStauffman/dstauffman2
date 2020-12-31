@@ -21,7 +21,7 @@ def readme():
 #%% Setup
 setup(
     name='dstauffman2',
-    version='0.1',
+    version='1.0.0',
     description='Vaguely useful Python utilities, plus a playground for games and miscelllaneous code.',
     long_description=readme(),
     keywords='dstauffman dstauffman2 games playground spyder configuration',
@@ -38,6 +38,6 @@ setup(
         'PyQt5',
         'scipy',
     ],
-    python_requires='>=3.6',
+    python_requires='>=3.8',
     include_package_data=True,
     zip_safe=False)
