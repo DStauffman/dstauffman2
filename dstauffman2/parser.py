@@ -17,8 +17,6 @@ import unittest
 
 from dstauffman import ReturnCodes
 
-import dstauffman2.commands as commands
-
 #%% Constants
 _VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'photos', 'man', 'tests', 'version'})
 
@@ -80,6 +78,9 @@ def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
     >>> parsed_args = parse_commands(command, args)
 
     """
+    # delayed import of commands
+    import dstauffman2.commands as commands
+
     # check for valid commands
     if command in _VALID_COMMANDS:
         # If valid, then parse the arguments with the appropiate method, so help calls parse_help etc.
@@ -92,6 +93,9 @@ def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
 #%% Functions - execute_command
 def execute_command(command: str, args: argparse.Namespace) -> int:
     r"""Executes the given command."""
+    # delayed import of commands
+    import dstauffman2.commands as commands
+
     # check for valid commands
     if command in _VALID_COMMANDS:
         # If valid, then call the appropriate method, so help calls execute_help etc.
