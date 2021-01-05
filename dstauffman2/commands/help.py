@@ -1,5 +1,5 @@
 r"""
-Functions related to `help` command.
+Functions related to `help` and `version` commands.
 
 Notes
 -----

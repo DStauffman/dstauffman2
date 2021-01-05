@@ -8,9 +8,9 @@ Notes
 """
 
 #%% Imports
-from .parser    import main
-from .paths     import get_root_dir, get_tests_dir, get_data_dir, get_images_dir, get_output_dir
-from .version   import version_info
+from .parser  import main
+from .paths   import get_root_dir, get_tests_dir, get_data_dir, get_images_dir, get_output_dir
+from .version import version_info
 
 #%% Constants
 __version__ = '.'.join(str(x) for x in version_info)
