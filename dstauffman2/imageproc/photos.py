@@ -114,7 +114,11 @@ def find_missing_nums(folder, old_picasa=True, digit_check=True, \
             digits  = [nums[i] for i in range(0, len(digs)) if digs[i] != max(digs)]
             if missing:
                 print('Missing: "{}": '.format(os.path.join(root, nams)), end='')
-                print(missing)
+                if len(missing) < 21:
+                    print(missing)
+                else:
+                    temp = sorted(missing)
+                    print(temp[:10], '...', temp[-10:])
             if digit_check and digits:
                 print('Inconsistent digits: "{}": '.format(os.path.join(root, nams)), end='')
                 print(set(digits))
