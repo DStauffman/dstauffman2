@@ -691,7 +691,7 @@ def plot_board(board, title, opts=None):
     # create the axis
     ax = fig.add_subplot(111)
     # set the title
-    fig.canvas.set_window_title(title)
+    fig.canvas.manager.set_window_title(title)
     ax.set_title(title)
     # draw each square
     for i in range(board.shape[0]):

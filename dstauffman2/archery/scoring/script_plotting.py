@@ -78,7 +78,7 @@ if __name__ == '__main__':
     # create figure
     fig = plt.figure(facecolor='w')
     title = 'Tulare Score Distribution vs. Expectation'
-    fig.canvas.set_window_title(title)
+    fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines
@@ -132,7 +132,7 @@ if __name__ == '__main__':
     # create figure
     fig = plt.figure(facecolor='w')
     title = 'Vegas Score Distribution vs. Expectation'
-    fig.canvas.set_window_title(title)
+    fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines

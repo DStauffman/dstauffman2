@@ -56,7 +56,7 @@ class MyCustomToolbar():
     >>> import matplotlib.pyplot as plt
     >>> import numpy as np
     >>> fig = plt.figure()
-    >>> fig.canvas.set_window_title('Figure Title')
+    >>> fig.canvas.manager.set_window_title('Figure Title')
     >>> ax = fig.add_subplot(111)
     >>> x = np.arange(0, 10, 0.1)
     >>> y = np.sin(x)
@@ -148,7 +148,7 @@ if __name__ == '__main__':
     # create figure
     fig = Figure()
     fig.canvas = FigureCanvas(fig)
-    fig.canvas.set_window_title(this_title)
+    fig.canvas.manager.set_window_title(this_title)
     fig.canvas.toolbar = NavigationToolbar(fig.canvas, frame)
 
     # add figure to GUI

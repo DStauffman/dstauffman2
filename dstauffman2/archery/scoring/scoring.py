@@ -211,7 +211,7 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     # create figure
     fig = plt.figure()
     title = 'Score Distribution'
-    fig.canvas.set_window_title(title)
+    fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
     # plot data
     ax.plot(score_range, num2per*normal_curve(score_range, nfaa_mean, nfaa_std), 'r', label='NFAA Normal')

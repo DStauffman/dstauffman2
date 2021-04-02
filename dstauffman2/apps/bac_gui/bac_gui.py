@@ -379,7 +379,7 @@ class BacGui(QMainWindow):
         # call the plotting function
         fig = plot_bac(self.gui_settings, LEGAL_LIMIT)
         # save the figure
-        filename = os.path.join(get_root_dir(), fig.canvas.get_window_title() + '.png')
+        filename = os.path.join(get_root_dir(), fig.canvas.manager.get_window_title() + '.png')
         fig.savefig(filename, dpi=160, bbox_inches='tight')
 
 #%% Functions - get_root_dir
@@ -539,7 +539,7 @@ def plot_bac(gui_settings, legal_limit=None):
     # create the figure and axis
     fig = plt.figure(facecolor='w')
     this_title = 'BAC vs. Time for {}'.format(name)
-    fig.canvas.set_window_title(this_title)
+    fig.canvas.manager.set_window_title(this_title)
     ax = fig.add_subplot(111)
 
     # plot the data

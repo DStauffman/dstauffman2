@@ -632,7 +632,7 @@ def plot_cube(piece, title=None, opts=None):
     # TODO: put back once MPL is fixed: ax.set_aspect('equal')
     # set the title
     if title is not None:
-        fig.canvas.set_window_title(title)
+        fig.canvas.manager.set_window_title(title)
         ax.set_title(title)
     # draw each of the 27 cubes
     for i in range(3):
