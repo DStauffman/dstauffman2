@@ -13,7 +13,7 @@ import os
 from typing import List
 import unittest
 
-from dstauffman import ReturnCodes
+from slog import ReturnCodes
 from dstauffman2 import get_root_dir, version_info
 
 #%% Functions - print_help

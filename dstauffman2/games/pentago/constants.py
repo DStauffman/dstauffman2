@@ -13,7 +13,7 @@ import unittest
 
 import numpy as np
 
-from dstauffman import activate_logging
+from slog import activate_logging
 activate_logging(logging.WARNING, log_format='%(levelname)s:%(message)s')
 
 #%% Constants

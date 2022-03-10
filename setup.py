@@ -43,6 +43,7 @@ setup(
     packages=['dstauffman2'],
     package_data={'dstauffman2': ['py.typed']},
     install_requires=[
+        'dstauffman',
         'h5py',
         'matplotlib',
         'numpy',
@@ -50,6 +51,7 @@ setup(
         'PyQt5',
         'pytest',
         'scipy',
+        'slog',
     ],
     python_requires='>=3.8',
     include_package_data=True,

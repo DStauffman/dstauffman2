@@ -15,7 +15,7 @@ import sys
 from typing import List, Optional, Tuple
 import unittest
 
-from dstauffman import ReturnCodes
+from slog import ReturnCodes
 
 #%% Constants
 _VALID_COMMANDS = frozenset({'batch_rename', 'find_words', 'help', 'photos', 'man', 'tests', 'version'})
