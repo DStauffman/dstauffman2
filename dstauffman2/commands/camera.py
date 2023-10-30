@@ -38,7 +38,7 @@ def parse_photos(input_args: List[str]) -> argparse.Namespace:
     Examples
     --------
     >>> from dstauffman2.commands import parse_photos
-    >>> input_args = ['.']
+    >>> input_args = ["."]
     >>> args = parse_photos(input_args)
     >>> print(args)
     Namespace(folder='.', upper=False, missing=False, unexpected_ext=False, picasa=False, long=False, resize=False, pause=False)
@@ -58,7 +58,7 @@ def parse_photos(input_args: List[str]) -> argparse.Namespace:
 
     parser.add_argument('-l', '--long', help='Find long filenames', action='store_true')
 
-    parser.add_argument('-r', '--resize', help='Resize the photos to max width and height', action='store_true')  # TODO: group with two other arguments
+    parser.add_argument("-r", "--resize", nargs="?", const=1200, default=None, type=int, help="Resize the photos to max width and height", action="store")  # TODO: group with two other arguments
 
     parser.add_argument('-p', '--pause', help='Pause within the python environment at the end of execution.', action='store_true')
 
@@ -94,7 +94,7 @@ def execute_photos(args: argparse.Namespace) -> int:
 
     """
     # alias options
-    folder    = os.path.abspath(args.folder)
+    folder    = os.path.abspath(args.folder)  # Path(folder).resolve()
     upper     = args.upper
     missing   = args.missing
     unexpect  = args.unexpected_ext
@@ -113,8 +113,8 @@ def execute_photos(args: argparse.Namespace) -> int:
         find_unexpected_ext(folder)
     if picasa:
         rename_old_picasa_files(folder)
-    if resize:
-        batch_resize(folder, max_width=1024, max_height=768)
+    if resize is not None:
+        batch_resize(folder, max_width=resize, max_height=resize)
     if pause:
         breakpoint()
 

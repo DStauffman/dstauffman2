@@ -425,15 +425,18 @@ def batch_resize(folder, max_width=8192, max_height=8192, \
             print(status_msg)
 
         # Resize it.
-        new_img = img.resize((new_width, new_height), Image.ANTIALIAS)
+        new_img = img.resize((new_width, new_height), Image.LANCZOS)
 
         # Create the output folder if necessary
 		# (Avoid using setup_dir, as this is currently the only dstauffman dependency)
         if not os.path.isdir(os.path.join(folder, 'resized')):
             os.makedirs(os.path.join(folder, 'resized'))
 
-        # Save it back to disk.
-        new_img.save(os.path.join(folder, 'resized', image))
+        # Save it back to disk (and include original exif data)
+        if "exif" in img.info:
+            new_img.save(os.path.join(folder, 'resized', image), exif=img.info["exif"], quality=95)
+        else:
+            new_img.save(os.path.join(folder, "resized", image), quality=95)
 
         # Close objects
         img.close()
@@ -549,7 +552,7 @@ def convert_tif_to_jpg(folder, max_width=8192, max_height=8192, replace=False, e
             print(status_msg)
 
         # Resize it.
-        new_img = img.resize((new_width, new_height), Image.ANTIALIAS)
+        new_img = img.resize((new_width, new_height), Image.LANCZOS)
 
         # Save it back to disk.
         new_img.save(new_name)
@@ -658,7 +661,7 @@ def read_exif_data(filename, field=None):
     # open the image
     with Image.open(filename) as img:
         # read the exif data
-        exif_data = img._getexif()
+        exif_data = img.getexif()
         # convert to dictionary based on EXIF tag
         exif = {TAGS[k]: v for k, v in exif_data.items() if k in TAGS}
 
