@@ -9,7 +9,7 @@ Notes
 # %% Imports
 import argparse
 import doctest
-import os
+from pathlib import Path
 from typing import List
 import unittest
 
@@ -103,7 +103,7 @@ def execute_photos(args: argparse.Namespace) -> int:
     """
     # alias options
     # fmt: off
-    folder    = os.path.abspath(args.folder)  # Path(folder).resolve()
+    folder    = Path(args.folder).resolve()
     upper     = args.upper
     missing   = args.missing
     unexpect  = args.unexpected_ext
