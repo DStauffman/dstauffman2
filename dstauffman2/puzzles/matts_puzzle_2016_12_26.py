@@ -31,12 +31,13 @@ Don't spend more than 1 hour.
 Report your runtime along with your algorithm/code.
 """
 
-#%% Imports
+# %% Imports
 import random
 
 import numpy as np
 
-#%% Functions - find_equilibriums
+
+# %% Functions - find_equilibriums
 def find_equilibriums(x):
     r"""Find the equilibrium points."""
     # force input to be array
@@ -54,7 +55,8 @@ def find_equilibriums(x):
         y = [-1]
     return y
 
-#%% Functions - boring_version
+
+# %% Functions - boring_version
 def boring_version(x, early=False):
     r"""Find the equilibrium points without using NumPy."""
     # initialize output
@@ -78,25 +80,26 @@ def boring_version(x, early=False):
         y.append(-1)
     return y
 
-#%% Script
-if __name__ == '__main__':
-    A   = [-1, 3, -4, 5, 1, -6, 2, 1]
+
+# %% Script
+if __name__ == "__main__":
+    A = [-1, 3, -4, 5, 1, -6, 2, 1]
     I1a = boring_version(A)
     I1b = find_equilibriums(A)
     np.testing.assert_array_equal(I1a, I1b)
     print(I1b)
 
-    rand  = [random.randint(-5, 5) for x in range(100000)]
+    rand = [random.randint(-5, 5) for x in range(100000)]
     rand2 = np.array(rand)
-    I2a   = boring_version(rand)
-    I2b   = find_equilibriums(rand)
+    I2a = boring_version(rand)
+    I2b = find_equilibriums(rand)
     np.testing.assert_array_equal(I2a, I2b)
     print(I2b)
 
-    worst  = list(range(100000))
+    worst = list(range(100000))
     worst2 = np.array(worst)
-    I3a    = boring_version(worst)
-    I3b    = find_equilibriums(worst)
+    I3a = boring_version(worst)
+    I3b = find_equilibriums(worst)
     np.testing.assert_array_equal(I3a, I3b)
     print(I3b)
 

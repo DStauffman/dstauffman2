@@ -24,7 +24,7 @@ def stringsRearrangement(a):
             else:
                 d=1
         return d
-    for (j,t) in enumerate(a):
+    for j,t in enumerate(a):
         w = [x for (i,x) in enumerate(a) if i!=j]
         if s(t,w): return 1
     return 0

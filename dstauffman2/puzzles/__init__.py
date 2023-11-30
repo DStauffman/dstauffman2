@@ -7,9 +7,9 @@ Notes
 #.  Written by David C. Stauffer in December 2016.
 """
 
-#%% Imports
+# %% Imports
 # None
 
-#%% Unit test
-if __name__ == '__main__':
+# %% Unit test
+if __name__ == "__main__":
     pass

@@ -22,7 +22,6 @@ $RECYCLE.BIN/
 # =========================
 
 # OSX
-# =========================
 .DS_Store
 .AppleDouble
 .LSOverride
@@ -30,9 +29,13 @@ $RECYCLE.BIN/
 # Thumbnails
 ._*
 
-# Files that might appear on external disk
+# Files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
 .Spotlight-V100
+.TemporaryItems
 .Trashes
+.VolumeIcon.icns
 
 # Directories potentially created on remote AFP share
 .AppleDB
@@ -47,6 +50,10 @@ Temporary Items
 *.pyc
 *.nbc
 *.nbi
+*.o
+*.obj
+*.mod
+*.exe
 
 # =========================
 # Installation Artifacts #
@@ -69,39 +76,35 @@ dstauffman2.egg-info/*
 # =========================
 # LaTeX Files #
 # =========================
-**/doc/*/*.aux
-**/doc/*/*.bbl
-**/doc/*/*.bcf
-**/doc/*/*.blg
-**/doc/*/*.dvi
-**/doc/*/*.gz
-**/doc/*/*.hst
-**/doc/*/*.lof
-**/doc/*/*.log
-**/doc/*/*.lot
-**/doc/*/*.out
-**/doc/*/*.pdf
-**/doc/*/*.run.xml
-**/doc/*/*.toc
-**/doc/*/*.tcp
-**/doc/*/*.tps
-**/doc/*/*.ver
+**/docs/*/*.aux
+**/docs/*/*.bbl
+**/docs/*/*.bcf
+**/docs/*/*.blg
+**/docs/*/*.dvi
+**/docs/*/*.gz
+**/docs/*/*.hst
+**/docs/*/*.lof
+**/docs/*/*.log
+**/docs/*/*.lot
+**/docs/*/*.out
+**/docs/*/*.pdf
+**/docs/*/*.run.xml
+**/docs/*/*.toc
+**/docs/*/*.tcp
+**/docs/*/*.tps
+**/docs/*/*.ver
 
 # beamer files
-**/doc/*/*.nav
-**/doc/*/*.snm
-**/doc/*/*.vrb
-
-# =========================
-# PyCharm Files #
-# =========================
-.idea/*
+**/docs/*/*.nav
+**/docs/*/*.snm
+**/docs/*/*.vrb
 
 # =========================
 # Folder/Files #
 # =========================
 coverage_html_report/
 .coverage
+.coverage.*
 output/*
 results/*
 temp/*

@@ -6,14 +6,14 @@ Notes
 #.  Written by David C. Stauffer in December 2013.
 """
 
-#%% Imports
+# %% Imports
 import dstauffman2.imageproc as dip
 
-#%% Test script
-if __name__ == '__main__':
-    folder = r'C:\Users\DStauffman\Desktop\Camera'
+# %% Test script
+if __name__ == "__main__":
+    folder = r"C:\Users\DStauffman\Desktop\Camera"
     dip.rename_upper_ext(folder)
     dip.find_missing_nums(folder)
-    #dip.find_unexpected_ext(folder)
-    #dip.rename_old_picasa_files(folder)
-    #dip.find_long_filenames(folder)
+    # dip.find_unexpected_ext(folder)
+    # dip.rename_old_picasa_files(folder)
+    # dip.find_long_filenames(folder)

@@ -6,18 +6,20 @@ Notes
 #.  Written by David C. Stauffer in March 2020.
 """
 
-#%% Imports
+# %% Imports
 import argparse
 import doctest
-import os
-from typing import List
+from pathlib import Path
+from typing import List, Optional
 import unittest
 
 from slog import ReturnCodes
+
 from dstauffman2 import get_root_dir, version_info
 
-#%% Functions - print_help
-def print_help() -> int:
+
+# %% Functions - print_help
+def print_help(help_file: Optional[Path] = None) -> int:
     r"""
     Prints the contents of the README.rst file.
 
@@ -32,16 +34,18 @@ def print_help() -> int:
     >>> print_help() # doctest: +SKIP
 
     """
-    help_file = os.path.join(get_root_dir(), '..', 'README.rst')
-    if not os.path.isfile(help_file): # pragma: no cover
+    if help_file is None:
+        help_file = get_root_dir().parent / "README.rst"
+    if not help_file.is_file():
         print(f'Warning: help file at "{help_file}" was not found.')
         return ReturnCodes.bad_help_file
-    with open(help_file) as file:
+    with open(help_file, encoding="utf-8") as file:
         text = file.read()
     print(text)
     return ReturnCodes.clean
 
-#%% Functions - print_version
+
+# %% Functions - print_version
 def print_version() -> int:
     r"""Prints the version of the library.
 
@@ -57,15 +61,16 @@ def print_version() -> int:
 
     """
     try:
-        version = '.'.join(str(x) for x in version_info)
+        version = ".".join(str(x) for x in version_info)
         return_code = ReturnCodes.clean
     except:
-        version = 'unknown'
+        version = "unknown"
         return_code = ReturnCodes.bad_version
     print(version)
     return return_code
 
-#%% Functions - parse_help
+
+# %% Functions - parse_help
 def parse_help(input_args: List[str]) -> argparse.Namespace:
     r"""
     Parser for help command.
@@ -89,12 +94,13 @@ def parse_help(input_args: List[str]) -> argparse.Namespace:
     Namespace()
 
     """
-    parser = argparse.ArgumentParser(prog='dcs2 help')
+    parser = argparse.ArgumentParser(prog="dcs2 help")
 
     args = parser.parse_args(input_args)
     return args
 
-#%% Functions - parse_version
+
+# %% Functions - parse_version
 def parse_version(input_args: List[str]) -> argparse.Namespace:
     r"""
     Parser for version command.
@@ -118,13 +124,14 @@ def parse_version(input_args: List[str]) -> argparse.Namespace:
     Namespace()
 
     """
-    parser = argparse.ArgumentParser(prog='dcs2 version')
+    parser = argparse.ArgumentParser(prog="dcs2 version")
 
     args = parser.parse_args(input_args)
     return args
 
-#%% Functions - execute_help
-def execute_help(args: argparse.Namespace) -> int:
+
+# %% Functions - execute_help
+def execute_help(args: argparse.Namespace) -> int:  # pylint: disable=unused-argument
     r"""
     Executes the help command.
 
@@ -148,8 +155,9 @@ def execute_help(args: argparse.Namespace) -> int:
     return_code = print_help()
     return return_code
 
-#%% Functions - execute_version
-def execute_version(args: argparse.Namespace) -> int:
+
+# %% Functions - execute_version
+def execute_version(args: argparse.Namespace) -> int:  # pylint: disable=unused-argument
     r"""
     Executes the version command.
 
@@ -173,7 +181,8 @@ def execute_version(args: argparse.Namespace) -> int:
     return_code = print_version()
     return return_code
 
-#%% Unit test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.tests.test_commands_help', exit=False)
+
+# %% Unit test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.tests.test_commands_help", exit=False)
     doctest.testmod(verbose=False)

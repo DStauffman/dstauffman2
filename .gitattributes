@@ -5,6 +5,8 @@
 *.m text diff=matlab merge
 *.py text diff=python merge
 *.pyx text diff=python merge
+*.f text diff=fortran merge
+*.f90 text diff=fortran merge
 *.coveragerc text
 *.css text
 *.gitattributes text
@@ -12,17 +14,24 @@
 *.htm text
 *.html text
 *.ini text
+*.lock text
 *.md text
+*.prj text
 *.php text
 *.rst text
 *.tex text
+*.toml text
 *.txt text
+*.make text
 
 # Windows specific files to always have CRLF
 *.bat text eol=crlf
 
 # Unix files to always have LF
 *.sh text eol=lf
+
+# Specific executables
+/dcs2 text eol=lf
 
 # known binary files to not modify
 *.dll binary

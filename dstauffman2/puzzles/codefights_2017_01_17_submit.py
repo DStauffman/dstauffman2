@@ -1,6 +1,7 @@
 r"""Codefight challenge (stringsRearrangement), 2017-01-17, by DStauffman."""
 
-#%% Functions - is_str_one_off
+
+# %% Functions - is_str_one_off
 def is_str_one_off(str1, str2):
     r"""
     Determines if strings are only one character different from one another.
@@ -48,7 +49,8 @@ def is_str_one_off(str1, str2):
     # if you got here, then there is exactly one difference and it's a good result
     return True
 
-#%% Functions - find_one_offs
+
+# %% Functions - find_one_offs
 def find_one_offs(key, input_array):
     r"""
     Finds the one-off paths within the list.
@@ -76,7 +78,8 @@ def find_one_offs(key, input_array):
     out = [ix for (ix, this_str) in enumerate(input_array) if is_str_one_off(key, this_str)]
     return out
 
-#%% Functions - stringsRearrangement
+
+# %% Functions - stringsRearrangement
 def stringsRearrangement(input_array):
     r"""
     Finds out if there is a viable path from one string to the next.
@@ -101,6 +104,7 @@ def stringsRearrangement(input_array):
     False
 
     """
+
     def recursive_solver(key, items, last=0):
         r"""
         Recursive path solver.
@@ -132,7 +136,7 @@ def stringsRearrangement(input_array):
         return False
 
     # solve wrapper
-    for (i, this_key) in enumerate(input_array):
+    for i, this_key in enumerate(input_array):
         # build a working list of everything except the current starting point
         working_list = [value for (j, value) in enumerate(input_array) if j != i]
         # recursively solve puzzle

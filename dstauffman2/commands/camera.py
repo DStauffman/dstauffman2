@@ -6,17 +6,24 @@ Notes
 #.  Written by David C. Stauffer in December 2020.
 """
 
-#%% Imports
+# %% Imports
 import argparse
 import doctest
 import os
 from typing import List
 import unittest
 
-from dstauffman2.imageproc import batch_resize, find_long_filenames, find_missing_nums, \
-    find_unexpected_ext, rename_old_picasa_files, rename_upper_ext
+from dstauffman2.imageproc import (
+    batch_resize,
+    find_long_filenames,
+    find_missing_nums,
+    find_unexpected_ext,
+    rename_old_picasa_files,
+    rename_upper_ext,
+)
 
-#%% Functions - parse_photos
+
+# %% Functions - parse_photos
 def parse_photos(input_args: List[str]) -> argparse.Namespace:
     r"""
     Parser for the photos command.
@@ -44,28 +51,29 @@ def parse_photos(input_args: List[str]) -> argparse.Namespace:
     Namespace(folder='.', upper=False, missing=False, unexpected_ext=False, picasa=False, long=False, resize=False, pause=False)
 
     """
-    parser = argparse.ArgumentParser(prog='dcs2 photos', description='Batch processes digital photos.')
+    parser = argparse.ArgumentParser(prog="dcs2 photos", description="Batch processes digital photos.")
 
-    parser.add_argument('folder', help='Folder to search for source files')
+    parser.add_argument("folder", help="Folder to search for source files")
 
-    parser.add_argument('-u', '--upper', help='Rename uppercase extensions to lowercase.', action='store_true')
+    parser.add_argument("-u", "--upper", action="store_true", help="Rename uppercase extensions to lowercase.")
 
-    parser.add_argument('-m', '--missing', help='Display any missing file numbers.', action='store_true')
+    parser.add_argument("-m", "--missing", action="store_true", help="Display any missing file numbers.")
 
-    parser.add_argument('-x', '--unexpected-ext', help='Find any unexpected file extensions in the folder(s).', action='store_true')
+    parser.add_argument("-x", "--unexpected-ext", action="store_true", help="Find any unexpected file extensions in the folder(s).")
 
-    parser.add_argument('-c', '--picasa', help='Rename any old picasa ini files', action='store_true')
+    parser.add_argument("-c", "--picasa", action="store_true", help="Rename any old picasa ini files")
 
-    parser.add_argument('-l', '--long', help='Find long filenames', action='store_true')
+    parser.add_argument("-l", "--long", action="store_true", help="Find long filenames")
 
-    parser.add_argument("-r", "--resize", nargs="?", const=1200, default=None, type=int, help="Resize the photos to max width and height", action="store")  # TODO: group with two other arguments
+    parser.add_argument("-r", "--resize", nargs="?", const=1200, default=None, type=int, help="Resize the photos to max width and height", action="store")
 
-    parser.add_argument('-p', '--pause', help='Pause within the python environment at the end of execution.', action='store_true')
+    parser.add_argument("-p", "--pause", action="store_true", help="Pause within the python environment at the end of execution.")
 
     args = parser.parse_args(input_args)
     return args
 
-#%% Functions - execute_photos
+
+# %% Functions - execute_photos
 def execute_photos(args: argparse.Namespace) -> int:
     r"""
     Executes the photo processing commands.
@@ -89,11 +97,12 @@ def execute_photos(args: argparse.Namespace) -> int:
     --------
     >>> from dstauffman2.commands import execute_photos
     >>> from argparse import Namespace
-    >>> args = Namespace(folder='.', long=False, missing=False, pause=False, picasa=False, resize=False, unexpected_ext=False, upper=False)
+    >>> args = Namespace(folder=".", long=False, missing=False, pause=False, picasa=False, resize=False, unexpected_ext=False, upper=False)
     >>> execute_photos(args) # doctest: +SKIP
 
     """
     # alias options
+    # fmt: off
     folder    = os.path.abspath(args.folder)  # Path(folder).resolve()
     upper     = args.upper
     missing   = args.missing
@@ -102,6 +111,7 @@ def execute_photos(args: argparse.Namespace) -> int:
     list_long = args.long
     resize    = args.resize
     pause     = args.pause
+    # fmt: on
 
     if upper:
         rename_upper_ext(folder)
@@ -118,7 +128,8 @@ def execute_photos(args: argparse.Namespace) -> int:
     if pause:
         breakpoint()
 
-#%% Unit test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.tests.test_commands_camera', exit=False)
+
+# %% Unit test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.tests.test_commands_camera", exit=False)
     doctest.testmod(verbose=False)

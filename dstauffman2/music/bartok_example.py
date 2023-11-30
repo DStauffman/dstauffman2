@@ -6,19 +6,19 @@ Notes
 #.  Written by David C. Stauffer in April 2017.
 """
 
-#%% Imports
+# %% Imports
 import copy
 
 import abjad as ab
 
-#%% Script
-if __name__ == '__main__':
+# %% Script
+if __name__ == "__main__":
     pass
 
-    #%% Score
+    # %% Score
     # create staves
     score = ab.Score([])
-    piano_staff = ab.scoretools.StaffGroup([], context_name='PianoStaff')
+    piano_staff = ab.scoretools.StaffGroup([], context_name="PianoStaff")
     upper_staff = ab.Staff([])
     lower_staff = ab.Staff([])
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     piano_staff.append(lower_staff)
     score.append(piano_staff)
 
-    #%% Measures
+    # %% Measures
     # add some measures
     upper_measures = []
     upper_measures.append(ab.Measure((2, 4), []))
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     upper_staff.extend(upper_measures)
     lower_staff.extend(lower_measures)
 
-    #%% Notes
+    # %% Notes
     # add notes
     upper_measures[0].extend("a'8 g'8 f'8 e'8")
     upper_measures[1].extend("d'4 g'8 f'8 e'8 d'8")
@@ -55,40 +55,40 @@ if __name__ == '__main__':
 
     # use LilyPond \voiceOne and \voiceTwo commansd for stem directions,
     # and set is_simltaneous for last two measures.
-    upper_voice = ab.Voice("b2", name='upper voice')
-    command = ab.indicatortools.LilyPondCommand('voiceOne')
+    upper_voice = ab.Voice("b2", name="upper voice")
+    command = ab.indicatortools.LilyPondCommand("voiceOne")
     ab.attach(command, upper_voice)
-    lower_voice = ab.Voice("b4 a4", name='lower voice')
-    command = ab.indicatortools.LilyPondCommand('voiceTwo')
+    lower_voice = ab.Voice("b4 a4", name="lower voice")
+    command = ab.indicatortools.LilyPondCommand("voiceTwo")
     ab.attach(command, lower_voice)
     lower_measures[3].extend([upper_voice, lower_voice])
     lower_measures[3].is_simultaneous = True
 
-    upper_voice = ab.Voice("b2", name='upper voice')
-    command = ab.indicatortools.LilyPondCommand('voiceOne')
+    upper_voice = ab.Voice("b2", name="upper voice")
+    command = ab.indicatortools.LilyPondCommand("voiceOne")
     ab.attach(command, upper_voice)
-    lower_voice = ab.Voice("g2", name='lower voice')
-    command = ab.indicatortools.LilyPondCommand('voiceTwo')
+    lower_voice = ab.Voice("g2", name="lower voice")
+    command = ab.indicatortools.LilyPondCommand("voiceTwo")
     ab.attach(command, lower_voice)
     lower_measures[4].extend([upper_voice, lower_voice])
     lower_measures[4].is_simultaneous = True
 
     ab.show(score)
 
-    #%% Details
-    clef = ab.Clef('bass')
+    # %% Details
+    clef = ab.Clef("bass")
     ab.attach(clef, lower_staff)
 
-    dynamic = ab.Dynamic('pp')
+    dynamic = ab.Dynamic("pp")
     ab.attach(dynamic, upper_measures[0][0])
 
-    dynamic = ab.Dynamic('mp')
+    dynamic = ab.Dynamic("mp")
     ab.attach(dynamic, upper_measures[1][1])
 
-    dynamic = ab.Dynamic('pp')
+    dynamic = ab.Dynamic("pp")
     ab.attach(dynamic, lower_measures[0][1])
 
-    dynamic = ab.Dynamic('mp')
+    dynamic = ab.Dynamic("mp")
     ab.attach(dynamic, lower_measures[1][3])
 
     score.add_final_bar_line()
@@ -124,7 +124,7 @@ if __name__ == '__main__':
     ab.attach(decrescendo, upper_leaves[-2:])
 
     # A ritardando marking above the last seven notes of the upper staff:
-    markup = ab.Markup('ritard.')
+    markup = ab.Markup("ritard.")
     text_spanner = ab.spannertools.TextSpanner()
     ab.override(text_spanner).text_spanner.bound_details__left__text = markup
     ab.attach(text_spanner, upper_leaves[-7:])
@@ -133,8 +133,8 @@ if __name__ == '__main__':
     tie = ab.Tie()
     ab.attach(tie, upper_leaves[-2:])
 
-    note_1 = lower_staff[-2]['upper voice'][0]
-    note_2 = lower_staff[-1]['upper voice'][0]
+    note_1 = lower_staff[-2]["upper voice"][0]
+    note_2 = lower_staff[-1]["upper voice"][0]
     notes = [note_1, note_2]
     tie = ab.Tie()
     ab.attach(tie, notes)

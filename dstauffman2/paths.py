@@ -8,12 +8,13 @@ Notes
 #.  Renamed to paths by David C. Stauffer in May 2020.
 """
 
-#%% Imports
+# %% Imports
 import doctest
 import os
 import unittest
 
-#%% Functions - get_root_dir
+
+# %% Functions - get_root_dir
 def get_root_dir() -> str:
     r"""
     Return the folder that contains this source file and thus the root folder for the whole code.
@@ -37,7 +38,8 @@ def get_root_dir() -> str:
     folder = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     return folder
 
-#%% Functions - get_tests_dir
+
+# %% Functions - get_tests_dir
 def get_tests_dir() -> str:
     r"""
     Return the default test folder location.
@@ -58,10 +60,11 @@ def get_tests_dir() -> str:
 
     """
     # this  folder is the 'tests' subfolder
-    folder = os.path.join(get_root_dir(), 'tests')
+    folder = os.path.join(get_root_dir(), "tests")
     return folder
 
-#%% Functions - get_data_dir
+
+# %% Functions - get_data_dir
 def get_data_dir() -> str:
     r"""
     Return the default data folder location.
@@ -82,10 +85,11 @@ def get_data_dir() -> str:
 
     """
     # this folder is the 'data' subfolder
-    folder = os.path.join(get_root_dir(), 'data')
+    folder = os.path.join(get_root_dir(), "data")
     return folder
 
-#%% Functions - get_images_dir
+
+# %% Functions - get_images_dir
 def get_images_dir() -> str:
     r"""
     Return the default data folder location.
@@ -106,10 +110,11 @@ def get_images_dir() -> str:
 
     """
     # this folder is the 'images' subfolder
-    folder = os.path.join(get_root_dir(), 'images')
+    folder = os.path.join(get_root_dir(), "images")
     return folder
 
-#%% Functions - get_output_dir
+
+# %% Functions - get_output_dir
 def get_output_dir() -> str:
     r"""
     Return the default output folder location.
@@ -130,10 +135,11 @@ def get_output_dir() -> str:
 
     """
     # this folder is the 'images' subfolder
-    folder = os.path.join(get_root_dir(), 'results')
+    folder = os.path.join(get_root_dir(), "results")
     return folder
 
-#%% Unit test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.tests.test_paths', exit=False)
+
+# %% Unit test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.tests.test_paths", exit=False)
     doctest.testmod(verbose=False)

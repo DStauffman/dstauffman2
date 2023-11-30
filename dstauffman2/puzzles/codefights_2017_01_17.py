@@ -1,10 +1,11 @@
 r"""Codefight challenge (stringsRearrangement), 2017-01-17, by DStauffman."""
 
-#%% Imports
+# %% Imports
 import doctest
 import unittest
 
-#%% Functions - is_str_one_off
+
+# %% Functions - is_str_one_off
 def is_str_one_off(str1, str2):
     r"""
     Determines if strings are only one character different from one another.
@@ -52,7 +53,8 @@ def is_str_one_off(str1, str2):
     # if you got here, then there is exactly one difference and it's a good result
     return True
 
-#%% Functions - find_one_offs
+
+# %% Functions - find_one_offs
 def find_one_offs(key, input_array):
     r"""
     Finds the one-off paths within the list.
@@ -80,7 +82,8 @@ def find_one_offs(key, input_array):
     out = [ix for (ix, this_str) in enumerate(input_array) if is_str_one_off(key, this_str)]
     return out
 
-#%% Functions - stringsRearrangement
+
+# %% Functions - stringsRearrangement
 def stringsRearrangement(input_array):
     r"""
     Finds out if there is a viable path from one string to the next.
@@ -105,6 +108,7 @@ def stringsRearrangement(input_array):
     False
 
     """
+
     def recursive_solver(key, items, last=0):
         r"""
         Recursive path solver.
@@ -136,7 +140,7 @@ def stringsRearrangement(input_array):
         return False
 
     # solve wrapper
-    for (i, this_key) in enumerate(input_array):
+    for i, this_key in enumerate(input_array):
         # build a working list of everything except the current starting point
         working_list = [value for (j, value) in enumerate(input_array) if j != i]
         # recursively solve puzzle
@@ -145,89 +149,96 @@ def stringsRearrangement(input_array):
             return True
     return False
 
-#%% Tests - is_str_one_off
+
+# %% Tests - is_str_one_off
 class Test_is_str_one_off(unittest.TestCase):
     r"""
     Tests the is_str_one_off function with the following cases:
         TBD
     """
+
     def test_nominal(self):
-        self.assertTrue(is_str_one_off('aaa', 'aab'))
-        self.assertTrue(is_str_one_off('aaa', 'aba'))
-        self.assertTrue(is_str_one_off('aaa', 'baa'))
-        self.assertTrue(is_str_one_off('ccc', 'cbc'))
+        self.assertTrue(is_str_one_off("aaa", "aab"))
+        self.assertTrue(is_str_one_off("aaa", "aba"))
+        self.assertTrue(is_str_one_off("aaa", "baa"))
+        self.assertTrue(is_str_one_off("ccc", "cbc"))
 
     def test_char_jumps(self):
-        self.assertTrue(is_str_one_off('aaa', 'aac'))
-        self.assertTrue(is_str_one_off('ccc', 'cac'))
+        self.assertTrue(is_str_one_off("aaa", "aac"))
+        self.assertTrue(is_str_one_off("ccc", "cac"))
 
     def test_not_true(self):
-        self.assertFalse(is_str_one_off('cc', 'bb'))
-        self.assertFalse(is_str_one_off('cccc', 'dddd'))
-        self.assertFalse(is_str_one_off('ccc', 'dce'))
+        self.assertFalse(is_str_one_off("cc", "bb"))
+        self.assertFalse(is_str_one_off("cccc", "dddd"))
+        self.assertFalse(is_str_one_off("ccc", "dce"))
 
     def test_equal(self):
-        self.assertFalse(is_str_one_off('a', 'a'))
+        self.assertFalse(is_str_one_off("a", "a"))
 
     def test_wrong_len(self):
         with self.assertRaises(AssertionError):
-            is_str_one_off('aaa', 'aa')
+            is_str_one_off("aaa", "aa")
 
-#%% Tests - find_one_offs
+
+# %% Tests - find_one_offs
 class Test_find_one_offs(unittest.TestCase):
     r"""
     Tests the find_one_offs function with the following cases:
         TBD
     """
+
     def test_nominal(self):
-        ix = find_one_offs('ccc', ['ccd', 'cdc', 'dcc', 'ddd', 'bbb', 'bcc', 'cbc', 'ccb', 'ccc'])
+        ix = find_one_offs("ccc", ["ccd", "cdc", "dcc", "ddd", "bbb", "bcc", "cbc", "ccb", "ccc"])
         self.assertListEqual(ix, [0, 1, 2, 5, 6, 7])
 
-#%% Tests - stringsRearrangement
+
+# %% Tests - stringsRearrangement
 class Test_stringsRearrangement(unittest.TestCase):
     r"""
     Tests the stringsRearrangement function with the following cases:
         TBD
     """
+
     def test_simple1(self):
-        self.assertTrue(stringsRearrangement(['aa', 'ab', 'bb']))
+        self.assertTrue(stringsRearrangement(["aa", "ab", "bb"]))
 
     def test_simple2(self):
-        self.assertTrue(stringsRearrangement(['aa', 'bb', 'ba']))
+        self.assertTrue(stringsRearrangement(["aa", "bb", "ba"]))
 
     def test_simple3(self):
-        self.assertFalse(stringsRearrangement(['aa', 'ab', 'ee']))
+        self.assertFalse(stringsRearrangement(["aa", "ab", "ee"]))
 
     def test_1(self):
-        self.assertFalse(stringsRearrangement(['aba', 'bbb', 'bab']))
+        self.assertFalse(stringsRearrangement(["aba", "bbb", "bab"]))
 
     def test_2(self):
-        self.assertTrue(stringsRearrangement(['ab', 'bb', 'aa']))
+        self.assertTrue(stringsRearrangement(["ab", "bb", "aa"]))
 
     def test_3(self):
-        self.assertFalse(stringsRearrangement(['q', 'q']))
+        self.assertFalse(stringsRearrangement(["q", "q"]))
 
     def test_4(self):
-        self.assertTrue(stringsRearrangement(['zzzzab', 'zzzzbb', 'zzzzaa']))
+        self.assertTrue(stringsRearrangement(["zzzzab", "zzzzbb", "zzzzaa"]))
 
     def test_5(self):
-        self.assertFalse(stringsRearrangement(['ab', 'ad', 'ef', 'eg']))
+        self.assertFalse(stringsRearrangement(["ab", "ad", "ef", "eg"]))
 
     def test_6(self):
-        self.assertFalse(stringsRearrangement(['abc', 'abx', 'axx', 'abc']))
+        self.assertFalse(stringsRearrangement(["abc", "abx", "axx", "abc"]))
 
     def test_7(self):
-        self.assertTrue(stringsRearrangement(['abc', 'abx', 'axx', 'abx', 'abc']))
+        self.assertTrue(stringsRearrangement(["abc", "abx", "axx", "abx", "abc"]))
 
     def test_8(self):
-        self.assertTrue(stringsRearrangement(['f', 'g', 'a', 'h']))
+        self.assertTrue(stringsRearrangement(["f", "g", "a", "h"]))
 
     def test_repeats(self):
-        self.assertTrue(stringsRearrangement(['abc', 'xbc', 'xxc', 'xbc', 'aby', 'ayy', 'aby']))
+        self.assertTrue(stringsRearrangement(["abc", "xbc", "xxc", "xbc", "aby", "ayy", "aby"]))
 
-#%% Script
-if __name__ == '__main__':
+
+# %% Script
+if __name__ == "__main__":
     # execute unit tests
-    unittest.main(module='dstauffman2.puzzles.codefights_2017_01_17', exit=False)
+    unittest.main(module="dstauffman2.puzzles.codefights_2017_01_17", exit=False)
     # execute doctests
     doctest.testmod(verbose=False)

@@ -6,53 +6,54 @@ Notes
 #.  Written by David C. Stauffer in April 2017.
 """
 
-#%% Imports
+# %% Imports
 import abjad as ab
 
-#%% Script
-if __name__ == '__main__':
+# %% Script
+if __name__ == "__main__":
     pass
 
-    #%% Score
+    # %% Score
     score = ab.Score([])
     staff = ab.Staff([])
     time_signature = ab.TimeSignature((6, 8))
     ab.attach(time_signature, staff)
     score.append(staff)
 
-    #%% Notes
-    measures = [ \
-        "c''8 c''8 c''8 e''4 b'8", \
-        "a'4. g'4.", \
-        "c''8 d''8 e''8 c''4 c'''8", \
-        "g''4. g''4 e''8", \
-        "g''4 d''8 f''4 e''8", \
-        "c''4. c''4 c''8", \
-        "c''8 d''8 e''8 c''4 b'8", \
-        "d''4. d''4 g'8", \
-        "c''4. e''8 d''8 c''8", \
-        "a'4. g'4.", \
-        "c''8 d''8 e''8 c''4 c'''8", \
-        "g''4. g''4 a''8", \
-        "c'''4 a''8 g''4 f''8", \
-        "g''4. e''4.", \
-        "c''8 d''8 e''8 c''4 a'8", \
-        "c''4. c''8 r8 a''8", \
-        "c'''4 a''8 g''4 f''8", \
-        "c'''4 g''8 f''4 e''8", \
-        "a''2.", \
-        "a''4 f''8 e''4 d''8", \
-        "c''4 r8 r4.", \
-        "c''8 d''8 e''8 c''4 c'''8", \
-        "g''4. g''4.", \
-        "c''8 d''8 e''8 c''4 a'8", \
-        "c''4 r8 r4.", \
-        "r2."]
+    # %% Notes
+    measures = [
+        "c''8 c''8 c''8 e''4 b'8",
+        "a'4. g'4.",
+        "c''8 d''8 e''8 c''4 c'''8",
+        "g''4. g''4 e''8",
+        "g''4 d''8 f''4 e''8",
+        "c''4. c''4 c''8",
+        "c''8 d''8 e''8 c''4 b'8",
+        "d''4. d''4 g'8",
+        "c''4. e''8 d''8 c''8",
+        "a'4. g'4.",
+        "c''8 d''8 e''8 c''4 c'''8",
+        "g''4. g''4 a''8",
+        "c'''4 a''8 g''4 f''8",
+        "g''4. e''4.",
+        "c''8 d''8 e''8 c''4 a'8",
+        "c''4. c''8 r8 a''8",
+        "c'''4 a''8 g''4 f''8",
+        "c'''4 g''8 f''4 e''8",
+        "a''2.",
+        "a''4 f''8 e''4 d''8",
+        "c''4 r8 r4.",
+        "c''8 d''8 e''8 c''4 c'''8",
+        "g''4. g''4.",
+        "c''8 d''8 e''8 c''4 a'8",
+        "c''4 r8 r4.",
+        "r2.",
+    ]
     measures = [ab.Measure((6, 8), x) for x in measures if x]
     staff.extend(measures)
     ab.show(score)
 
-    #%% Details
+    # %% Details
 #    dynamic = ab.Dynamic('pp')
 #    ab.attach(dynamic, upper_measures[0][0])
 #

@@ -1,10 +1,11 @@
 r"""Codefight challenge (digitSumInverse), 2017-02-21, by DStauffman."""
 
-#%% Imports
+# %% Imports
 import doctest
 import unittest
 
-#%% Functions - digit_sum
+
+# %% Functions - digit_sum
 def digit_sum(num):
     out = 0
     while num > 0:
@@ -12,7 +13,8 @@ def digit_sum(num):
         num //= 10
     return out
 
-#%% Functions - brute_force
+
+# %% Functions - brute_force
 def brute_force(sum_, num_len):
     out = 0
     for i in range(0, 10**num_len):
@@ -22,7 +24,8 @@ def brute_force(sum_, num_len):
             print(i)
     return out
 
-#%% Functions - digitSumInverse
+
+# %% Functions - digitSumInverse
 def digitSumInverse(sum_, num_len):
     r"""
     Given integers `sum_` and `num_len`, find the number of non-negative integers less than 10^num_len
@@ -37,22 +40,24 @@ def digitSumInverse(sum_, num_len):
         return 1 if sum_ < 10 else 0
 
     # checks for no possible solutions
-    if sum_ > 9*num_len:
+    if sum_ > 9 * num_len:
         return 0
 
     # otherwise, solve recursively
     out = 0
     for digit in range(10):
         if digit <= sum_:
-            out += digitSumInverse(sum_-digit, num_len-1)
+            out += digitSumInverse(sum_ - digit, num_len - 1)
     return out
 
-#%% Tests - stringsRearrangement
+
+# %% Tests - stringsRearrangement
 class Test_stringsRearrangement(unittest.TestCase):
     r"""
     Tests the stringsRearrangement function with the following cases:
         TBD
     """
+
     def test_1(self):
         self.assertEqual(digitSumInverse(5, 2), 6)
 
@@ -61,7 +66,7 @@ class Test_stringsRearrangement(unittest.TestCase):
 
     def test_3a(self):
         digits = 10
-        self.assertEqual(digitSumInverse(9*digits, digits), 1)
+        self.assertEqual(digitSumInverse(9 * digits, digits), 1)
 
     def test_3b(self):
         self.assertEqual(digitSumInverse(90, 10), 1)
@@ -78,8 +83,9 @@ class Test_stringsRearrangement(unittest.TestCase):
     def test_7(self):
         self.assertEqual(digitSumInverse(18, 5), 4840)
 
-#%% Script
-if __name__ == '__main__':
+
+# %% Script
+if __name__ == "__main__":
     # execute unit tests
     unittest.main(exit=False)
     # execute doctests

@@ -6,13 +6,13 @@ Notes
 #.  Written by David C. Stauffer in December 2018.
 """
 
-#%% Imports
+# %% Imports
 import os
 import shutil
 
-#%% Script
-if __name__ == '__main__':
-    folder = r'C:\Users\DStauffman\Desktop\Camera'
+# %% Script
+if __name__ == "__main__":
+    folder = r"C:\Users\DStauffman\Desktop\Camera"
 
     for this_sub in os.listdir(folder):
         this_full_sub = os.path.join(folder, this_sub)
