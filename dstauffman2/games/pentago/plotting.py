@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import doctest
 import unittest
 
@@ -15,30 +15,32 @@ from matplotlib.patches import Circle, Rectangle, Wedge
 from dstauffman2.games.pentago.constants import COLOR, PLAYER, SIZES
 from dstauffman2.games.pentago.utils import calc_cur_move
 
-#%% plot_cur_move
+
+# %% plot_cur_move
 def plot_cur_move(ax, move):
     r"""Plots the piece corresponding the current players move."""
     # local alias
-    box_size = SIZES['square']
+    box_size = SIZES["square"]
 
     # fill background
     ax.add_patch(Rectangle((-box_size/2, -box_size/2), box_size, box_size, \
         facecolor=COLOR['board'], edgecolor='k'))
 
     # draw the piece
-    if move == PLAYER['white']:
-        plot_piece(ax, 0, 0, SIZES['piece'], COLOR['white'])
-    elif move == PLAYER['black']:
-        plot_piece(ax, 0, 0, SIZES['piece'], COLOR['black'])
-    elif move == PLAYER['none']:
+    if move == PLAYER["white"]:
+        plot_piece(ax, 0, 0, SIZES["piece"], COLOR["white"])
+    elif move == PLAYER["black"]:
+        plot_piece(ax, 0, 0, SIZES["piece"], COLOR["black"])
+    elif move == PLAYER["none"]:
         pass
     else:
-        raise ValueError('Unexpected player.')
+        raise ValueError("Unexpected player.")
 
     # turn the axes back off (they get reinitialized at some point)
     ax.set_axis_off()
 
-#%% plot_piece
+
+# %% plot_piece
 def plot_piece(ax, vc, hc, r, c, half=False):
     r"""
     Plots a piece on the board.
@@ -80,20 +82,21 @@ def plot_piece(ax, vc, hc, r, c, half=False):
     """
     # theta angle to sweep out 2*pi
     if half:
-        piece = Wedge((hc, vc), r, 270, 90, facecolor=c, edgecolor='k')
+        piece = Wedge((hc, vc), r, 270, 90, facecolor=c, edgecolor="k")
     else:
-        piece = Circle((hc, vc), r, facecolor=c, edgecolor='k')
+        piece = Circle((hc, vc), r, facecolor=c, edgecolor="k")
 
     # plot piece
     ax.add_patch(piece)
     return piece
 
-#%% plot_board
+
+# %% plot_board
 def plot_board(ax, board):
     r"""Plots the board (and the current player move)."""
     # get axes limits
     (m, n) = board.shape
-    s = SIZES['square']/2
+    s = SIZES["square"] / 2
     xmin = 0 - s
     xmax = m - 1 + s
     ymin = 0 - s
@@ -104,32 +107,33 @@ def plot_board(ax, board):
         edgecolor=COLOR['maj_edge']))
 
     # draw minor horizontal lines
-    ax.plot([1-s, 1-s], [ymin, ymax], color=COLOR['min_edge'])
-    ax.plot([2-s, 2-s], [ymin, ymax], color=COLOR['min_edge'])
-    ax.plot([4-s, 4-s], [ymin, ymax], color=COLOR['min_edge'])
-    ax.plot([5-s, 5-s], [ymin, ymax], color=COLOR['min_edge'])
+    ax.plot([1 - s, 1 - s], [ymin, ymax], color=COLOR["min_edge"])
+    ax.plot([2 - s, 2 - s], [ymin, ymax], color=COLOR["min_edge"])
+    ax.plot([4 - s, 4 - s], [ymin, ymax], color=COLOR["min_edge"])
+    ax.plot([5 - s, 5 - s], [ymin, ymax], color=COLOR["min_edge"])
     # draw minor vertical lines
-    ax.plot([xmin, xmax], [1-s, 1-s], color=COLOR['min_edge'])
-    ax.plot([xmin, xmax], [2-s, 2-s], color=COLOR['min_edge'])
-    ax.plot([xmin, xmax], [4-s, 4-s], color=COLOR['min_edge'])
-    ax.plot([xmin, xmax], [5-s, 5-s], color=COLOR['min_edge'])
+    ax.plot([xmin, xmax], [1 - s, 1 - s], color=COLOR["min_edge"])
+    ax.plot([xmin, xmax], [2 - s, 2 - s], color=COLOR["min_edge"])
+    ax.plot([xmin, xmax], [4 - s, 4 - s], color=COLOR["min_edge"])
+    ax.plot([xmin, xmax], [5 - s, 5 - s], color=COLOR["min_edge"])
     # draw major quadrant lines
-    ax.plot([3-s, 3-s], [ymin, ymax], color=COLOR['maj_edge'], linewidth=2)
-    ax.plot([xmin, xmax], [3-s, 3-s], color=COLOR['maj_edge'], linewidth=2)
+    ax.plot([3 - s, 3 - s], [ymin, ymax], color=COLOR["maj_edge"], linewidth=2)
+    ax.plot([xmin, xmax], [3 - s, 3 - s], color=COLOR["maj_edge"], linewidth=2)
 
     # loop through and place marbles
     for i in range(m):
         for j in range(n):
-            if board[i, j] == PLAYER['none']:
+            if board[i, j] == PLAYER["none"]:
                 pass
-            elif board[i, j] == PLAYER['white']:
-                plot_piece(ax, i, j, SIZES['piece'], COLOR['white'])
-            elif board[i, j] == PLAYER['black']:
-                plot_piece(ax, i, j, SIZES['piece'], COLOR['black'])
+            elif board[i, j] == PLAYER["white"]:
+                plot_piece(ax, i, j, SIZES["piece"], COLOR["white"])
+            elif board[i, j] == PLAYER["black"]:
+                plot_piece(ax, i, j, SIZES["piece"], COLOR["black"])
             else:
-                raise ValueError('Bad board position.')
+                raise ValueError("Bad board position.")
 
-#%% plot_win
+
+# %% plot_win
 def plot_win(ax, mask):
     r"""
     Plots the winning pieces in red.
@@ -164,9 +168,10 @@ def plot_win(ax, mask):
     for i in range(m):
         for j in range(n):
             if mask[i, j]:
-                plot_piece(ax, i, j, SIZES['win'], COLOR['win'])
+                plot_piece(ax, i, j, SIZES["win"], COLOR["win"])
 
-#%% plot_possible_win
+
+# %% plot_possible_win
 def plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_game):
     r"""
     Plots the possible wins on the board.
@@ -197,19 +202,19 @@ def plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_g
     pos_white = set(white_moves)
     pos_black = set(black_moves)
     # find intersecting positions
-    pos_both  = pos_white & pos_black
+    pos_both = pos_white & pos_black
 
     # plot the whole pieces
     for this_move in pos_white ^ pos_both:
-        plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_wht'])
-        rot_buttons[this_move.rot_key].overlay = 'wht'
+        plot_piece(ax, this_move.row, this_move.column, SIZES["win"], COLOR["win_wht"])
+        rot_buttons[this_move.rot_key].overlay = "wht"
     for this_move in pos_black ^ pos_both:
-        plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_blk'])
-        rot_buttons[this_move.rot_key].overlay = 'blk'
+        plot_piece(ax, this_move.row, this_move.column, SIZES["win"], COLOR["win_blk"])
+        rot_buttons[this_move.rot_key].overlay = "blk"
 
     # plot the half pieces, with the current players move as whole
     next_move = calc_cur_move(cur_move, cur_game)
-    if next_move == PLAYER['white']:
+    if next_move == PLAYER["white"]:
         for this_move in pos_both:
             plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_wht'])
             plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_blk'], half=True)
@@ -220,9 +225,10 @@ def plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_g
             plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_wht'], half=True)
             rot_buttons[this_move.rot_key].overlay = 'b_w'
     else:
-        raise ValueError('Unexpected next player.')
+        raise ValueError("Unexpected next player.")
 
-#%% Unit Test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.games.pentago.tests.test_plotting', exit=False)
+
+# %% Unit Test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.games.pentago.tests.test_plotting", exit=False)
     doctest.testmod(verbose=False)

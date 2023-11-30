@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in April 2017.
 """
 
-#%% Imports
+# %% Imports
 import os
 
 import numpy as np
@@ -19,18 +19,20 @@ from PyQt5.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
 
 from dstauffman import close_all, get_images_dir
 
-#%% Constants
+# %% Constants
 plt = None
 
-#%% Classes - _HoverButton
+
+# %% Classes - _HoverButton
 class _HoverButton(QPushButton):
     r"""Custom button that allows hovering and icons."""
+
     def __init__(self, *args, **kwargs):
         # initialize
         super().__init__(*args, **kwargs)
         # Enable mouse hover event tracking
         self.setMouseTracking(True)
-        self.setStyleSheet('border: 0px;')
+        self.setStyleSheet("border: 0px;")
         # set icon
         for this_arg in args:
             if isinstance(this_arg, QIcon):
@@ -39,14 +41,15 @@ class _HoverButton(QPushButton):
 
     def enterEvent(self, event):
         # Draw border on hover
-        self.setStyleSheet('border: 1px; border-style: solid;') # pragma: no cover
+        self.setStyleSheet("border: 1px; border-style: solid;")  # pragma: no cover
 
     def leaveEvent(self, event):
         # Delete border after hover
-        self.setStyleSheet('border: 0px;') # pragma: no cover
+        self.setStyleSheet("border: 0px;")  # pragma: no cover
 
-#%% Classes - MyCustomToolbar
-class MyCustomToolbar():
+
+# %% Classes - MyCustomToolbar
+class MyCustomToolbar:
     r"""
     Defines a custom toolbar to use in any matplotlib plots.
 
@@ -67,24 +70,25 @@ class MyCustomToolbar():
     >>> plt.close(fig)
 
     """
+
     def __init__(self, toolbar):
         r"""Initializes the custom toolbar."""
         # create buttons - Prev Plot
-        icon = QIcon(os.path.join(get_images_dir(), 'prev_plot.png'))
-        self.btn_prev_plot = _HoverButton(icon, '')
-        self.btn_prev_plot.setToolTip('Show the previous plot')
+        icon = QIcon(os.path.join(get_images_dir(), "prev_plot.png"))
+        self.btn_prev_plot = _HoverButton(icon, "")
+        self.btn_prev_plot.setToolTip("Show the previous plot")
         fig.canvas.toolbar.addWidget(self.btn_prev_plot)
         self.btn_prev_plot.clicked.connect(self.prev_plot)
         # create buttons - Next Plot
-        icon = QIcon(os.path.join(get_images_dir(), 'next_plot.png'))
-        self.btn_next_plot = _HoverButton(icon, '')
-        self.btn_next_plot.setToolTip('Show the next plot')
+        icon = QIcon(os.path.join(get_images_dir(), "next_plot.png"))
+        self.btn_next_plot = _HoverButton(icon, "")
+        self.btn_next_plot.setToolTip("Show the next plot")
         fig.canvas.toolbar.addWidget(self.btn_next_plot)
         self.btn_next_plot.clicked.connect(self.next_plot)
         # create buttons - Close all
-        icon = QIcon(os.path.join(get_images_dir(), 'close_all.png'))
-        self.btn_close_all = _HoverButton(icon, '')
-        self.btn_close_all.setToolTip('Close all the open plots')
+        icon = QIcon(os.path.join(get_images_dir(), "close_all.png"))
+        self.btn_close_all = _HoverButton(icon, "")
+        self.btn_close_all.setToolTip("Close all the open plots")
         fig.canvas.toolbar.addWidget(self.btn_close_all)
         self.btn_close_all.clicked.connect(self._close_all)
 
@@ -103,8 +107,8 @@ class MyCustomToolbar():
             # find the active figure within the list
             if this_fig == all_figs[i]:
                 # find the next figure, with allowances for rolling over the list
-                if i < len(all_figs)-1:
-                    next_fig = all_figs[i+1]
+                if i < len(all_figs) - 1:
+                    next_fig = all_figs[i + 1]
                 else:
                     next_fig = all_figs[0]
         # set the appropriate active figure
@@ -124,7 +128,7 @@ class MyCustomToolbar():
             if this_fig == all_figs[i]:
                 # find the next figure, with allowances for rolling over the list
                 if i > 0:
-                    prev_fig = all_figs[i-1]
+                    prev_fig = all_figs[i - 1]
                 else:
                     prev_fig = all_figs[-1]
         # set the appropriate active figure
@@ -132,12 +136,13 @@ class MyCustomToolbar():
         # make it the active window
         fig.canvas.manager.window.raise_()
 
-#%% Script
-if __name__ == '__main__':
+
+# %% Script
+if __name__ == "__main__":
     # data
     time = np.arange(0, 10)
     data = np.sin(time)
-    this_title = 'Sin vs. Time'
+    this_title = "Sin vs. Time"
 
     # create GUI for figure
     frame = QMainWindow()
@@ -157,11 +162,11 @@ if __name__ == '__main__':
 
     # add an axis and plot the data
     ax = fig.add_subplot(111)
-    ax.plot(time, data, '.-', label='Sin')
+    ax.plot(time, data, ".-", label="Sin")
 
     # add labels and legends
-    ax.set_xlabel('Time')
-    ax.set_ylabel('Amp')
+    ax.set_xlabel("Time")
+    ax.set_ylabel("Amp")
     ax.set_title(this_title)
 
     # show legend

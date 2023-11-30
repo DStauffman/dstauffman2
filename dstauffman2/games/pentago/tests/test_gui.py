@@ -7,48 +7,48 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import dstauffman2.games.pentago as pentago
 
-#%% Aliases
-w = pentago.PLAYER['white']
-b = pentago.PLAYER['black']
+# %% Aliases
+w = pentago.PLAYER["white"]
+b = pentago.PLAYER["black"]
 
-#%% RotationButton
-pass
-
-#%% PentagoGui
-#PentagoGui.initialize_state
-pass
-#PentagoGui.load_images
-pass
-#PentagoGui.init
-pass
-#PentagoGui.closeEvent
-pass
-#PentagoGui.center
-pass
-#PentagoGui.display_controls
-pass
-#PentagoGui.update_game_stats
-pass
-#PentagoGui.btn_undo_function
-pass
-#PentagoGui.btn_new_function
-pass
-#PentagoGui.btn_redo_function
-pass
-#PentagoGui.btn_rot_function
-pass
-#PentagoGui.mouse_click_callback
-pass
-#PentagoGui.execute_move
-pass
-#PentagoGui.wrapper
+# %% RotationButton
 pass
 
-#%% Unit test execution
-if __name__ == '__main__':
+# %% PentagoGui
+# PentagoGui.initialize_state
+pass
+# PentagoGui.load_images
+pass
+# PentagoGui.init
+pass
+# PentagoGui.closeEvent
+pass
+# PentagoGui.center
+pass
+# PentagoGui.display_controls
+pass
+# PentagoGui.update_game_stats
+pass
+# PentagoGui.btn_undo_function
+pass
+# PentagoGui.btn_new_function
+pass
+# PentagoGui.btn_redo_function
+pass
+# PentagoGui.btn_rot_function
+pass
+# PentagoGui.mouse_click_callback
+pass
+# PentagoGui.execute_move
+pass
+# PentagoGui.wrapper
+pass
+
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

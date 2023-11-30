@@ -7,24 +7,24 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import dstauffman2.games.pentago as pentago
 
-#%% Aliases
-w = pentago.PLAYER['white']
-b = pentago.PLAYER['black']
+# %% Aliases
+w = pentago.PLAYER["white"]
+b = pentago.PLAYER["black"]
 
-#%% State
+# %% State
 pass
 
-#%% Move
+# %% Move
 pass
 
-#%% GameStats
+# %% GameStats
 pass
 
-#%% Unit test execution
-if __name__ == '__main__':
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

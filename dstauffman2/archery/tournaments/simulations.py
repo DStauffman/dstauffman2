@@ -6,19 +6,20 @@ Notes
 #.  Written by David C. Stauffer in March 2015.
 """
 
-#%% Imports
+# %% Imports
 import numpy as np
 
 from dstauffman2.archery.tournaments.constants import COL_SCORE1, COL_SCORE2, COL_SCORE_TOT, \
     COL_X_COUNT1, COL_X_COUNT2, COL_X_COUNT_TOT
 
-#%% Local constants
+# %% Local constants
 MAX_INDIV_SCORE = 360
 MAX_INDIV_X     = 36
 MAX_SET         = 6
 MAX_CUM         = 150
 
-#%% Functions - simulate_individual_scores
+
+# %% Functions - simulate_individual_scores
 def simulate_individual_scores(data):
     r"""Simulates the individual scoring rounds."""
     # get the number of archers
@@ -39,17 +40,20 @@ def simulate_individual_scores(data):
     # return the updated answer, TODO: I don't know why this set isn't necessary
     return data
 
-#%% Functions - simulate_bracket_scores
-def simulate_bracket_scores(data, round_=''):
+
+# %% Functions - simulate_bracket_scores
+def simulate_bracket_scores(data, round_=""):
     r"""Simulates the bracket scores, round by round."""
     if len(round_) == 0:
         return
 
-#%% Unit test function
+
+# %% Unit test function
 def _main():
     r"""Unit test case."""
     pass
 
-#%% Unit test
-if __name__ == '__main__':
+
+# %% Unit test
+if __name__ == "__main__":
     _main()

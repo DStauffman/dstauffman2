@@ -1,6 +1,5 @@
 r"""
-Test file for the `paths` module of the "dstauffman2" library.  It is intented to contain test
-cases to demonstrate functionaliy and correct outcomes for all the functions within the module.
+Test file for the `paths` module of the "dstauffman2" library.
 
 Notes
 -----
@@ -10,6 +9,7 @@ Notes
 # %% Imports
 import inspect
 import os
+import pathlib
 import unittest
 
 import dstauffman2 as dcs2
@@ -18,64 +18,64 @@ import dstauffman2 as dcs2
 # %% get_root_dir
 class Test_get_root_dir(unittest.TestCase):
     r"""
-    Tests the get_root_dir function with these cases:
+    Tests the get_root_dir function with the following cases:
         call the function
     """
 
-    def test_function(self):
-        filepath = inspect.getfile(dcs2.get_root_dir)
-        expected_root = os.path.split(filepath)[0]
+    def test_function(self) -> None:
+        filepath = inspect.getfile(dcs2.get_root_dir.__wrapped__)
+        expected_root = pathlib.Path(os.path.split(filepath)[0])
         folder = dcs2.get_root_dir()
         self.assertEqual(folder, expected_root)
-        self.assertTrue(os.path.isdir(folder))
+        self.assertTrue(folder.is_dir())
 
 
 # %% get_tests_dir
 class Test_get_tests_dir(unittest.TestCase):
     r"""
-    Tests the get_tests_dir function with these cases:
+    Tests the get_tests_dir function with the following cases:
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         folder = dcs2.get_tests_dir()
-        self.assertEqual(folder, os.path.join(dcs2.get_root_dir(), "tests"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "tests"))
 
 
 # %% get_data_dir
 class Test_get_data_dir(unittest.TestCase):
     r"""
-    Tests the get_data_dir function with these cases:
+    Tests the get_data_dir function with the following cases:
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         folder = dcs2.get_data_dir()
-        self.assertEqual(folder, os.path.join(dcs2.get_root_dir(), "data"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "data"))
 
 
 # %% get_images_dir
 class Test_get_images_dir(unittest.TestCase):
     r"""
-    Tests the get_images_dir function with these cases:
+    Tests the get_images_dir function with the following cases:
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         folder = dcs2.get_images_dir()
-        self.assertEqual(folder, os.path.join(dcs2.get_root_dir(), "images"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "images"))
 
 
 # %% get_output_dir
 class Test_get_output_dir(unittest.TestCase):
     r"""
-    Tests the get_output_dir function with these cases:
+    Tests the get_output_dir function with the following cases:
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         folder = dcs2.get_output_dir()
-        self.assertEqual(folder, os.path.join(dcs2.get_root_dir(), "results"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "results"))
 
 
 # %% Unit test execution

@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in June 2015.
 """
 
-#%% Imports
+# %% Imports
 import os
 import timeit
 
@@ -15,25 +15,24 @@ import pprofile
 from dstauffman2 import get_output_dir, setup_dir
 import dstauffman2.games.knight as knight
 
-#%% Script
-if __name__ == '__main__':
-
-    do_board = 'none' # from {'none', 'small', 'large', 'both'}
+# %% Script
+if __name__ == "__main__":
+    do_board = "none"  # from {'none', 'small', 'large', 'both'}
 
     # convert board to numeric representation for efficiency
     board1 = knight.char_board_to_nums(knight.BOARD1)
     board2 = knight.char_board_to_nums(knight.BOARD2)
 
     # create the output folder
-    folder = os.path.join(get_output_dir(), 'knight')
+    folder = os.path.join(get_output_dir(), "knight")
     setup_dir(folder)
 
     # create profiler
     profile = pprofile.Profile()
 
     # Small board
-    if do_board in {'small', 'both'}:
-        print('\nSolve the smaller board for the minimum length solution.')
+    if do_board in {"small", "both"}:
+        print("\nSolve the smaller board for the minimum length solution.")
         # enable/disable profiler while running solver
         profile.enable()
         moves3 = knight.solve_min_puzzle(board1)
@@ -46,11 +45,11 @@ if __name__ == '__main__':
             knight.print_sequence(board1, moves3)
 
     # Large board
-    if do_board in {'large', 'both'}:
-        print('\nSolve the larger board for the minimum length solution.')
+    if do_board in {"large", "both"}:
+        print("\nSolve the larger board for the minimum length solution.")
         board2[0, 0] = knight.Piece.start
-        #board2[-1, -1] = knight.Piece.final # doesn't use transport
-        board2[11, -1] = knight.Piece.final # uses transport
+        # board2[-1, -1] = knight.Piece.final # doesn't use transport
+        board2[11, -1] = knight.Piece.final  # uses transport
 
         # enable/disable profiler while running solver
         profile.enable()
@@ -70,6 +69,6 @@ if __name__ == '__main__':
     print(t/5)
 
     # Save profile results
-    profile.dump_stats(os.path.join(folder, 'profile_results.txt'))
-    with open(os.path.join(folder, 'profile_results.callgrind'), 'w+') as file:
+    profile.dump_stats(os.path.join(folder, "profile_results.txt"))
+    with open(os.path.join(folder, "profile_results.callgrind"), "w+") as file:
         profile.callgrind(file)

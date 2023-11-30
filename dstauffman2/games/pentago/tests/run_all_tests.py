@@ -6,10 +6,10 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import nose
 
 import dstauffman2.games.pentago as pentago
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     nose.run(pentago)

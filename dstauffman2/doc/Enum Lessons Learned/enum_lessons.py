@@ -6,22 +6,26 @@ Notes
 #.  Written by David C. Stauffer in April 2015.
 """
 
-#%% Imports
+# %% Imports
 from enum import Enum, EnumMeta, IntEnum, unique
 
 import numpy as np
 
-#%% Meta Class
+
+# %% Meta Class
 class _EnumMetaPlus(EnumMeta):
     r"""Overrides the repr/str methods of the EnumMeta class to display all possible values."""
+
     def __repr__(cls):
         text = [repr(field) for field in cls]
-        return '\n'.join(text)
+        return "\n".join(text)
+
     def __str__(cls):
         text = [str(field) for field in cls]
-        return '\n'.join(text)
+        return "\n".join(text)
 
-#%% Extened IntEnum class
+
+# %% Extened IntEnum class
 @unique
 class _IntEnumPlus(int, Enum, metaclass=_EnumMetaPlus):
     r"""
@@ -29,10 +33,12 @@ class _IntEnumPlus(int, Enum, metaclass=_EnumMetaPlus):
 
     Also forces all values to be unique.
     """
-    def __str__(self):
-        return '{}.{}: {}'.format(self.__class__.__name__, self.name, self.value)
 
-#%% TB Status
+    def __str__(self):
+        return "{}.{}: {}".format(self.__class__.__name__, self.name, self.value)
+
+
+# %% TB Status
 class TbStatus(_IntEnumPlus):
     r"""
     Enumerator definitions for the possible Tuberculosis infection status.
@@ -42,13 +48,14 @@ class TbStatus(_IntEnumPlus):
     #.  Negative values are uninfected, positive values are infected, zero
         is undefined.
     """
-    null           =  0 # not set, used for preallocation
-    uninfected     = -1 # never been infected
-    recovered      = -2 # currently uninfected, but have been infected in the past
-    latent_recent  =  1 # recently infected (<2 years)
-    latent_remote  =  2 # immune stabilized infection
-    active_untreat =  3 # active TB, not on treatment, or on ineffective treatment
-    active_treated =  4 # active TB, on effective treatment
+    null           =  0  # not set, used for preallocation
+    uninfected     = -1  # never been infected
+    recovered      = -2  # currently uninfected, but have been infected in the past
+    latent_recent  =  1  # recently infected (<2 years)
+    latent_remote  =  2  # immune stabilized infection
+    active_untreat =  3  # active TB, not on treatment, or on ineffective treatment
+    active_treated =  4  # active TB, on effective treatment
+
 
 class TbStatus2(IntEnum):
     r"""Standard Enumerator."""
@@ -60,7 +67,8 @@ class TbStatus2(IntEnum):
     active_untreat =  3
     active_treated =  4
 
-#%% Functions
+
+# %% Functions
 def get_those_infected(tb_status):
     r"""Finds anyone who is infected with TB."""
     ix_infected = (tb_status == TbStatus.latent_recent) | (tb_status == \
@@ -68,20 +76,20 @@ def get_those_infected(tb_status):
         (tb_status == TbStatus.active_untreat)
     return ix_infected
 
+
 def get_those_uninfected(tb_status):
     r"""Finds anyone who is not infected with TB."""
-    ix_uninfected = (tb_status == TbStatus.uninfected) | \
-        (tb_status == TbStatus.recovered)
+    ix_uninfected = (tb_status == TbStatus.uninfected) | (tb_status == TbStatus.recovered)
     return ix_uninfected
 
-#%% Example usage
-if __name__ == '__main__':
+
+# %% Example usage
+if __name__ == "__main__":
     num = 100
     tb_status = np.full(num, TbStatus.null, dtype=int)
     ix = np.random.rand(num)
     tb_status[ix >= 0.5] = TbStatus.active_treated
     tb_status[ix <  0.5] = TbStatus.uninfected
-
 
     ix_infected1 = tb_status > 0
     ix_infected2 = get_those_infected(tb_status)
@@ -93,14 +101,14 @@ if __name__ == '__main__':
     np.testing.assert_array_equal(ix_uninfected1, ix_uninfected2)
 
     # normal Enums
-    print('Normal')
+    print("Normal")
     print(TbStatus2.uninfected)
     print(repr(TbStatus2.uninfected))
     print(TbStatus2)
     print(repr(TbStatus2))
 
     # extended Enums
-    print('Extended')
+    print("Extended")
     print(TbStatus.uninfected)
     print(repr(TbStatus.uninfected))
     print(TbStatus)

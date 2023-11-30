@@ -8,8 +8,10 @@ Notes
 """
 
 #%% Imports
+
 cimport cython
 from libcpp cimport bool
+
 
 #%% check_board_boundaries
 def check_board_boundaries(int x, int y, int xmax, int ymax):

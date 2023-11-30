@@ -7,15 +7,15 @@ Written by David C. Stauffer in March 2016.
 # Build with:
 # pyinstaller --onefile --windowed run_tictactoe.py
 
-#%% Imports
+# %% Imports
 import sys
 
 from PyQt5.QtWidgets import QApplication
 
 from dstauffman2.games.tictactoe import TicTacToeGui
 
-#%% Execution
-if __name__ == '__main__':
+# %% Execution
+if __name__ == "__main__":
     # Runs the GUI application
     qapp = QApplication(sys.argv)
     # instatiates the GUI

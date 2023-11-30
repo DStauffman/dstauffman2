@@ -7,23 +7,25 @@ Notes
 #.  Written by David C. Stauffer in May 2016.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import dstauffman2.games.cards as cards
 
-#%% Local aliases
+# %% Local aliases
 R = cards.Rank
 S = cards.Suit
 H = cards.Hand
 C = cards.Card
 
-#%% Card
+
+# %% Card
 class Test_card(unittest.TestCase):
     r"""
     Tests the Card class with the following cases:
         TBD
     """
+
     def setUp(self):
         self.ranks = [R.TWO, R.ACE, R.TWO, R.ACE, R.FIVE, R.FIVE]
         self.suits = [S.CLUBS, S.CLUBS, S.SPADES, S.SPADES, S.HEARTS, S.DIAMONDS]
@@ -75,11 +77,12 @@ class Test_Deck(unittest.TestCase):
     Tests the Deck class with the following cases:
         TBD
     """
+
     def setUp(self):
         self.deck = cards.Deck()
-        self.sorted_deck = 'A♠, K♠, Q♠, J♠, 10♠, 9♠, 8♠, 7♠, 6♠, 5♠, 4♠, 3♠, 2♠, ' + \
-            'A♥, K♥, Q♥, J♥, 10♥, 9♥, 8♥, 7♥, 6♥, 5♥, 4♥, 3♥, 2♥, A♦, K♦, Q♦, J♦, 10♦, ' + \
-            '9♦, 8♦, 7♦, 6♦, 5♦, 4♦, 3♦, 2♦, A♣, K♣, Q♣, J♣, 10♣, 9♣, 8♣, 7♣, 6♣, 5♣, 4♣, 3♣, 2♣'
+        self.sorted_deck = "A♠, K♠, Q♠, J♠, 10♠, 9♠, 8♠, 7♠, 6♠, 5♠, 4♠, 3♠, 2♠, " + \
+            "A♥, K♥, Q♥, J♥, 10♥, 9♥, 8♥, 7♥, 6♥, 5♥, 4♥, 3♥, 2♥, A♦, K♦, Q♦, J♦, 10♦, " + \
+            "9♦, 8♦, 7♦, 6♦, 5♦, 4♦, 3♦, 2♦, A♣, K♣, Q♣, J♣, 10♣, 9♣, 8♣, 7♣, 6♣, 5♣, 4♣, 3♣, 2♣"
 
     def test_creation(self):
         self.assertEqual(str(self.deck), self.sorted_deck)
@@ -88,7 +91,7 @@ class Test_Deck(unittest.TestCase):
         self.deck.shuffle()
         self.assertNotEqual(str(self.deck), self.sorted_deck)
 
-    #def test_sort(self):
+    # def test_sort(self):
     #    self.deck.shuffle()
     #    self.assertNotEqual(str(self.deck), self.sorted_deck)
     #    self.deck.sort()
@@ -101,14 +104,16 @@ class Test_Deck(unittest.TestCase):
         self.deck.reset()
         self.assertEqual(str(self.deck), self.sorted_deck)
 
-#%% Hand
+
+# %% Hand
 class Test_Hand(unittest.TestCase):
     r"""
     Tests the Hand Class with the following cases:
         TBD
     """
+
     def setUp(self):
-        self.hand  = cards.Hand()
+        self.hand = cards.Hand()
         self.card1 = cards.Card(R.ACE, S.SPADES)
         self.card2 = cards.Card(R.FOUR, S.HEARTS)
 
@@ -202,12 +207,13 @@ class Test_Hand(unittest.TestCase):
         hand2 = H([C(R.TEN, S.SPADES), C(R.TEN, S.DIAMONDS), C(R.TEN, S.CLUBS), C(R.TEN, S.HEARTS), C(R.TEN, S.SPADES)])
         score1 = hand1.score_hand()
         score2 = hand2.score_hand()
-        #self.assertGreater(score1, 9)
-        #self.assertGreater(score2, 9)
-        #self.assertLess(score1, 10)
-        #self.assertLess(score2, 10)
-        #self.assertGreater(score1, score2)
+        # self.assertGreater(score1, 9)
+        # self.assertGreater(score2, 9)
+        # self.assertLess(score1, 10)
+        # self.assertLess(score2, 10)
+        # self.assertGreater(score1, score2)
 
-#%% Unit test execution
-if __name__ == '__main__':
+
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

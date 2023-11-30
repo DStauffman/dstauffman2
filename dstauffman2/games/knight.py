@@ -71,32 +71,33 @@ Level 5 [HARD]: Compute the longest sequence of moves to complete Level 3 withou
     visiting the same square twice.  Use the 32x32 board.
 """
 
-#%% Imports
+# %% Imports
 import doctest
+from enum import IntEnum, unique
 import logging
 import time
 import unittest
-from enum import IntEnum, unique
 
 import numpy as np
 
-#%% Pyrex imports
-use_cython = False # TODO: try to use Cython eventually?
+# %% Pyrex imports
+use_cython = False  # TODO: try to use Cython eventually?
 if use_cython:
-    import pyximport;
+    import pyximport
+
     pyximport.install()
     from dstauffman2.games.knight2 import check_board_boundaries as _check_board_boundaries2
 
-#%% Logging
-logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.WARNING)
+# %% Logging
+logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.WARNING)
 
-#%% Constants
+# %% Constants
 # hard-coded values
 LARGE_INT = 1000000
 # dictionaries
-CHAR_DICT = {'.':0, 'S':1, 'E':2, 'K':3, 'W':4, 'R':5, 'B':6, 'T':7, 'L':8, 'x': 9}
-NUM_DICT  = {value:key for (key, value) in CHAR_DICT.items()}
-COST_DICT = {'normal': 1, 'transport': 1, 'water': 2, 'lava': 5, 'invalid': LARGE_INT, 'start': 0}
+CHAR_DICT = {".": 0, "S": 1, "E": 2, "K": 3, "W": 4, "R": 5, "B": 6, "T": 7, "L": 8, "x": 9}
+NUM_DICT  = {value: key for (key, value) in CHAR_DICT.items()}
+COST_DICT = {"normal": 1, "transport": 1, "water": 2, "lava": 5, "invalid": LARGE_INT, "start": 0}
 # boards
 BOARD1 = r"""
 . . . . . . . .
@@ -143,9 +144,9 @@ W W W W . . . . . . . . . . . B . . . W W W W W W W . . . . . .
 . . . . . . . . . . . B . . . . . . . . . . . . . . . . . . . .
 """
 # moves
-#MOVES = frozenset({-4, -3, -2, -1, 1, 2, 3, 4})
+# MOVES = frozenset({-4, -3, -2, -1, 1, 2, 3, 4})
 MOVES = [-4, -3, -2, -1, 1, 2, 3, 4]
-#MOVES = frozenset({-4, -3, -2, -1, 1, 2, 3, 4, -5, 5, -6, 6, -7, 7, -8, 8})
+# MOVES = frozenset({-4, -3, -2, -1, 1, 2, 3, 4, -5, 5, -6, 6, -7, 7, -8, 8})
 # Move design is based on a first direction step of two moves, followed by a single step to the
 # left or right of the first one.
 # Note for chess nerds: The move is two steps and then one.  With no obstructions, it can be thought
@@ -168,22 +169,24 @@ MOVES = [-4, -3, -2, -1, 1, 2, 3, 4]
 # . . . . .  |  . . . . .  |  . . . . .  |  . . x x E  |  . . . x .  |  . x . . .  |  E x x . .  |  . . . . .
 # . . . . .  |  . . . . .  |  . . . . .  |  . . . . .  |  . . . E .  |  . E . . .  |  . . . . .  |  . . . . .
 
-#%% Classes - Piece
+
+# %% Classes - Piece
 @unique
 class Piece(IntEnum):
     r"""Enumerator for all the possible types of squares within the board, including start and end positions."""
-    null      = 0 # Empty square that has never been used
-    start     = 1 # Original starting position
-    final     = 2 # Final ending position
-    current   = 3 # Current knight position
-    water     = 4 # water, costs two moves to land on
-    rock      = 5 # rock, can be jumped across, but not landed on
-    barrier   = 6 # barrier, cannot be landed on or moved across
-    transport = 7 # transport to the other transport, can only be exactly 0 or 2 on the board
-    lava      = 8 # lava, costs 5 moves to land on
-    visited   = 9 # previously visited square that cannot be used again
+    null      = 0  # Empty square that has never been used
+    start     = 1  # Original starting position
+    final     = 2  # Final ending position
+    current   = 3  # Current knight position
+    water     = 4  # water, costs two moves to land on
+    rock      = 5  # rock, can be jumped across, but not landed on
+    barrier   = 6  # barrier, cannot be landed on or moved across
+    transport = 7  # transport to the other transport, can only be exactly 0 or 2 on the board
+    lava      = 8  # lava, costs 5 moves to land on
+    visited   = 9  # previously visited square that cannot be used again
 
-#%% Classes - Move
+
+# %% Classes - Move
 @unique
 class Move(IntEnum):
     r"""Enumerator for all the cost outcomes for moving a piece."""
@@ -196,11 +199,13 @@ class Move(IntEnum):
     lava      = 4
     winning   = 5
 
-#%% alternates for speed
+
+# %% alternates for speed
 Piece2 = {x.name: x.value for x in Piece}
 Move2  = {x.name: x.value for x in Move}
 
-#%% _board_to_costs
+
+# %% _board_to_costs
 def _board_to_costs(board):
     r"""
     Translates a board to the associated costs for landing on any square within the board.
@@ -234,27 +239,28 @@ def _board_to_costs(board):
      [      1       1 1000000]]
 
     """
-    costs = np.full(board.shape, COST_DICT['invalid'], dtype=int)
+    costs = np.full(board.shape, COST_DICT["invalid"], dtype=int)
     for i in range(costs.shape[0]):
         for j in range(costs.shape[1]):
             this_piece = board[i, j]
             if this_piece in {Piece.rock, Piece.barrier}:
                 continue
             elif this_piece in {Piece.null, Piece.final}:
-                costs[i, j] = COST_DICT['normal']
+                costs[i, j] = COST_DICT["normal"]
             elif this_piece == Piece.start:
-                costs[i, j] = COST_DICT['start']
+                costs[i, j] = COST_DICT["start"]
             elif this_piece == Piece.transport:
-                costs[i, j] = COST_DICT['transport']
+                costs[i, j] = COST_DICT["transport"]
             elif this_piece == Piece.water:
-                costs[i, j] = COST_DICT['water']
+                costs[i, j] = COST_DICT["water"]
             elif this_piece == Piece.lava:
-                costs[i, j] = COST_DICT['lava']
+                costs[i, j] = COST_DICT["lava"]
             else:
                 raise ValueError('Cannot convert piece "{}" to a cost.'.format(this_piece))
     return costs
 
-#%% _get_transports
+
+# %% _get_transports
 def _get_transports(board):
     r"""
     Gets the locations of all the transports.
@@ -288,8 +294,8 @@ def _get_transports(board):
     """
     if np.any(board == Piece.transport):
         ix = np.nonzero(board == Piece.transport)
-        assert len(ix) == 2, 'Must be a 2D board.'
-        assert len(ix[0]) == 0 or len(ix[0]) == 2, 'There must be 0 or exactly 2 transports.'
+        assert len(ix) == 2, "Must be a 2D board."
+        assert len(ix[0]) == 0 or len(ix[0]) == 2, "There must be 0 or exactly 2 transports."
         transports = [(ix[0][i], ix[1][i]) for i in range(len(ix[0]))]
         # TODO: use this instead of tuples
         # transports = np.argwhere(board == Piece.transport)
@@ -297,7 +303,8 @@ def _get_transports(board):
         transports = None
     return transports
 
-#%% _get_current_position
+
+# %% _get_current_position
 def _get_current_position(board):
     r"""
     Gets the current position of the knight.
@@ -330,20 +337,21 @@ def _get_current_position(board):
 
     """
     # find position
-    ix = np.nonzero(board == Piece2['current'])
+    ix = np.nonzero(board == Piece2["current"])
     # alias X and Y locations
     x = ix[0]
     y = ix[1]
     # check that only exactly one current position was found, and if not, print the messed up board
-    count = np.count_nonzero(board == Piece2['current'])
+    count = np.count_nonzero(board == Piece2["current"])
     is_valid = count == 1
     if not is_valid:
         print_board(board)
-    assert is_valid, 'Only exactly one current position may be found, not {}.'.format(count)
+    assert is_valid, "Only exactly one current position may be found, not {}.".format(count)
     # otherwise if all is good, return the location
     return (x[0], y[0])
 
-#%% _get_new_position
+
+# %% _get_new_position
 def _get_new_position(x, y, move, transports):
     r"""
     Gets the new position of the knight after making the desired move.
@@ -384,53 +392,54 @@ def _get_new_position(x, y, move, transports):
     """
     # move the piece
     if move == -1:
-        pos1 = (x-1, y)
-        pos2 = (x-2, y)
-        pos3 = (x-2, y-1)
+        pos1 = (x - 1, y)
+        pos2 = (x - 2, y)
+        pos3 = (x - 2, y - 1)
     elif move == 1:
-        pos1 = (x-1, y)
-        pos2 = (x-2, y)
-        pos3 = (x-2, y+1)
+        pos1 = (x - 1, y)
+        pos2 = (x - 2, y)
+        pos3 = (x - 2, y + 1)
     elif move == -2:
-        pos1 = (x,   y+1)
-        pos2 = (x,   y+2)
-        pos3 = (x-1, y+2)
+        pos1 = (x,     y + 1)
+        pos2 = (x,     y + 2)
+        pos3 = (x - 1, y + 2)
     elif move == 2:
-        pos1 = (x,   y+1)
-        pos2 = (x,   y+2)
-        pos3 = (x+1, y+2)
+        pos1 = (x,     y + 1)
+        pos2 = (x,     y + 2)
+        pos3 = (x + 1, y + 2)
     elif move == -3:
-        pos1 = (x+1, y)
-        pos2 = (x+2, y)
-        pos3 = (x+2, y+1)
+        pos1 = (x + 1, y)
+        pos2 = (x + 2, y)
+        pos3 = (x + 2, y + 1)
     elif move == 3:
-        pos1 = (x+1, y)
-        pos2 = (x+2, y)
-        pos3 = (x+2, y-1)
+        pos1 = (x + 1, y)
+        pos2 = (x + 2, y)
+        pos3 = (x + 2, y - 1)
     elif move == -4:
-        pos1 = (x,   y-1)
-        pos2 = (x,   y-2)
-        pos3 = (x+1, y-2)
+        pos1 = (x,     y - 1)
+        pos2 = (x,     y - 2)
+        pos3 = (x + 1, y - 2)
     elif move == 4:
-        pos1 = (x,   y-1)
-        pos2 = (x,   y-2)
-        pos3 = (x-1, y-2)
+        pos1 = (x,     y - 1)
+        pos2 = (x,     y - 2)
+        pos3 = (x - 1, y - 2)
     elif move in {-5, 5, -6, 6, -7, 7, -8, 8}:
-        raise ValueError('Extended moves are not yet implemented.')
+        raise ValueError("Extended moves are not yet implemented.")
     else:
         raise ValueError('Invalid move of "{}"'.format(move))
     # handle landing on a transport
     if transports is not None:
-        assert len(transports) == 2, 'There must be exactly 0 or 2 transports.'
+        assert len(transports) == 2, "There must be exactly 0 or 2 transports."
         if pos3 in transports:
             if pos3 == transports[0]:
                 pos3 = transports[1]
-            elif pos3 == transports[1]: #pragma: no branch
+            elif pos3 == transports[1]:  # pragma: no branch
                 pos3 = transports[0]
     # return the whole set of stuff
     return (pos1, pos2, pos3)
 
-#%% _check_board_boundaries
+
+# %% _check_board_boundaries
 def _check_board_boundaries(x, y, xmax, ymax):
     r"""
     Checks that a given position is on the board.
@@ -477,7 +486,8 @@ def _check_board_boundaries(x, y, xmax, ymax):
     is_valid = x_valid and y_valid
     return is_valid
 
-#%% _classify_move
+
+# %% _classify_move
 def _classify_move(board, move, transports, start_x, start_y):
     r"""
     Determines if the desired move is valid or not, and what type of move/cost it would have.
@@ -530,35 +540,36 @@ def _classify_move(board, move, transports, start_x, start_y):
         valid_moves2 = np.array([_check_board_boundaries2(pos[0], pos[1], xmax, ymax) for pos in (pos1, pos2, pos3)])
         np.testing.assert_array_equal(valid_moves, valid_moves2)
     if np.any(~valid_moves):
-        return Move2['off_board']
+        return Move2["off_board"]
     # get the values for each position
     p1 = board[pos1[0], pos1[1]]
     p2 = board[pos2[0], pos2[1]]
     p3 = board[pos3[0], pos3[1]]
     # check for error conditions
-    if p3 in {Piece2['start'], Piece2['current']}:
-        raise ValueError("The piece should never be able to move to it's current or starting position.") # pragma: no cover
+    if p3 in {Piece2["start"], Piece2["current"]}:
+        raise ValueError("The piece should never be able to move to it's current or starting position.")  # pragma: no cover
     # check for blocked conditions
-    if p3 in {Piece2['rock'], Piece2['barrier']} or p1 == Piece2['barrier'] or p2 == Piece2['barrier']:
-        return Move2['blocked']
+    if p3 in {Piece2["rock"], Piece2["barrier"]} or p1 == Piece2["barrier"] or p2 == Piece2["barrier"]:
+        return Move2["blocked"]
     # remaining moves are valid, determine type
-    if p3 == Piece2['visited']:
-        move_type = Move2['visited']
-    elif p3 == Piece2['null']:
-        move_type = Move2['normal']
-    elif p3 == Piece2['final']:
-        move_type = Move2['winning']
-    elif p3 == Piece2['transport']:
-        move_type = Move2['transport']
-    elif p3 == Piece2['water']:
-        move_type = Move2['water']
-    elif p3 == Piece2['lava']:
-        move_type = Move2['lava']
+    if p3 == Piece2["visited"]:
+        move_type = Move2["visited"]
+    elif p3 == Piece2["null"]:
+        move_type = Move2["normal"]
+    elif p3 == Piece2["final"]:
+        move_type = Move2["winning"]
+    elif p3 == Piece2["transport"]:
+        move_type = Move2["transport"]
+    elif p3 == Piece2["water"]:
+        move_type = Move2["water"]
+    elif p3 == Piece2["lava"]:
+        move_type = Move2["lava"]
     else:
-        raise ValueError('Unexpected piece type "{}"'.format(p3)) # pragma: no cover
+        raise ValueError('Unexpected piece type "{}"'.format(p3))  # pragma: no cover
     return move_type
 
-#%% _update_board
+
+# %% _update_board
 def _update_board(board, move, costs, transports, start_x, start_y):
     r"""
     Updates the new board based on the desired move.
@@ -619,7 +630,7 @@ def _update_board(board, move, costs, transports, start_x, start_y):
 
     """
     # initialize outputs
-    cost      = LARGE_INT
+    cost = LARGE_INT
     is_repeat = False
     # determine the move type
     move_type = _classify_move(board, move, transports, start_x, start_y)
@@ -633,16 +644,17 @@ def _update_board(board, move, costs, transports, start_x, start_y):
         board[new_x, new_y] = Piece.current
         # determine what the cost was
         cost = costs[new_x, new_y]
-        if move_type == Move2['winning']:
+        if move_type == Move2["winning"]:
             cost = -cost
-        elif move_type == Move2['visited']:
+        elif move_type == Move2["visited"]:
             is_repeat = True
     else:
         new_x = start_x
         new_y = start_y
     return (cost, is_repeat, new_x, new_y)
 
-#%% _undo_move
+
+# %% _undo_move
 def _undo_move(board, last_move, original_board, transports, start_x, start_y):
     r"""
     Undoes the last move on the board.
@@ -692,26 +704,27 @@ def _undo_move(board, last_move, original_board, transports, start_x, start_y):
 
     """
     # set the current position back to it's original piece
-    if original_board[start_x, start_y] == Piece2['start']:
-        board[start_x, start_y] = Piece2['null']
+    if original_board[start_x, start_y] == Piece2["start"]:
+        board[start_x, start_y] = Piece2["null"]
     else:
         board[start_x, start_y] = original_board[start_x, start_y]
     # find the inverse move
     new_move = _get_move_inverse(last_move)
     # if on a transport, then undo travel it first
     if transports is not None:
-        assert len(transports) == 2, 'There must be exactly 0 or 2 transports.'
+        assert len(transports) == 2, "There must be exactly 0 or 2 transports."
         if (start_x, start_y) in transports:
             if (start_x, start_y) == transports[0]:
                 (start_x, start_y) = transports[1]
-            elif (start_x, start_y) == transports[1]: # pragma: no branch
+            elif (start_x, start_y) == transports[1]:  # pragma: no branch
                 (start_x, start_y) = transports[0]
     # get the new position (without traversing transports)
     (_, _, (new_x, new_y)) = _get_new_position(start_x, start_y, new_move, transports=None)
     # set the new position to current
-    board[new_x, new_y] = Piece2['current']
+    board[new_x, new_y] = Piece2["current"]
 
-#%% _get_move_inverse
+
+# %% _get_move_inverse
 def _get_move_inverse(move):
     r"""
     Gets the inverse move to go back where you were.
@@ -745,11 +758,12 @@ def _get_move_inverse(move):
     2
 
     """
-    assert move in MOVES, 'Invalid move.'
+    assert move in MOVES, "Invalid move."
     inv_move = np.sign(move) * (np.mod(np.abs(move) + 1, 4) + 1)
     return inv_move
 
-#%% _predict_cost
+
+# %% _predict_cost
 def _predict_cost(board):
     r"""
     Predicts the cost from all locations on the board to the final square.
@@ -786,13 +800,14 @@ def _predict_cost(board):
     x_fin = temp[0][0]
     y_fin = temp[1][0]
     # build a grid of points to evaluate
-    (X, Y) = np.meshgrid(np.arange(board.shape[0]), np.arange(board.shape[1]), indexing='ij')
+    (X, Y) = np.meshgrid(np.arange(board.shape[0]), np.arange(board.shape[1]), indexing="ij")
     x_dist = np.abs(X - x_fin)
     y_dist = np.abs(Y - y_fin)
     costs = np.where(x_dist > y_dist, np.maximum(x_dist / 2, y_dist), np.maximum(x_dist, y_dist / 2))
     return costs
 
-#%% _sort_best_moves
+
+# %% _sort_best_moves
 def _sort_best_moves(board, moves, costs, transports, start_x, start_y):
     r"""
     Sorts the given moves into the most likely best order based on a predicted cost
@@ -841,7 +856,7 @@ def _sort_best_moves(board, moves, costs, transports, start_x, start_y):
     # initialize the costs
     pred_costs = np.full(len(moves), np.nan, dtype=float)
     pred_costs.fill(np.nan)
-    for (ix, move) in enumerate(moves):
+    for ix, move in enumerate(moves):
         (_, _, (new_x, new_y)) = _get_new_position(start_x, start_y, move, transports)
         if new_x >= 0 and new_y >= 0:
             try:
@@ -853,7 +868,8 @@ def _sort_best_moves(board, moves, costs, transports, start_x, start_y):
     sorted_moves = [moves[i] for i in sorted_ix if not np.isnan(pred_costs[i])]
     return sorted_moves
 
-#%% print_baord
+
+# %% print_baord
 def print_board(board):
     r"""
     Prints the current board position to the console window.
@@ -887,12 +903,13 @@ def print_board(board):
     for i in range(rows):
         for j in range(cols):
             # print each piece in the row without a line continuation
-            pad = ' ' if j < cols-1 else ''
-            print(NUM_DICT[board[i, j]] + pad, end='')
+            pad = " " if j < cols - 1 else ""
+            print(NUM_DICT[board[i, j]] + pad, end="")
         # add the line continuation at the end of each row
-        print('')
+        print("")
 
-#%% char_board_to_nums
+
+# %% char_board_to_nums
 def char_board_to_nums(char_board):
     r"""
     Converts the original board from a character array into a numpy ndarray of int.
@@ -914,7 +931,7 @@ def char_board_to_nums(char_board):
     Examples
     --------
     >>> from dstauffman2.games.knight import char_board_to_nums
-    >>> char_board = '. . S . .\n. . . . E'
+    >>> char_board = ". . S . .\n. . . . E"
     >>> board = char_board_to_nums(char_board)
     >>> print(board)
     [[0 0 1 0 0]
@@ -922,9 +939,9 @@ def char_board_to_nums(char_board):
 
     """
     # convert to rows of lines
-    lines = char_board.split('\n')
+    lines = char_board.split("\n")
     # remove any empty rows
-    lines = [this_line.split(' ') for this_line in lines if this_line]
+    lines = [this_line.split(" ") for this_line in lines if this_line]
     # get the size of the board
     rows = len(lines)
     cols = len(lines[0])
@@ -936,7 +953,8 @@ def char_board_to_nums(char_board):
             board[i, j] = CHAR_DICT[lines[i][j]]
     return board
 
-#%% check_valid_sequence
+
+# %% check_valid_sequence
 def check_valid_sequence(board, moves, print_status=False, allow_repeats=False):
     r"""
     Checks that the list of moves is a valid sequence to go from start to final position.
@@ -976,7 +994,7 @@ def check_valid_sequence(board, moves, print_status=False, allow_repeats=False):
     """
     # initialize output
     is_valid = True
-    is_done  = False
+    is_done = False
     # determine the costs
     costs = _board_to_costs(board)
     # find transports
@@ -988,36 +1006,37 @@ def check_valid_sequence(board, moves, print_status=False, allow_repeats=False):
     (x, y) = _get_current_position(temp_board)
     # check that the board has a final goal
     if not np.any(temp_board == Piece.final):
-        raise ValueError('The board does not have a finishing location.')
-    for (i, this_move) in enumerate(moves):
+        raise ValueError("The board does not have a finishing location.")
+    for i, this_move in enumerate(moves):
         # update the board and determine the cost
         (cost, is_repeat, x, y) = _update_board(temp_board, this_move, costs, transports, x, y)
         # if cost was zero, then the move was invalid
-        if cost == COST_DICT['invalid']:
+        if cost == COST_DICT["invalid"]:
             is_valid = False
             break
         # check for repeated conditions
         if not allow_repeats and is_repeat:
             is_valid = False
             if print_status:
-                print('No repeats allowed.')
+                print("No repeats allowed.")
             break
         # check for winning conditions (based on negative cost value)
         if cost < 0:
             is_done = True
-            if i < len(moves)-1:
-                raise ValueError('Sequence finished, but then kept going.')
+            if i < len(moves) - 1:
+                raise ValueError("Sequence finished, but then kept going.")
     if print_status:
         if is_valid:
             if is_done:
-                print('Sequence is valid and finished the puzzle.')
+                print("Sequence is valid and finished the puzzle.")
             else:
-                print('Sequence is valid, but did not finish the puzzle.')
+                print("Sequence is valid, but did not finish the puzzle.")
         else:
-            print('Sequence is not valid.')
+            print("Sequence is not valid.")
     return is_valid
 
-#%% print_sequence
+
+# %% print_sequence
 def print_sequence(board, moves):
     r"""
     Prints the every board position for the given move sequence.
@@ -1064,7 +1083,7 @@ def print_sequence(board, moves):
     transports = _get_transports(board)
     # create internal board for calculations
     temp_board = board.copy()
-    print('Starting position:')
+    print("Starting position:")
     print_board(temp_board)
     # set the current position to the start
     temp_board[temp_board == Piece.start] = Piece.current
@@ -1072,20 +1091,21 @@ def print_sequence(board, moves):
     # initialize total costs
     total_cost = 0
     # loop through move sequence
-    for (i, this_move) in enumerate(moves):
+    for i, this_move in enumerate(moves):
         # update board
         (cost, _, x, y) = _update_board(temp_board, this_move, costs, transports, x, y)
-        if cost != COST_DICT['invalid']:
+        if cost != COST_DICT["invalid"]:
             # update total costs
             total_cost += abs(cost)
             # print header
-            print('\nAfter move {}, cost: {}'.format(i+1, total_cost))
+            print("\nAfter move {}, cost: {}".format(i + 1, total_cost))
             # print new board
             print_board(temp_board)
         else:
-            raise ValueError('Bad sequence.')
+            raise ValueError("Bad sequence.")
 
-#%% _initialize_data
+
+# %% _initialize_data
 def _initialize_data(board):
     r"""
     Initializers the internal data structure for use in the solver.
@@ -1133,37 +1153,38 @@ def _initialize_data(board):
     # initialize dictionary
     data = {}
     # save original board for use in undoing moves
-    data['original_board'] = board.copy()
+    data["original_board"] = board.copy()
     # find transports
-    data['transports'] = _get_transports(board)
+    data["transports"] = _get_transports(board)
     # alias the final location for use at the end
     temp = np.nonzero(board == Piece.final)
-    data['final_loc'] = (temp[0][0], temp[1][0])
+    data["final_loc"] = (temp[0][0], temp[1][0])
     # calculate the costs for landing on each square
-    data['costs'] = _board_to_costs(board)
+    data["costs"] = _board_to_costs(board)
     # crudely predict all the costs
-    data['pred_costs'] = _predict_cost(board)
+    data["pred_costs"] = _predict_cost(board)
     # initialize best costs on first run
-    data['best_costs'] = np.full(board.shape, LARGE_INT, dtype=int)
+    data["best_costs"] = np.full(board.shape, LARGE_INT, dtype=int)
     # initialize best solution
-    data['best_moves'] = None
+    data["best_moves"] = None
     # initialize moves array and solved status
-    data['moves'] = []
-    data['is_solved'] = False
-    data['all_moves'] = [[[] for y in range(board.shape[1])] for x in range(board.shape[0])]
-    data['all_boards'] = np.empty((board.shape[0], board.shape[1], board.shape[0], board.shape[1]), dtype=int)
+    data["moves"] = []
+    data["is_solved"] = False
+    data["all_moves"] = [[[] for y in range(board.shape[1])] for x in range(board.shape[0])]
+    data["all_boards"] = np.empty((board.shape[0], board.shape[1], board.shape[0], board.shape[1]), dtype=int)
     # initialize current cost and update in best_costs
-    data['current_cost'] = 0
+    data["current_cost"] = 0
     temp = np.nonzero(board == Piece.start)
-    data['best_costs'][temp] = data['current_cost']
+    data["best_costs"][temp] = data["current_cost"]
     # create temp board and set the current position to the start
     temp_board = board.copy()
     temp_board[board == Piece.start] = Piece.current
     # store the first board
-    data['all_boards'][:, :, temp[0][0], temp[1][0]] = temp_board.copy()
+    data["all_boards"][:, :, temp[0][0], temp[1][0]] = temp_board.copy()
     return data
 
-#%% _solve_next_move
+
+# %% _solve_next_move
 def _solve_next_move(board, data, start_x, start_y):
     r"""
     Solves the puzzle using a breadth first approach.
@@ -1193,58 +1214,58 @@ def _solve_next_move(board, data, start_x, start_y):
     >>> start_y = 0
     >>> board[start_x, start_y] = Piece.current
     >>> _solve_next_move(board, data, start_x, start_y)
-    >>> print(data['best_costs'])
+    >>> print(data["best_costs"])
     [[      0 1000000 1000000 1000000 1000000]
      [1000000 1000000       1 1000000 1000000]]
 
     """
     # check for a start piece, in which case something is messed up
-    assert not np.any(board == Piece2['start']), 'Empty dicts should not have a start piece and vice versa.'
+    assert not np.any(board == Piece2["start"]), "Empty dicts should not have a start piece and vice versa."
     # guess the order for the best moves based on predicited costs
-    sorted_moves = _sort_best_moves(board, MOVES, data['pred_costs'], data['transports'], start_x, start_y)
+    sorted_moves = _sort_best_moves(board, MOVES, data["pred_costs"], data["transports"], start_x, start_y)
     # try all the next possible moves
     for this_move in sorted_moves:
         # make the move
-        (cost, is_repeat, new_x, new_y) = _update_board(board, this_move, data['costs'], \
-            data['transports'], start_x, start_y)
+        (cost, is_repeat, new_x, new_y) = _update_board(board, this_move, data["costs"], data["transports"], start_x, start_y)
         # optional logging for debugging
-        log_message = 'this_move = {}, this_cost = {}, total moves = {}'.format(this_move, cost, data['moves'])
+        log_message = "this_move = {}, this_cost = {}, total moves = {}".format(this_move, cost, data["moves"])
         # if the move was invalid then go to the next one
-        if cost == COST_DICT['invalid']:
-            logging.debug(log_message + ' - invalid')
-            continue # pragma: no cover - Actually covered, error in coverage tool
+        if cost == COST_DICT["invalid"]:
+            logging.debug(log_message + " - invalid")
+            continue  # pragma: no cover - Actually covered, error in coverage tool
         # valid move
         else:
             # determine if move was to a previously visited square of worse cost than another sequence
-            if is_repeat or data['current_cost'] + abs(cost) >= data['best_costs'][new_x, new_y]:
-                logging.debug(log_message + ' - worse repeat')
+            if is_repeat or data["current_cost"] + abs(cost) >= data["best_costs"][new_x, new_y]:
+                logging.debug(log_message + " - worse repeat")
                 # reject move and re-establish the visited state
-                _undo_move(board, this_move, data['original_board'], data['transports'], new_x, new_y)
+                _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
                 if cost > 0 and is_repeat:
-                    board[new_x, new_y] = Piece2['visited']
-                continue # pragma: no cover - Actually covered, error in coverage tool
+                    board[new_x, new_y] = Piece2["visited"]
+                continue  # pragma: no cover - Actually covered, error in coverage tool
             # optional logging for debugging
             if cost < 0:
-                logging.debug(log_message + ' - solution')
-                logging.debug('Potential solution found, moves = {} + {}'.format(data['moves'], this_move))
+                logging.debug(log_message + " - solution")
+                logging.debug("Potential solution found, moves = {} + {}".format(data["moves"], this_move))
             elif is_repeat:
-                logging.debug(log_message + ' - better repeat')
+                logging.debug(log_message + " - better repeat")
             else:
-                logging.debug(log_message + ' - new step')
+                logging.debug(log_message + " - new step")
             # move is new or better, update current and best costs and append move
-            assert data['best_costs'][new_x, new_y] > 50000
-            data['best_costs'][new_x, new_y] = data['current_cost'] + cost
-            data['all_moves'][new_x][new_y] = data['moves'][:] + [this_move]
-            data['all_boards'][:, :, new_x, new_y] = board.copy()
+            assert data["best_costs"][new_x, new_y] > 50000
+            data["best_costs"][new_x, new_y] = data["current_cost"] + cost
+            data["all_moves"][new_x][new_y] = data["moves"][:] + [this_move]
+            data["all_boards"][:, :, new_x, new_y] = board.copy()
             if cost < 0:
-                print('Solution found for cost of: {}.'.format(data['current_cost'] + abs(cost)))
-                data['is_solved'] = True
-                _undo_move(board, this_move, data['original_board'], data['transports'], new_x, new_y)
+                print("Solution found for cost of: {}.".format(data["current_cost"] + abs(cost)))
+                data["is_solved"] = True
+                _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
             else:
                 # undo board as prep for next move
-                _undo_move(board, this_move, data['original_board'], data['transports'], new_x, new_y)
+                _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
 
-#%% Functions - solve_min_puzzle
+
+# %% Functions - solve_min_puzzle
 def solve_min_puzzle(board):
     r"""
     Puzzle solver.  Uses a breadth first approach to solve for the minimum length solution.
@@ -1262,7 +1283,7 @@ def solve_min_puzzle(board):
     Notes
     -----
     #.  Written by David C. Stauffer in November 2015.
-    #.  The 'max' length solver has not been written yet.
+    #.  The "max" length solver has not been written yet.
 
     Examples
     --------
@@ -1287,39 +1308,40 @@ def solve_min_puzzle(board):
     start_solver = time.time()
 
     # initialize the data structure for the solver
-    print('Initializing solver.')
+    print("Initializing solver.")
 
     # check that the board has a final goal
     if not np.any(board == Piece.final):
-        raise ValueError('The board does not have a finishing location.')
+        raise ValueError("The board does not have a finishing location.")
 
     # initialize the data structure
     data = _initialize_data(board)
 
     # solve the puzzle
     for this_iter in range(MAX_ITERS):
-        next_moves = np.nonzero(data['best_costs'] == data['current_cost'])
+        next_moves = np.nonzero(data["best_costs"] == data["current_cost"])
         for ix in range(len(next_moves[0])):
             start_x = next_moves[0][ix]
             start_y = next_moves[1][ix]
             # update the current board and moves for the given position
-            temp_board = data['all_boards'][:, :, start_x, start_y]
-            data['moves'] = data['all_moves'][start_x][start_y]
+            temp_board = data["all_boards"][:, :, start_x, start_y]
+            data["moves"] = data["all_moves"][start_x][start_y]
             # call solver for this move
             _solve_next_move(temp_board, data, start_x, start_y)
         # increment the minimum cost and continue
-        data['current_cost'] += 1
+        data["current_cost"] += 1
     # if the puzzle was solved, then save the relevant move list
-    if data['is_solved']:
-        data['moves'] = data['all_moves'][data['final_loc'][0]][data['final_loc'][1]]
+    if data["is_solved"]:
+        data["moves"] = data["all_moves"][data["final_loc"][0]][data["final_loc"][1]]
     else:
-        print('No solution found.')
-        data['moves'] = []
+        print("No solution found.")
+        data["moves"] = []
     # display the elapsed time
-    print('Elapsed time : ' + time.strftime('%H:%M:%S', time.gmtime(time.time()-start_solver)))
-    return data['moves'] # or just return data for debugging
+    print("Elapsed time : " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_solver)))
+    return data["moves"]  # or just return data for debugging
 
-#%% Functions - solve_max_puzzle
+
+# %% Functions - solve_max_puzzle
 def solve_max_puzzle(board):
     r"""
     Puzzle solver.  Uses a depth first recursive approach to solve for the maximum length solution.
@@ -1354,28 +1376,30 @@ def solve_max_puzzle(board):
     start_solver = time.time()
 
     # initialize the data structure for the solver
-    print('Initializing solver.')
+    print("Initializing solver.")
 
     # TODO: write this function
     moves = []
     if len(moves) == 0:
-        print('No solution found.')
+        print("No solution found.")
 
     # display the elapsed time
-    print('Elapsed time : ' + time.strftime('%H:%M:%S', time.gmtime(time.time()-start_solver)))
-    return moves # or just return data for debugging
+    print("Elapsed time : " + time.strftime("%H:%M:%S", time.gmtime(time.time() - start_solver)))
+    return moves  # or just return data for debugging
 
-#%% Unit test
+
+# %% Unit test
 def _main():
     r"""Unit tests."""
-    unittest.main(module='dstauffman2.games.test_knight', exit=False)
+    unittest.main(module="dstauffman2.games.test_knight", exit=False)
     doctest.testmod(verbose=False)
 
-#%% Script
-if __name__ == '__main__':
+
+# %% Script
+if __name__ == "__main__":
     # flags for what steps to do
     do_steps = {-1, 0, 1, 2, 3, 4, 5}
-    #do_steps = {10}
+    # do_steps = {10}
     print_seq = True
 
     # Step -1 (Run unit tests)
@@ -1388,15 +1412,15 @@ if __name__ == '__main__':
 
     # Step 0
     if 0 in do_steps:
-        print('Step 0: print the boards.')
+        print("Step 0: print the boards.")
         print_board(board1)
-        print('')
+        print("")
         print_board(board2)
-        print('')
+        print("")
 
     # Step 1
     if 1 in do_steps:
-        print('\nStep 1: see if the sequence is valid.')
+        print("\nStep 1: see if the sequence is valid.")
         moves1 = [2, 2]
         is_valid1 = check_valid_sequence(board1, moves1, print_status=True)
         if is_valid1 and print_seq:
@@ -1404,7 +1428,7 @@ if __name__ == '__main__':
 
     # Step 2
     if 2 in do_steps:
-        print('\nStep 2: solve the first board for any length solution.')
+        print("\nStep 2: solve the first board for any length solution.")
         moves2 = solve_min_puzzle(board1)
         print(moves2)
         is_valid2 = check_valid_sequence(board1, moves2, print_status=True)
@@ -1413,7 +1437,7 @@ if __name__ == '__main__':
 
     # Step 3
     if 3 in do_steps:
-        print('\nStep 3: solve the first board for the minimum length solution.')
+        print("\nStep 3: solve the first board for the minimum length solution.")
         moves3 = solve_min_puzzle(board1)
         print(moves3)
         is_valid3 = check_valid_sequence(board1, moves3, print_status=True)
@@ -1422,10 +1446,10 @@ if __name__ == '__main__':
 
     # Step 4
     if 4 in do_steps:
-        print('\nStep 4: solve the second board for the minimum length solution.')
+        print("\nStep 4: solve the second board for the minimum length solution.")
         board2[0, 0] = Piece.start
-        #board2[-1, -1] = Piece.final # doesn't use transport
-        board2[11, -1] = Piece.final # uses transport
+        # board2[-1, -1] = Piece.final # doesn't use transport
+        board2[11, -1] = Piece.final  # uses transport
         moves4 = solve_min_puzzle(board2)
         print(moves4)
         is_valid4 = check_valid_sequence(board2, moves4, print_status=True)
@@ -1438,7 +1462,7 @@ if __name__ == '__main__':
 
     # Step 10, alternate solver for testing
     if 10 in do_steps:
-        print('\nStep 10: solve a test board for the minimum length solution.')
+        print("\nStep 10: solve a test board for the minimum length solution.")
         board3 = np.zeros((6, 5), dtype=int)
         board3[:, 2] = Piece.barrier
         board3[0, 0] = Piece.start
@@ -1446,7 +1470,7 @@ if __name__ == '__main__':
         board3[4, 0] = Piece.transport
         board3[1, 3] = Piece.transport
         print_board(board3)
-        print('')
+        print("")
         moves10 = solve_min_puzzle(board3)
         is_valid10 = check_valid_sequence(board3, moves10, print_status=True)
         print(moves10)

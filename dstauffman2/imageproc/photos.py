@@ -11,6 +11,7 @@ Notes
 # %% Imports
 import doctest
 import os
+from pathlib import Path
 import re
 import shutil
 from typing import Iterable, List, Optional, Tuple
@@ -34,11 +35,11 @@ PROCESS_EXTENSIONS = frozenset([".jpg", ".png", ".gif", ".nef", ".arw", ".heic",
 
 # %% Functions - find_missing_nums
 def find_missing_nums(
-    folder: str,
+    folder: Path,
     old_picasa: bool = True,
     digit_check: bool = True,
     process_extensions: Iterable[str] = PROCESS_EXTENSIONS,
-    folder_exclusions: Optional[Iterable[str]] = None,
+    folder_exclusions: Optional[Iterable[Path]] = None,
 ) -> None:
     r"""
     Finds the missing numbers in a file sequence.
@@ -51,7 +52,7 @@ def find_missing_nums(
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to process
     old_picasa : bool, optional
         Determines if printing a warning about old .picasa.ini files, default is True
@@ -71,7 +72,7 @@ def find_missing_nums(
     >>> find_missing_nums(folder)
 
     """
-    for root, _, files in os.walk(folder):
+    for root, _, files in os.walk(str(folder)):
         name_dict = dict()
         nums_list = list()
         digs_list = list()
@@ -85,7 +86,7 @@ def find_missing_nums(
             excluded = False
             if folder_exclusions is not None:
                 for excl in folder_exclusions:
-                    if excl == root[0 : len(excl)]:
+                    if str(excl) == root[0 : len(str(excl))]:
                         excluded = True
             if excluded:
                 continue
@@ -133,13 +134,13 @@ def find_missing_nums(
 
 
 # %% Functions - find_unexpected_ext
-def find_unexpected_ext(folder: str, allowable_extensions: Iterable[str] = ALLOWABLE_EXTENSIONS) -> None:
+def find_unexpected_ext(folder: Path, allowable_extensions: Iterable[str] = ALLOWABLE_EXTENSIONS) -> None:
     r"""
     Lists any files in the folder that don't have the expected file extensions.
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to process
     allowable_extensions : set of str, optional
         List of extensions to consider allowable in the folder
@@ -162,7 +163,7 @@ def find_unexpected_ext(folder: str, allowable_extensions: Iterable[str] = ALLOW
     # print status
     print("Finding any unexpected file extensions...")
     # walk through folder
-    for root, _, files in os.walk(folder):
+    for root, _, files in os.walk(str(folder)):
         # go through files
         for name in files:
             # check for allowable extensions
@@ -174,13 +175,13 @@ def find_unexpected_ext(folder: str, allowable_extensions: Iterable[str] = ALLOW
 
 
 # %% Functions - rename_old_picasa_files
-def rename_old_picasa_files(folder: str) -> None:
+def rename_old_picasa_files(folder: Path) -> None:
     r"""
     Renames the old "Picasa.ini" to the newer ".picasa.ini" standard.
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to process
 
     Notes
@@ -199,7 +200,7 @@ def rename_old_picasa_files(folder: str) -> None:
     old_name = r"Picasa.ini"
     new_name = r".picasa.ini"
     # walk through folder
-    for root, _, files in os.walk(folder):
+    for root, _, files in os.walk(str(folder)):
         # go through files
         for name in files:
             # find any that match the old name
@@ -219,7 +220,7 @@ def rename_old_picasa_files(folder: str) -> None:
 
 
 # %% Functions - rename_upper_ext
-def rename_upper_ext(folder: str, allowable_extensions: Iterable[str] = ALLOWABLE_EXTENSIONS) -> None:
+def rename_upper_ext(folder: Path, allowable_extensions: Iterable[str] = ALLOWABLE_EXTENSIONS) -> None:
     r"""
     Renames any expected file types to have all lowercase file extensions.
 
@@ -227,7 +228,7 @@ def rename_upper_ext(folder: str, allowable_extensions: Iterable[str] = ALLOWABL
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to process
     allowable_extensions : set of str, optional
         List of extensions to consider allowable in the folder
@@ -249,7 +250,7 @@ def rename_upper_ext(folder: str, allowable_extensions: Iterable[str] = ALLOWABL
     # update status
     print("Searching for file extensions to rename...")
     # walk through folder
-    for root, _, files in os.walk(folder):
+    for root, _, files in os.walk(str(folder)):
         # go through files
         for name in files:
             # split the filename and extension
@@ -274,13 +275,13 @@ def rename_upper_ext(folder: str, allowable_extensions: Iterable[str] = ALLOWABL
 
 
 # %% Functions - find_long_filenames
-def find_long_filenames(folder: str) -> None:
+def find_long_filenames(folder: Path) -> None:
     r"""
     Finds any files with really long filenames.
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to process
 
     Notes
@@ -304,8 +305,8 @@ def find_long_filenames(folder: str) -> None:
     max_name = 0
     max_root = 0
     max_full = 0
-    len_root = len("\\".join(folder.split("\\")[:-1]))
-    for root, _, files in os.walk(folder):
+    len_root = len("\\".join(str(folder).split("\\")[:-1]))
+    for root, _, files in os.walk(str(folder)):
         for name in files:
             (file_name, file_ext) = os.path.splitext(name)
             if "".join(file_name.split()) == "" or (file_ext == "" and file_name[0] == "."):
@@ -338,7 +339,7 @@ def find_long_filenames(folder: str) -> None:
 
 # %% Functions - batch_resize
 def batch_resize(
-    folder: str,
+    folder: Path,
     max_width: int = 8192,
     max_height: int = 8192,
     process_extensions: Iterable[str] = PROCESS_EXTENSIONS,
@@ -349,7 +350,7 @@ def batch_resize(
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to process
     max_width : int
         Maximum width for the resized photo
@@ -385,17 +386,16 @@ def batch_resize(
     print('Processing folder: "{}"'.format(folder))
 
     # Iterate through every image given in the folder argument and resize it.
-    for image in os.listdir(folder):
-        image_fullpath = os.path.join(folder, image)
+    for image in folder.glob("*"):
         # check if valid image file
-        if os.path.isdir(image_fullpath):
+        if image.is_dir():
             continue
-        elif image[-4:] not in process_extensions:
-            print(' Skipping file   : "{}"'.format(image))
+        elif image.suffix not in process_extensions:
+            print(' Skipping file   : "{}"'.format(image.name))
             continue
 
         # Open and load the image file
-        with open(image_fullpath, "rb") as file:
+        with open(image, "rb") as file:
             img = Image.open(file)
             img.load()
 
@@ -431,10 +431,10 @@ def batch_resize(
         assert new_width == max_width or new_height == max_height, 'New width: "{}" is not max_width: "{}" or new height "{}" is not max_height: "{}"'.format(new_width, max_width, new_height, max_height)
 
         # Update status, with options for enlarging or not
-        status_msg = ' Resizing image  : "{}"'.format(image)
+        status_msg = ' Resizing image  : "{}"'.format(image.name)
         if new_width > cur_width or new_height > cur_height:
             if not enlarge:
-                print(' Not enlarging   : "{}"'.format(image))
+                print(' Not enlarging   : "{}"'.format(image.name))
                 new_width  = cur_width
                 new_height = cur_height
             else:
@@ -447,14 +447,14 @@ def batch_resize(
 
         # Create the output folder if necessary
         # (Avoid using setup_dir, as this is currently the only dstauffman dependency)
-        if not os.path.isdir(os.path.join(folder, "resized")):
-            os.makedirs(os.path.join(folder, "resized"))
+        if not folder.joinpath("resized").is_dir():
+            folder.joinpath("resized").mkdir()
 
         # Save it back to disk (and include original exif data)
         if "exif" in img.info:
-            new_img.save(os.path.join(folder, "resized", image), exif=img.info["exif"], quality=95)
+            new_img.save(folder.joinpath("resized", image.name), exif=img.info["exif"], quality=95)
         else:
-            new_img.save(os.path.join(folder, "resized", image), quality=95)
+            new_img.save(folder.joinpath("resized", image.name), quality=95)
 
         # Close objects
         img.close()
@@ -465,14 +465,14 @@ def batch_resize(
 
 # %% Functions - convert_tif_to_jpg
 def convert_tif_to_jpg(
-    folder: str, max_width: int = 8192, max_height: int = 8192, replace: bool = False, enlarge: bool = False
+    folder: Path, max_width: int = 8192, max_height: int = 8192, replace: bool = False, enlarge: bool = False
 ) -> None:
     r"""
     Converts *.tif images into *.jpg images.
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of the folder to process
     max_width : int
         Maximum width for the resized photo
@@ -507,25 +507,24 @@ def convert_tif_to_jpg(
     print('Processing folder: "{}"'.format(folder))
 
     # Iterate through every image given in the folder argument and resize it.
-    for image in os.listdir(folder):
-        image_fullpath = os.path.join(folder, image)
+    for image in folder.glob("*"):
         # check if valid image tif file
-        if os.path.isdir(image_fullpath):
+        if image.is_dir():
             continue
-        elif image_fullpath.split(".")[-1] not in {"tif", "tiff"}:
-            print(' Skipping file   : "{}"'.format(image))
+        elif image.suffix not in {".tif", ".tiff"}:
+            print(' Skipping file   : "{}"'.format(image.name))
             continue
 
         # get new name (handles *.tiff or *.tif)
-        new_name = ".".join(image_fullpath.split(".")[:-1]) + ".jpg"
+        new_name = image.with_suffix(".jpg")
 
         # determine if the file already exists
-        if os.path.isfile(new_name) and not replace:
-            print(' Skipping due to pre-existing jpg file: "{}"'.format(image))
+        if new_name.is_file() and not replace:
+            print(' Skipping due to pre-existing jpg file: "{}"'.format(image.name))
             continue
 
         # Open and load the image file
-        with open(image_fullpath, "rb") as file:
+        with open(image, "rb") as file:
             img = Image.open(file)
             img.load()
 
@@ -561,10 +560,10 @@ def convert_tif_to_jpg(
         assert new_width == max_width or new_height == max_height, 'New width: "{}" is not max_width: "{}" or new height "{}" is not max_height: "{}"'.format(new_width, max_width, new_height, max_height)
 
         # Update status, with options for enlarging or not
-        status_msg = ' Saving image    : "{}"'.format(new_name)
+        status_msg = ' Saving image    : "{}"'.format(new_name.name)
         if new_width > cur_width or new_height > cur_height:
             if not enlarge:
-                print(' Saving (not enlarging) : "{}"'.format(new_name))
+                print(' Saving (not enlarging) : "{}"'.format(new_name.name))
                 new_width  = cur_width
                 new_height = cur_height
             else:
@@ -587,14 +586,14 @@ def convert_tif_to_jpg(
 
 # %% number_files
 def number_files(
-    folder: str, prefix: str = "Image ", start: int = 1, digits: int = 2, process_extensions: Iterable[str] = PROCESS_EXTENSIONS
+    folder: Path, prefix: str = "Image ", start: int = 1, digits: int = 2, process_extensions: Iterable[str] = PROCESS_EXTENSIONS
 ) -> None:
     r"""
     Numbers the files in the folder using the given prefix, starting value, and number of digits.
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of the folder to process
     prefix : str
         Filename to use as prefix to each photo
@@ -633,11 +632,10 @@ def number_files(
     dig_str = "{:0" + "{}".format(digits) + "d}"
 
     # Iterate through every image given in the folder argument and resize it.
-    for image in sorted(os.listdir(folder)):
-        image_fullpath = os.path.join(folder, image)
-        file_ext = image[-4:]
+    for image in folder.glob("*"):
+        file_ext = image.suffix
         # check if valid image file
-        if os.path.isdir(image_fullpath):
+        if image.is_dir():
             continue
         elif file_ext not in process_extensions:
             print(' Skipping file   : "{}"'.format(image))
@@ -647,8 +645,8 @@ def number_files(
         new_name = prefix + dig_str.format(counter) + file_ext
 
         # rename the image
-        print(' Renaming : "{}" to "{}"'.format(image, new_name))
-        shutil.move(image_fullpath, os.path.join(folder, new_name))
+        print(' Renaming : "{}" to "{}"'.format(image.name, new_name))
+        shutil.move(image, folder / new_name)
 
         # increment counter
         counter = counter + 1
@@ -657,13 +655,13 @@ def number_files(
 
 
 # %% read_exif_data
-def read_exif_data(filename: str, field: Optional[str] = None) -> dict:
+def read_exif_data(filename: Path, field: Optional[str] = None) -> dict:
     r"""
     Reads the EXIF data from the specified image.
 
     Parameters
     ----------
-    filename : str
+    filename : class pathlib.Path
         Name of the image to read the EXIF data from
     field : str, optional
         Name of EXIF tag to read from image
@@ -678,7 +676,7 @@ def read_exif_data(filename: str, field: Optional[str] = None) -> dict:
     >>> from dstauffman2 import get_images_dir
     >>> from dstauffman2.imageproc import read_exif_data
     >>> import os
-    >>> filename = os.path.join(get_images_dir(), "python.png")
+    >>> filename = get_images_dir() / "python.png"
     >>> # TODO: get jpg with EXIF metadata
     >>> exif = read_exif_data(filename)  # doctest: +SKIP
 
@@ -698,13 +696,13 @@ def read_exif_data(filename: str, field: Optional[str] = None) -> dict:
 
 
 # %% get_image_datetime
-def get_image_datetime(filename: str) -> str:
+def get_image_datetime(filename: Path) -> str:
     r"""
     Get the image date-time information from the given file.
 
     Parameters
     ----------
-    filename : str
+    filename : class pathlib.Path
         Name of file to read the time stamp from
 
     Examples
@@ -712,7 +710,7 @@ def get_image_datetime(filename: str) -> str:
     >>> from dstauffman2 import get_images_dir
     >>> from dstauffman2.imageproc import get_image_datetime
     >>> import os
-    >>> filename = os.path.join(folder, 'python.png')
+    >>> filename = folder / "python.png"
     >>> # TODO: needs jpg with metadata
     >>> time_stamp = get_image_datetime(filename) # doctest: +SKIP
 
@@ -733,8 +731,8 @@ def get_image_datetime(filename: str) -> str:
 
 # %% get_raw_file_from_datetime
 def get_raw_file_from_datetime(
-    folder: str,
-    raw_folder: str,
+    folder: Path,
+    raw_folder: Path,
     dry_run: bool = False,
     img_extension: str = ".jpg",
     raw_extension: str = ".arw",
@@ -747,9 +745,9 @@ def get_raw_file_from_datetime(
 
     Parameters
     ----------
-    folder : str
+    folder : class pathlib.Path
         Name of folder to read jpegs from to try and match to raw files
-    raw_folder : str
+    raw_folder : class pathlib.Path
         Name of folder that contains the raw files
     dry_run : bool, optional
         If true, then only show what would happen without actually doing it, default is False
@@ -760,9 +758,9 @@ def get_raw_file_from_datetime(
 
     Returns
     -------
-    missed : list of str
+    missed : list of pathlib.Path
         Names of files that couldn't be matched to a raw file
-    possibly_wrong : list of str
+    possibly_wrong : list of pathlib.Path
         Names of files that couldn't be uniquely determined and might be wrong (usually due to
         multiple frames within one second)
 
@@ -779,31 +777,29 @@ def get_raw_file_from_datetime(
     # read data from each image in the given folder
     img_times = {}
     img_names = {}
-    for image in os.listdir(folder):
-        image_fullpath = os.path.join(folder, image)
+    for image in folder.glob("*"):
         # check if valid image file
-        if os.path.isdir(image_fullpath):
+        if image.is_dir():
             continue
-        elif not image_fullpath.endswith(img_extension):
+        elif image.suffix != img_extension:
             print(' Skipping file   : "{}"'.format(image))
             continue
         # read exif data
-        time_stamp = get_image_datetime(image_fullpath)
-        img_times[time_stamp] = image_fullpath
-        img_names[time_stamp] = image
+        time_stamp = get_image_datetime(image)
+        img_times[time_stamp] = str(image)
+        img_names[time_stamp] = image.name
 
     # read data from raw files for comparison
     raw_times = {}
     duplicates = set()
-    for image in os.listdir(raw_folder):
-        raw_fullpath = os.path.join(raw_folder, image)
-        if os.path.isdir(raw_fullpath):
+    for image in raw_folder.glob("*"):
+        if image.is_dir():
             continue
-        elif not image.endswith(raw_extension):
+        elif image.suffix != raw_extension:
             continue
-        raw_time_stamp = get_image_datetime(raw_fullpath)
+        raw_time_stamp = get_image_datetime(image)
         if raw_time_stamp not in raw_times:
-            raw_times[raw_time_stamp] = raw_fullpath
+            raw_times[raw_time_stamp] = str(image)
         else:
             duplicates.add(raw_time_stamp)
 
@@ -813,7 +809,7 @@ def get_raw_file_from_datetime(
     for name in img_times.keys():
         if name in raw_times:
             old_file = raw_times[name]
-            new_file = os.path.join(folder, img_names[name].replace(img_extension, raw_extension))
+            new_file = folder.joinpath(img_names[name].replace(img_extension, raw_extension))
             if name in duplicates:
                 possibly_wrong.append(new_file)
             print(' File: "{}" has a time stamp of {} and was matched to "{}".'.format(img_times[name], name, raw_times[name]))

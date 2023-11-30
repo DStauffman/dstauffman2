@@ -7,7 +7,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import inspect
 import os
 import unittest
@@ -16,38 +16,43 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from dstauffman import Counter
+
 import dstauffman2.games.tictactoe as ttt
 
-#%% Aliases
-o = ttt.PLAYER['o']
-x = ttt.PLAYER['x']
-n = ttt.PLAYER['none']
+# %% Aliases
+o = ttt.PLAYER["o"]
+x = ttt.PLAYER["x"]
+n = ttt.PLAYER["none"]
 
-#%% Functions - _make_board
+
+# %% Functions - _make_board
 def _make_board():
     r"""Makes a board and returns the figure and axis for use in testing."""
     plt.ioff()
     fig = plt.figure()
-    ax  = fig.add_subplot(111)
+    ax = fig.add_subplot(111)
     ax.set_xlim(-0.5, 2.5)
     ax.set_ylim(-0.5, 2.5)
     ax.invert_yaxis()
     return (fig, ax)
 
-#%% get_root_dir
+
+# %% get_root_dir
 class Test_get_root_dir(unittest.TestCase):
     r"""
     Tests the get_root_dir function with these cases:
         call the function
     """
+
     def test_function(self):
-        filepath      = inspect.getfile(ttt.get_root_dir)
+        filepath = inspect.getfile(ttt.get_root_dir)
         expected_root = os.path.split(filepath)[0]
         folder = ttt.get_root_dir()
         self.assertEqual(folder, expected_root)
         self.assertTrue(os.path.isdir(folder))
 
-#%% calc_cur_move
+
+# %% calc_cur_move
 class Test_calc_cur_move(unittest.TestCase):
     r"""
     Tests the _board_to_costs function with the following cases:
@@ -56,6 +61,7 @@ class Test_calc_cur_move(unittest.TestCase):
         Even game, odd move
         Even game, even move
     """
+
     def setUp(self):
         self.odd_num  = 3
         self.even_num = 4
@@ -78,7 +84,8 @@ class Test_calc_cur_move(unittest.TestCase):
         move = ttt.calc_cur_move(self.even_num, self.even_num)
         self.assertEqual(move, o)
 
-#%% check_for_win
+
+# %% check_for_win
 class Test_check_for_win(unittest.TestCase):
     r"""
     Tests the check_for_win function with the following cases:
@@ -90,6 +97,7 @@ class Test_check_for_win(unittest.TestCase):
         draw with no moves left
         draw with simultaneous wins
     """
+
     def setUp(self):
         self.board = np.full((3, 3), n, dtype=int)
         self.win_mask = np.zeros((3, 3), dtype=bool)
@@ -148,23 +156,25 @@ class Test_check_for_win(unittest.TestCase):
         self.board[2, 1] = o
         self.board[2, 2] = x
         (winner, win_mask) = ttt.check_for_win(self.board)
-        self.assertEqual(winner, ttt.PLAYER['draw'])
+        self.assertEqual(winner, ttt.PLAYER["draw"])
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
     def test_draw_simult_wins(self):
         self.board[0, :] = o
         self.board[1, :] = x
         (winner, win_mask) = ttt.check_for_win(self.board)
-        self.assertEqual(winner, ttt.PLAYER['draw'])
+        self.assertEqual(winner, ttt.PLAYER["draw"])
         win_mask2 = (self.board == x) | (self.board == o)
         np.testing.assert_array_equal(win_mask, win_mask2)
 
-#%% find_moves
+
+# %% find_moves
 class Test_find_moves(unittest.TestCase):
     r"""
     Tests the find_moves function with the following cases:
         TBD
     """
+
     def setUp(self):
         self.board = np.zeros((3, 3), dtype=int)
 
@@ -265,12 +275,14 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[1].power, 5)
         self.assertEqual(black_moves[1].power, 5)
 
-#%% make_move
+
+# %% make_move
 class Test_make_move(unittest.TestCase):
     r"""
     Tests the make_move function with the following cases:
         Nominal
     """
+
     def setUp(self):
         (self.fig, self.ax) = _make_board()
         self.board = np.full((3, 3), n, dtype=int)
@@ -301,11 +313,11 @@ class Test_make_move(unittest.TestCase):
         board = self.board.copy()
         xc = 2
         yc = 2
-        cur_move = Counter(1) # 2 would be the next move, 1 makes this replace the last move
+        cur_move = Counter(1)  # 2 would be the next move, 1 makes this replace the last move
         cur_game = Counter(1)
         game_hist = [ttt.GameStats(1, o), ttt.GameStats(2, x)]
-        game_hist[1].add_move(ttt.Move(0,0))
-        game_hist[1].add_move(ttt.Move(1,1)) # setting a move that will be replaced
+        game_hist[1].add_move(ttt.Move(0, 0))
+        game_hist[1].add_move(ttt.Move(1, 1))  # setting a move that will be replaced
         board[0, 0] = x
         self.assertEqual(game_hist[1].num_moves, 2)
         ttt.make_move(self.ax, board, xc, yc, cur_move, cur_game, game_hist)
@@ -318,12 +330,14 @@ class Test_make_move(unittest.TestCase):
     def tearDown(self):
         plt.close(self.fig)
 
-#%% play_ai_game
+
+# %% play_ai_game
 class Test_play_ai_game(unittest.TestCase):
     r"""
     Tests the play_ai_game function with the following cases:
         Nominal (O to play first move)
     """
+
     def setUp(self):
         (self.fig, self.ax) = _make_board()
         self.board = np.full((3, 3), n, dtype=int)
@@ -370,13 +384,15 @@ class Test_play_ai_game(unittest.TestCase):
     def tearDown(self):
         plt.close(self.fig)
 
-#%% create_board_from_moves
+
+# %% create_board_from_moves
 class Test_create_board_from_moves(unittest.TestCase):
     r"""
     Tests the create_board_From_moves function with the following cases:
         O to move first
         X to move first
     """
+
     def setUp(self):
         self.moves = [ttt.Move(0, 0), ttt.Move(1, 1), ttt.Move(2, 1)]
         self.board = np.full((3, 3), n, dtype=int)
@@ -397,6 +413,7 @@ class Test_create_board_from_moves(unittest.TestCase):
         board = ttt.create_board_from_moves(self.moves, first_player)
         np.testing.assert_array_equal(board, self.board)
 
-#%% Unit test execution
-if __name__ == '__main__':
+
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

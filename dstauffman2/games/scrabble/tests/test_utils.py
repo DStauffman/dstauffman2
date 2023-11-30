@@ -7,17 +7,18 @@ Notes
 #.  Written by David C. Stauffer in March 2017.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import numpy as np
 
 import dstauffman2.games.scrabble as scrab
 
-#%% Support
+# %% Support
 words = scrab.create_dict(scrab.get_dict_path())
 
-#%% find_all_words
+
+# %% find_all_words
 class Test_find_all_words(unittest.TestCase):
     r"""
     Tests the find_all_words function with the following cases:
@@ -28,6 +29,7 @@ class Test_find_all_words(unittest.TestCase):
     #.  Valid word lists provided by wordsolver.net
 
     """
+
     def setUp(self):
         self.tiles = ['w', 'o', 'r', 'd', 's']
         self.words = words
@@ -77,6 +79,7 @@ class Test_find_all_words(unittest.TestCase):
             'wo', 'xi', 'xu', 'ya', 'ye', 'yo', 'za']
         np.testing.assert_array_equal(out, expected)
 
-#%% Unit test execution
-if __name__ == '__main__':
+
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

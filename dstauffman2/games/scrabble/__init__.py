@@ -6,13 +6,15 @@ Notes
 #.  Written by David C. Stauffer in March 2017.
 """
 
-#%% Logging
+# %% Logging
 import logging
+
 logger = logging.getLogger()
 logger.setLevel(logging.WARNING)
-#logger.setLevel(logging.DEBUG)
+# logger.setLevel(logging.DEBUG)
 
-#%% Imports
+# %% Imports
+# fmt: off
 from .classes   import Board, Move
 from .constants import LETTERS, VOWELS, CONSONANTS, WWF_SCORES, SCRAB_SCORES, WWF_COUNTS, \
                            WWF_SMALL_COUNTS, SCRAB_COUNTS, COLOR, MAX_LEN, BOARD_SYMBOLS, \
@@ -32,7 +34,8 @@ from .special   import find_all, find_all_two_letter_words, find_all_three_lette
 from .utils     import get_root_dir, get_dict_path, get_raw_dictionary, create_dict, \
                            count_num_words, find_all_words, validate_board, validate_move, \
                            score_move, get_board_played, get_board_open, get_board_must_play
+# fmt: on
 
-#%% Unit Test
-if __name__ == '__main__':
+# %% Unit Test
+if __name__ == "__main__":
     pass

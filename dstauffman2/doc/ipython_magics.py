@@ -9,10 +9,11 @@ Notes
     C:\Programs\WinPython-64bit-3.6.1.0Qt5\settings\.ipython\profile_default\startup
 """
 
-#%% Imports
+# %% Imports
 from IPython.core.magic import register_line_magic
 
-#%% Custom Magic Commands - reload_ghap
+
+# %% Custom Magic Commands - reload_ghap
 @register_line_magic
 def reload_ghap(line):
     r"""Force reloading of `ghap` module."""
@@ -20,7 +21,8 @@ def reload_ghap(line):
     import ghap
     reload_package(ghap)
 
-#%% Custom Magic Commands - reload_ghap
+
+# %% Custom Magic Commands - reload_ghap
 @register_line_magic
 def reload_cromo(line):
     r"""Force reloading of `cromo` module."""
@@ -28,14 +30,17 @@ def reload_cromo(line):
     import cromo
     reload_package(cromo)
 
-#%% Custom Magic Commands - reload_dstauffman
+
+# %% Custom Magic Commands - reload_dstauffman
 @register_line_magic
 def reload_dstauffman(line):
     r"""Force reloading of `dstauffman` module."""
     import dstauffman
+
     dstauffman.reload_package(dstauffman)
 
-#%% Custom Magic Commands - cc
+
+# %% Custom Magic Commands - cc
 @register_line_magic
 def cc(line):
     r"""Like Matlab CC command."""
@@ -44,7 +49,8 @@ def cc(line):
     import ghap
     dstauffman.reload_package(ghap, disp_reloads=False)
     dstauffman.reload_package(dstauffman, disp_reloads=False)
-    get_ipython().magic('%reset -f')
-    get_ipython().magic('%clear')
+    get_ipython().magic("%reset -f")
+    get_ipython().magic("%clear")
+
 
 del reload_ghap, reload_cromo, reload_dstauffman, cc

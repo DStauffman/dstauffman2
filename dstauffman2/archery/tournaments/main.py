@@ -7,7 +7,7 @@ Notes
 #.  Written by David C. Stauffer in December 2014.
 """
 
-#%% Imports
+# %% Imports
 import os
 
 import pandas as pd
@@ -23,7 +23,8 @@ from dstauffman2.archery.tournaments.constants import COL_BALE, COL_DIVISION, \
     MIXED_SIZE, TEAMS_SIZE
 from dstauffman2.archery.tournaments.utils import generic_html_end, generic_html_start
 
-#%% Functions - _set_seeds
+
+# %% Functions - _set_seeds
 def _set_seeds(data, max_seed=None):
     r"""
     Sorts the dataFrame by total score and total X count and gives a 1 to N seed number.
@@ -36,59 +37,62 @@ def _set_seeds(data, max_seed=None):
     data.sort([COL_SCORE_TOT, COL_X_COUNT_TOT], ascending=[False, False], inplace=True)
     # TODO: what if the scores and X counts are the same?
     if max_seed is None:
-        num = len(data)+1
+        num = len(data) + 1
     else:
-        num = min((len(data)+1, max_seed+1))
-    data[COL_SEED][0:num-1] = range(1,num)
+        num = min((len(data) + 1, max_seed + 1))
+    data[COL_SEED][0 : num - 1] = range(1, num)
     # return updated dataframe with the seed numbers included
     return data
 
-#%% Functions - write_registered_archers
-def write_registered_archers(data, filename='', show_bales=True):
+
+# %% Functions - write_registered_archers
+def write_registered_archers(data, filename="", show_bales=True):
     r"""Writes the list of registered archers out to an html file."""
     # check that a non-empty filename was specified
     if len(filename) == 0:
-        raise ValueError('A filename must be specified.')
+        raise ValueError("A filename must be specified.")
     # get the title from the filename
     (_, title) = os.path.split(filename)
     # get the html prequel text
     html = generic_html_start()
     # replace the generic "Title" with this filename
-    html = html.replace(r'<title>Title</title>', r'<title>' + title.split('.')[0] + r'</title>')
+    html = html.replace(r"<title>Title</title>", r"<title>" + title.split(".")[0] + r"</title>")
     # determine which columns to write out
     cols = [COL_LASTNAME, COL_FIRSTNAME, COL_GENDER, COL_SCHOOL, COL_DIVISION]
     if show_bales:
         cols.append(COL_BALE)
     # write the dataframe to an html text equivalent
-    html_table = data.to_html(columns=cols, index_names=False, bold_rows=False, na_rep='')
+    html_table = data.to_html(columns=cols, index_names=False, bold_rows=False, na_rep="")
     # combine all the html together
     html = html + html_table + generic_html_end()
     # write out to the specified file
     write_text_file(filename, html)
 
-#%% Functions - write_indiv_results
-def write_indiv_results(data, filename=''):
+
+# %% Functions - write_indiv_results
+def write_indiv_results(data, filename=""):
     r"""Writes the individual archer results out to an html file."""
     # check that a non-empty filename was specified
     if len(filename) == 0:
-        raise ValueError('A filename must be specified.')
+        raise ValueError("A filename must be specified.")
     # get the title from the filename
     (_, title) = os.path.split(filename)
     # get the html prequel text
     html = generic_html_start()
     # replace the generic "Title" with this filename
-    html = html.replace(r'<title>Title</title>', r'<title>' + title.split('.')[0] + r'</title>')
+    html = html.replace(r"<title>Title</title>", r"<title>" + title.split(".")[0] + r"</title>")
     # determine which columns to write out
     cols = [COL_LASTNAME, COL_FIRSTNAME, COL_GENDER, COL_SCHOOL, COL_DIVISION, COL_BALE, \
             COL_SCORE1, COL_X_COUNT1, COL_SCORE2, COL_X_COUNT2, COL_SCORE_TOT, COL_X_COUNT_TOT, COL_SEED]
     # write the dataframe to an html text equivalent
-    html_table = data.to_html(columns=cols, index_names=False, bold_rows=False, na_rep='')
+    html_table = data.to_html(columns=cols, index_names=False, bold_rows=False, na_rep="")
     # combine all the html together
     html = html + html_table + generic_html_end()
     # write out to the specified file
     write_text_file(filename, html)
 
-#%% Functions - update_indiv
+
+# %% Functions - update_indiv
 def update_indiv(data, use_gender=True):
     r"""Updates the individual results with a seed number by division and gender."""
     if use_gender:
@@ -102,7 +106,8 @@ def update_indiv(data, use_gender=True):
     # return update dataframe
     return data_out
 
-#%% Functions - update_teams
+
+# %% Functions - update_teams
 def update_teams(data_indiv, data_teams):
     r"""
     Updates the team results based on the highest three individuals from a particular school.
@@ -116,14 +121,14 @@ def update_teams(data_indiv, data_teams):
     # initialize a counter
     counter = 0
     # loop through groups
-    for (this_key, this_group) in grouped:
+    for this_key, this_group in grouped:
         # find groups with at least the required number of people
         if len(this_group) >= TEAMS_SIZE:
             # sort this group by score
             this_group.sort([COL_SCORE_TOT, COL_X_COUNT_TOT], ascending=[False, False], inplace=True)
             # build the information:
             # Team
-            data_teams.ix[counter, COL_TEAM_NUM] = counter + 1 # TODO: can't be an empty frame
+            data_teams.ix[counter, COL_TEAM_NUM] = counter + 1  # TODO: can't be an empty frame
             # TODO: try this? data_teams = data_teams.append(pd.DataFrame({COL_TEAM_NUM: counter + 1}, range(1)), ignore_index=True)
             # School
             data_teams.ix[counter, COL_SCHOOL]   = this_group.iloc[0][COL_SCHOOL]
@@ -154,7 +159,8 @@ def update_teams(data_indiv, data_teams):
     data_teams_out = update_indiv(data_teams)
     return data_teams_out
 
-#%% Functions - update_mixed
+
+# %% Functions - update_mixed
 def update_mixed(data_indiv, data_mixed):
     r"""
     Updates the mixed team results based on the highest female and male individuals from a particular school.
@@ -168,14 +174,14 @@ def update_mixed(data_indiv, data_mixed):
     # initialize a counter
     counter = 0
     # loop through groups
-    for (this_key, this_group) in grouped:
+    for this_key, this_group in grouped:
         # ensure one male and one female
         sub_grouped = this_group.groupby([COL_GENDER], group_keys=False)
         if len(sub_grouped) >= MIXED_SIZE:
             # initialize a new frame
             mixed_frame = pd.DataFrame()
             # loop through genders
-            for (_, this_gender_group) in sub_grouped:
+            for _, this_gender_group in sub_grouped:
                 # sort by score
                 this_gender_group.sort([COL_SCORE_TOT, COL_X_COUNT_TOT], ascending=[False, False], inplace=True)
                 # append person
@@ -184,7 +190,7 @@ def update_mixed(data_indiv, data_mixed):
             mixed_frame.sort(COL_GENDER, ascending=True, inplace=True)
             # build the information:
             # Team
-            data_mixed.ix[counter, COL_TEAM_NUM] = counter + 1 # TODO: can't be an empty frame
+            data_mixed.ix[counter, COL_TEAM_NUM] = counter + 1  # TODO: can't be an empty frame
             # School
             data_mixed.ix[counter, COL_SCHOOL]   = mixed_frame.iloc[0][COL_SCHOOL]
             # Division
@@ -208,6 +214,7 @@ def update_mixed(data_indiv, data_mixed):
     data_mixed_out = update_indiv(data_mixed, use_gender=False)
     return data_mixed_out
 
-#%% Unit test
-if __name__ == '__main__':
+
+# %% Unit test
+if __name__ == "__main__":
     pass

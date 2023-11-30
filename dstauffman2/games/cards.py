@@ -7,14 +7,15 @@ Notes
 #.  Written by David C. Stauffer in May 2016.
 """
 
-#%% Imports
-import doctest
-import unittest
+# %% Imports
 from collections import Counter
+import doctest
 from enum import IntEnum, unique
 from random import shuffle as shuffle_func
+import unittest
 
-#%% Enums - Suit
+
+# %% Enums - Suit
 @unique
 class Suit(IntEnum):
     r"""Enumerator definitions for the possible card suits."""
@@ -23,7 +24,8 @@ class Suit(IntEnum):
     HEARTS   = 2
     SPADES   = 3
 
-#%% Enums - Rank
+
+# %% Enums - Rank
 @unique
 class Rank(IntEnum):
     r"""Enumerator definitions for the possible hand ranks."""
@@ -41,36 +43,39 @@ class Rank(IntEnum):
     KING  = 11
     ACE   = 12
 
-#%% Constants
+
+# %% Constants
 NUM_SUITS = 4
 NUM_RANKS = 13
 # suit symbols for printing
 SUIT_SYMBOL                = {}
-SUIT_SYMBOL[Suit.CLUBS]    = '\u2663'
-SUIT_SYMBOL[Suit.DIAMONDS] = '\u2666'
-SUIT_SYMBOL[Suit.HEARTS]   = '\u2665'
-SUIT_SYMBOL[Suit.SPADES]   = '\u2660'
+SUIT_SYMBOL[Suit.CLUBS]    = "\u2663"
+SUIT_SYMBOL[Suit.DIAMONDS] = "\u2666"
+SUIT_SYMBOL[Suit.HEARTS]   = "\u2665"
+SUIT_SYMBOL[Suit.SPADES]   = "\u2660"
 # rank symbols for printing
 RANK_SYMBOL             = {}
-RANK_SYMBOL[Rank.TWO]   = '2'
-RANK_SYMBOL[Rank.THREE] = '3'
-RANK_SYMBOL[Rank.FOUR]  = '4'
-RANK_SYMBOL[Rank.FIVE]  = '5'
-RANK_SYMBOL[Rank.SIX]   = '6'
-RANK_SYMBOL[Rank.SEVEN] = '7'
-RANK_SYMBOL[Rank.EIGHT] = '8'
-RANK_SYMBOL[Rank.NINE]  = '9'
-RANK_SYMBOL[Rank.TEN]   = '10'
-RANK_SYMBOL[Rank.JACK]  = 'J'
-RANK_SYMBOL[Rank.QUEEN] = 'Q'
-RANK_SYMBOL[Rank.KING]  = 'K'
-RANK_SYMBOL[Rank.ACE]   = 'A'
+RANK_SYMBOL[Rank.TWO]   = "2"
+RANK_SYMBOL[Rank.THREE] = "3"
+RANK_SYMBOL[Rank.FOUR]  = "4"
+RANK_SYMBOL[Rank.FIVE]  = "5"
+RANK_SYMBOL[Rank.SIX]   = "6"
+RANK_SYMBOL[Rank.SEVEN] = "7"
+RANK_SYMBOL[Rank.EIGHT] = "8"
+RANK_SYMBOL[Rank.NINE]  = "9"
+RANK_SYMBOL[Rank.TEN]   = "10"
+RANK_SYMBOL[Rank.JACK]  = "J"
+RANK_SYMBOL[Rank.QUEEN] = "Q"
+RANK_SYMBOL[Rank.KING]  = "K"
+RANK_SYMBOL[Rank.ACE]   = "A"
 # all possible straights
 STRAIGHTS = [set(range(i, i+5)) for i in range(9)]
 
-#%% Classes - Card
+
+# %% Classes - Card
 class Card(object):
     r"""A Single card."""
+
     def __init__(self, rank, suit):
         r"""Initialize the card."""
         self._card = self._ranksuit2card(rank, suit)
@@ -113,7 +118,7 @@ class Card(object):
     @staticmethod
     def _ranksuit2card(rank, suit):
         r"""Converts a given rank and suit to a numeric card."""
-        return rank + NUM_RANKS*suit
+        return rank + NUM_RANKS * suit
 
     def get_rank(self):
         r"""Gets the rank of the current card."""
@@ -123,9 +128,11 @@ class Card(object):
         r"""Gets the suit of the current card."""
         return self._card2suit(self._card)
 
-#%% Classes - Deck
+
+# %% Classes - Deck
 class Deck(object):
     r"""Standard Poker Deck.  52 Cards, no wilds."""
+
     def __init__(self, shuffle=False):
         r"""Initialize the deck."""
         self._cards = [Card(rank, suit) for suit in Suit for rank in Rank]
@@ -133,7 +140,7 @@ class Deck(object):
             shuffle_func(self._cards)
 
     def __str__(self):
-        text = ', '.join(str(card) for card in reversed(self._cards))
+        text = ", ".join(str(card) for card in reversed(self._cards))
         return text
 
     def shuffle(self):
@@ -148,9 +155,11 @@ class Deck(object):
     def count_remaining_cards(self):
         return len(self._cards)
 
-#%% Classes - Card
+
+# %% Classes - Card
 class Hand(object):
     r"""Poker hand."""
+
     def __init__(self, cards=None):
         r"""Creates the initial empty hand."""
         self._cards = []
@@ -159,7 +168,7 @@ class Hand(object):
                 self._cards.append(this_card)
 
     def __str__(self):
-        text = ', '.join(str(card) for card in self._cards)
+        text = ", ".join(str(card) for card in self._cards)
         return text
 
     @property
@@ -218,10 +227,10 @@ class Hand(object):
         # check for five of a kind
         if max(ranks_count.values()) >= 5:
             pass
-            #rank_ix = np.argmax(ranks_count[::-1])
-            #score = 9 + (rank_ix-NUM_RANKS) / NUM_RANKS
+            # rank_ix = np.argmax(ranks_count[::-1])
+            # score = 9 + (rank_ix-NUM_RANKS) / NUM_RANKS
         # check for straight flush
-        #elif np.any(suits_count) >= 5 and np.any(straight_count) >= 5:
+        # elif np.any(suits_count) >= 5 and np.any(straight_count) >= 5:
         #    # check that cards from the straight also make the flush
         #    straight_ix = np.flatnonzero(straight_count == 5)
         #    for this_straight in straight_ix[::-1]:
@@ -231,15 +240,17 @@ class Hand(object):
         #                pass
         return score
 
-#%% Classes - WarGame
+
+# %% Classes - WarGame
 class WarGame(object):
     r"""The game of War implemented as a class."""
     war_downs = 3
+
     def __init__(self):
         r"""Deal the cards to start the game."""
         # display a banner
-        print('************')
-        print('Playing war!')
+        print("************")
+        print("Playing war!")
         # initialize variables
         self._hand1 = Hand()
         self._hand2 = Hand()
@@ -266,19 +277,19 @@ class WarGame(object):
         self._pot.add_card(card2)
         # determine which card won, with ties going to wars
         if card1 > card2:
-            print('Move {}: {} beats {}'.format(self.move, card1, card2), end='')
+            print("Move {}: {} beats {}".format(self.move, card1, card2), end="")
             while self._pot.num_cards > 0:
                 self._hold1.add_card(self._pot.play_card())
             self._check_shuffle()
             self.print_card_count()
         elif card1 < card2:
-            print('Move {}: {} loses {}'.format(self.move, card1, card2), end='')
+            print("Move {}: {} loses {}".format(self.move, card1, card2), end="")
             while self._pot.num_cards > 0:
                 self._hold2.add_card(self._pot.play_card())
             self._check_shuffle()
             self.print_card_count()
         else:
-            print('Move {}: {} wars {}'.format(self.move, card1, card2), end='')
+            print("Move {}: {} wars {}".format(self.move, card1, card2), end="")
             self._check_shuffle()
             self._play_war()
 
@@ -297,7 +308,7 @@ class WarGame(object):
 
     def _play_war(self):
         r"""Plays the down cards when a war happens."""
-        print(' Down cards (x{})'.format(self.war_downs), end='')
+        print(" Down cards (x{})".format(self.war_downs), end="")
         for i in range(self.war_downs):
             self._pot.add_card(self._hand1.play_card())
             self._pot.add_card(self._hand2.play_card())
@@ -323,15 +334,15 @@ class WarGame(object):
         n1 = self._hand1.num_cards
         n2 = self._hand2.num_cards
         if n1 > 0 and n2 == 0:
-            return 'Player 1 won!'
+            return "Player 1 won!"
         elif n1 == 0 and n2 > 0:
-            return 'Player 2 won!'
+            return "Player 2 won!"
         elif n1 == 0 and n2 == 0:
-            return 'Draw game!'
+            return "Draw game!"
         else:
-            print('Card count: ', end='')
+            print("Card count: ", end="")
             self.print_card_count()
-            raise ValueError('Undetermined winner!')
+            raise ValueError("Undetermined winner!")
 
     def play_game(self):
         r"""Wrapper function that plays a game until a winner is determined."""
@@ -341,11 +352,13 @@ class WarGame(object):
 
     def print_card_count(self):
         r"""Prints the current number of cards that each player has."""
-        print(' ({} to {})'.format(self._hand1.num_cards+self._hold1.num_cards, \
-            self._hand2.num_cards+self._hold2.num_cards))
+        print(
+            " ({} to {})".format(self._hand1.num_cards + self._hold1.num_cards, self._hand2.num_cards + self._hold2.num_cards)
+        )
 
-#%% Unit test
-if __name__ == '__main__':
+
+# %% Unit test
+if __name__ == "__main__":
     hand = Hand([Card(Rank.ACE, Suit.SPADES), Card(Rank.KING, Suit.SPADES), Card(Rank.QUEEN, Suit.HEARTS), \
         Card(Rank.JACK, Suit.DIAMONDS), Card(Rank.TEN, Suit.CLUBS)])
     print(hand)
@@ -354,9 +367,9 @@ if __name__ == '__main__':
     deck = Deck()
     deck.reset()
     print(deck)
-    unittest.main(module='dstauffman2.games.test_cards', exit=False)
+    unittest.main(module="dstauffman2.games.test_cards", exit=False)
     doctest.testmod(verbose=False)
 
     # play War
-    #war = WarGame()
-    #war.play_game()
+    # war = WarGame()
+    # war.play_game()

@@ -7,14 +7,15 @@ Notes
 #.  Updated by David C. Stauffer in March 2019 to process pyhesat.
 """
 
-#%% Imports
+# %% Imports
 import json
 import os
 import subprocess
 
 from dstauffman import get_root_dir, make_conclusion, make_preamble
 
-#%% Functions
+
+# %% Functions
 def process_repo(name, root, tests, exclude):
     r"""
     Processes the given repository for a line of code count.
@@ -25,34 +26,34 @@ def process_repo(name, root, tests, exclude):
     #.  All lines in .tex, .xml, and .md files are considered "docs".
     """
     # hard-coded values
-    langs = frozenset({'Python', 'MATLAB', 'DOS Batch', 'Bourne Shell'})
-    exclu = frozenset({'header', 'SUM', 'CSS', 'HTML', 'JSON', 'JavaScript'}) # set(data.keys()) - langs - exclu - docs
-    docs  = frozenset({'TeX', 'XML', 'Markdown'})
-    types = frozenset({'blank', 'comment', 'code'})
+    langs = frozenset({"Python", "MATLAB", "DOS Batch", "Bourne Shell"})
+    exclu = frozenset({"header", "SUM", "CSS", "HTML", "JSON", "JavaScript"})  # set(data.keys()) - langs - exclu - docs
+    docs  = frozenset({"TeX", "XML", "Markdown"})
+    types = frozenset({"blank", "comment", "code"})
 
     # get test folder results
     test_root = os.path.join(root, tests)
-    command   = [cloc, test_root, '--json']
+    command   = [cloc, test_root, "--json"]
     result    = subprocess.run(command, stdout=subprocess.PIPE)
-    json_text = result.stdout.decode('utf-8')
+    json_text = result.stdout.decode("utf-8")
     data      = json.loads(json_text)
 
     # check that nothing unexpected was found
     temp = set(data.keys()) - langs - exclu - docs
-    assert len(temp) == 0, 'Extra data was found: {}'.format(temp)
+    assert len(temp) == 0, "Extra data was found: {}".format(temp)
 
     # get the total number of test lines of code
-    lines = {'tests': sum(data['SUM'][x] for x in types)}
-    files = {'tests': data['SUM']['nFiles']}
+    lines = {"tests": sum(data["SUM"][x] for x in types)}
+    files = {"tests": data["SUM"]["nFiles"]}
 
     # get root results with applied exclusions
     dirs = []
     for excl in exclude:
-        dirs.append('-exclude_dir')
+        dirs.append("-exclude_dir")
         dirs.append(excl)
-    command   = [cloc, root, '--json'] + dirs
+    command   = [cloc, root, "--json"] + dirs
     result    = subprocess.run(command, stdout=subprocess.PIPE)
-    json_text = result.stdout.decode('utf-8')
+    json_text = result.stdout.decode("utf-8")
     data      = json.loads(json_text)
 
     # check that nothing unexpected was found
@@ -60,22 +61,23 @@ def process_repo(name, root, tests, exclude):
 
     # get the line counts
     # TODO: pull out the documentation lines from the rest
-    lines['total']   = sum(data['SUM'][subkey] for subkey in types) + lines['tests']
-    lines['code']    = sum(data[key]['code'] for key in langs if key in data)
-    lines['comment'] = sum(data[key]['comment'] for key in langs if key in data)
-    lines['blank']   = sum(data[key]['blank'] for key in langs if key in data)
-    lines['docs']    = sum(data[key][subkey] for key in docs for subkey in types if key in data)
-    files['total']   = data['SUM']['nFiles'] + files['tests']
+    lines["total"]   = sum(data["SUM"][subkey] for subkey in types) + lines["tests"]
+    lines["code"]    = sum(data[key]["code"] for key in langs if key in data)
+    lines["comment"] = sum(data[key]["comment"] for key in langs if key in data)
+    lines["blank"]   = sum(data[key]["blank"] for key in langs if key in data)
+    lines["docs"]    = sum(data[key][subkey] for key in docs for subkey in types if key in data)
+    files["total"]   = data["SUM"]["nFiles"] + files["tests"]
 
     # organize output
-    out = {'name': name, 'lines': lines, 'files': files}
+    out = {"name": name, "lines": lines, "files": files}
 
     # print results
     print_results(**out)
 
     return out
 
-#%% Functions - print_results
+
+# %% Functions - print_results
 def print_results(name, lines, files):
     r"""Prints the results from the given dictionary."""
     print(f"******** {name} ********")
@@ -87,23 +89,25 @@ def print_results(name, lines, files):
          lines['docs'], 100*lines['docs']/lines['total']))
     print('')
 
-#%% Functions - combine_results
+
+# %% Functions - combine_results
 def combine_results(out1, out2):
     r"""Combines the results from the two given dictionaries."""
     out = {}
     for key in out1:
-        if key == 'name':
-            out[key] = out1[key] + '+' + out2[key]
+        if key == "name":
+            out[key] = out1[key] + "+" + out2[key]
         else:
             out[key] = {}
             for subkey in out1[key]:
                 out[key][subkey] = out1[key][subkey] + out2[key][subkey]
     return out
 
-#%% Functions - print_latex_tables
+
+# %% Functions - print_latex_tables
 def print_latex_tables(out, keys):
     r"""Prints the tables for inclusion in our LaTeX documents."""
-    cols = ['total', 'code', 'comment', 'blank', 'tests', 'docs']
+    cols = ["total", "code", "comment", "blank", "tests", "docs"]
 
     text = []
     text += make_preamble('Count Lines of Code Breakdown','tab:cloc','lcccccc')
@@ -128,25 +132,26 @@ def print_latex_tables(out, keys):
 
     return text
 
-#%% Script
-if __name__ == '__main__':
+
+# %% Script
+if __name__ == "__main__":
     # Constants
     # location of cloc utility
-    root  = os.path.sep.join(get_root_dir().split(os.path.sep)[:-2])
-    cloc  = os.path.join(root, 'cloc-1.70.exe')
+    root = os.path.sep.join(get_root_dir().split(os.path.sep)[:-2])
+    cloc = os.path.join(root, "cloc-1.70.exe")
     # repositories to process
-    repos = {k:{} for k in ['dstauffman', 'hesat']}
+    repos = {k: {} for k in ["dstauffman", "hesat"]}
 
     # test folder and other exclusion settings
-    repos['dstauffman']['name']    = 'dstauffman'
-    repos['dstauffman']['root']    = os.path.join(root, 'dstauffman', 'dstauffman')
-    repos['dstauffman']['tests']   = 'tests'
-    repos['dstauffman']['exclude'] = ['data', 'images', 'output', 'results' ,'temp']
+    repos["dstauffman"]["name"]    = "dstauffman"
+    repos["dstauffman"]["root"]    = os.path.join(root, "dstauffman", "dstauffman")
+    repos["dstauffman"]["tests"]   = "tests"
+    repos["dstauffman"]["exclude"] = ["data", "images", "output", "results", "temp"]
 
-    repos['hesat']['name']    = 'hesat'
-    repos['hesat']['root']    = os.path.join(root, 'pyhesat', 'hesat')
-    repos['hesat']['tests']   = 'tests'
-    repos['hesat']['exclude'] = ['data', 'output']
+    repos["hesat"]["name"]    = "hesat"
+    repos["hesat"]["root"]    = os.path.join(root, "pyhesat", "hesat")
+    repos["hesat"]["tests"]   = "tests"
+    repos["hesat"]["exclude"] = ["data", "output"]
 
     # process repos
     out = {}
@@ -154,8 +159,8 @@ if __name__ == '__main__':
         out[key] = process_repo(**repos[key])
 
     # hesat and dstauffman
-    out['hesat+dstauffman'] = combine_results(out['hesat'], out['dstauffman'])
-    print_results(**out['hesat+dstauffman'])
+    out["hesat+dstauffman"] = combine_results(out["hesat"], out["dstauffman"])
+    print_results(**out["hesat+dstauffman"])
 
     # print the LaTeX tables
-    print_latex_tables(out, ['dstauffman', 'hesat', 'hesat+dstauffman'])
+    print_latex_tables(out, ["dstauffman", "hesat", "hesat+dstauffman"])

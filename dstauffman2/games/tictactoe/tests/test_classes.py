@@ -7,7 +7,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import os
 import unittest
 
@@ -15,20 +15,27 @@ import numpy as np
 
 import dstauffman2.games.tictactoe as ttt
 
-#%% Aliases
-o = ttt.PLAYER['o']
-x = ttt.PLAYER['x']
-n = ttt.PLAYER['none']
+# %% Aliases
+o = ttt.PLAYER["o"]
+x = ttt.PLAYER["x"]
+n = ttt.PLAYER["none"]
 
-#%% Options
+
+# %% Options
 class Test_Options(unittest.TestCase):
     r"""
     Tests the Options class with the following cases:
         TBD
     """
+
     def setUp(self):
-        self.options_dict = {'load_previous_game': 'No', 'plot_best_moves': True, \
-            'plot_move_power': True, 'o_is_computer': True, 'x_is_computer': True}
+        self.options_dict = {
+            "load_previous_game": "No",
+            "plot_best_moves": True,
+            "plot_move_power": True,
+            "o_is_computer": True,
+            "x_is_computer": True,
+        }
 
     def test_nominal(self):
         opts = ttt.Options()
@@ -42,19 +49,22 @@ class Test_Options(unittest.TestCase):
 
     def test_bad_input(self):
         with self.assertRaises(ValueError):
-            ttt.Options(bad_input_value='Whatever')
+            ttt.Options(bad_input_value="Whatever")
 
-#%% State
+
+# %% State
 class Test_State(unittest.TestCase):
     r"""
     Tests the State class with the following cases:
         Nominal
     """
+
     def test_nominal(self):
         self.state = ttt.State()
         self.assertTrue(isinstance(self.state, ttt.State))
 
-#%% Move
+
+# %% Move
 class Test_Move(unittest.TestCase):
     r"""
     Tests the Move class with the following cases:
@@ -69,6 +79,7 @@ class Test_Move(unittest.TestCase):
         string
         repr
     """
+
     def setUp(self):
         self.move1 = ttt.Move(0, 1)
         self.move2 = ttt.Move(1, 3, 4)
@@ -116,18 +127,20 @@ class Test_Move(unittest.TestCase):
 
     def test_str(self):
         out = str(self.move1)
-        self.assertEqual(out, 'row: 0, col: 1')
+        self.assertEqual(out, "row: 0, col: 1")
 
     def test_repr(self):
         rep = repr(self.move1)
-        self.assertEqual(rep, '<row: 0, col: 1, pwr: None>')
+        self.assertEqual(rep, "<row: 0, col: 1, pwr: None>")
 
-#%% GameStats
+
+# %% GameStats
 class Test_GameStats(unittest.TestCase):
     r"""
     Tests the GameStats class with the following cases:
         TBD
     """
+
     def setUp(self):
         self.move1      = ttt.Move(0, 0)
         self.gamestats1 = ttt.GameStats(0, o, n)
@@ -165,7 +178,7 @@ class Test_GameStats(unittest.TestCase):
         np.testing.assert_array_equal(results, [n, n])
 
     def test_save_and_load(self):
-        filename = os.path.join(ttt.get_root_dir(), 'tests', 'temp_save.pkl')
+        filename = os.path.join(ttt.get_root_dir(), "tests", "temp_save.pkl")
         ttt.GameStats.save(filename, self.game_hist)
         self.assertTrue(os.path.isfile(filename))
         game_hist = ttt.GameStats.load(filename)
@@ -174,10 +187,11 @@ class Test_GameStats(unittest.TestCase):
                 self.assertEqual(self.game_hist[i].move_list[j], game_hist[i].move_list[j])
 
     def tearDown(self):
-        filename = os.path.join(ttt.get_root_dir(), 'tests', 'temp_save.pkl')
+        filename = os.path.join(ttt.get_root_dir(), "tests", "temp_save.pkl")
         if os.path.isfile(filename):
             os.remove(filename)
 
-#%% Unit test execution
-if __name__ == '__main__':
+
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

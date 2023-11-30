@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in March 2017.
 """
 
-#%% Imports
+# %% Imports
 import sys
 
 import nose
@@ -14,8 +14,8 @@ from PyQt5.QtWidgets import QApplication
 
 import dstauffman2.games.scrabble as scrab
 
-#%% Script
-if __name__ == '__main__':
+# %% Script
+if __name__ == "__main__":
     # open a qapp
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)

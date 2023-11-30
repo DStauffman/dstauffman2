@@ -1,47 +1,48 @@
 """script_plotting makes the plots for Tulare and Vegas scores relative to season standard deviations."""
 
-#%% Imports
+# %% Imports
 import getpass
 import os
 
+from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-from matplotlib.patches import Rectangle
 
 from dstauffman.plotting import Opts, setup_plots
+
 from dstauffman2 import get_output_dir
 import dstauffman2.archery.scoring as score
 
-#%% Script
-if __name__ == '__main__':
+# %% Script
+if __name__ == "__main__":
     # turn interactive plotting off
     plt.ioff()
 
-    #%% folder and file locations
-    username        = getpass.getuser()
-    folder          = os.path.join(r'C:\Users', username, r'Google Drive\Python\2015-16_Indoor_Scores')
-    xlsx_datafile   = os.path.join(folder, '2015-16 Indoor Scorecards.xlsx')
+    # %% folder and file locations
+    username      = getpass.getuser()
+    folder        = os.path.join(r'C:\Users', username, r'Google Drive\Python\2015-16_Indoor_Scores')
+    xlsx_datafile = os.path.join(folder, '2015-16 Indoor Scorecards.xlsx')
 
-    #%% opts settings for plots
+    # %% opts settings for plots
     opts = Opts()
     opts.save_path = get_output_dir()
     opts.save_plot = True
-    opts.plot_type = 'png'
+    opts.plot_type = "png"
 
-    #%% process data
+    # %% process data
     (scores, names, dates) = score.read_from_excel_datafile(xlsx_datafile)
     (nfaa_score, usaa_score) = score.convert_data_to_scores(scores)
 
-    #%% Specific dates
+    # %% Specific dates
     inner10 = []
     outer10 = []
     tulare  = []
     vegas   = []
-    for (ix, this_name) in enumerate(names):
-        if 'Tulare' in this_name:
+    for ix, this_name in enumerate(names):
+        if "Tulare" in this_name:
             tulare.append(usaa_score[ix])
-        elif 'Vegas' in this_name:
+        elif "Vegas" in this_name:
             vegas.append(nfaa_score[ix])
         else:
             inner10.append(usaa_score[ix])
@@ -49,7 +50,7 @@ if __name__ == '__main__':
     # manually add missing Vegas scores for now
     vegas = [284, 289] + vegas
 
-    #%% make plots
+    # %% make plots
     # hard-coded values
     num2per       = 100
     perfect_score = 300
@@ -66,24 +67,24 @@ if __name__ == '__main__':
     score_range = np.arange(0, perfect_score+dt, dt)
 
     # create actuals for scores
-    act_range   = np.arange(PLOT_LIMITS[0], PLOT_LIMITS[1]+1)
-    outer10_acts   = np.empty(act_range.shape)
-    inner10_acts   = np.empty(act_range.shape)
-    num_scores  = len(outer10)
-    for (ix, this_score) in enumerate(act_range):
+    act_range    = np.arange(PLOT_LIMITS[0], PLOT_LIMITS[1]+1)
+    outer10_acts = np.empty(act_range.shape)
+    inner10_acts = np.empty(act_range.shape)
+    num_scores   = len(outer10)
+    for ix, this_score in enumerate(act_range):
         outer10_acts[ix] = np.count_nonzero(outer10 == this_score) / num_scores
         inner10_acts[ix] = np.count_nonzero(inner10 == this_score) / num_scores
 
-    #%% Tulare
+    # %% Tulare
     # create figure
-    fig = plt.figure(facecolor='w')
-    title = 'Tulare Score Distribution vs. Expectation'
+    fig = plt.figure(facecolor="w")
+    title = "Tulare Score Distribution vs. Expectation"
     fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
 
     # set ticks to only bottom and left
     ax.get_xaxis().tick_bottom()
@@ -95,20 +96,20 @@ if __name__ == '__main__':
     acts = ax.bar(act_range, num2per*inner10_acts, color='#7293CB', label='Actuals', width=0.9)
 
     # plot tournament scores
-    val = 1/len(inner10)
+    val = 1 / len(inner10)
     patches = []
-    for this_score in tulare: # set(tulare)
+    for this_score in tulare:  # set(tulare)
         num_this_one = tulare.count(this_score)
-        label = 'Tournament' if len(patches) == 0 else ''
-        this_patch = Rectangle((this_score, 0), 0.8, num2per*val*num_this_one, facecolor='#D35E60', label=label)
+        label = "Tournament" if len(patches) == 0 else ""
+        this_patch = Rectangle((this_score, 0), 0.8, num2per * val * num_this_one, facecolor="#D35E60", label=label)
         patches.append(this_patch)
         ax.add_patch(this_patch)
         ax.text(this_score+0.1, 0.25, 'Session {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
             fontsize=12, color='w', fontweight='bold')
 
     # add labels and legends
-    ax.set_xlabel('Score', fontsize=14)
-    ax.set_ylabel('Distribution [%]', fontsize=14)
+    ax.set_xlabel("Score", fontsize=14)
+    ax.set_ylabel("Distribution [%]", fontsize=14)
     ax.set_title(title, fontsize=20)
     ax.set_xlim(265, 290)
     (handles, labels) = ax.get_legend_handles_labels()
@@ -116,28 +117,28 @@ if __name__ == '__main__':
     ax.legend([handles[i] for i in order], [labels[i] for i in order])
 
     # add more information
-    ax.text(266, 14.5, 'N = 21 samples from Oct 2015 to Jan 2016', fontsize=10)
-    ax.text(266, 13.8, 'Inner 10 scoring', fontsize=10)
-    ax.text(266, 13.1, 'Mean = {:1.1f}'.format(inner10_mean), fontsize=10)
-    ax.text(266, 12.4, 'Std Dev = {:1.1f}'.format(inner10_std), fontsize=10)
+    ax.text(266, 14.5, "N = 21 samples from Oct 2015 to Jan 2016", fontsize=10)
+    ax.text(266, 13.8, "Inner 10 scoring", fontsize=10)
+    ax.text(266, 13.1, "Mean = {:1.1f}".format(inner10_mean), fontsize=10)
+    ax.text(266, 12.4, "Std Dev = {:1.1f}".format(inner10_std), fontsize=10)
 
-    ax.text(283, 11.0, 'Goal: 276 ave. to beat 1103 PR', fontsize=10)
-    ax.text(283, 10.3, 'Stretch Goal: 280 ave. for 1120', fontsize=10)
-    ax.text(283,  9.6, 'Result: 1084.  Failed Miserably!', fontsize=10)
+    ax.text(283, 11.0, "Goal: 276 ave. to beat 1103 PR", fontsize=10)
+    ax.text(283, 10.3, "Stretch Goal: 280 ave. for 1120", fontsize=10)
+    ax.text(283, 9.6, "Result: 1084.  Failed Miserably!", fontsize=10)
 
     # optionally save and format plot
     setup_plots(fig, opts)
 
-    #%% Vegas
+    # %% Vegas
     # create figure
-    fig = plt.figure(facecolor='w')
-    title = 'Vegas Score Distribution vs. Expectation'
+    fig = plt.figure(facecolor="w")
+    title = "Vegas Score Distribution vs. Expectation"
     fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines
-    ax.spines['top'].set_visible(False)
-    ax.spines['right'].set_visible(False)
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
 
     # set ticks to only bottom and left
     ax.get_xaxis().tick_bottom()
@@ -149,36 +150,36 @@ if __name__ == '__main__':
     ax.bar(act_range, num2per*outer10_acts, color='#7293CB', label='Actuals', width=0.9)
 
     # plot tournament scores
-    val = 1/len(outer10)
+    val = 1 / len(outer10)
     patches = []
-    for this_score in vegas: # set(vegas) to handle duplicates
+    for this_score in vegas:  # set(vegas) to handle duplicates
         num_this_one = vegas.count(this_score)
-        label = 'Tournament' if len(patches) == 0 else ''
-        this_patch = Rectangle((this_score, 0), 0.8, num2per*val*num_this_one, facecolor='#D35E60', label=label)
+        label = "Tournament" if len(patches) == 0 else ""
+        this_patch = Rectangle((this_score, 0), 0.8, num2per * val * num_this_one, facecolor="#D35E60", label=label)
         patches.append(this_patch)
         ax.add_patch(this_patch)
         ax.text(this_score+0.1, 0.25, 'Day {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
             fontsize=12, color='w', fontweight='bold')
 
     # add labels and legends
-    ax.set_xlabel('Score', fontsize=14)
-    ax.set_ylabel('Distribution [%]', fontsize=14)
-    ax.set_title('Vegas Score Distribution vs. Expectation', fontsize=20)
+    ax.set_xlabel("Score", fontsize=14)
+    ax.set_ylabel("Distribution [%]", fontsize=14)
+    ax.set_title("Vegas Score Distribution vs. Expectation", fontsize=20)
     ax.set_xlim(275, 300)
     (handles, labels) = ax.get_legend_handles_labels()
     order = [0, 2, 1]
     ax.legend([handles[i] for i in order], [labels[i] for i in order])
 
     # add more information
-    ax.text(275.5, 17.5, 'N = 21 samples from Oct 2015 to Jan 2016', fontsize=10)
-    ax.text(275.5, 16.8, 'Outer 10 scoring', fontsize=10)
-    ax.text(275.5, 16.1, 'Mean = {:1.1f}'.format(outer10_mean), fontsize=10)
-    ax.text(275.5, 15.4, 'Std Dev = {:1.1f}'.format(outer10_std), fontsize=10)
+    ax.text(275.5, 17.5, "N = 21 samples from Oct 2015 to Jan 2016", fontsize=10)
+    ax.text(275.5, 16.8, "Outer 10 scoring", fontsize=10)
+    ax.text(275.5, 16.1, "Mean = {:1.1f}".format(outer10_mean), fontsize=10)
+    ax.text(275.5, 15.4, "Std Dev = {:1.1f}".format(outer10_std), fontsize=10)
 
-    ax.text(293, 13.0, 'Goal: 290 average for 870', fontsize=10)
-    ax.text(293, 12.3, 'Stretch Goal: Beat PR.', fontsize=10)
-    ax.text(293, 11.6, '  (Needs 292+ ave. for >876)', fontsize=10)
-    ax.text(293, 10.9, 'Result: 865.  Won $65.  Meh.', fontsize=10)
+    ax.text(293, 13.0, "Goal: 290 average for 870", fontsize=10)
+    ax.text(293, 12.3, "Stretch Goal: Beat PR.", fontsize=10)
+    ax.text(293, 11.6, "  (Needs 292+ ave. for >876)", fontsize=10)
+    ax.text(293, 10.9, "Result: 865.  Won $65.  Meh.", fontsize=10)
 
     # optionally save and format plot
     setup_plots(fig, opts)

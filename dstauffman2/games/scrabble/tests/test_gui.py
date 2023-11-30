@@ -7,7 +7,7 @@ Notes
 #.  Written by David C. Stauffer in March 2017.
 """
 
-#%% Imports
+# %% Imports
 import sys
 import unittest
 
@@ -17,12 +17,12 @@ from PyQt5.QtWidgets import QApplication, QPushButton
 
 import dstauffman2.games.scrabble as scrab
 
-#%% Unit test execution
-if __name__ == '__main__':
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)
 
-#%% Unit test execution
-if __name__ == '__main__':
+# %% Unit test execution
+if __name__ == "__main__":
     # open a qapp
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)

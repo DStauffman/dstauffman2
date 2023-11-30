@@ -7,47 +7,53 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import dstauffman2.games.tictactoe as ttt
 
-#%% Aliases
-o = ttt.PLAYER['o']
-x = ttt.PLAYER['x']
+# %% Aliases
+o = ttt.PLAYER["o"]
+x = ttt.PLAYER["x"]
 
-#%% COLOR
+
+# %% COLOR
 class Test_COLOR(unittest.TestCase):
     r"""
     Tests the COLOR class with the following cases:
         Test all keys
     """
+
     def setUp(self):
-        self.expected_keys = set(['board', 'win', 'o', 'x', 'edge', 'win_o', 'win_x', 'win_ox'])
+        self.expected_keys = set(["board", "win", "o", "x", "edge", "win_o", "win_x", "win_ox"])
 
     def test_expected(self):
         keys = set(ttt.COLOR)
         self.assertEqual(keys, self.expected_keys)
 
-#%% PLAYER
+
+# %% PLAYER
 class Test_PLAYER(unittest.TestCase):
     r"""
     Tests the PLAYER class with the following cases:
         Test all keys
     """
+
     def setUp(self):
-        self.expected_keys = set(['o', 'x', 'none', 'draw'])
+        self.expected_keys = set(["o", "x", "none", "draw"])
 
     def test_expected(self):
         keys = set(ttt.PLAYER)
         self.assertEqual(keys, self.expected_keys)
 
-#%% SCORING
+
+# %% SCORING
 class Test_SCORING(unittest.TestCase):
     r"""
     Tests the SCORING class with the following cases:
         Test all keys
     """
+
     def setUp(self):
         self.expected_keys = set(['win', 'block_win', 'win_in_two', 'block_in_two', 'normal_line', 'block_line'])
 
@@ -55,28 +61,33 @@ class Test_SCORING(unittest.TestCase):
         keys = set(ttt.SCORING)
         self.assertEqual(keys, self.expected_keys)
 
-#%% SIZES
+
+# %% SIZES
 class Test_SIZES(unittest.TestCase):
     r"""
     Tests the Color class with the following cases:
         Test all keys
     """
+
     def setUp(self):
-        self.expected_keys = set(['piece', 'square', 'board'])
+        self.expected_keys = set(["piece", "square", "board"])
 
     def test_expected(self):
         keys = set(ttt.SIZES)
         self.assertEqual(keys, self.expected_keys)
 
-#%% WIN
+
+# %% WIN
 class Test_WIN(unittest.TestCase):
     r"""
     Tests the WIN class with the following cases:
         Size test
     """
-    def test_size(self):
-        self.assertEqual(ttt.WIN.shape, (9,8))
 
-#%% Unit test execution
-if __name__ == '__main__':
+    def test_size(self):
+        self.assertEqual(ttt.WIN.shape, (9, 8))
+
+
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

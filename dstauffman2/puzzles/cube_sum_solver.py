@@ -34,10 +34,10 @@ def enforce_minmax(A):
 # %% Script
 if __name__ == "__main__":
     # %% Given:
-    A      = np.array([[0, 0, 0, 2], [0, 8, 0, 0], [9, 0, 0, 0], [0, 0, 7, 0]], dtype=float)
-    horzs  = np.array([13, 31, 13, 25])
-    verts  = np.array([33, 13, 14, 22])
-    diags  = np.array([26, 15])
+    A = np.array([[0, 0, 0, 2], [0, 8, 0, 0], [9, 0, 0, 0], [0, 0, 7, 0]], dtype=float)
+    horzs = np.array([13, 31, 13, 25])
+    verts = np.array([33, 13, 14, 22])
+    diags = np.array([26, 15])
     A_soln = np.array([[8, 2, 1, 2], [9, 8, 5, 9], [9, 1, 1, 2], [7, 2, 7, 9]])
 
     # %% settings
@@ -45,9 +45,9 @@ if __name__ == "__main__":
     round_dig = 4
 
     # %% alias useful values
-    n    = A.shape[0]
-    d1   = (np.arange(n), np.arange(n))
-    d2   = (np.arange(n), np.arange(n - 1, -1, -1))
+    n = A.shape[0]
+    d1 = (np.arange(n), np.arange(n))
+    d2 = (np.arange(n), np.arange(n - 1, -1, -1))
     mask = A == 0
 
     # %% calculations

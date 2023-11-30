@@ -24,7 +24,8 @@ Notes
 #.  Moved to the "dstauffman2" library by David C. Stauffer in November 2016.
 """
 
-#%% Relative imports
+# %% Relative imports
+# fmt: off
 from .bales       import assign_bales, validate_bales
 from .brackets    import write_brackets, build_seed_order, get_name_by_index, validate_brackets, \
                          build_bracket_html_template, replace_css, replace_bracket_tokens
@@ -46,7 +47,8 @@ from .main        import write_registered_archers, write_indiv_results, update_i
 from .simulations import simulate_individual_scores, simulate_bracket_scores
 from .utils       import display_info, import_from_excel, export_to_excel, generic_html_start, \
                          generic_html_end, get_root_dir
+# fmt: on
 
-#%% Unit test
-if __name__ == '__main__':
+# %% Unit test
+if __name__ == "__main__":
     pass

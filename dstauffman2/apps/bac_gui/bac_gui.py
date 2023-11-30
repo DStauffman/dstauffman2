@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in June 2016.
 """
 
-#%% Imports
+# %% Imports
 import doctest
 import glob
 import os
@@ -22,21 +22,24 @@ from PyQt5.QtWidgets import QApplication, QComboBox, QFormLayout, QGridLayout, Q
     QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QRadioButton, QToolTip, QVBoxLayout, \
     QWidget
 
-#%% Constants
+# %% Constants
 GUI_TOKEN   = -1
 LEGAL_LIMIT = 0.08/100
 BMI_CONV    = 703.0704
 
-#%% Classes - Gender
+
+# %% Classes - Gender
 @unique
 class Gender(Enum):
     r"""Enumerator definitions for the possible gender conditions."""
     male   = 1 # uncircumcised male
     female = 2 # female
 
-#%% Classes - GuiSettings
+
+# %% Classes - GuiSettings
 class GuiSettings(object):
     r"""Settings that capture the current state of the GUI."""
+
     def __init__(self):
         self.profile     = 'Default'
         self.height      = GUI_TOKEN

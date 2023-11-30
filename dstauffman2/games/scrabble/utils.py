@@ -6,19 +6,19 @@ Notes
 #.  Written by David C. Stauffer in March 2017.
 """
 
-#%% Imports
+# %% Imports
+from collections import defaultdict
 import doctest
 import itertools
 import os
 import re
 import unittest
-from collections import defaultdict
 
-from dstauffman2 import get_data_dir as dcs_data_dir
-from dstauffman2 import get_root_dir as dcs_root_dir
+from dstauffman2 import get_data_dir as dcs_data_dir, get_root_dir as dcs_root_dir
 from dstauffman2.games.scrabble.constants import BOARD_SYMBOLS, DICT, LETTERS
 
-#%% get_root_dir
+
+# %% get_root_dir
 def get_root_dir():
     r"""
     Gets the full path to the root directory of the scrabble game.
@@ -34,13 +34,15 @@ def get_root_dir():
     >>> folder = get_root_dir()
 
     """
-    folder = os.path.join(dcs_root_dir(), 'games', 'scrabble')
+    folder = os.path.join(dcs_root_dir(), "games", "scrabble")
     return folder
 
-#%% get_data_dir
-get_data_dir = dcs_data_dir # TODO: override docstring?
 
-#%% get_dict_path
+# %% get_data_dir
+get_data_dir = dcs_data_dir  # TODO: override docstring?
+
+
+# %% get_dict_path
 def get_dict_path(name=DICT):
     r"""
     Gets the full path to the specified or default dictionary.
@@ -68,7 +70,8 @@ def get_dict_path(name=DICT):
     path = os.path.join(get_data_dir(), name)
     return path
 
-#%% get_raw_dictionary
+
+# %% get_raw_dictionary
 def get_raw_dictionary(filename=None, min_len=2, max_len=20):
     r"""
     Loads the entire dictionary into a Python set.
@@ -117,14 +120,15 @@ def get_raw_dictionary(filename=None, min_len=2, max_len=20):
     if filename is None:
         filename = get_dict_path()
     words = set()
-    with open(filename, 'rt') as file:
+    with open(filename, "rt") as file:
         for line in file.readlines():
-            word = line.rstrip('\n')
+            word = line.rstrip("\n")
             if min_len <= len(word) <= max_len:
                 words.add(word)
     return words
 
-#%% create_dictionary_from_text
+
+# %% create_dictionary_from_text
 def create_dict(filename, min_len=2, max_len=20):
     r"""
     Reads in the word list and creates a Python words dictionary by anagrammed keys.
@@ -163,11 +167,12 @@ def create_dict(filename, min_len=2, max_len=20):
     words = defaultdict(list)
     for word in raw_words:
         if len(set(word) - LETTERS) == 0 and len(word) >= min_len and len(word) <= max_len:
-            key = ''.join(sorted(word))
+            key = "".join(sorted(word))
             words[key].append(word)
     return dict(words)
 
-#%% count_num_words
+
+# %% count_num_words
 def count_num_words(words):
     r"""
     Counts the number of keys, words, and words by length in the dictionary.
@@ -208,18 +213,19 @@ def count_num_words(words):
     num_keys   = 0
     num_words  = 0
     temp_count = defaultdict(int)
-    for (key, value) in words.items():
+    for key, value in words.items():
         new_words = len(value)
         num_keys += 1
         num_words += new_words
         len_key = len(key)
         temp_count[len_key] += new_words
     # reorganize dictionary
-    len_count = {key:temp_count[key] for key in sorted(temp_count.keys())}
+    len_count = {key: temp_count[key] for key in sorted(temp_count.keys())}
     return (num_keys, num_words, len_count)
 
-#%% find_all_words
-def find_all_words(tiles, words, pattern=''):
+
+# %% find_all_words
+def find_all_words(tiles, words, pattern=""):
     r"""
     Finds all the anagrams of the given tiles.
 
@@ -259,13 +265,14 @@ def find_all_words(tiles, words, pattern=''):
     ['ward', 'wars', 'ado', 'ads', 'ars']
 
     """
+
     def wrapped(tiles, words):
         r"""Wrapped solver function."""
         # find all the possible keys
         keys = []
-        for r in range(2, len(tiles)+1):
+        for r in range(2, len(tiles) + 1):
             for subset in itertools.combinations(tiles, r):
-                this_key = ''.join(subset)
+                this_key = "".join(subset)
                 keys.append(this_key)
 
         # find all the possible words based on the found keys
@@ -279,13 +286,13 @@ def find_all_words(tiles, words, pattern=''):
     extra_letters = [letter for letter in pattern if letter in LETTERS]
 
     # create a working list of all the tiles
-    full_tiles = [x for x in tiles if x != '?'] + extra_letters
+    full_tiles = [x for x in tiles if x != "?"] + extra_letters
 
     # ensure that tiles are sorted
     full_tiles = sorted(full_tiles)
 
     # convert the blanks to possible letters
-    num_blanks = tiles.count('?')
+    num_blanks = tiles.count("?")
     if num_blanks == 0:
         soln = wrapped(full_tiles, words)
     else:
@@ -306,29 +313,32 @@ def find_all_words(tiles, words, pattern=''):
     out.sort(key=lambda item: (-len(item), item))
     return out
 
-#%% Functions - validate_board
+
+# %% Functions - validate_board
 def validate_board(board):
     r"""Validates a given board."""
     num_squares = len(board)
-    rows = board.split('\n')
+    rows = board.split("\n")
     num_rows = len(rows)
     temp_cols = set(len(x) for x in rows)
     # board assertions
     if len(temp_cols) != 1:
-        raise ValueError('Board does not have an equal number of columns in each row.')
+        raise ValueError("Board does not have an equal number of columns in each row.")
     num_cols = temp_cols.pop()
-    if num_squares != num_rows * (num_cols+1) - 1:
-        raise ValueError('Board is not sized properly, check for extra newline characters.')
+    if num_squares != num_rows * (num_cols + 1) - 1:
+        raise ValueError("Board is not sized properly, check for extra newline characters.")
     if not all(x in BOARD_SYMBOLS for x in board):
-        raise ValueError('Invalid board characters')
+        raise ValueError("Invalid board characters")
     return (num_rows, num_cols)
 
-#%% Functions - validate_move
+
+# %% Functions - validate_move
 def validate_move(board, played, move):
     r"""Validates whether the desired move is legal."""
-    return True # TODO: write this
+    return True  # TODO: write this
 
-#%% Functions - score_move
+
+# %% Functions - score_move
 def score_move(board, played, move):
     r"""Scores a given move based on a board layout and played tiles."""
     # initialize output
@@ -336,7 +346,8 @@ def score_move(board, played, move):
     # TODO: write this
     return score
 
-#%% Functions - get_board_played
+
+# %% Functions - get_board_played
 def get_board_played(played):
     r"""
     Finds the indices to positions that have been played.
@@ -350,10 +361,11 @@ def get_board_played(played):
     [13, 14, 15]
 
     """
-    out = {ix for (ix, char) in enumerate(played) if (char != ' ' and char != '\n')}
+    out = {ix for (ix, char) in enumerate(played) if (char != " " and char != "\n")}
     return out
 
-#%% Functions - get_board_open
+
+# %% Functions - get_board_open
 def get_board_open(played):
     r"""
     Finds the indices to positions that are open to play.
@@ -367,10 +379,11 @@ def get_board_open(played):
     [0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 12, 16, 18, 19, 20, 21, 22, 24, 25, 26, 27, 28]
 
     """
-    out = {ix for (ix, char) in enumerate(played) if char == ' '}
+    out = {ix for (ix, char) in enumerate(played) if char == " "}
     return out
 
-#%% Functions - get_board_must_play
+
+# %% Functions - get_board_must_play
 def get_board_must_play(board, num_rows, num_cols, played):
     r"""
     Finds the indices to positions that are open to play.
@@ -388,8 +401,8 @@ def get_board_must_play(board, num_rows, num_cols, played):
 
     """
     # check for special case of an empty board
-    if all(char in {' ','\n'} for char in played):
-        out = {ix for (ix, char) in enumerate(board) if char == 's'}
+    if all(char in {" ", "\n"} for char in played):
+        out = {ix for (ix, char) in enumerate(board) if char == "s"}
         return out
     # find the currently occupied places
     occupied = get_board_played(played)
@@ -416,7 +429,8 @@ def get_board_must_play(board, num_rows, num_cols, played):
                 out.add(ix)
     return out
 
-#%% Unit test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.games.scrabble.tests.test_utils', exit=False)
+
+# %% Unit test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.games.scrabble.tests.test_utils", exit=False)
     doctest.testmod(verbose=False)

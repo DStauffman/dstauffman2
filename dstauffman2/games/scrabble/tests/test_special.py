@@ -7,11 +7,11 @@ Notes
 #.  Written by David C. Stauffer in March 2017.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import dstauffman2.games.scrabble as scrab
 
-#%% Unit test execution
-if __name__ == '__main__':
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

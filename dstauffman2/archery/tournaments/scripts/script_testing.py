@@ -6,13 +6,14 @@ Created on Mon Dec 15 13:21:07 2014
 @author: DStauffman
 """
 
-#%% Imports
+# %% Imports
 import os
 
 from dstauffman import setup_dir
+
 import dstauffman2.archery.tournaments as arch
 
-#%% Variables
+# %% Variables
 # simulate stuff?
 SIMULATE = True
 # folder and file locations
@@ -37,17 +38,17 @@ file_list_teams = {}
 file_list_mixed = {}
 for div in arch.DIVISIONS:
     for sex in arch.GENDERS:
-        file_list_indiv[sex + ' ' + div] = os.path.join(output_folder, 'Individual Brackets ' + sex + ' ' + div + '.htm')
-        file_list_teams[sex + ' ' + div] = os.path.join(output_folder, 'Team Brackets ' + sex + ' ' + div + '.htm')
+        file_list_indiv[sex + " " + div] = os.path.join(output_folder, "Individual Brackets " + sex + " " + div + ".htm")
+        file_list_teams[sex + " " + div] = os.path.join(output_folder, "Team Brackets " + sex + " " + div + ".htm")
         if sex == arch.GENDERS[0]:
             file_list_mixed[div]         = os.path.join(output_folder, 'Mixed Team Brackets ' + div + '.htm')
 
-#%% Output folder
+# %% Output folder
 # create the output folder if it doesn't already exist
 if not os.path.isdir(output_folder):
     setup_dir(output_folder)
 
-#%% Process data
+# %% Process data
 # import data from excel
 data_indiv = arch.import_from_excel(test_file, sheet=arch.SHEET_NAME_INDIV)
 data_teams = arch.import_from_excel(test_file, sheet=arch.SHEET_NAME_TEAMS)
@@ -85,48 +86,48 @@ arch.write_indiv_results(data_indiv, filename=file_indiv_res)
 data_teams = arch.update_teams(data_indiv, data_teams)
 data_mixed = arch.update_mixed(data_indiv, data_mixed)
 
-#%% Brackets
+# %% Brackets
 # assign bracket bales based on seeds/number of archers in each division and field layout
 # TODO: write this
 
 ## validate all brackets & bales
-#arch.validate_brackets(data_indiv, team='indiv')
-#arch.validate_brackets(data_teams, team='teams')
-#arch.validate_brackets(data_mixed, team='mixed')
+# arch.validate_brackets(data_indiv, team="indiv")
+# arch.validate_brackets(data_teams, team="teams")
+# arch.validate_brackets(data_mixed, team="mixed")
 #
 ## write initial brackets for individual competition
-#arch.write_brackets(data_indiv, filename=file_list_indiv, team='indiv')
+# arch.write_brackets(data_indiv, filename=file_list_indiv, team="indiv")
 #
 ## enter individual bracket scores (simulated for each round), start with 1/16 round
-#if SIMULATE:
-#    arch.simulate_bracket_scores(data_indiv, round_='1/16')
-#arch.write_brackets(data_indiv, filename=file_list_indiv, team='indiv')
+# if SIMULATE:
+#     arch.simulate_bracket_scores(data_indiv, round_="1/16")
+# arch.write_brackets(data_indiv, filename=file_list_indiv, team="indiv")
 ## update brackets 1/8 round and rewrite brackets
-#if SIMULATE:
-#    arch.simulate_bracket_scores(data_indiv, round_='1/8')
-#arch.write_brackets(data_indiv, filename=file_list_indiv, team='indiv')
+# if SIMULATE:
+#     arch.simulate_bracket_scores(data_indiv, round_="1/8")
+# arch.write_brackets(data_indiv, filename=file_list_indiv, team="indiv")
 ## update brackets 1/4 (quarter-final) round and rewrite brackets
-#if SIMULATE:
-#    arch.simulate_bracket_scores(data_indiv, round_='1/4')
-#arch.write_brackets(data_indiv, filename=file_list_indiv, team='indiv')
+# if SIMULATE:
+#     arch.simulate_bracket_scores(data_indiv, round_="1/4")
+# arch.write_brackets(data_indiv, filename=file_list_indiv, team="indiv")
 ## update brackets 1/2 (semi-final) round and rewrite brackets
-#if SIMULATE:
-#    arch.simulate_bracket_scores(data_indiv, round_='1/2')
-#arch.write_brackets(data_indiv, filename=file_list_indiv, team='indiv')
+# if SIMULATE:
+#     arch.simulate_bracket_scores(data_indiv, round_="1/2")
+# arch.write_brackets(data_indiv, filename=file_list_indiv, team="indiv")
 ## update brackets 1 (final) round and produce final results brackets
-#if SIMULATE:
-#    arch.simulate_bracket_scores(data_indiv, round_='1/1')
-#arch.write_brackets(data_indiv, filename=file_list_indiv, team='indiv')
+# if SIMULATE:
+#     arch.simulate_bracket_scores(data_indiv, round_="1/1")
+# arch.write_brackets(data_indiv, filename=file_list_indiv, team="indiv")
 #
 ## enter mixed team bracket scores (simulated for each round)
-##TODO: repeat again
+## TODO: repeat again
 ## write initial brackets for team competition
-##arch.write_brackets(data_teams, filename=file_list_teams, team='teams')
+## arch.write_brackets(data_teams, filename=file_list_teams, team="teams")
 #
 ## enter team bracket scores (simulated for each round)
-##TODO: repeat again
+## TODO: repeat again
 ## write initial brackets for mixed team competition
-##arch.write_brackets(data_mixed, filename=file_list_mixed, team='mixed')
+## arch.write_brackets(data_mixed, filename=file_list_mixed, team="mixed")
 
 # write updated information to output (CSV)
 arch.export_to_excel(data_indiv, output_file_indiv)

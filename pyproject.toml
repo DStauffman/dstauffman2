@@ -74,6 +74,7 @@ dcs2 = "dstauffman2.__main__:main"
 [tool.black]
 line-length = 128
 target_version = ["py39", "py310", "py311"]
+include = '\.pyi?$'
 
 [tool.coverage.run]
 branch = true

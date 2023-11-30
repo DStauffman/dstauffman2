@@ -9,12 +9,13 @@ Notes
 
 # %% Imports
 import os
+import shutil
 import unittest
 
 from PIL import Image
 import numpy as np
 
-from dstauffman import setup_dir, write_text_file
+from dstauffman import write_text_file
 from slog import capture_output
 
 from dstauffman2 import get_data_dir, get_images_dir, get_tests_dir
@@ -36,16 +37,16 @@ class Test_find_missing_nums(unittest.TestCase):
     def setUpClass(cls):
         cls.folder = get_tests_dir()
         cls.folder_exclusions = [
-            os.path.join(cls.folder, "temp_dir"),
-            os.path.join(cls.folder, "coverage_html_report"),
+            cls.folder / "temp_dir",
+            cls.folder / "coverage_html_report",
         ]
-        file1 = os.path.join(cls.folder, "temp image 01.jpg")
-        file2 = os.path.join(cls.folder, "temp image 02.jpg")
-        file3 = os.path.join(cls.folder, "temp image 04.jpg")
-        file4 = os.path.join(cls.folder, "temp image 006.jpg")
-        file5 = os.path.join(cls.folder, "temp something else 1.jpg")
-        file6 = os.path.join(cls.folder, "Picasa.ini")
-        file7 = os.path.join(cls.folder, "temp image 10 10.jpg")
+        file1 = cls.folder / "temp image 01.jpg"
+        file2 = cls.folder / "temp image 02.jpg"
+        file3 = cls.folder / "temp image 04.jpg"
+        file4 = cls.folder / "temp image 006.jpg"
+        file5 = cls.folder / "temp something else 1.jpg"
+        file6 = cls.folder / "Picasa.ini"
+        file7 = cls.folder / "temp image 10 10.jpg"
         if not os.path.isdir(cls.folder_exclusions[0]):
             os.mkdir(cls.folder_exclusions[0])
         file8 = os.path.join(cls.folder_exclusions[0], "temp image 01.jpg")
@@ -231,40 +232,39 @@ class Test_batch_resize(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.source = os.path.join(get_images_dir(), "python.png")
+        cls.source = get_images_dir() / "python.png"
         cls.name1 = "image1.jpg"
         cls.name2 = "image2.jpg"
         cls.name3 = "image3.jpg"
         cls.name4 = "image4.jpg"
         cls.name5 = "image5.jpg"
         cls.name6 = "image6.jpeg"
-        cls.folder = os.path.join(get_tests_dir(), "images")
-        cls.extra = os.path.join(cls.folder, "extra")
+        cls.folder = get_tests_dir() / "images"
+        cls.extra = cls.folder / "extra"
         cls.size1 = 128
         cls.size2 = 96
         cls.size3 = 32
         cls.size4 = 128 * 2
         cls.size5 = 96 * 2
         cls.size6 = 4
-        cls.output = os.path.join(cls.folder, "resized")
-        with capture_output():
-            setup_dir(cls.folder)
-            setup_dir(cls.extra)
+        cls.output = cls.folder / "resized"
+        cls.folder.mkdir()
+        cls.extra.mkdir()
         with open(cls.source, "rb") as file:
             img = Image.open(file)
             img.load()
             img = img.convert("RGB")  # remove transparency (alpha) channel to allow JPG saving
         new_img = img.resize((cls.size1, cls.size1), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name1))
-        new_img.save(os.path.join(cls.folder, cls.name6))
+        new_img.save(cls.folder / cls.name1)
+        new_img.save(cls.folder / cls.name6)
         new_img = img.resize((cls.size2, cls.size1), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name2))
+        new_img.save(cls.folder / cls.name2)
         new_img = img.resize((cls.size1, cls.size2), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name3))
+        new_img.save(cls.folder / cls.name3)
         new_img = img.resize((cls.size1, cls.size6), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name4))
+        new_img.save(cls.folder / cls.name4)
         new_img = img.resize((cls.size6, cls.size1), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name5))
+        new_img.save(cls.folder / cls.name5)
         img.close()
         new_img.close()
 
@@ -286,24 +286,24 @@ class Test_batch_resize(unittest.TestCase):
                 break
         else:
             self.assertTrue(False, 'File "{}" was not skipped.'.format(self.name6))
-        with open(os.path.join(self.output, self.name1), "rb") as file:
+        with open(self.output / self.name1, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size3, self.size3])
         fact = self.size2 / self.size1
-        with open(os.path.join(self.output, self.name2), "rb") as file:
+        with open(self.output / self.name2, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [int(self.size3 * fact), self.size3])
-        with open(os.path.join(self.output, self.name3), "rb") as file:
+        with open(self.output / self.name3, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size3, int(self.size3 * fact)])
-        with open(os.path.join(self.output, self.name4), "rb") as file:
+        with open(self.output / self.name4, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size3, self.size6 // 4])
-        with open(os.path.join(self.output, self.name5), "rb") as file:
+        with open(self.output / self.name5, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size6 // 4, self.size3])
@@ -338,23 +338,23 @@ class Test_batch_resize(unittest.TestCase):
                 break
         else:
             self.assertTrue(False, 'File "{}" was not skipped.'.format(self.name6))
-        with open(os.path.join(self.output, self.name1), "rb") as file:
+        with open(self.output / self.name1, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size1, self.size1])
-        with open(os.path.join(self.output, self.name2), "rb") as file:
+        with open(self.output / self.name2, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size2, self.size1])
-        with open(os.path.join(self.output, self.name3), "rb") as file:
+        with open(self.output / self.name3, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size1, self.size2])
-        with open(os.path.join(self.output, self.name4), "rb") as file:
+        with open(self.output / self.name4, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size1, self.size6])
-        with open(os.path.join(self.output, self.name5), "rb") as file:
+        with open(self.output / self.name5, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size6, self.size1])
@@ -378,24 +378,24 @@ class Test_batch_resize(unittest.TestCase):
                 break
         else:
             self.assertTrue(False, 'File "{}" was not skipped.'.format(self.name6))
-        with open(os.path.join(self.output, self.name1), "rb") as file:
+        with open(self.output / self.name1, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size4, self.size4])
         fact = self.size2 / self.size1
-        with open(os.path.join(self.output, self.name2), "rb") as file:
+        with open(self.output / self.name2, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size4 * fact, self.size4])
-        with open(os.path.join(self.output, self.name3), "rb") as file:
+        with open(self.output / self.name3, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size4, self.size4 * fact])
-        with open(os.path.join(self.output, self.name4), "rb") as file:
+        with open(self.output / self.name4, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size4, self.size6 * 2])
-        with open(os.path.join(self.output, self.name5), "rb") as file:
+        with open(self.output / self.name5, "rb") as file:
             img = Image.open(file)
             img.load()
         np.testing.assert_array_equal(img.size, [self.size6 * 2, self.size4])
@@ -403,16 +403,12 @@ class Test_batch_resize(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if os.path.isdir(cls.extra):
-            os.rmdir(cls.extra)
-        if os.path.isdir(cls.output):
-            with capture_output():
-                setup_dir(cls.output)
-            os.rmdir(cls.output)
-        if os.path.isdir(cls.folder):
-            with capture_output():
-                setup_dir(cls.folder)
-            os.rmdir(cls.folder)
+        if cls.extra.is_dir():
+            shutil.rmtree(cls.extra)
+        if cls.output.is_dir():
+            shutil.rmtree(cls.output)
+        if cls.folder.is_dir():
+            shutil.rmtree(cls.folder)
 
 
 # convert_tif_to_jpg
@@ -427,39 +423,38 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.source = os.path.join(get_images_dir(), "python.png")
+        cls.source = get_images_dir() / "python.png"
         cls.name1 = "image1.tif"
         cls.name2 = "image2.tif"
         cls.name3 = "image3.tif"
         cls.name4 = "image4.tif"
         cls.name5 = "image5.tif"
         cls.name6 = "image6.jpeg"
-        cls.folder = os.path.join(get_tests_dir(), "images")
-        cls.extra = os.path.join(cls.folder, "extra")
+        cls.folder = get_tests_dir() / "images"
+        cls.extra = cls.folder / "extra"
         cls.size1 = 128
         cls.size2 = 96
         cls.size3 = 32
         cls.size4 = 128 * 2
         cls.size5 = 96 * 2
         cls.size6 = 4
-        with capture_output():
-            setup_dir(cls.folder)
-            setup_dir(cls.extra)
+        cls.folder.mkdir()
+        cls.extra.mkdir()
         with open(cls.source, "rb") as file:
             img = Image.open(file)
             img.load()
             img = img.convert("RGB")  # remove transparency (alpha) channel to allow JPG saving
         new_img = img.resize((cls.size1, cls.size1), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name1))
-        new_img.save(os.path.join(cls.folder, cls.name6))
+        new_img.save(cls.folder / cls.name1)
+        new_img.save(cls.folder / cls.name6)
         new_img = img.resize((cls.size2, cls.size1), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name2))
+        new_img.save(cls.folder / cls.name2)
         new_img = img.resize((cls.size1, cls.size2), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name3))
+        new_img.save(cls.folder / cls.name3)
         new_img = img.resize((cls.size1, cls.size6), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name4))
+        new_img.save(cls.folder / cls.name4)
         new_img = img.resize((cls.size6, cls.size1), Image.LANCZOS)
-        new_img.save(os.path.join(cls.folder, cls.name5))
+        new_img.save(cls.folder / cls.name5)
         img.close()
         new_img.close()
 
@@ -617,12 +612,10 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
 
     @classmethod
     def tearDownClass(cls):
-        if os.path.isdir(cls.extra):
-            os.rmdir(cls.extra)
-        if os.path.isdir(cls.folder):
-            with capture_output():
-                setup_dir(cls.folder)
-            os.rmdir(cls.folder)
+        if cls.extra.is_dir():
+            shutil.rmtree(cls.extra)
+        if cls.folder.is_dir():
+            shutil.rmtree(cls.folder)
 
 
 # %% number_files

@@ -7,74 +7,46 @@ Notes
 #.  Written by David C. Stauffer in June 2015 after he crashed his bike and had nothing to do for a bit.
 """
 
-#%% Imports
+# %% Imports
+from datetime import datetime
 import doctest
 import os
 import shutil
-from datetime import datetime
 
 import matplotlib.pyplot as plt
-import numpy as np
 from mpl_toolkits.mplot3d.art3d import Line3DCollection, Poly3DCollection
+import numpy as np
 
 from dstauffman import Opts, setup_dir, setup_plots
+
 from dstauffman2 import get_root_dir
 
-#%% Hard-coded values
-N = 0 # Null cube - not defined
-R = 1 # Red cube
-G = 2 # Gray cube
-E = 3 # Either (unknown color, used for center cube)
+# %% Hard-coded values
+N = 0  # Null cube - not defined
+R = 1  # Red cube
+G = 2  # Gray cube
+E = 3  # Either (unknown color, used for center cube)
 # Number of unique pieces in the game
 NUM_PIECES = 9
 # Size of the overall puzzle
-SIZE_PIECES = (3,3,3)
+SIZE_PIECES = (3, 3, 3)
 # Pre-determined solution color pattern
-soln = np.array([\
-    [[R, G, R],[G, G, G],[R, G, R]], \
-    [[R, G, R],[G, E, G],[R, G, R]], \
-    [[R, G, R],[G, G, G],[R, G, R]]])
+soln = np.array([[[R, G, R], [G, G, G], [R, G, R]], [[R, G, R], [G, E, G], [R, G, R]], [[R, G, R], [G, G, G], [R, G, R]]])
 # Pieces 1-9
-p1 = np.array([\
-    [[R, N, N],[N, N, N],[N, N, N]], \
-    [[R, N, N],[N, N, N],[N, N, N]], \
-    [[R, N, N],[N, N, N],[N, N, N]]])
-p2 = np.array([\
-    [[N, N, N],[N, N, N],[N, N, N]], \
-    [[R, G, N],[N, N, N],[N, N, N]], \
-    [[R, N, N],[N, N, N],[N, N, N]]])
-p3 = np.array([\
-    [[N, N, N],[N, N, N],[N, N, N]], \
-    [[N, N, N],[G, N, N],[N, G, N]], \
-    [[R, N, N],[N, N, N],[N, N, N]]])
-p4 = np.array([\
-    [[N, N, N],[N, G, N],[N, N, N]], \
-    [[N, N, N],[R, N, N],[N, N, N]], \
-    [[G, N, N],[N, N, N],[N, N, N]]])
-p5 = np.array([\
-    [[N, N, N],[N, N, N],[N, N, N]], \
-    [[N, G, N],[G, N, N],[N, N, N]], \
-    [[G, N, N],[N, N, N],[N, N, N]]])
-p6 = np.array([\
-    [[N, N, N],[N, N, N],[N, N, N]], \
-    [[N, N, G],[N, N, N],[N, N, N]], \
-    [[R, G, N],[N, N, N],[N, N, N]]])
-p7 = np.array([\
-    [[N, N, N],[N, N, N],[N, N, N]], \
-    [[R, N, N],[N, R, N],[N, N, N]], \
-    [[R, N, N],[N, N, N],[N, N, N]]])
-p8 = np.array([\
-    [[N, N, R],[N, N, N],[N, N, N]], \
-    [[N, G, N],[N, N, N],[N, N, N]], \
-    [[R, N, N],[N, N, N],[N, N, N]]])
-p9 = np.array([\
-    [[N, N, N],[N, N, N],[N, N, N]], \
-    [[N, G, N],[N, N, N],[N, N, N]], \
-    [[G, N, G],[N, N, N],[N, N, N]]])
+p1 = np.array([[[R, N, N], [N, N, N], [N, N, N]], [[R, N, N], [N, N, N], [N, N, N]], [[R, N, N], [N, N, N], [N, N, N]]])
+p2 = np.array([[[N, N, N], [N, N, N], [N, N, N]], [[R, G, N], [N, N, N], [N, N, N]], [[R, N, N], [N, N, N], [N, N, N]]])
+p3 = np.array([[[N, N, N], [N, N, N], [N, N, N]], [[N, N, N], [G, N, N], [N, G, N]], [[R, N, N], [N, N, N], [N, N, N]]])
+p4 = np.array([[[N, N, N], [N, G, N], [N, N, N]], [[N, N, N], [R, N, N], [N, N, N]], [[G, N, N], [N, N, N], [N, N, N]]])
+p5 = np.array([[[N, N, N], [N, N, N], [N, N, N]], [[N, G, N], [G, N, N], [N, N, N]], [[G, N, N], [N, N, N], [N, N, N]]])
+p6 = np.array([[[N, N, N], [N, N, N], [N, N, N]], [[N, N, G], [N, N, N], [N, N, N]], [[R, G, N], [N, N, N], [N, N, N]]])
+p7 = np.array([[[N, N, N], [N, N, N], [N, N, N]], [[R, N, N], [N, R, N], [N, N, N]], [[R, N, N], [N, N, N], [N, N, N]]])
+p8 = np.array([[[N, N, R], [N, N, N], [N, N, N]], [[N, G, N], [N, N, N], [N, N, N]], [[R, N, N], [N, N, N], [N, N, N]]])
+p9 = np.array([[[N, N, N], [N, N, N], [N, N, N]], [[N, G, N], [N, N, N], [N, N, N]], [[G, N, G], [N, N, N], [N, N, N]]])
 # combine all the pieces into a list
 pieces = [p1, p2, p3, p4, p5, p6, p7, p8, p9]
 
-#%% Functions - _get_color
+
+# %% Functions - _get_color
 def _get_color(value):
     r"""
     Gets the color based on the given numeric value.
@@ -102,18 +74,19 @@ def _get_color(value):
 
     """
     if value == N:
-        color = 'none'
+        color = "none"
     elif value == R:
-        color = 'r'
+        color = "r"
     elif value == G:
-        color = '#cccccc'
+        color = "#cccccc"
     elif value == E:
-        color = 'k'
+        color = "k"
     else:
-        raise ValueError('Unexpected color code.')
+        raise ValueError("Unexpected color code.")
     return color
 
-#%% Functions - _support_rot_piece
+
+# %% Functions - _support_rot_piece
 def _support_rot_piece():
     r"""
     Calculates the maps for rotating the pieces.
@@ -130,20 +103,21 @@ def _support_rot_piece():
     y1 = np.zeros(SIZE_PIECES, dtype=int)
     for i in range(3):
         for j in range(3):
-            y1[:,i,j] = x[:,2-j,i]
-     # rot 2
+            y1[:, i, j] = x[:, 2 - j, i]
+    # rot 2
     y2 = np.zeros(SIZE_PIECES, dtype=int)
     for i in range(3):
         for j in range(3):
-            y2[j,:,i] = x[i,:,2-j]
+            y2[j, :, i] = x[i, :, 2 - j]
     # rot 3
     y3 = np.zeros(SIZE_PIECES, dtype=int)
     for i in range(3):
         for j in range(3):
-            y3[i,j,:] = x[2-j,i,:]
+            y3[i, j, :] = x[2 - j, i, :]
 
-#%% Functions - _draw_cube
-def _draw_cube(ax, xs=0, ys=0, zs=0, color='k'):
+
+# %% Functions - _draw_cube
+def _draw_cube(ax, xs=0, ys=0, zs=0, color="k"):
     r"""
     Draws a 3D plot of the cube at a possibly shifted position, with a given color.
 
@@ -179,19 +153,20 @@ def _draw_cube(ax, xs=0, ys=0, zs=0, color='k'):
 
     """
     #               face 1     face 2     face 3     face 4     face 5     face 6
-    x = np.array([[0,1,1,0], [0,1,1,0], [0,0,1,1], [0,0,1,1], [0,0,0,0], [1,1,1,1]]) + xs
-    y = np.array([[0,0,1,1], [0,0,1,1], [0,0,0,0], [1,1,1,1], [0,1,1,0], [0,1,1,0]]) + ys
-    z = np.array([[0,0,0,0], [1,1,1,1], [0,1,1,0], [0,1,1,0], [0,0,1,1], [0,0,1,1]]) + zs
+    x = np.array([[0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1]]) + xs
+    y = np.array([[0, 0, 1, 1], [0, 0, 1, 1], [0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 1, 0], [0, 1, 1, 0]]) + ys
+    z = np.array([[0, 0, 0, 0], [1, 1, 1, 1], [0, 1, 1, 0], [0, 1, 1, 0], [0, 0, 1, 1], [0, 0, 1, 1]]) + zs
     # loop through the 6 faces of the cube
     for i in range(len(x)):
         # collect the four vertices for each face
         verts = np.array([x[i], y[i], z[i]]).T
         # create a 3D poly shape and set the desired colors
-        poly = Poly3DCollection([verts], facecolors=color, edgecolors='k')
-        line = Line3DCollection([verts], colors='k', linewidths=0.6, linestyles=':')
+        poly = Poly3DCollection([verts], facecolors=color, edgecolors="k")
+        line = Line3DCollection([verts], colors="k", linewidths=0.6, linestyles=":")
         # add the shape to the specified axis
         ax.add_collection3d(poly)
         ax.add_collection3d(line)
+
 
 def _check_seams(piece_combos, this_soln):
     r"""
@@ -243,15 +218,15 @@ def _check_seams(piece_combos, this_soln):
             for j in range(3):
                 for k in range(3):
                     # see if this piece is not null
-                    if this_piece[i,j,k] != N:
+                    if this_piece[i, j, k] != N:
                         # go through all the possibly adjacent cubes
                         for perm in permutations:
                             # see if this adjacent cube is within the 3x3x3 bounds
-                            if not set((i+perm[0],j+perm[1],k+perm[2])) - {0, 1, 2}:
+                            if not set((i + perm[0], j + perm[1], k + perm[2])) - {0, 1, 2}:
                                 # check if this valid adjacent cube is not null
-                                if this_piece[i+perm[0],j+perm[1],k+perm[2]] != N:
+                                if this_piece[i + perm[0], j + perm[1], k + perm[2]] != N:
                                     # append this seam to the list
-                                    this_list.append((2*np.array([i,j,k]) + np.array(perm))/2)
+                                    this_list.append((2 * np.array([i, j, k]) + np.array(perm)) / 2)
         # make a set of the seams that were found (eliminates duplicates within one piece)
         this_set = set(tuple(x) for x in this_list)
         # see if any of the seams overlap with a previous piece
@@ -264,7 +239,8 @@ def _check_seams(piece_combos, this_soln):
             seams = seams | this_set
     return True
 
-#%% Functions - solve_center
+
+# %% Functions - solve_center
 def solve_center(pieces):
     r"""
     Solve for the color of the center piece.
@@ -311,12 +287,13 @@ def solve_center(pieces):
         center = R
     elif d_red == 0 and d_gry == 0:
         # Already solved and this function was called again, so return the current center color
-        center = soln[1,1,1]
+        center = soln[1, 1, 1]
     else:
-        raise ValueError('Unable to solve for center color.')
+        raise ValueError("Unable to solve for center color.")
     return center
 
-#%% Functions - rot_piece
+
+# %% Functions - rot_piece
 def rot_piece(piece, axis):
     r"""
     Rotates the piece about the given axis.
@@ -357,23 +334,21 @@ def rot_piece(piece, axis):
 
     """
     # build the correct map based on the given axis
-    if axis   ==  0:
-        map_ = np.array([6,  3,  0,  7,  4,  1,  8,  5,  2, 15, 12,  9, 16, 13, 10, 17, 14, \
-            11, 24, 21, 18, 25, 22, 19, 26, 23, 20])
-    elif axis ==  1:
-        map_ = np.array([2, 11, 20,  5, 14, 23,  8, 17, 26,  1, 10, 19,  4, 13, 22,  7, 16, \
-            25,  0,  9, 18,  3, 12, 21,  6, 15, 24])
-    elif axis ==  2:
-        map_ = np.array([18, 19, 20,  9, 10, 11,  0,  1,  2, 21, 22, 23, 12, 13, 14,  3,  4, \
-            5, 24, 25, 26, 15, 16, 17,  6,  7,  8])
+    if axis == 0:
+        map_ = np.array([6, 3, 0, 7, 4, 1, 8, 5, 2, 15, 12, 9, 16, 13, 10, 17, 14, 11, 24, 21, 18, 25, 22, 19, 26, 23, 20])
+    elif axis == 1:
+        map_ = np.array([2, 11, 20, 5, 14, 23, 8, 17, 26, 1, 10, 19, 4, 13, 22, 7, 16, 25, 0, 9, 18, 3, 12, 21, 6, 15, 24])
+    elif axis == 2:
+        map_ = np.array([18, 19, 20, 9, 10, 11, 0, 1, 2, 21, 22, 23, 12, 13, 14, 3, 4, 5, 24, 25, 26, 15, 16, 17, 6, 7, 8])
     else:
         # throw an error for any unexpected axes
-        raise ValueError('Unexpected axis to rotate.')
+        raise ValueError("Unexpected axis to rotate.")
     # rotate the piece by using the map and return
     new_piece = piece.ravel()[map_].reshape(3, 3, 3)
     return new_piece
 
-#%% Functions - trans_piece
+
+# %% Functions - trans_piece
 def trans_piece(piece, axis, step):
     r"""
     Translates the piece in the given axis by the given number of steps.
@@ -428,31 +403,32 @@ def trans_piece(piece, axis, step):
         # loop through number of steps
         for i in range(step):
             # determine if the step is valid
-            if np.any(new_piece[2,:,:] != N):
+            if np.any(new_piece[2, :, :] != N):
                 return None
             # make the step
-            new_piece[2,:,:] = new_piece[1,:,:]
-            new_piece[1,:,:] = new_piece[0,:,:]
-            new_piece[0,:,:] = N
+            new_piece[2, :, :] = new_piece[1, :, :]
+            new_piece[1, :, :] = new_piece[0, :, :]
+            new_piece[0, :, :] = N
     elif axis == 1:
         for i in range(step):
-            if np.any(new_piece[:,2,:] != N):
+            if np.any(new_piece[:, 2, :] != N):
                 return None
-            new_piece[:,2,:] = new_piece[:,1,:]
-            new_piece[:,1,:] = new_piece[:,0,:]
-            new_piece[:,0,:] = N
+            new_piece[:, 2, :] = new_piece[:, 1, :]
+            new_piece[:, 1, :] = new_piece[:, 0, :]
+            new_piece[:, 0, :] = N
     elif axis == 2:
         for i in range(step):
-            if np.any(new_piece[:,:,2] != N):
+            if np.any(new_piece[:, :, 2] != N):
                 return None
-            new_piece[:,:,2] = new_piece[:,:,1]
-            new_piece[:,:,1] = new_piece[:,:,0]
-            new_piece[:,:,0] = N
+            new_piece[:, :, 2] = new_piece[:, :, 1]
+            new_piece[:, :, 1] = new_piece[:, :, 0]
+            new_piece[:, :, 0] = N
     else:
-        raise ValueError('Unexpected value for axis = {}.'.format(axis))
+        raise ValueError("Unexpected value for axis = {}.".format(axis))
     return new_piece
 
-#%% Functions - get_all_positions
+
+# %% Functions - get_all_positions
 def get_all_positions(piece):
     r"""
     Gets all the possible positions for the given piece.
@@ -488,6 +464,7 @@ def get_all_positions(piece):
     27
 
     """
+
     def _rotations(all_pos):
         r"""
         Rotates the list of pieces about all 24 possible 3D orientations.
@@ -557,13 +534,13 @@ def get_all_positions(piece):
         #.  Does not take symmetry into account.
         """
         # convert to N positions by 27 element linear array
-        all_rows  = np.array([x.ravel() for x in all_pos])
+        all_rows = np.array([x.ravel() for x in all_pos])
         # find the unique rows
         uniq_rows = np.unique(all_rows, axis=0)
         # convert back to N element list of 3x3x3 pieces
         pieces = []
         for i in range(uniq_rows.shape[0]):
-            pieces.append(uniq_rows[i,:].reshape(SIZE_PIECES))
+            pieces.append(uniq_rows[i, :].reshape(SIZE_PIECES))
         return pieces
 
     # initialize a new list
@@ -582,7 +559,8 @@ def get_all_positions(piece):
         all_pos = _keep_unique(all_pos)
     return all_pos
 
-#%% Functions - plot_cube
+
+# %% Functions - plot_cube
 def plot_cube(piece, title=None, opts=None):
     r"""
     Plots the given cube as a 3D plot.
@@ -628,7 +606,7 @@ def plot_cube(piece, title=None, opts=None):
     # create the figure
     fig = plt.figure()
     # create the axis
-    ax = fig.add_subplot(111, projection='3d')
+    ax = fig.add_subplot(111, projection="3d")
     # TODO: put back once MPL is fixed: ax.set_aspect('equal')
     # set the title
     if title is not None:
@@ -638,7 +616,7 @@ def plot_cube(piece, title=None, opts=None):
     for i in range(3):
         for j in range(3):
             for k in range(3):
-                _draw_cube(ax, xs=i, ys=j, zs=k, color=_get_color(piece[i,j,k]))
+                _draw_cube(ax, xs=i, ys=j, zs=k, color=_get_color(piece[i, j, k]))
 
     # set the limits
     ax.set_xlim3d(-1, 4)
@@ -656,7 +634,8 @@ def plot_cube(piece, title=None, opts=None):
     # return the resulting figure handle
     return fig
 
-#%% Functions - print_combos
+
+# %% Functions - print_combos
 def print_combos(piece_combos, text):
     r"""
     Print the possible combos.
@@ -689,10 +668,11 @@ def print_combos(piece_combos, text):
 
     """
     for i in range(NUM_PIECES):
-        print('Piece {} has {} {} combinations'.format(i+1, len(piece_combos[i]), text))
-    print('')
+        print("Piece {} has {} {} combinations".format(i + 1, len(piece_combos[i]), text))
+    print("")
 
-#%% Functions - apply_solution_to_combos
+
+# %% Functions - apply_solution_to_combos
 def apply_solution_to_combos(soln, combos):
     r"""
     Applies the known solution to restrict the piece combinations to only those that fit.
@@ -735,7 +715,8 @@ def apply_solution_to_combos(soln, combos):
     valid = [combos[x] for x in valid_ix]
     return valid
 
-#%% Functions - solve_puzzle
+
+# %% Functions - solve_puzzle
 def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
     r"""
     Solves the puzzle once all the possible piece combinations have been found.
@@ -770,6 +751,7 @@ def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
     [ 0  4 14  3  5 23  5  4  0]
 
     """
+
     def _get_solution_sum(level):
         soln_sum = r_comb[0][i0]
         if level >= 1:
@@ -790,7 +772,7 @@ def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
 
     # initialize output
     soln_pieces = []
-    #r_comb = [cube.ravel() for cube in this_piece for this_piece in piece_combos]
+    # r_comb = [cube.ravel() for cube in this_piece for this_piece in piece_combos]
     r_comb = []
     for i in range(NUM_PIECES):
         temp = []
@@ -853,30 +835,32 @@ def solve_puzzle(piece_combos, stop_at_first=False, check_seams=True):
                                             return soln_pieces
     return soln_pieces
 
-#%% Funccions - discard_symmetric_duplicates
+
+# %% Funccions - discard_symmetric_duplicates
 def discard_symmetric_duplicates(soln_pieces, piece_combos):
     r"""Discards solutions that are only rotations of other solutions."""
+
     def _make_equal_solns(piece):
         # initialize output and counter
-        pieces_array = np.empty((27,8), dtype=int)
+        pieces_array = np.empty((27, 8), dtype=int)
         counter = 0
         # create a temp variable to use
         temp_piece = piece.copy()
         # store the original position
-        pieces_array[:,0] = temp_piece.ravel()
+        pieces_array[:, 0] = temp_piece.ravel()
         counter += 1
         # create all possible permutations
         for i in range(4):
             temp_piece = rot_piece(temp_piece, axis=0)
             if i < 3:
-                pieces_array[:,counter] = temp_piece.ravel()
+                pieces_array[:, counter] = temp_piece.ravel()
                 counter += 1
         # rotate 180 degrees
         temp_piece = rot_piece(temp_piece, axis=1)
         temp_piece = rot_piece(temp_piece, axis=1)
         # repeat rotations
         for i in range(4):
-            pieces_array[:,counter] = temp_piece.ravel()
+            pieces_array[:, counter] = temp_piece.ravel()
             temp_piece = rot_piece(temp_piece, axis=0)
             counter += 1
         return pieces_array
@@ -898,14 +882,16 @@ def discard_symmetric_duplicates(soln_pieces, piece_combos):
             pass
     return reduced_soln_pieces
 
-#%% Functions - test_docstrings
+
+# %% Functions - test_docstrings
 def test_docstrings():
     r"""Tests the docstrings within this file."""
-    file = os.path.join(get_root_dir(), 'games', 'brick.py')
+    file = os.path.join(get_root_dir(), "games", "brick.py")
     doctest.testfile(file, report=True, verbose=False, module_relative=True)
 
-#%% Main script
-if __name__ == '__main__':
+
+# %% Main script
+if __name__ == "__main__":
     # flags for running code
     run_tests    = True
     make_plots   = True
@@ -919,19 +905,19 @@ if __name__ == '__main__':
         # Create and set Opts
         date = datetime.now()
         opts = Opts()
-        opts.case_name = 'Brick'
-        opts.save_path = os.path.join(get_root_dir(), 'results', date.strftime('%Y-%m-%d') + '_brick')
+        opts.case_name = "Brick"
+        opts.save_path = os.path.join(get_root_dir(), "results", date.strftime("%Y-%m-%d") + "_brick")
         opts.save_plot = True
         opts.show_plot = False
         if make_plots:
             setup_dir(opts.save_path, rec=True)
 
         # Solve for the center color
-        soln[1,1,1] = solve_center(pieces)
+        soln[1, 1, 1] = solve_center(pieces)
 
         if make_plots:
             # plot the cube
-            plot_cube(soln, title='Final Solution', opts=opts)
+            plot_cube(soln, title="Final Solution", opts=opts)
 
         # find all possible orientations of all pieces
         all_piece_combos = []
@@ -939,19 +925,19 @@ if __name__ == '__main__':
             all_piece_combos.append(get_all_positions(this_piece))
 
         # Print the total combinations before simplifying to the solution
-        print_combos(all_piece_combos, 'total')
+        print_combos(all_piece_combos, "total")
 
         # Solve for only the valid piece combinations
         piece_combos = [apply_solution_to_combos(soln, this_piece_combos) for this_piece_combos in all_piece_combos]
 
         # Print the total combinations after simplifying to the solution
-        print_combos(piece_combos, 'valid')
+        print_combos(piece_combos, "valid")
 
         # Plot all the piece combinations and save to disk
         if make_plots:
             for i in range(NUM_PIECES):
-                for (j, this_piece) in enumerate(piece_combos[i]):
-                    plot_cube(this_piece, title='P{} position {}'.format(i+1, j+1), opts=opts)
+                for j, this_piece in enumerate(piece_combos[i]):
+                    plot_cube(this_piece, title="P{} position {}".format(i + 1, j + 1), opts=opts)
                     for this_fig in plt.get_fignums():
                         plt.close(this_fig)
 
@@ -967,7 +953,7 @@ if __name__ == '__main__':
         soln_pieces = discard_symmetric_duplicates(soln_pieces_all, piece_combos)
 
         # verify solution
-        for (ix, this_soln) in enumerate(soln_pieces):
+        for ix, this_soln in enumerate(soln_pieces):
             soln2 = 0
             for i in range(NUM_PIECES):
                 soln2 = soln2 + piece_combos[i][this_soln[i]]
@@ -977,15 +963,15 @@ if __name__ == '__main__':
         unsort_ix = np.argsort(sort_ix)
         for j in range(len(soln_pieces)):
             if make_plots:
-                setup_dir(os.path.join(opts.save_path, 'soln{}'.format(j+1)))
-            print('Solution #{}'.format(j+1))
+                setup_dir(os.path.join(opts.save_path, "soln{}".format(j + 1)))
+            print("Solution #{}".format(j + 1))
             for i in range(NUM_PIECES):
-                print('Piece {}, position {}'.format(i+1,soln_pieces[j][unsort_ix[i]]+1))
+                print("Piece {}, position {}".format(i + 1, soln_pieces[j][unsort_ix[i]] + 1))
                 if make_plots:
                     old_name = os.path.join(opts.save_path, '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
                     new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
                     shutil.copyfile(old_name, new_name)
-            print('')
+            print("")
             if make_plots:
                 old_name = os.path.join(opts.save_path, '{} - Final Solution.png'.format(opts.case_name))
                 new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - Final Solution.png'.format(opts.case_name))

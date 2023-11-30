@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import doctest
 import pickle
 import unittest
@@ -14,21 +14,26 @@ import unittest
 import numpy as np
 
 from dstauffman import Counter, Frozen
+
 from dstauffman2.games.pentago.constants import PLAYER, SIZES
 
-#%% Classes - State
+
+# %% Classes - State
 class State(Frozen):
     r"""Class that keeps track of the GUI state."""
+
     def __init__(self):
-        self.board       = np.full((SIZES['board'], SIZES['board']), PLAYER['none'], dtype=int)
+        self.board       = np.full((SIZES["board"], SIZES["board"]), PLAYER["none"], dtype=int)
         self.cur_move    = Counter(0)
         self.cur_game    = Counter(0)
-        self.move_status = {'ok': False, 'pos': None, 'patch_object': None}
-        self.game_hist   = [GameStats(number=self.cur_game, first_move=PLAYER['white'])]
+        self.move_status = {"ok": False, "pos": None, "patch_object": None}
+        self.game_hist   = [GameStats(number=self.cur_game, first_move=PLAYER["white"])]
 
-#%% Classes - Move
+
+# %% Classes - Move
 class Move(Frozen):
     r"""Class that keeps track of each individual move."""
+
     def __init__(self, row, column, quadrant, direction, power=None):
         self.row       = row
         self.column    = column
@@ -74,7 +79,7 @@ class Move(Frozen):
             return True
         elif self.direction < other.direction:
             return False
-        return False # make True if __le__
+        return False  # make True if __le__
 
     def __hash__(self):
         r"""Hash uses str instead of repr, and thus power does not distinguish values."""
@@ -82,21 +87,23 @@ class Move(Frozen):
 
     def __str__(self):
         r"""String returns values except for power."""
-        return 'row: {}, col: {}, quad: {}, dir: {}'.format(self.row, self.column, self.quadrant, self.direction)
+        return "row: {}, col: {}, quad: {}, dir: {}".format(self.row, self.column, self.quadrant, self.direction)
 
     def __repr__(self):
         r"""Repr returns all values, including power."""
-        return '<' + self.__str__() + ', pwr: {}'.format(self.power) + '>'
+        return "<" + self.__str__() + ", pwr: {}".format(self.power) + ">"
 
     @property
     def rot_key(self):
         r"""Gets the key for the rotation that this move represents."""
-        return '{}{}'.format(self.quadrant, 'L' if self.direction == -1 else 'R')
+        return "{}{}".format(self.quadrant, "L" if self.direction == -1 else "R")
 
-#%% Classes - GameStats
+
+# %% Classes - GameStats
 class GameStats(Frozen):
     r"""Class that keeps track of all the moves in a game."""
-    def __init__(self, number, first_move, winner=PLAYER['none'], move_list=None):
+
+    def __init__(self, number, first_move, winner=PLAYER["none"], move_list=None):
         self.number     = number
         self.first_move = first_move
         self.winner     = winner
@@ -107,7 +114,7 @@ class GameStats(Frozen):
 
     def add_move(self, move):
         r"""Adds the given move to the game move history."""
-        assert isinstance(move, Move), 'The specified move must be an instance of class Move.'
+        assert isinstance(move, Move), "The specified move must be an instance of class Move."
         self.move_list.append(move)
 
     def remove_moves(self, cur_move=None):
@@ -115,7 +122,7 @@ class GameStats(Frozen):
         if cur_move is None:
             self.move_list.pop()
         else:
-            del(self.move_list[cur_move:])
+            del self.move_list[cur_move:]
 
     @property
     def num_moves(self):
@@ -130,17 +137,18 @@ class GameStats(Frozen):
     @staticmethod
     def save(filename, game_hist):
         r"""Saves a list of GameStats objects to disk."""
-        with open(filename, 'wb') as file:
+        with open(filename, "wb") as file:
             pickle.dump(game_hist, file)
 
     @staticmethod
     def load(filename):
         r"""Loads a list of GameStats objects to disk."""
-        with open(filename, 'rb') as file:
+        with open(filename, "rb") as file:
             game_hist = pickle.load(file)
         return game_hist
 
-#%% Unit Test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.games.pentago.tests.test_classes', exit=False)
+
+# %% Unit Test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.games.pentago.tests.test_classes", exit=False)
     doctest.testmod(verbose=False)

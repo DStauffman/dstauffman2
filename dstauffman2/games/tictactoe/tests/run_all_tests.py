@@ -7,13 +7,13 @@ Notes
 """
 
 #%% Imports
-import pytest
 import sys
 
 from PyQt5.QtWidgets import QApplication
+import pytest
 
-#%% Script
-if __name__ == '__main__':
+# %% Script
+if __name__ == "__main__":
     # open a qapp
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)

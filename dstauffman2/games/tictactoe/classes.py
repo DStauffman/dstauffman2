@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import doctest
 import pickle
 import unittest
@@ -14,13 +14,15 @@ import unittest
 import numpy as np
 
 from dstauffman import Counter, Frozen
+
 from dstauffman2.games.tictactoe.constants import PLAYER
 
-#%% Options
+
+# %% Options
 class Options(Frozen):
     r"""Class that keeps track of the options for the game."""
     # Gameplay default options
-    load_previous_game = 'No' # from ['Yes','No','Ask']
+    load_previous_game = "No"  # from ["Yes","No","Ask"]
     plot_best_moves    = False
     plot_move_power    = False
     o_is_computer      = False
@@ -33,20 +35,24 @@ class Options(Frozen):
             if hasattr(self, key):
                 setattr(self, key, kwargs[key])
             else:
-                raise ValueError('Unexpected attribute: {}'.format(key))
+                raise ValueError("Unexpected attribute: {}".format(key))
 
-#%% State
+
+# %% State
 class State(Frozen):
     r"""Class that keeps track of the GUI state."""
+
     def __init__(self):
-        self.board     = np.full((3, 3), PLAYER['none'], dtype=int)
+        self.board     = np.full((3, 3), PLAYER["none"], dtype=int)
         self.cur_move  = Counter(0)
         self.cur_game  = Counter(0)
-        self.game_hist = [GameStats(number=self.cur_game, first_move=PLAYER['o'])]
+        self.game_hist = [GameStats(number=self.cur_game, first_move=PLAYER["o"])]
 
-#%% Moves
+
+# %% Moves
 class Move(Frozen):
     r"""Class that keeps track of each individual move."""
+
     def __init__(self, row, column, power=None):
         self.row       = row
         self.column    = column
@@ -54,7 +60,7 @@ class Move(Frozen):
 
     def __eq__(self, other):
         r"""Equality is based on row and column."""
-        return (self.row == other.row and self.column == other.column)
+        return self.row == other.row and self.column == other.column
 
     def __ne__(self, other):
         r"""Inequality is based on row and column."""
@@ -89,16 +95,18 @@ class Move(Frozen):
 
     def __str__(self):
         r"""String returns values except for power."""
-        return 'row: {}, col: {}'.format(self.row, self.column)
+        return "row: {}, col: {}".format(self.row, self.column)
 
     def __repr__(self):
         r"""Repr returns all values, including power."""
-        return '<' + self.__str__() + ', pwr: {}'.format(self.power) + '>'
+        return "<" + self.__str__() + ", pwr: {}".format(self.power) + ">"
 
-#%% GameStats
+
+# %% GameStats
 class GameStats(Frozen):
     r"""Class that keeps track of all the moves in a game."""
-    def __init__(self, number, first_move, winner=PLAYER['none'], move_list=None):
+
+    def __init__(self, number, first_move, winner=PLAYER["none"], move_list=None):
         self.number     = number
         self.first_move = first_move
         self.winner     = winner
@@ -109,7 +117,7 @@ class GameStats(Frozen):
 
     def add_move(self, move):
         r"""Adds the given move to the game move history."""
-        assert isinstance(move, Move), 'The specified move must be an instance of class Move.'
+        assert isinstance(move, Move), "The specified move must be an instance of class Move."
         self.move_list.append(move)
 
     def remove_moves(self, cur_move=None):
@@ -117,7 +125,7 @@ class GameStats(Frozen):
         if cur_move is None:
             self.move_list.pop()
         else:
-            del(self.move_list[cur_move:])
+            del self.move_list[cur_move:]
 
     @property
     def num_moves(self):
@@ -132,17 +140,18 @@ class GameStats(Frozen):
     @staticmethod
     def save(filename, game_hist):
         r"""Saves a list of GameStats objects to disk."""
-        with open(filename, 'wb') as file:
+        with open(filename, "wb") as file:
             pickle.dump(game_hist, file)
 
     @staticmethod
     def load(filename):
         r"""Loads a list of GameStats objects to disk."""
-        with open(filename, 'rb') as file:
+        with open(filename, "rb") as file:
             game_hist = pickle.load(file)
         return game_hist
 
-#%% Unit Test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.games.tictactoe.tests.test_classes', exit=False)
+
+# %% Unit Test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.games.tictactoe.tests.test_classes", exit=False)
     doctest.testmod(verbose=False)

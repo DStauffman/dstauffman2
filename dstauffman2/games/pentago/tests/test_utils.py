@@ -7,38 +7,42 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import unittest
 
 import numpy as np
 
 import dstauffman2.games.pentago as pentago
 
-#%% Aliases
-w = pentago.PLAYER['white']
-b = pentago.PLAYER['black']
+# %% Aliases
+w = pentago.PLAYER["white"]
+b = pentago.PLAYER["black"]
 
-#%% get_root_dir
+
+# %% get_root_dir
 class Test_get_root_dir(unittest.TestCase):
     r"""
     Tests the get_root_dir function with these cases:
         call the function
     """
+
     def test_function(self):
         folder = pentago.get_root_dir()
         self.assertTrue(folder)
 
-#%% rotate_board
+
+# %% rotate_board
 class Test_rotate_board(unittest.TestCase):
     r"""
     Tests the rotate_board function with the following cases:
         TBD
     """
+
     def setUp(self):
         self.board = np.reshape(np.arange(36), (6, 6))
-        self.left  = np.array([[ 2,  8, 14], [ 1,  7, 13], [ 0,  6, 12]])
-        self.right = np.array([[12,  6,  0], [13,  7,  1], [14,  8,  2]])
-        #[[ 0  1  2  3  4  5]
+        self.left = np.array([[2, 8, 14], [1, 7, 13], [0, 6, 12]])
+        self.right = np.array([[12, 6, 0], [13, 7, 1], [14, 8, 2]])
+        # [[ 0  1  2  3  4  5]
         # [ 6  7  8  9 10 11]
         # [12 13 14 15 16 17]
         # [18 19 20 21 22 23]
@@ -114,7 +118,7 @@ class Test_rotate_board(unittest.TestCase):
             board5.ravel(), board6.ravel(), board7.ravel(), board8.ravel())).T
         temp_board = np.ones((1, 8), dtype=int) * np.expand_dims(self.board.ravel(), axis=1)
         quad_dirs = [(1, -1), (1, 1), (2, -1), (2, 1), (3, -1), (3, 1), (4, -1), (4, 1)]
-        for (ix, (quad, dir_)) in enumerate(quad_dirs):
+        for ix, (quad, dir_) in enumerate(quad_dirs):
             temp = temp_board.copy()
             pentago.rotate_board(temp, quadrant=quad, direction=dir_)
             np.testing.assert_array_equal(temp[:, ix], expected_board[:, ix], 'Quad {}, Dir {}, ix {}'.format(quad, dir_, ix))
@@ -125,14 +129,15 @@ class Test_rotate_board(unittest.TestCase):
         temp1 = np.expand_dims(self.board.ravel(), axis=1)
         temp2 = self.board.copy().ravel()
         new_board = pentago.rotate_board(temp1, quadrant=1, direction=-1, inplace=False)
-        np.testing.assert_array_equal(np.reshape(new_board, (6,6)), expected_board)
+        np.testing.assert_array_equal(np.reshape(new_board, (6, 6)), expected_board)
         np.testing.assert_array_equal(temp1, temp2[:, np.newaxis])
 
     def test_bad_not_inplace(self):
         with self.assertRaises(AssertionError):
             pentago.rotate_board(self.board, quadrant=1, direction=-1, inplace=False)
 
-#%% _calc_cur_move
+
+# %% _calc_cur_move
 class Test__calc_cur_move(unittest.TestCase):
     r"""
     Tests the _board_to_costs function with the following cases:
@@ -141,6 +146,7 @@ class Test__calc_cur_move(unittest.TestCase):
         Even game, odd move
         Even game, even move
     """
+
     def setUp(self):
         self.odd_num  = 3
         self.even_num = 4
@@ -161,26 +167,28 @@ class Test__calc_cur_move(unittest.TestCase):
         move = pentago.calc_cur_move(self.even_num, self.even_num)
         self.assertEqual(move, w)
 
-#%% _check_for_win
+
+# %% _check_for_win
 class Test__check_for_win(unittest.TestCase):
     r"""
     Tests the _check_for_win function with the following cases:
         TBD
     """
+
     def setUp(self):
-        self.board = np.full((6, 6), pentago.PLAYER['none'], dtype=int)
+        self.board = np.full((6, 6), pentago.PLAYER["none"], dtype=int)
         self.win_mask = np.zeros((6, 6), dtype=bool)
 
     def test_no_moves(self):
         (winner, win_mask) = pentago.check_for_win(self.board)
-        self.assertEqual(winner, pentago.PLAYER['none'])
+        self.assertEqual(winner, pentago.PLAYER["none"])
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
     def test_no_winner(self):
         self.board[0, 0] = w
         self.board[1, 1] = b
         (winner, win_mask) = pentago.check_for_win(self.board)
-        self.assertEqual(winner, pentago.PLAYER['none'])
+        self.assertEqual(winner, pentago.PLAYER["none"])
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
     def test_white_wins(self):
@@ -234,7 +242,7 @@ class Test__check_for_win(unittest.TestCase):
         self.board[1, 4] = w
         self.board[1, 4] = w
         (winner, win_mask) = pentago.check_for_win(self.board)
-        self.assertEqual(winner, pentago.PLAYER['draw'])
+        self.assertEqual(winner, pentago.PLAYER["draw"])
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
     def test_draw_simult_wins(self):
@@ -243,15 +251,17 @@ class Test__check_for_win(unittest.TestCase):
         self.win_mask[1, 1:6] = True
         self.win_mask[4, 0:5] = True
         (winner, win_mask) = pentago.check_for_win(self.board)
-        self.assertEqual(winner, pentago.PLAYER['draw'])
+        self.assertEqual(winner, pentago.PLAYER["draw"])
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
-#%% find_moves
+
+# %% find_moves
 class Test_find_moves(unittest.TestCase):
     r"""
     Tests the find_moves function with the following cases:
         TBD
     """
+
     def setUp(self):
         self.board = np.zeros((6, 6), dtype=int)
         self.white_moves = []
@@ -297,15 +307,15 @@ class Test_find_moves(unittest.TestCase):
         self.board[4, 3:6] = w
         for i in range(6):
             for j in range(6):
-                if self.board[i, j] == pentago.PLAYER['none']:
+                if self.board[i, j] == pentago.PLAYER["none"]:
                     self.white_moves.append(pentago.Move(i, j, 3, 1, 5))
         self.white_moves.append(pentago.Move(4, 2, 1, -1, 5))
         self.white_moves.append(pentago.Move(4, 2, 1, 1, 5))
         self.white_moves.append(pentago.Move(4, 2, 2, -1, 5))
         self.white_moves.append(pentago.Move(4, 2, 2, 1, 5))
-        #self.white_moves.append(pentago.Move(3, 1, 3, 1, 5)) # covered in for loop
+        # self.white_moves.append(pentago.Move(3, 1, 3, 1, 5)) # covered in for loop
         self.white_moves.append(pentago.Move(5, 1, 3, -1, 5))
-        #self.white_moves.append(pentago.Move(5, 1, 3, 1, 5)) # covered in for loop
+        # self.white_moves.append(pentago.Move(5, 1, 3, 1, 5)) # covered in for loop
         (white_moves, black_moves) = pentago.find_moves(self.board)
         np.testing.assert_array_equal(white_moves, sorted(self.white_moves))
         np.testing.assert_array_equal(black_moves, self.black_moves)
@@ -350,12 +360,13 @@ class Test_find_moves(unittest.TestCase):
         self.board = np.reshape(np.hstack((np.array([0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1]), np.zeros(24, dtype=int))), (6, 6))
         pass
 
-#%% _get_move_from_one_off
+
+# %% _get_move_from_one_off
 pass
 
-#%% _create_board_from_moves
+# %% _create_board_from_moves
 pass
 
-#%% Unit test execution
-if __name__ == '__main__':
+# %% Unit test execution
+if __name__ == "__main__":
     unittest.main(exit=False)

@@ -6,7 +6,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import doctest
 import unittest
 
@@ -14,7 +14,8 @@ from matplotlib.patches import Polygon, Rectangle, Wedge
 
 from dstauffman2.games.tictactoe.constants import COLOR, PLAYER, SIZES
 
-#%% plot_cur_move
+
+# %% plot_cur_move
 def plot_cur_move(ax, move):
     r"""
     Plots the piece corresponding the current players move.
@@ -42,26 +43,27 @@ def plot_cur_move(ax, move):
 
     """
     # local alias
-    box_size = SIZES['square']
+    box_size = SIZES["square"]
 
     # fill background
     ax.add_patch(Rectangle((-box_size/2, -box_size/2), box_size, box_size, \
         facecolor=COLOR['board'], edgecolor='k'))
 
     # draw the piece
-    if move == PLAYER['x']:
-        plot_piece(ax, 0, 0, SIZES['piece'], COLOR['x'], shape=PLAYER['x'])
-    elif move == PLAYER['o']:
-        plot_piece(ax, 0, 0, SIZES['piece'], COLOR['o'], shape=PLAYER['o'])
-    elif move == PLAYER['none']:
+    if move == PLAYER["x"]:
+        plot_piece(ax, 0, 0, SIZES["piece"], COLOR["x"], shape=PLAYER["x"])
+    elif move == PLAYER["o"]:
+        plot_piece(ax, 0, 0, SIZES["piece"], COLOR["o"], shape=PLAYER["o"])
+    elif move == PLAYER["none"]:
         pass
     else:
-        raise ValueError('Unexpected player.')
+        raise ValueError("Unexpected player.")
 
     # turn the axes back off (they get reinitialized at some point)
     ax.set_axis_off()
 
-#%% plot_piece
+
+# %% plot_piece
 def plot_piece(ax, vc, hc, size, color, shape, thick=True):
     r"""
     Plots a piece on the board.
@@ -98,7 +100,7 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
 
     """
     if thick:
-        width = 0.2 # normalized units
+        width = 0.2  # normalized units
     else:
         width = 0.1
     if shape != PLAYER['o']:
@@ -108,27 +110,28 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         # plot an O
         patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor='k')
         piece = [patch1]
-    elif shape == PLAYER['x']:
+    elif shape == PLAYER["x"]:
         # plot an X
-        patch1 = Polygon(coords1, True, facecolor=color, edgecolor='k')
-        patch2 = Polygon(coords2, True, facecolor=color, edgecolor='k')
+        patch1 = Polygon(coords1, True, facecolor=color, edgecolor="k")
+        patch2 = Polygon(coords2, True, facecolor=color, edgecolor="k")
         piece = [patch1, patch2]
         ax
-    elif shape == PLAYER['draw']:
+    elif shape == PLAYER["draw"]:
         # plot a combined O and X
         patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor='k')
         patch2 = Polygon(coords1, True, facecolor=color, edgecolor='k')
         patch3 = Polygon(coords2, True, facecolor=color, edgecolor='k')
         piece = [patch1, patch2, patch3]
     else:
-        raise ValueError('Unexpected shape.')
+        raise ValueError("Unexpected shape.")
 
     # plot piece
     for this_patch in piece:
         ax.add_patch(this_patch)
     return piece
 
-#%% plot_board
+
+# %% plot_board
 def plot_board(ax, board):
     r"""
     Plots the board (and the current player move).
@@ -161,7 +164,7 @@ def plot_board(ax, board):
     """
     # get axes limits
     (m, n) = board.shape
-    s = SIZES['square']/2
+    s = SIZES["square"] / 2
     xmin = 0 - s
     xmax = m - 1 + s
     ymin = 0 - s
@@ -172,25 +175,26 @@ def plot_board(ax, board):
         edgecolor=None))
 
     # draw minor horizontal lines
-    ax.plot([1-s, 1-s], [ymin, ymax], color=COLOR['edge'], linewidth=2)
-    ax.plot([2-s, 2-s], [ymin, ymax], color=COLOR['edge'], linewidth=2)
+    ax.plot([1 - s, 1 - s], [ymin, ymax], color=COLOR["edge"], linewidth=2)
+    ax.plot([2 - s, 2 - s], [ymin, ymax], color=COLOR["edge"], linewidth=2)
     # draw minor vertical lines
-    ax.plot([xmin, xmax], [1-s, 1-s], color=COLOR['edge'], linewidth=2)
-    ax.plot([xmin, xmax], [2-s, 2-s], color=COLOR['edge'], linewidth=2)
+    ax.plot([xmin, xmax], [1 - s, 1 - s], color=COLOR["edge"], linewidth=2)
+    ax.plot([xmin, xmax], [2 - s, 2 - s], color=COLOR["edge"], linewidth=2)
 
     # loop through and place pieces
     for i in range(m):
         for j in range(n):
-            if board[i, j] == PLAYER['none']:
+            if board[i, j] == PLAYER["none"]:
                 pass
-            elif board[i, j] == PLAYER['o']:
-                plot_piece(ax, i, j, SIZES['piece'], COLOR['o'], PLAYER['o'])
-            elif board[i, j] == PLAYER['x']:
-                plot_piece(ax, i, j, SIZES['piece'], COLOR['x'], PLAYER['x'])
+            elif board[i, j] == PLAYER["o"]:
+                plot_piece(ax, i, j, SIZES["piece"], COLOR["o"], PLAYER["o"])
+            elif board[i, j] == PLAYER["x"]:
+                plot_piece(ax, i, j, SIZES["piece"], COLOR["x"], PLAYER["x"])
             else:
-                raise ValueError('Bad board position.')
+                raise ValueError("Bad board position.")
 
-#%% plot_win
+
+# %% plot_win
 def plot_win(ax, mask, board):
     r"""
     Plots the winning pieces in red.
@@ -229,9 +233,10 @@ def plot_win(ax, mask, board):
     for i in range(m):
         for j in range(n):
             if mask[i, j]:
-                plot_piece(ax, i, j, SIZES['piece'], COLOR['win'], board[i, j], thick=False)
+                plot_piece(ax, i, j, SIZES["piece"], COLOR["win"], board[i, j], thick=False)
 
-#%% plot_possible_win
+
+# %% plot_possible_win
 def plot_possible_win(ax, o_moves, x_moves):
     r"""
     Plots the possible wins on the board.
@@ -262,7 +267,7 @@ def plot_possible_win(ax, o_moves, x_moves):
     pos_x = set([move for move in x_moves if move.power >= best_power])
 
     # find intersecting positions
-    pos_both  = pos_o & pos_x
+    pos_both = pos_o & pos_x
 
     # plot the whole pieces
     for pos in pos_o ^ pos_both:
@@ -274,7 +279,8 @@ def plot_possible_win(ax, o_moves, x_moves):
     for pos in pos_both:
         plot_piece(ax, pos.row, pos.column, SIZES['piece'], COLOR['win_ox'], PLAYER['draw'], thick=False)
 
-#%% plot_powers
+
+# %% plot_powers
 def plot_powers(ax, board, o_moves, x_moves):
     r"""
     Plots the powers of each move visually on the board.
@@ -306,7 +312,8 @@ def plot_powers(ax, board, o_moves, x_moves):
         ax.annotate('{}'.format(this_move.power), xy=(this_move.column+0.4, this_move.row+0.4), \
             xycoords='data', horizontalalignment='right', verticalalignment='center', fontsize=15, color='k')
 
-#%% Unit Test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.games.tictactoe.tests.test_plotting', exit=False)
+
+# %% Unit Test
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.games.tictactoe.tests.test_plotting", exit=False)
     doctest.testmod(verbose=False)

@@ -7,7 +7,7 @@ Notes
 #.  Written by David C. Stauffer in June 2016.
 """
 
-#%% Imports
+# %% Imports
 import copy
 import inspect
 import os
@@ -22,11 +22,13 @@ from PyQt5.QtWidgets import QApplication
 
 import dstauffman2.apps.bac_gui as bac
 
-#%% Constants
+
+# %% Constants
 class Test_Constants(unittest.TestCase):
     r"""
     Tests the defined constants to verify that they can be used.
     """
+
     def test_init(self):
         self.assertEqual(bac.GUI_TOKEN, -1)
         self.assertAlmostEqual(bac.LEGAL_LIMIT, 0.0008)
@@ -37,7 +39,8 @@ class Test_Constants(unittest.TestCase):
         f = bac.Gender.female
         self.assertNotEqual(m, f)
 
-#%% GuiSettings
+
+# %% GuiSettings
 class Test_GuiSettings(unittest.TestCase):
     r"""
     Tests the GuiSettings class with the following cases:
@@ -46,21 +49,22 @@ class Test_GuiSettings(unittest.TestCase):
         Printing
         Saving and loading
     """
+
     def setUp(self):
         self.gui_settings = bac.GuiSettings()
-        self.filename = os.path.join(bac.get_root_dir(), 'TestGuiSettingsFile.pkl')
+        self.filename = os.path.join(bac.get_root_dir(), "TestGuiSettingsFile.pkl")
 
     def test_nominal(self):
         self.assertTrue(isinstance(self.gui_settings, bac.GuiSettings))
 
     def test_text_field(self):
         fields = bac.GuiSettings.get_text_fields()
-        self.assertEqual(fields, ['height', 'weight', 'age', 'bmi', 'hr1', 'hr2', 'hr3', 'hr4', 'hr5', 'hr6'])
+        self.assertEqual(fields, ["height", "weight", "age", "bmi", "hr1", "hr2", "hr3", "hr4", "hr5", "hr6"])
 
     def test_printing(self):
         text = str(self.gui_settings)
-        self.assertTrue(text.startswith('GuiSettings:\n    age: -1\n'))
-        self.assertTrue(text.endswith('\n    weight: -1'))
+        self.assertTrue(text.startswith("GuiSettings:\n    age: -1\n"))
+        self.assertTrue(text.endswith("\n    weight: -1"))
 
     def test_save_and_load(self):
         self.gui_settings.save(self.filename)
@@ -72,12 +76,14 @@ class Test_GuiSettings(unittest.TestCase):
         if os.path.isfile(self.filename):
             os.remove(self.filename)
 
-#%% BacGui
+
+# %% BacGui
 class Test_BacGui(unittest.TestCase):
     r"""
     Tests the BacGui with the following cases:
         TBD
     """
+
     def _reset(self):
         self.gui.gui_settings = bac.GuiSettings()
         self.gui.wrapper()
@@ -96,10 +102,10 @@ class Test_BacGui(unittest.TestCase):
         self.gui_settings = copy.deepcopy(self.gui.gui_settings)
         if False:
             # Create a new profile
-            self.gui.onActivated(self.gui.popup_profile.count()-1)
+            self.gui.onActivated(self.gui.popup_profile.count() - 1)
             # Enter a name for the new profile
-            #QTest.keyClicks(widget, "Temp 1") TODO: make this work!
-            #QtCore.QTimer.singleShot(0, button.clicked)
+            # QTest.keyClicks(widget, "Temp 1") TODO: make this work!
+            # QtCore.QTimer.singleShot(0, button.clicked)
 
         # Update the height
         self.gui.lne_height.clear()
@@ -186,32 +192,36 @@ class Test_BacGui(unittest.TestCase):
     def tearDown(self):
         QApplication.instance().closeAllWindows()
         folder = bac.get_root_dir()
-        files = ['Temp 1.pkl', 'Temp 2.pkl', 'Default.pkl', 'BAC vs. Time for Temp 1.png']
+        files = ["Temp 1.pkl", "Temp 2.pkl", "Default.pkl", "BAC vs. Time for Temp 1.png"]
         for file in files:
             filename = os.path.join(folder, file)
             if os.path.isfile(filename):
                 os.remove(filename)
 
-#%% get_root_dir
+
+# %% get_root_dir
 class Test_get_root_dir(unittest.TestCase):
     r"""
     Tests the get_root_dir function with these cases:
         call the function
     """
+
     def test_function(self):
-        filepath      = inspect.getfile(bac.get_root_dir)
+        filepath = inspect.getfile(bac.get_root_dir)
         expected_root = os.path.split(filepath)[0]
         folder = bac.get_root_dir()
         self.assertEqual(folder, expected_root)
         self.assertTrue(os.path.isdir(folder))
 
-#%% calculate_bmi
+
+# %% calculate_bmi
 class Test_calculate_bmi(unittest.TestCase):
     r"""
     Tests the calculate_bmi function the following cases:
         Default conv
         Specified conv
     """
+
     def setUp(self):
         self.height = 69
         self.weight = 161
@@ -227,7 +237,8 @@ class Test_calculate_bmi(unittest.TestCase):
         bmi = bac.calculate_bmi(self.height, self.weight, self.gender, conv=1)
         self.assertAlmostEqual(bmi, self.bmi2)
 
-#%% calculate_bac
+
+# %% calculate_bac
 class Test_calculate_bac(unittest.TestCase):
     r"""
     Tests the calculate_bac function with the following cases:
@@ -235,13 +246,14 @@ class Test_calculate_bac(unittest.TestCase):
         Add time to beginning
         Add time to end
     """
+
     def setUp(self):
         self.time_drinks = np.array([1, 2, 3, 4, 5, 6])
         self.drinks = np.array([1, 1.5, 2.2, 0.5, 0, 0])
         self.time_out = self.time_drinks.copy()
         self.body_weight = 105
-        self.bac_func = lambda drinks, weight, time: drinks.cumsum() / weight * 0.0375 - 0.00015*time
-        self.bac_ = self.drinks.cumsum() / self.body_weight * 0.0375 - 0.00015*self.time_out
+        self.bac_func = lambda drinks, weight, time: drinks.cumsum() / weight * 0.0375 - 0.00015 * time
+        self.bac_ = self.drinks.cumsum() / self.body_weight * 0.0375 - 0.00015 * self.time_out
 
     def test_nominal(self):
         bac1 = bac.calculate_bac(self.time_drinks, self.drinks, self.time_out, self.body_weight)
@@ -262,19 +274,21 @@ class Test_calculate_bac(unittest.TestCase):
         self.assertEqual(bac1[-1], self.bac_func(np.sum(self.drinks), self.body_weight, 7))
         np.testing.assert_array_almost_equal(bac1[:-1], bac2)
 
-#%% plot_bac
+
+# %% plot_bac
 class Test_plot_bac(unittest.TestCase):
     r"""
     Tests the plot_bac function with the following cases:
         Nominal
         With legal limit
     """
+
     def setUp(self):
         self.gui_settings = bac.GuiSettings()
         self.gui_settings.height = 69
         self.gui_settings.weight = 161
-        self.gui_settings.age    = 34
-        self.gui_settings.bmi    = 23.78
+        self.gui_settings.age = 34
+        self.gui_settings.bmi = 23.78
         self.gui_settings.gender = bac.Gender.male
         self.fig = None
 
@@ -287,8 +301,9 @@ class Test_plot_bac(unittest.TestCase):
     def tearDown(self):
         plt.close(self.fig)
 
-#%% Unit test execution
-if __name__ == '__main__':
+
+# %% Unit test execution
+if __name__ == "__main__":
     # open a qapp
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)

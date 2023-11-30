@@ -7,14 +7,13 @@ Notes
 #.  Written by David C. Stauffer in Feb 2015.
 """
 
-#%% Imports
+# %% Imports
 import random
 
-from dstauffman2.archery.tournaments.constants import BALE_POS, COL_BALE, COL_DIVISION, \
-    COL_GENDER, DIVISIONS, GENDERS
+from dstauffman2.archery.tournaments.constants import BALE_POS, COL_BALE, COL_DIVISION, COL_GENDER, DIVISIONS, GENDERS
 
 
-#%% Functions - assign_bales
+# %% Functions - assign_bales
 def assign_bales(data):
     r"""Randomly assigns the archers to bales based on division and gender."""
     # find sub data frame for each division/gender combination
@@ -31,17 +30,18 @@ def assign_bales(data):
             for i in ix2:
                 this_index = ix1[i]
                 # get text for this bale
-                this_bale = '{}'.format(counter // n_pos + 1) + BALE_POS[counter % n_pos]
+                this_bale = "{}".format(counter // n_pos + 1) + BALE_POS[counter % n_pos]
                 # assign bale to this person
                 data.ix[this_index, COL_BALE] = this_bale
                 # increment counter for next person
                 counter = counter + 1
             # force next group to start on a new bale
             # (This line is cryptic, the -(-a//b) does a ceiling command)
-            counter = (-(-counter // n_pos))*n_pos
+            counter = (-(-counter // n_pos)) * n_pos
     return data
 
-#%% Functions - validate_bales
+
+# %% Functions - validate_bales
 def validate_bales(data):
     r"""Error checks the bale assignments and displays any problems."""
     # get bale, spot on bale and corresponding index
@@ -49,20 +49,21 @@ def validate_bales(data):
     # spots = [x[-1] for x in data['Bale'].values]
     # ix    = data['Bale'].index
     num_bales = max(bales)
-    print('Validating Bale assignments ...')
+    print("Validating Bale assignments ...")
     for i in range(0, num_bales):
-        sub_ix = [a for a, b in enumerate(bales) if b == i+1]
+        sub_ix = [a for a, b in enumerate(bales) if b == i + 1]
         count = len(sub_ix)
         if count == 0:
-            print(' Bale {} has no people assigned.'.format(i+1))
+            print(" Bale {} has no people assigned.".format(i + 1))
         elif count < 3:
-            print(' Bale {} has less than 3 people assigned.'.format(i+1))
+            print(" Bale {} has less than 3 people assigned.".format(i + 1))
         elif count > 4:
-            print(' Bale {} has more than 4 people assigned.'.format(i+1))
+            print(" Bale {} has more than 4 people assigned.".format(i + 1))
         else:
             pass
-    print('Done.')
+    print("Done.")
 
-#%% Unit test
-if __name__ == '__main__':
+
+# %% Unit test
+if __name__ == "__main__":
     pass

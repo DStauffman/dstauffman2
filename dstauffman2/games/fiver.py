@@ -9,28 +9,29 @@ Notes
     acquiring and rearranging some furniture.
 """
 
-#%% Imports
+# %% Imports
+from datetime import datetime
 import doctest
 import os
 import pickle
 import unittest
-from datetime import datetime
 
+from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Rectangle
 
 from dstauffman import setup_dir
 from dstauffman.plotting import ColorMap, Opts, setup_plots
+
 from dstauffman2 import get_root_dir
 
-#%% Hard-coded values
+# %% Hard-coded values
 SIZE_PIECES = 5
 NUM_PIECES  = 12
 NUM_ORIENTS = 8
 # build colormap
-cm = ColorMap('Paired', 0, NUM_PIECES-1)
-COLORS = ['w'] + [cm.get_color(i) for i in range(NUM_PIECES)] + ['k']
+cm = ColorMap("Paired", 0, NUM_PIECES - 1)
+COLORS = ["w"] + [cm.get_color(i) for i in range(NUM_PIECES)] + ["k"]
 # make boards
 BOARD1             = np.full((14, 18), NUM_PIECES+1, dtype=int)
 BOARD1[4:10,4:14]  = 0
@@ -38,7 +39,8 @@ BOARD2             = np.full((16, 16), NUM_PIECES+1, dtype=int)
 BOARD2[4:12, 4:12] = 0
 BOARD2[7:9, 7:9]   = NUM_PIECES+1
 
-#%% Functions - _pad_piece
+
+# %% Functions - _pad_piece
 def _pad_piece(piece, max_size, pad_value=0):
     r"""
     Pads a piece to a given size.
@@ -85,14 +87,15 @@ def _pad_piece(piece, max_size, pad_value=0):
     new_piece = piece.copy()
     # pad the horizontal direction
     if j < max_size[0]:
-        new_piece = np.hstack((new_piece, np.full((i, max_size[1]-j), pad_value, dtype=int)))
+        new_piece = np.hstack((new_piece, np.full((i, max_size[1] - j), pad_value, dtype=int)))
     # pad the vertical direction
     if i < max_size[1]:
-        new_piece = np.vstack((new_piece, np.full((max_size[0]-i, max_size[1]), pad_value, dtype=int)))
+        new_piece = np.vstack((new_piece, np.full((max_size[0] - i, max_size[1]), pad_value, dtype=int)))
     # return the resulting piece
     return new_piece
 
-#%% Functions - _shift_piece
+
+# %% Functions - _shift_piece
 def _shift_piece(piece):
     r"""
     Shifts a piece to the most upper left location within an array.
@@ -134,7 +137,8 @@ def _shift_piece(piece):
         new_piece = new_piece[:, ix]
     return new_piece
 
-#%% Functions - _rotate_piece
+
+# %% Functions - _rotate_piece
 def _rotate_piece(piece):
     r"""
     Rotates a piece 90 degrees to the left.
@@ -173,7 +177,8 @@ def _rotate_piece(piece):
     new_piece = _shift_piece(temp_piece)
     return new_piece
 
-#%% Functions - _flip_piece
+
+# %% Functions - _flip_piece
 def _flip_piece(piece):
     r"""
     Flips a piece about the horizontal axis.
@@ -209,7 +214,8 @@ def _flip_piece(piece):
     # flip and shift to upper left most position
     return _shift_piece(np.flipud(piece))
 
-#%% Functions - _get_unique_pieces
+
+# %% Functions - _get_unique_pieces
 def _get_unique_pieces(pieces):
     r"""
     Returns the indices to the first dimension for the unique pieces.
@@ -259,7 +265,8 @@ def _get_unique_pieces(pieces):
             sets.append(inds)
     return ix_unique
 
-#%% Functions - _display_progress
+
+# %% Functions - _display_progress
 def _display_progress(ix, nums, last_ratio=0):
     r"""
     Displays the total progress to the command window.
@@ -291,21 +298,22 @@ def _display_progress(ix, nums, last_ratio=0):
 
     """
     # determine the number of permutations in each piece level
-    complete = np.flipud(np.cumprod(np.flipud(nums.astype(np.float))))
+    complete = np.flipud(np.cumprod(np.flipud(nums.astype(np.float64))))
     # count how many branches have been evaluated
     done = 0
     for i in range(len(ix)):
-        done = done + ix[i]*complete[i]/nums[i]
+        done = done + ix[i] * complete[i] / nums[i]
     # determine the completion ratio
     ratio = done / complete[0]
     # print the status
-    if np.round(1000*ratio) > np.round(1000*last_ratio):
-        print('Progess: {:.1f}%'.format(ratio*100))
+    if np.round(1000 * ratio) > np.round(1000 * last_ratio):
+        print("Progess: {:.1f}%".format(ratio * 100))
         return ratio
     else:
         return last_ratio
 
-#%% Functions - _blobbing
+
+# %% Functions - _blobbing
 def _blobbing(board):
     r"""Blobbing algorithm 2.  Checks that all empty blobs are multiples of 5 squares."""
     # set sizes
@@ -321,11 +329,11 @@ def _blobbing(board):
             if board[i, j]:
                 # get the north and west neighbors
                 if i > 0:
-                    north = labels[i-1, j]
+                    north = labels[i - 1, j]
                 else:
                     north = 0
                 if j > 0:
-                    west = labels[i, j-1]
+                    west = labels[i, j - 1]
                 else:
                     west = 0
                 # check one of four conditions
@@ -339,8 +347,8 @@ def _blobbing(board):
                             # neighbors have different labels, so combine the sets
                             min_label = min(north, west)
                             labels[i, j] = min_label
-                            linked[north-1] = linked[north-1] | {west}
-                            linked[west-1]  = linked[west-1] | {north}
+                            linked[north - 1] = linked[north - 1] | {west}
+                            linked[west - 1] = linked[west - 1] | {north}
                     else:
                         # join with north neighbor
                         labels[i, j] = north
@@ -367,7 +375,8 @@ def _blobbing(board):
             return False
     return True
 
-#%% Functions - _save_solution
+
+# %% Functions - _save_solution
 def _save_solution(solutions, this_board):
     r"""Saves the given solution if it's unique."""
     if len(solutions) == 0:
@@ -377,7 +386,7 @@ def _save_solution(solutions, this_board):
         # determine if unique
         temp = this_board.copy()
         (m, n) = temp.shape
-        rots = NUM_ORIENTS//2
+        rots = NUM_ORIENTS // 2
         for i in range(rots):
             temp = _rotate_piece(temp)
             if temp.shape[0] != m or temp.shape[1] != n:
@@ -394,9 +403,10 @@ def _save_solution(solutions, this_board):
                 if not np.any(solutions[j] - temp):
                     return
         solutions.append(this_board.copy())
-    print('Solution {} found!'.format(len(solutions)))
+    print("Solution {} found!".format(len(solutions)))
 
-#%% Functions - make_all_pieces
+
+# %% Functions - make_all_pieces
 def make_all_pieces():
     r"""
     Makes all the possible pieces of the game.
@@ -424,56 +434,28 @@ def make_all_pieces():
     """
     # Hard-coded values
     p1 = np.array([[1, 1, 1, 1, 1]])
-    p2 = np.array([\
-        [1, 1, 1, 1], \
-        [0, 0, 0, 1]])
-    p3 = np.array([\
-        [1, 1, 1, 1], \
-        [0, 0, 1, 0]])
-    p4 = np.array([\
-        [1, 1, 1, 0], \
-        [0, 0, 1, 1]])
-    p5 = np.array([\
-        [1, 1, 1], \
-        [1, 0, 0], \
-        [1, 0, 0]])
-    p6 = np.array([\
-        [1, 1, 1], \
-        [0, 1, 0], \
-        [0, 1, 0]])
-    p7 = np.array([\
-        [0, 1, 0], \
-        [1, 1, 1], \
-        [0, 1, 0]])
-    p8 = np.array([\
-        [1, 1, 1], \
-        [1, 1, 0]])
-    p9 = np.array([\
-        [1, 1, 0], \
-        [0, 1, 0], \
-        [0, 1, 1]])
-    p10 = np.array([\
-        [1, 1], \
-        [1, 0], \
-        [1, 1]])
-    p11 = np.array([\
-        [1, 1, 0], \
-        [0, 1, 1], \
-        [0, 1, 0]])
-    p12 = np.array([\
-        [0, 1, 1], \
-        [1, 1, 0], \
-        [1, 0, 0]])
+    p2 = np.array([[1, 1, 1, 1], [0, 0, 0, 1]])
+    p3 = np.array([[1, 1, 1, 1], [0, 0, 1, 0]])
+    p4 = np.array([[1, 1, 1, 0], [0, 0, 1, 1]])
+    p5 = np.array([[1, 1, 1], [1, 0, 0], [1, 0, 0]])
+    p6 = np.array([[1, 1, 1], [0, 1, 0], [0, 1, 0]])
+    p7 = np.array([[0, 1, 0], [1, 1, 1], [0, 1, 0]])
+    p8 = np.array([[1, 1, 1], [1, 1, 0]])
+    p9 = np.array([[1, 1, 0], [0, 1, 0], [0, 1, 1]])
+    p10 = np.array([[1, 1], [1, 0], [1, 1]])
+    p11 = np.array([[1, 1, 0], [0, 1, 1], [0, 1, 0]])
+    p12 = np.array([[0, 1, 1], [1, 1, 0], [1, 0, 0]])
     # preallocate output
-    pieces = np.full((NUM_PIECES, SIZE_PIECES, SIZE_PIECES), -1, dtype=int);
-    for (ix, this_piece) in enumerate([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12]):
+    pieces = np.full((NUM_PIECES, SIZE_PIECES, SIZE_PIECES), -1, dtype=int)
+    for ix, this_piece in enumerate([p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12]):
         # pad each piece
         new_piece = _pad_piece(this_piece, SIZE_PIECES)
         # save this piece with an appropriate numerical value
         pieces[ix] = (ix + 1) * new_piece
     return pieces
 
-#%% Functions - make_all_permutations
+
+# %% Functions - make_all_permutations
 def make_all_permutations(pieces):
     r"""
     Makes all the possible permutations of every possible piece.
@@ -508,7 +490,7 @@ def make_all_permutations(pieces):
         # alias this piece
         this_piece = pieces[ix]
         # find the number of rotations (4)
-        rots = NUM_ORIENTS//2
+        rots = NUM_ORIENTS // 2
         # do the rotations and keep each piece
         for counter in range(rots):
             this_piece = _rotate_piece(this_piece)
@@ -518,14 +500,15 @@ def make_all_permutations(pieces):
         # do another set of rotations and keep each piece
         for counter in range(rots):
             this_piece = _rotate_piece(this_piece)
-            all_this_piece[counter+rots] = this_piece
+            all_this_piece[counter + rots] = this_piece
         # find the indices to the unique pieces
         ix_unique = _get_unique_pieces(all_this_piece)
         # gather the unique combinations
         all_pieces.append(all_this_piece[ix_unique])
     return all_pieces
 
-#%% Functions - is_valid
+
+# %% Functions - is_valid
 def is_valid(board, piece, use_blobbing=True):
     r"""
     Determines if the piece is valid for the given board.
@@ -581,18 +564,19 @@ def is_valid(board, piece, use_blobbing=True):
         raise ValueError('Unexpected number of dimensions for piece = "{}"'.format(piece.ndim))
     return out
 
-#%% Functions - find_all_valid_locations
+
+# %% Functions - find_all_valid_locations
 def find_all_valid_locations(board, all_pieces):
     r"""Finds all the valid locations for each piece on the board."""
     (m, n) = board.shape
-    max_pieces = (m - SIZE_PIECES - 1)*(n - SIZE_PIECES - 1) * NUM_ORIENTS
+    max_pieces = (m - SIZE_PIECES - 1) * (n - SIZE_PIECES - 1) * NUM_ORIENTS
     locations = []
     for these_pieces in all_pieces:
         # over-allocate a possible array
         these_locs = np.zeros((max_pieces, m, n), dtype=int)
         counter = 0
         for ix in range(these_pieces.shape[0]):
-            start_piece = _pad_piece(these_pieces[ix,:,:], board.shape)
+            start_piece = _pad_piece(these_pieces[ix, :, :], board.shape)
             for i in range(m - SIZE_PIECES + 1):
                 this_piece = np.roll(start_piece, i, axis=0)
                 if is_valid(board, this_piece):
@@ -609,7 +593,8 @@ def find_all_valid_locations(board, all_pieces):
     locations = [locations[ix] for ix in sort_ix]
     return locations
 
-#%% Functions - solve_puzzle
+
+# %% Functions - solve_puzzle
 def solve_puzzle(board, locations, find_all=False):
     r"""Solves the puzzle for the given board and all possible piece locations."""
     # initialize the solutions
@@ -676,7 +661,8 @@ def solve_puzzle(board, locations, find_all=False):
         np.subtract(this_board, locations[0][i0], this_board)
     return solutions
 
-#%% Functions - plot_board
+
+# %% Functions - plot_board
 def plot_board(board, title, opts=None):
     r"""Plots the board or the individual pieces."""
     # hard-coded square size
@@ -700,7 +686,7 @@ def plot_board(board, title, opts=None):
             ax.add_patch(Rectangle((box_size*i,box_size*j),box_size, box_size, \
                 facecolor=COLORS[board[i,j]], edgecolor='k'))
     # make square
-    ax.set_aspect('equal')
+    ax.set_aspect("equal")
     # set limits
     ax.set_xlim(0, board.shape[0])
     ax.set_ylim(0, board.shape[1])
@@ -713,14 +699,16 @@ def plot_board(board, title, opts=None):
     # return the resulting figure handle
     return fig
 
-#%% Functions - test_docstrings
+
+# %% Functions - test_docstrings
 def test_docstrings():
     r"""Tests the docstrings within this file."""
-    unittest.main(module='dstauffman2.games.test_fiver', exit=False)
+    unittest.main(module="dstauffman2.games.test_fiver", exit=False)
     doctest.testmod(verbose=False)
 
-#%% Main script
-if __name__ == '__main__':
+
+# %% Main script
+if __name__ == "__main__":
     # flags for running code
     run_tests    = True
     make_plots   = True
@@ -740,37 +728,37 @@ if __name__ == '__main__':
     # Create and set Opts
     date = datetime.now()
     opts = Opts()
-    opts.save_path = os.path.join(get_root_dir(), 'results', date.strftime('%Y-%m-%d') + '_fiver')
+    opts.save_path = os.path.join(get_root_dir(), "results", date.strftime("%Y-%m-%d") + "_fiver")
     opts.save_plot = True
     opts.show_plot = False
     # Save plots of the possible piece orientations
     if make_plots:
         setup_dir(opts.save_path, rec=True)
-        for (ix, these_pieces) in enumerate(all_pieces):
+        for ix, these_pieces in enumerate(all_pieces):
             for ix2 in range(these_pieces.shape[0]):
-                this_title = 'Piece {}, Permutation {}'.format(ix+1, ix2+1)
+                this_title = "Piece {}, Permutation {}".format(ix + 1, ix2 + 1)
                 fig = plot_board(these_pieces[ix2], this_title, opts=opts)
                 plt.close(fig)
         # print empty boards
-        fig = plot_board(BOARD1[3:-3,3:-3], 'Empty Board 1', opts=opts)
+        fig = plot_board(BOARD1[3:-3, 3:-3], "Empty Board 1", opts=opts)
         plt.close(fig)
-        fig = plot_board(BOARD2[3:-3,3:-3], 'Empty Board 2', opts=opts)
+        fig = plot_board(BOARD2[3:-3, 3:-3], "Empty Board 2", opts=opts)
         plt.close(fig)
 
     # solve the puzzle
     locations1 = find_all_valid_locations(BOARD1, all_pieces)
     locations2 = find_all_valid_locations(BOARD2, all_pieces)
     if make_soln:
-        print('Solving puzzle 1.')
+        print("Solving puzzle 1.")
         solutions1 = solve_puzzle(BOARD1, locations1, find_all=find_all)
-        print('Solving puzzle 2.')
+        print("Solving puzzle 2.")
         solutions2 = solve_puzzle(BOARD2, locations2, find_all=find_all)
 
     # save the results
     if save_results:
-        with open(os.path.join(opts.save_path, 'solutions1.pkl'), 'wb') as file:
+        with open(os.path.join(opts.save_path, "solutions1.pkl"), "wb") as file:
             pickle.dump(solutions1, file)
-        with open(os.path.join(opts.save_path, 'solutions2.pkl'), 'wb') as file:
+        with open(os.path.join(opts.save_path, "solutions2.pkl"), "wb") as file:
             pickle.dump(solutions2, file)
 
     # plot the results
@@ -778,8 +766,8 @@ if __name__ == '__main__':
         opts.show_plot = True
         figs1 = []
         for i in range(len(solutions1)):
-            this_title = 'Puzzle 1, Solution {}'.format(i+1)
-            figs1.append(plot_board(solutions1[i][3:-3,3:-3], this_title, opts=opts))
+            this_title = "Puzzle 1, Solution {}".format(i + 1)
+            figs1.append(plot_board(solutions1[i][3:-3, 3:-3], this_title, opts=opts))
             if np.mod(i, 10) == 0:
                 while figs1:
                     plt.close(figs1.pop())
@@ -787,8 +775,8 @@ if __name__ == '__main__':
         opts.show_plot = True
         figs2 = []
         for i in range(len(solutions2)):
-            this_title = 'Puzzle 2, Solution {}'.format(i+1)
-            figs2.append(plot_board(solutions2[i][3:-3,3:-3], this_title, opts=opts))
+            this_title = "Puzzle 2, Solution {}".format(i + 1)
+            figs2.append(plot_board(solutions2[i][3:-3, 3:-3], this_title, opts=opts))
             if np.mod(i, 10) == 0:
                 while figs2:
                     plt.close(figs2.pop())

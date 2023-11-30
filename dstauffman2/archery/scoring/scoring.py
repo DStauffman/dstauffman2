@@ -10,11 +10,11 @@ Notes
 #.  Moved into dstauffman2 library by David C. Stauffer in November 2016.
 """
 
-#%% Imports
+# %% Imports
+from datetime import datetime, timedelta
 import doctest
 import os
 import unittest
-from datetime import datetime, timedelta
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -23,11 +23,12 @@ import pandas as pd
 from dstauffman import setup_dir
 from dstauffman.plotting import Opts, setup_plots
 
-#%% Constants
-PLOT_LIMITS  = [250,300]
+# %% Constants
+PLOT_LIMITS  = [250, 300]
 PLOT_ACTUALS = True
 
-#%% Functions - get_root_dir
+
+# %% Functions - get_root_dir
 def get_root_dir():
     r"""
     Returns the folder that contains this source file and thus the root folder for the whole code.
@@ -51,8 +52,9 @@ def get_root_dir():
     folder = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     return folder
 
-#%% Functions - score_text_to_number
-def score_text_to_number(text, flag='nfaa'):
+
+# %% Functions - score_text_to_number
+def score_text_to_number(text, flag="nfaa"):
     r"""
     Converts text scores to numeric values, with options for X=10 and M=0, for both NFAA and USAA scoring.
 
@@ -61,7 +63,7 @@ def score_text_to_number(text, flag='nfaa'):
     text : str
         The text to be converted to a numeric score
     flag : str, optional
-        The scoring system to use, from {'usaa', 'nfaa'}
+        The scoring system to use, from {"usaa", "nfaa"}
 
     Returns
     -------
@@ -75,7 +77,7 @@ def score_text_to_number(text, flag='nfaa'):
     Examples
     --------
     >>> from dstauffman2.archery.scoring import score_text_to_number
-    >>> text = ['X', '10', '9', '8', '7', '6', '5', '4', '3', '2', '1', 'M']
+    >>> text = ["X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "M"]
     >>> nums = [score_text_to_number(x) for x in text]
     >>> print(nums)
     [10, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]
@@ -90,7 +92,7 @@ def score_text_to_number(text, flag='nfaa'):
         # check for specific values, or convert to int
         if text == "x":
             return 10
-        elif text == '10' and flag == 'usaa':
+        elif text == "10" and flag == "usaa":
             return 9
         elif text == "m":
             return 0
@@ -100,12 +102,13 @@ def score_text_to_number(text, flag='nfaa'):
         # assume anything else is numeric and force it to be an int
         value = int(text)
         # check for USAA conversion case, otherwise return numeric value
-        if value == 10 and flag == 'usaa':
+        if value == 10 and flag == "usaa":
             return 9
         else:
             return value
 
-#%% Functions - convert_data_to_scores
+
+# %% Functions - convert_data_to_scores
 def convert_data_to_scores(scores):
     r"""
     Makes the USAA and NFAA scores from the individual arrow score histories.
@@ -127,7 +130,7 @@ def convert_data_to_scores(scores):
     Examples
     --------
     >>> from dstauffman2.archery.scoring import convert_data_to_scores
-    >>> scores = [10*['X', 10, 9], 10*[9, 9, 9]]
+    >>> scores = [10*["X", 10, 9], 10*[9, 9, 9]]
     >>> (nfaa_score, usaa_score) = convert_data_to_scores(scores)
     >>> print(nfaa_score)
     [290, 270]
@@ -141,11 +144,12 @@ def convert_data_to_scores(scores):
     usaa_score = []
     # convert string scores into numbers based on NFAA and USAA scoring rules
     for this_round in scores:
-        nfaa_score.append(sum([score_text_to_number(x, 'nfaa') for x in this_round]))
-        usaa_score.append(sum([score_text_to_number(x, 'usaa') for x in this_round]))
+        nfaa_score.append(sum([score_text_to_number(x, "nfaa") for x in this_round]))
+        usaa_score.append(sum([score_text_to_number(x, "usaa") for x in this_round]))
     return (nfaa_score, usaa_score)
 
-#%% Functions - plot_mean_and_std
+
+# %% Functions - plot_mean_and_std
 def plot_mean_and_std(scores, opts=None, perfect_score=300):
     r"""
     Plots the bell curve based on the given scores.
@@ -173,7 +177,7 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     --------
     >>> from dstauffman2.archery.scoring import plot_mean_and_std
     >>> import matplotlib.pyplot as plt
-    >>> scores = [10*['X', 10, 9], 10*[9, 9, 9]]
+    >>> scores = [10*["X", 10, 9], 10*[9, 9, 9]]
     >>> fig = plot_mean_and_std(scores)
 
     Close the figure
@@ -185,44 +189,44 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     # check for optional arguments
     if opts is None:
         opts = Opts()
-        opts.case_name = ''
+        opts.case_name = ""
     # split into NFAA and USAA scores
     (nfaa_score, usaa_score) = convert_data_to_scores(scores)
     # calculate mean and standard deviations, use pandas Series instead of numpy for N-1 definition of std.
-    nfaa_mean   = np.mean(nfaa_score)
-    usaa_mean   = np.mean(usaa_score)
+    nfaa_mean = np.mean(nfaa_score)
+    usaa_mean = np.mean(usaa_score)
     if len(nfaa_score) > 1:
-        nfaa_std    = pd.Series(nfaa_score).std()
-        usaa_std    = pd.Series(usaa_score).std()
+        nfaa_std = pd.Series(nfaa_score).std()
+        usaa_std = pd.Series(usaa_score).std()
     else:
         nfaa_std = 0
         usaa_std = 0
     # create score range to evaluate for plotting
-    dt          = 0.1
-    score_range = np.arange(0, perfect_score+dt, dt)
+    dt = 0.1
+    score_range = np.arange(0, perfect_score + dt, dt)
     # create actuals for scores
-    act_range   = np.arange(PLOT_LIMITS[0], PLOT_LIMITS[1]+1)
-    nfaa_acts   = np.empty(act_range.shape)
-    usaa_acts   = np.empty(act_range.shape)
-    num_scores  = len(nfaa_score)
-    for (ix, score) in enumerate(act_range):
+    act_range = np.arange(PLOT_LIMITS[0], PLOT_LIMITS[1] + 1)
+    nfaa_acts = np.empty(act_range.shape)
+    usaa_acts = np.empty(act_range.shape)
+    num_scores = len(nfaa_score)
+    for ix, score in enumerate(act_range):
         nfaa_acts[ix] = np.count_nonzero(nfaa_score == score) / num_scores
         usaa_acts[ix] = np.count_nonzero(usaa_score == score) / num_scores
     # create figure
     fig = plt.figure()
-    title = 'Score Distribution'
+    title = "Score Distribution"
     fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
     # plot data
-    ax.plot(score_range, num2per*normal_curve(score_range, nfaa_mean, nfaa_std), 'r', label='NFAA Normal')
+    ax.plot(score_range, num2per * normal_curve(score_range, nfaa_mean, nfaa_std), "r", label="NFAA Normal")
     if PLOT_ACTUALS:
-        ax.bar(act_range, num2per*nfaa_acts, color='r', label='NFAA Actuals')
-    ax.plot(score_range, num2per*normal_curve(score_range, usaa_mean, usaa_std), 'b', label='USAA Normal')
+        ax.bar(act_range, num2per * nfaa_acts, color="r", label="NFAA Actuals")
+    ax.plot(score_range, num2per * normal_curve(score_range, usaa_mean, usaa_std), "b", label="USAA Normal")
     if PLOT_ACTUALS:
-        ax.bar(act_range, num2per*usaa_acts, color='b', label='USAA Actuals')
+        ax.bar(act_range, num2per * usaa_acts, color="b", label="USAA Actuals")
     # add labels and legends
-    ax.set_xlabel('Score')
-    ax.set_ylabel('Distribution [%]')
+    ax.set_xlabel("Score")
+    ax.set_ylabel("Distribution [%]")
     ax.set_title(title)
     ax.set_xlim(PLOT_LIMITS)
     ax.legend()
@@ -231,7 +235,8 @@ def plot_mean_and_std(scores, opts=None, perfect_score=300):
     setup_plots(fig, opts)
     return fig
 
-#%% Functions - normal_curve
+
+# %% Functions - normal_curve
 def normal_curve(x, mu=0, sigma=1):
     r"""
     Calculates a normal bell curve for the given points, based on a mean and standard deviation.
@@ -263,14 +268,15 @@ def normal_curve(x, mu=0, sigma=1):
 
     """
     if sigma < 0:
-        raise ValueError('The sigma must be positive, not {}.'.format(sigma))
+        raise ValueError("The sigma must be positive, not {}.".format(sigma))
     elif sigma == 0:
         y = np.where(x == mu, 1, 0)
     else:
-        y = 1/(sigma * np.sqrt(2 * np.pi)) * np.exp( - (x - mu)**2 / (2 * sigma**2) )
+        y = 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-((x - mu) ** 2) / (2 * sigma**2))
     return y
 
-#%% Functions - excel_date_to_str
+
+# %% Functions - excel_date_to_str
 def excel_date_to_str(excel_num):
     r"""
     Convert an excel date to a Python datetime.datetime object.
@@ -309,9 +315,10 @@ def excel_date_to_str(excel_num):
     date = date_zero + dt
 
     # output the object as a string
-    return date.strftime('%Y-%m-%d')
+    return date.strftime("%Y-%m-%d")
 
-#%% Functions - read_from_excel_datafile
+
+# %% Functions - read_from_excel_datafile
 def read_from_excel_datafile(filename):
     r"""
     Reads the score data from the given excel file and also returns the archer names.
@@ -336,7 +343,7 @@ def read_from_excel_datafile(filename):
     --------
     >>> from dstauffman2.archery.scoring import read_from_excel_datafile, get_root_dir
     >>> import os
-    >>> filename = os.path.join(get_root_dir(), 'test_score_template.xlsx')
+    >>> filename = os.path.join(get_root_dir(), "test_score_template.xlsx")
     >>> (scores, names, dates) = read_from_excel_datafile(filename)
     >>> print(scores[0][0:3])
     ['X' 9.0 9.0]
@@ -349,34 +356,35 @@ def read_from_excel_datafile(filename):
 
     """
     # read data from excel into DataFrame
-    data = pd.read_excel(filename, sheet_name='Scorecard', usecols='B:AT', skiprows=2)
+    data = pd.read_excel(filename, sheet_name="Scorecard", usecols="B:AT", skiprows=2)
 
     # get index to rows with valid scores
-    ix = (data['Archer'].notnull())
+    ix = data["Archer"].notnull()
 
     # reduce data
     subdata = data[ix]
 
     # drop rows with NaNs for scores in End 1
-    subdata = subdata.dropna(subset=['End 1'])
+    subdata = subdata.dropna(subset=["End 1"])
 
     # column index to scoring ends
-    cols = sorted(np.concatenate((range(1,40,4),range(2,40,4),range(3,40,4))))
+    cols = sorted(np.concatenate((range(1, 40, 4), range(2, 40, 4), range(3, 40, 4))))
 
     # pull out scores
     scores = subdata.iloc[:, cols].values
 
     # pull out names
-    names = subdata['Archer'].values
+    names = subdata["Archer"].values
 
     # convert names to dates
-    dates = [datetime.strptime(this_name.split(' ')[0], '%m/%d/%Y') for this_name in names]
+    dates = [datetime.strptime(this_name.split(" ")[0], "%m/%d/%Y") for this_name in names]
 
     # return a tuple of the scores and associated names
     return (scores, names, dates)
 
-#%% Functions - create_scoresheet
-def create_scoresheet(filename, scores, names, plotname='Score Distribution.png'):
+
+# %% Functions - create_scoresheet
+def create_scoresheet(filename, scores, names, plotname="Score Distribution.png"):
     r"""
     Creates an HTML file scoresheet of the given information.
 
@@ -403,9 +411,9 @@ def create_scoresheet(filename, scores, names, plotname='Score Distribution.png'
     Examples
     --------
     >>> from dstauffman2.archery.scoring import create_scoresheet
-    >>> filename = ''
-    >>> scores = [10*['X', 10, 9], 10*[9, 9, 9]]
-    >>> names = ['First Round', 'Second Round']
+    >>> filename = ""
+    >>> scores = [10*["X", 10, 9], 10*[9, 9, 9]]
+    >>> names = ["First Round", "Second Round"]
     >>> html = create_scoresheet(filename, scores, names)
     >>> print(html[:56])
     <!DOCTYPE html>
@@ -521,7 +529,7 @@ span.white {color: #ffffff;}
     plot1 = """<p><img src=""" + plotname.replace(' ','%20') + """ alt="Normal Distribution plot" height="597" width="800"> </p>
 """
 
-    for i in range(0,len(scores)):
+    for i in range(0, len(scores)):
         table1 = table1 + ' <tr>\n  <td rowspan="2">' + names[i] + '</td>\n'
         this_data   = scores[i]
         this_data   = [x if isinstance(x,str) else str(int(x)) for x in this_data]
@@ -529,36 +537,36 @@ span.white {color: #ffffff;}
         this_cumsum = np.cumsum(this_nums)
         for j in range(0,len(this_data)):
             this_text = this_data[j]
-            if this_text in {'X','x','10','9'}:
-                c = 'Y'
-                s = ''
-            elif this_text in {'8','7'}:
-                c = 'R'
-                s = ''
-            elif this_text in {'6','5'}:
-                c = 'B'
-                s = ''
-            elif this_text in {'4','3'}:
+            if this_text in {"X", "x", "10", "9"}:
+                c = "Y"
+                s = ""
+            elif this_text in {"8", "7"}:
+                c = "R"
+                s = ""
+            elif this_text in {"6", "5"}:
+                c = "B"
+                s = ""
+            elif this_text in {"4", "3"}:
                 c = 'K"><span class="white'
-                s = '</span>'
-            elif this_text in {'2','1'}:
-                c = 'W'
-                s = ''
-            elif this_text in {'M','m','0'}:
+                s = "</span>"
+            elif this_text in {"2", "1"}:
+                c = "W"
+                s = ""
+            elif this_text in {"M", "m", "0"}:
                 c = 'M"><span class="red'
-                s = '</span>'
+                s = "</span>"
             else:
                 raise ValueError('Unexpected Value for score "{}".'.format(this_text))
-            table1 = table1 + '  <td class="' + c + '">' + this_text + s + '</td>\n'
+            table1 = table1 + '  <td class="' + c + '">' + this_text + s + "</td>\n"
             if j % 3 == 2:
-                table1 = table1 + '  <td>{}</td>\n'.format(np.sum(this_nums[j-2:j+1]))
-        num_tens = np.count_nonzero([x=='10' for x in this_data])
+                table1 = table1 + "  <td>{}</td>\n".format(np.sum(this_nums[j - 2 : j + 1]))
+        num_tens = np.count_nonzero([x == "10" for x in this_data])
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1])
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1]-num_tens)
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(np.count_nonzero([x.lower()=='x' for x in this_data]))
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(num_tens)
         table1 = table1 + ' </tr>\n <tr>\n'
-        for j in range(0,len(this_data)):
+        for j in range(0, len(this_data)):
             if j % 3 == 2:
                 table1 = table1 + '  <td colspan="4">' + '{}'.format(this_cumsum[j]) + '</td>\n'
         table1 = table1 + ' </tr>\n'
@@ -588,12 +596,13 @@ span.white {color: #ffffff;}
         folder = os.path.split(filename)[0]
         if not os.path.isdir(folder):
             setup_dir(folder)
-        with open(filename, 'w') as file:
+        with open(filename, "w") as file:
             file.write(htm)
 
     return htm
 
-#%% Unit test
-if __name__ == '__main__':
-    unittest.main(module='test_scoring', exit=False)
+
+# %% Unit test
+if __name__ == "__main__":
+    unittest.main(module="test_scoring", exit=False)
     doctest.testmod(verbose=False)

@@ -7,7 +7,7 @@ Notes
 #.  Written by David C. Stauffer in January 2016.
 """
 
-#%% Imports
+# %% Imports
 import copy
 import sys
 import unittest
@@ -18,17 +18,19 @@ from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication, QPushButton
 
 from dstauffman import Counter
+
 import dstauffman2.games.tictactoe as ttt
 
-#%% Aliases
-o = ttt.PLAYER['o']
-x = ttt.PLAYER['x']
-n = ttt.PLAYER['none']
+# %% Aliases
+o = ttt.PLAYER["o"]
+x = ttt.PLAYER["x"]
+n = ttt.PLAYER["none"]
 
-#%% Flags
+# %% Flags
 skip = True
 
-#%% TicTacToeGui
+
+# %% TicTacToeGui
 class Test_TicTacToeGui(unittest.TestCase):
     r"""
     Tests the TicTacToeGui with the following cases:
@@ -37,6 +39,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         Press All button
         TODO: put in many more
     """
+
     def _default(self):
         # assert default starting conditions
         self.assertEqual(self.gui.state.cur_game, self.state.cur_game)
@@ -53,14 +56,14 @@ class Test_TicTacToeGui(unittest.TestCase):
     def _place_piece(self, row, col):
         board_width = self.gui.board_canvas.size().width()
         board_height = self.gui.board_canvas.size().height()
-        pos = QtCore.QPoint((2*col + 1) * (board_width // 6), (2*row + 1) * (board_height // 6))
+        pos = QtCore.QPoint((2 * col + 1) * (board_width // 6), (2 * row + 1) * (board_height // 6))
         QTest.mouseClick(self.gui.board_canvas, QtCore.Qt.LeftButton, pos=pos, delay=1)
 
     def test_sequence(self):
         # set Options
         ttt.Options.o_is_computer = False
         ttt.Options.x_is_computer = False
-        ttt.Options.load_previous_game = 'No'
+        ttt.Options.load_previous_game = "No"
         # instantiate GUI
         self.gui = ttt.TicTacToeGui()
         # copy the state for reference
@@ -132,7 +135,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         # set Options
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True
-        ttt.Options.load_previous_game = 'No'
+        ttt.Options.load_previous_game = "No"
         ttt.Options.plot_best_moves = True
         ttt.Options.plot_move_power = True
         # instantiate GUI
@@ -143,14 +146,14 @@ class Test_TicTacToeGui(unittest.TestCase):
     def test_load_game(self):
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True
-        ttt.Options.load_previous_game = 'Yes'
+        ttt.Options.load_previous_game = "Yes"
         self.gui = ttt.TicTacToeGui()
 
-    @unittest.skip('Don''t know how to implement this one yet.')
+    @unittest.skip("Don" "t know how to implement this one yet.")
     def test_ask_game_load(self):
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True
-        ttt.Options.load_previous_game = 'Ask'
+        ttt.Options.load_previous_game = "Ask"
         self.gui = ttt.TicTacToeGui()
         # TODO: move focus to new window
         self.gui.load_widget.setFocus()
@@ -163,15 +166,16 @@ class Test_TicTacToeGui(unittest.TestCase):
         self.assertTrue(self.gui.state.board[1, 1] != n)
 
     def test_ask_bad_option(self):
-        ttt.Options.load_previous_game = 'Bad Option'
+        ttt.Options.load_previous_game = "Bad Option"
         with self.assertRaises(ValueError):
             self.gui = ttt.TicTacToeGui()
 
     def tearDown(self):
         QApplication.instance().closeAllWindows()
 
-#%% Unit test execution
-if __name__ == '__main__':
+
+# %% Unit test execution
+if __name__ == "__main__":
     # open a qapp
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
