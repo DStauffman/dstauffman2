@@ -405,8 +405,8 @@ def batch_resize(
         aspect_ratio = cur_width / cur_height
 
         # Calucalte desired size
-        cal_width  = int(max_height * aspect_ratio)
-        cal_height = int(max_width / aspect_ratio)
+        cal_width  = int(round(max_height * aspect_ratio))
+        cal_height = int(round(max_width / aspect_ratio))
 
         # set new size
         if cal_height < max_height:
