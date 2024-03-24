@@ -9,6 +9,7 @@ Notes
 
 # %% Imports
 # fmt: off
+from .pdfs   import build_book
 from .photos import find_missing_nums, find_unexpected_ext, rename_old_picasa_files, \
                         rename_upper_ext, find_long_filenames, batch_resize, \
                         convert_tif_to_jpg, number_files, read_exif_data, get_image_datetime, \
