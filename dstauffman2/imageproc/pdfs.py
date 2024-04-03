@@ -58,8 +58,30 @@ def _build_full_page(this_image: Image, *, width: int, height: int, background_c
 
 
 # %% Functions - _build_dual_page
-def _build_dual_page():
-    pass
+def _build_dual_page(new_image: Image, images: list[Image], *, width: int, height: int, border: int, background_color: _C, right: bool) -> Image:
+    """Add up to three photos to the given page."""
+    is_horizontal = [image.size[0] >= image.size[1] for image in images]
+    offset1 = border
+    offset2 = 2 * border + height
+    offset_left = border
+    offset_right = 4 * border  # full page width - border - width
+    offset_delta = width - height
+    if all(is_horizontal):
+        assert len(images) == 2, "Expect two images if all horizontal."
+    else:
+        assert len(images) == 1, "Expect one image if any are vertical."
+
+    if is_horizontal[0]:
+        assert is_horizontal[1]
+        offsets = (offset_right, offset1) if right else (offset_left, offset1)
+        new_image.paste(images[0], offsets)
+        offsets = (offset_right, offset2) if right else (offset_left, offset2)
+        new_image.paste(images[1], offsets)
+    else:
+        offsets = (offset_right, offset1 + offset_delta // 2) if right else (offset_left + offset_delta, offset1 + offset_delta // 2)
+        new_image.paste(images[0], offsets)
+
+    return new_image
 
 
 # %% Functions - _build_triplet_page
@@ -101,11 +123,11 @@ def _build_triplet_page(new_image: Image, images: list[Image], *, width: int, he
     return new_image
 
 
-# %% Functions - _build_full_12x12
-def _build_full_12x12(
+# %% Functions - _build_single_page
+def _build_single_page(
     files: list[Path], *, height: int, width: int, background_color: _C, line_color: _OC, rotate: bool
 ) -> tuple[Image, list[Image]]:
-    """Create full pages for book."""
+    """Create single image pages for book."""
     num_images = len(files)
     book_pages = []
     assert len(files) % 2 == 0, "Expecting an even number of images."
@@ -140,57 +162,11 @@ def _build_full_12x12(
     return book, book_pages
 
 
-# %% Functions - _build_dual_4x6
-def _build_dual_4x6(
-    files: list[Path],
-    *,
-    height: int,
-    width: int,
-    photo_height: int,
-    photo_width: int,
-    border: int,
-    background_color: _C,
-    line_color: _OC,
-    rotate: bool,
-) -> tuple[Image, list[Image]]:
-    """Create dual pages for book."""
-    num_images = len(files)
-    book_pages = []
-    page = 1
-    for ix, file in enumerate(files):
-        print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
-        this_image = Image.open(file)
-        if rotate and _should_rotate(height, width, this_image.size[1], this_image.size[0]):
-            this_image = this_image.rotate(90, expand=1)
-        new_image = _build_full_page(this_image, width=width, height=height, background_color=background_color)
-        if ix == 0:
-            # first page, just keep image
-            book = new_image
-            page += 1
-        elif ix == num_images - 1:
-            # last page, which should be single, so save it
-            book_pages.append(new_image)
-            page += 1
-        elif ix % 2 == 1:
-            # save for next loop
-            left = new_image
-        else:
-            full = Image.new("RGB", (2*width, height))
-            full.paste(left, (0, 0))
-            full.paste(new_image, (width, 0))
-            if line_color is not None:
-                draw = ImageDraw.Draw(full)
-                draw.line((width, 0, width, height), fill=line_color, width=1)
-            book_pages.append(full)
-            page += 1
-
-    return book, book_pages
-
-
-# %% Functions - _build_triplet_4x6
-def _build_triplet_4x6(
+# %% Functions - _build_multipage
+def _build_multipage(
     files: list[list[Path]],
     *,
+    layout: str,
     height: int,
     width: int,
     photo_height: int,
@@ -200,7 +176,7 @@ def _build_triplet_4x6(
     line_color: _OC,
     rotate: bool,
 ) -> tuple[Image, list[Image]]:
-    """Create triplet pages for book."""
+    """Create multi-image pages for book."""
     num_images = sum(len(page) for page in files)
     book_pages = []
     page = 0
@@ -213,6 +189,8 @@ def _build_triplet_4x6(
         for file in subfiles:
             print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
             this_image = Image.open(file)
+            if rotate and _should_rotate(width, height, this_image.size[1], this_image.size[0]):  # TODO: flag for direction?
+                this_image = this_image.rotate(90, expand=1)
             if this_image.size[0] >= this_image.size[1]:
                 images.append(_resize_image(this_image, width=photo_width, height=photo_height))
             else:
@@ -221,11 +199,16 @@ def _build_triplet_4x6(
 
         new_image = Image.new("RGB", (width, height))
         new_image.paste(background_color, (0, 0, width, height))
-        _build_triplet_page(new_image, images, width=photo_width, height=photo_height, border=border, right=is_right, background_color=background_color)
+        if layout.startswith("dual"):
+            _build_dual_page(new_image, images, width=photo_width, height=photo_height, border=border, right=is_right, background_color=background_color)
+        elif layout.startswith("trip"):
+            _build_triplet_page(new_image, images, width=photo_width, height=photo_height, border=border, right=is_right, background_color=background_color)
+        else:
+            raise ValueError(f"Unexpected layout: {layout}")
         if page == 1:
             # first page, just keep image
             book = new_image
-        elif ix == num_images - 1:
+        elif ix == num_images:
             # last page, which should be single, so save it
             book_pages.append(new_image)
         elif not is_right:
@@ -306,7 +289,7 @@ def build_book(
 
     print(f"Making Book: {pdf_filename}")
     if layout == "full":
-        book, book_pages = _build_full_12x12(
+        book, book_pages = _build_single_page(
             files,
             height=height,
             width=width,
@@ -314,11 +297,10 @@ def build_book(
             line_color=line_color,
             rotate=rotate,
         )
-    elif layout == "dual_4x6":
-        book, book_pages = _build_dual_4x6(files)
-    elif layout in {"triple_4x6",}:
-        book, book_pages = _build_triplet_4x6(
+    elif layout in {"dual_4x6", "triple_4x6"}:
+        book, book_pages = _build_multipage(
             files,
+            layout=layout,
             height=height,
             width=width,
             photo_width=photo_width,
