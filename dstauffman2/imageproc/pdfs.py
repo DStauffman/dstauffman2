@@ -22,13 +22,16 @@ _OC = None | _C
 
 
 # %% Functions - _should_rotate
-def _should_rotate(page_height: int, page_width: int, image_height: int, image_width: int) -> bool:
+def _should_rotate(rotate: str, page_height: int, page_width: int, image_height: int, image_width: int) -> bool:
     """Determine if an image should be rotated or not."""
-    if page_height == page_width or image_height == image_width:
+    assert rotate.lower() in {"none", "horizontal", "vertical"}
+    if rotate.lower() == "none":
         return False
-    if page_height > page_width and image_height < image_width:
+    if image_height == image_width:
+        return False
+    if rotate.lower() == "vertical" and image_height < image_width:
         return True
-    if page_height < page_width and image_height > image_width:
+    if rotate.lower() == "horizontal" and image_height > image_width:
         return True
     return False
 
@@ -135,7 +138,7 @@ def _build_single_page(
     for ix, file in enumerate(files):
         print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
         this_image = Image.open(file)
-        if rotate and _should_rotate(height, width, this_image.size[1], this_image.size[0]):
+        if _should_rotate(rotate, height, width, this_image.size[1], this_image.size[0]):
             this_image = this_image.rotate(90, expand=1)
         new_image = _build_full_page(this_image, width=width, height=height, background_color=background_color)
         if ix == 0:
@@ -189,7 +192,7 @@ def _build_multipage(
         for file in subfiles:
             print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
             this_image = Image.open(file)
-            if rotate and _should_rotate(width, height, this_image.size[1], this_image.size[0]):  # TODO: flag for direction?
+            if _should_rotate(rotate, width, height, this_image.size[1], this_image.size[0]):  # TODO: flag for direction?
                 this_image = this_image.rotate(90, expand=1)
             if this_image.size[0] >= this_image.size[1]:
                 images.append(_resize_image(this_image, width=photo_width, height=photo_height))
