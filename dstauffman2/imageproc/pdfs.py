@@ -19,28 +19,31 @@ from PIL import Image, ImageDraw
 # %% Constants
 _C = tuple[int, int, int]
 _OC = None | _C
+DEBUG_COLOR = (255, 255, 0)
 
 
 # %% Functions - _should_rotate
-def _should_rotate(rotate: str, page_height: int, page_width: int, image_height: int, image_width: int) -> bool:
+def _should_rotate(rotate: str, *, height: int, width: int) -> bool:
     """Determine if an image should be rotated or not."""
     assert rotate.lower() in {"none", "horizontal", "vertical"}
     if rotate.lower() == "none":
         return False
-    if image_height == image_width:
+    if height == width:
         return False
-    if rotate.lower() == "vertical" and image_height < image_width:
+    if rotate.lower() == "vertical" and height < width:
         return True
-    if rotate.lower() == "horizontal" and image_height > image_width:
+    if rotate.lower() == "horizontal" and height > width:
         return True
     return False
 
 
 # %% Functions - _resize_image
-def _resize_image(image: Image, width: int, height: int) -> Image:
+def _resize_image(image: Image, *, width: int, height: int) -> Image:
     """Resize the image, which will also upsample if necessary."""
-    image.thumbnail((width, height), Image.Resampling.LANCZOS)  # Note: will not increase size
+    # Note: thumbnial will not increase size
+    image.thumbnail((width, height), Image.Resampling.LANCZOS)
     if image.size[0] < width and image.size[1] < height:
+        # This code is to upscale as necessary
         ratio = max(image.size[0] / width, image.size[1] / height)
         new_size = (int(round(image.size[0] / ratio)), int(round(image.size[1] / ratio)))
         image = image.resize(new_size, Image.Resampling.LANCZOS)
@@ -49,25 +52,41 @@ def _resize_image(image: Image, width: int, height: int) -> Image:
 
 
 # %% Functions - _build_full_page
-def _build_full_page(this_image: Image, *, width: int, height: int, background_color: _C) -> Image:
+def _build_full_page(
+    this_image: Image, *, width: int, height: int, background_color: _C, border: int, debug: bool
+) -> Image:
     """Builds a full page from the given image."""
     new_image = Image.new("RGB", (width, height))
     new_image.paste(background_color, (0, 0, width, height))
-    this_image = _resize_image(this_image, width, height)
+    this_image = _resize_image(this_image, width=width - 2 * border, height=height - 2 * border)
     offset_x = (width - this_image.size[0]) // 2
     offset_y = (height - this_image.size[1]) // 2
     new_image.paste(this_image, (offset_x, offset_y))
+    if debug:
+        draw = ImageDraw.Draw(new_image)
+        draw.rectangle((border, border, border + width, border + height), outline=DEBUG_COLOR, width=1)
     return new_image
 
 
 # %% Functions - _build_dual_page
-def _build_dual_page(new_image: Image, images: list[Image], *, width: int, height: int, border: int, background_color: _C, right: bool) -> Image:
+def _build_dual_page(
+    new_image: Image,
+    images: list[Image],
+    *,
+    width: int,
+    height: int,
+    border: int,
+    center_offset: int,
+    background_color: _C,
+    right: bool,
+    debug: bool,
+) -> Image:
     """Add up to three photos to the given page."""
     is_horizontal = [image.size[0] >= image.size[1] for image in images]
     offset1 = border
     offset2 = 2 * border + height
     offset_left = border
-    offset_right = 4 * border  # full page width - border - width
+    offset_right = border + center_offset
     offset_delta = width - height
     if all(is_horizontal):
         assert len(images) == 2, "Expect two images if all horizontal."
@@ -78,24 +97,47 @@ def _build_dual_page(new_image: Image, images: list[Image], *, width: int, heigh
         assert is_horizontal[1]
         offsets = (offset_right, offset1) if right else (offset_left, offset1)
         new_image.paste(images[0], offsets)
+        if debug:
+            draw = ImageDraw.Draw(new_image)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=1)
         offsets = (offset_right, offset2) if right else (offset_left, offset2)
         new_image.paste(images[1], offsets)
+        if debug:
+            draw = ImageDraw.Draw(new_image)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=1)
     else:
-        offsets = (offset_right, offset1 + offset_delta // 2) if right else (offset_left + offset_delta, offset1 + offset_delta // 2)
+        if right:
+            offsets = (offset_right, offset1 + offset_delta // 2)
+        else:
+            offsets = (offset_left + offset_delta, offset1 + offset_delta // 2)
         new_image.paste(images[0], offsets)
+        if debug:
+            draw = ImageDraw.Draw(new_image)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + height, offsets[1] + width), outline=DEBUG_COLOR, width=1)
 
     return new_image
 
 
 # %% Functions - _build_triplet_page
-def _build_triplet_page(new_image: Image, images: list[Image], *, width: int, height: int, border: int, background_color: _C, right: bool) -> Image:
+def _build_triplet_page(
+    new_image: Image,
+    images: list[Image],
+    *,
+    width: int,
+    height: int,
+    border: int,
+    center_offset: int,
+    background_color: _C,
+    right: bool,
+    debug: bool,
+) -> Image:
     """Add up to three photos to the given page."""
     is_horizontal = [image.size[0] >= image.size[1] for image in images]
     offset1 = border
     offset2 = 2 * border + height
     offset3 = 3 * border + 2 * height
     offset_left = border
-    offset_right = 6 * border  # full page width - border - width
+    offset_right = border + center_offset
     offset_delta = width - height
     offset_half = 3*border + 3*height - width  # full page height - border - width
     if all(is_horizontal):
@@ -108,6 +150,10 @@ def _build_triplet_page(new_image: Image, images: list[Image], *, width: int, he
     else:
         offsets = (offset_right, offset1) if right else (offset_left + offset_delta, offset1)
     new_image.paste(images[0], offsets)
+    if debug:
+        draw = ImageDraw.Draw(new_image)
+        temp = (width, height) if is_horizontal[0] else (height, width)
+        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=1)
     if is_horizontal[0]:
         if is_horizontal[1]:
             offsets = (offset_right, offset2) if right else (offset_left, offset2)
@@ -119,16 +165,31 @@ def _build_triplet_page(new_image: Image, images: list[Image], *, width: int, he
         else:
             offsets = (offset_right, offset_half) if right else (offset_left + offset_delta, offset_half)
     new_image.paste(images[1], offsets)
+    if debug:
+        draw = ImageDraw.Draw(new_image)
+        temp = (width, height) if is_horizontal[1] else (height, width)
+        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=1)
     if all(is_horizontal):
         offsets = (offset_right, offset3) if right else (offset_left, offset3)
         new_image.paste(images[2], offsets)
+        if debug:
+            draw = ImageDraw.Draw(new_image)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=1)
 
     return new_image
 
 
 # %% Functions - _build_single_page
 def _build_single_page(
-    files: list[Path], *, height: int, width: int, background_color: _C, line_color: _OC, rotate: bool
+    files: list[Path],
+    *,
+    height: int,
+    width: int,
+    border: int,
+    background_color: _C,
+    line_color: _OC,
+    rotate: str,
+    debug: bool,
 ) -> tuple[Image, list[Image]]:
     """Create single image pages for book."""
     num_images = len(files)
@@ -138,9 +199,11 @@ def _build_single_page(
     for ix, file in enumerate(files):
         print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
         this_image = Image.open(file)
-        if _should_rotate(rotate, height, width, this_image.size[1], this_image.size[0]):
+        if _should_rotate(rotate, height=this_image.size[1], width=this_image.size[0]):
             this_image = this_image.rotate(90, expand=1)
-        new_image = _build_full_page(this_image, width=width, height=height, background_color=background_color)
+        new_image = _build_full_page(
+            this_image, width=width, height=height, background_color=background_color, border=border, debug=debug
+        )
         if ix == 0:
             # first page, just keep image
             book = new_image
@@ -175,9 +238,11 @@ def _build_multipage(
     photo_height: int,
     photo_width: int,
     border: int,
+    center_offset: int,
     background_color: _C,
     line_color: _OC,
-    rotate: bool,
+    rotate: str,
+    debug: bool,
 ) -> tuple[Image, list[Image]]:
     """Create multi-image pages for book."""
     num_images = sum(len(page) for page in files)
@@ -192,7 +257,7 @@ def _build_multipage(
         for file in subfiles:
             print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
             this_image = Image.open(file)
-            if _should_rotate(rotate, width, height, this_image.size[1], this_image.size[0]):  # TODO: flag for direction?
+            if _should_rotate(rotate, height=this_image.size[1], width=this_image.size[0]):
                 this_image = this_image.rotate(90, expand=1)
             if this_image.size[0] >= this_image.size[1]:
                 images.append(_resize_image(this_image, width=photo_width, height=photo_height))
@@ -203,35 +268,59 @@ def _build_multipage(
         new_image = Image.new("RGB", (width, height))
         new_image.paste(background_color, (0, 0, width, height))
         if layout.startswith("dual"):
-            _build_dual_page(new_image, images, width=photo_width, height=photo_height, border=border, right=is_right, background_color=background_color)
+            _build_dual_page(
+                new_image,
+                images,
+                width=photo_width,
+                height=photo_height,
+                border=border,
+                center_offset=center_offset,
+                right=is_right,
+                background_color=background_color,
+                debug=debug,
+            )
         elif layout.startswith("trip"):
-            _build_triplet_page(new_image, images, width=photo_width, height=photo_height, border=border, right=is_right, background_color=background_color)
+            _build_triplet_page(
+                new_image,
+                images,
+                width=photo_width,
+                height=photo_height,
+                border=border,
+                center_offset=center_offset,
+                right=is_right,
+                background_color=background_color,
+                debug=debug,
+            )
         else:
             raise ValueError(f"Unexpected layout: {layout}")
         if page == 1:
             # first page, just keep image
             book = new_image
-        elif ix == num_images:
-            # last page, which should be single, so save it
-            book_pages.append(new_image)
+            continue
         elif not is_right:
             # save for next loop
             left = new_image
-        else:
-            full = Image.new("RGB", (2*width, height))
-            full.paste(left, (0, 0))
-            full.paste(new_image, (width, 0))
-            if line_color is not None:
-                draw = ImageDraw.Draw(full)
-                draw.line((width, 0, width, height), fill=line_color, width=1)
-            book_pages.append(full)
+            if ix < num_images:
+                # not the last page, then continue
+                continue
+            else:
+                # is the last page, and it's only the left, then save
+                book_pages.append(new_image)
+                break
+        full = Image.new("RGB", (2*width, height))
+        full.paste(left, (0, 0))
+        full.paste(new_image, (width, 0))
+        if line_color is not None:
+            draw = ImageDraw.Draw(full)
+            draw.line((width, 0, width, height), fill=line_color, width=1)
+        book_pages.append(full)
 
     return book, book_pages
 
 
 # %% Functions - build_book
 def build_book(
-    files: list[Path | list[Path]],
+    files: list[Path] | list[list[Path]],
     pdf_filename: Path,
     *,
     width: int = 300*12,
@@ -241,9 +330,11 @@ def build_book(
     border: int = 0,
     dpi: int = 300,
     layout: str = "full",
+    center_offset: int = 0,
     background_color: _C = (0, 0, 0),
     line_color: _OC = None,
-    rotate: bool = False,
+    rotate: str = "None",
+    debug: bool = False,
 ) -> None:
     """
     Creates the PDF file from the given images.
@@ -270,8 +361,8 @@ def build_book(
         Background color as integer RGB, default is black
     line_color : tuple[int, int, int], optional
         Line color between side by side pages, if None, then no line
-    rotate : bool, optional, default is False
-        Whether to rotate the photo to maximize its size on the page
+    rotate : str, optional, default is "None"
+        Whether to rotate the photo to maximize its size on the page, from {"None", "Horizontal", "Vertical"}
 
     Notes
     -----
@@ -293,25 +384,29 @@ def build_book(
     print(f"Making Book: {pdf_filename}")
     if layout == "full":
         book, book_pages = _build_single_page(
-            files,
+            files,  # type: ignore[arg-type]
             height=height,
             width=width,
+            border=border,
             background_color=background_color,
             line_color=line_color,
             rotate=rotate,
+            debug=debug,
         )
     elif layout in {"dual_4x6", "triple_4x6"}:
         book, book_pages = _build_multipage(
-            files,
+            files,  # type: ignore[arg-type]
             layout=layout,
             height=height,
             width=width,
             photo_width=photo_width,
             photo_height=photo_height,
             border=border,
+            center_offset=center_offset,
             background_color=background_color,
             line_color=line_color,
             rotate=rotate,
+            debug=debug,
         )
     else:
         raise ValueError(f"Unexpected layout: {layout}")

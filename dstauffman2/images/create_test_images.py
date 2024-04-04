@@ -58,7 +58,7 @@ def create_test_images(folder: Path, *, width: int = 4*300, height: int = 6*300,
     gray3.save(folder / "gray_three.jpg", dpi=(dpi, dpi))
 
     # create small red image with gradient
-    red = draw_gradient(width, height, (255, 0, 0), (63, 0, 0), "Horizontal")
+    red = draw_gradient(height, width, (255, 0, 0), (63, 0, 0), "Horizontal")
     red.save(folder / "red.jpg", dpi=(dpi, dpi))
 
     # create large green image with gradient
