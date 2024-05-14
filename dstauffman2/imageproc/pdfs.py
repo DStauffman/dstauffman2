@@ -19,20 +19,21 @@ from PIL import Image, ImageDraw
 # %% Constants
 _C = tuple[int, int, int]
 _OC = None | _C
-DEBUG_COLOR = (255, 255, 0)
+DEBUG_COLOR: _C = (255, 0, 0)  # (255, 255, 0)
+DEBUG_WIDTH: int = 3
 
 
 # %% Functions - _should_rotate
 def _should_rotate(rotate: str, *, height: int, width: int) -> bool:
     """Determine if an image should be rotated or not."""
-    assert rotate.lower() in {"none", "horizontal", "vertical"}
+    assert rotate.lower() in {"none", "horizontal", "vertical", "horizontal_clockwise", "vertical_clockwise"}
     if rotate.lower() == "none":
         return False
     if height == width:
         return False
-    if rotate.lower() == "vertical" and height < width:
+    if rotate.lower().startswith("vertical") and height < width:
         return True
-    if rotate.lower() == "horizontal" and height > width:
+    if rotate.lower().startswith("horizontal") and height > width:
         return True
     return False
 
@@ -64,7 +65,7 @@ def _build_full_page(
     new_image.paste(this_image, (offset_x, offset_y))
     if debug:
         draw = ImageDraw.Draw(new_image)
-        draw.rectangle((border, border, border + width, border + height), outline=DEBUG_COLOR, width=1)
+        draw.rectangle((border, border, border + width, border + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
     return new_image
 
 
@@ -99,12 +100,12 @@ def _build_dual_page(
         new_image.paste(images[0], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=1)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
         offsets = (offset_right, offset2) if right else (offset_left, offset2)
         new_image.paste(images[1], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=1)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
     else:
         if right:
             offsets = (offset_right, offset1 + offset_delta // 2)
@@ -113,7 +114,7 @@ def _build_dual_page(
         new_image.paste(images[0], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + height, offsets[1] + width), outline=DEBUG_COLOR, width=1)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + height, offsets[1] + width), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
 
     return new_image
 
@@ -153,7 +154,7 @@ def _build_triplet_page(
     if debug:
         draw = ImageDraw.Draw(new_image)
         temp = (width, height) if is_horizontal[0] else (height, width)
-        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=1)
+        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
     if is_horizontal[0]:
         if is_horizontal[1]:
             offsets = (offset_right, offset2) if right else (offset_left, offset2)
@@ -168,13 +169,13 @@ def _build_triplet_page(
     if debug:
         draw = ImageDraw.Draw(new_image)
         temp = (width, height) if is_horizontal[1] else (height, width)
-        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=1)
+        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
     if all(is_horizontal):
         offsets = (offset_right, offset3) if right else (offset_left, offset3)
         new_image.paste(images[2], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=1)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
 
     return new_image
 
@@ -200,7 +201,10 @@ def _build_single_page(
         print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
         this_image = Image.open(file)
         if _should_rotate(rotate, height=this_image.size[1], width=this_image.size[0]):
-            this_image = this_image.rotate(90, expand=1)
+            if rotate.lower().endswith("clockwise"):
+                this_image = this_image.rotate(-90, expand=1)
+            else:
+                this_image = this_image.rotate(90, expand=1)
         new_image = _build_full_page(
             this_image, width=width, height=height, background_color=background_color, border=border, debug=debug
         )
@@ -362,7 +366,8 @@ def build_book(
     line_color : tuple[int, int, int], optional
         Line color between side by side pages, if None, then no line
     rotate : str, optional, default is "None"
-        Whether to rotate the photo to maximize its size on the page, from {"None", "Horizontal", "Vertical"}
+        Whether to rotate the photo to maximize its size on the page,
+        from {"None", "Horizontal", "Vertical", "horizontal_clockwise", "vertical_clockwise"}
 
     Notes
     -----

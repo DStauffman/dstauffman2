@@ -73,9 +73,9 @@ def find_missing_nums(
 
     """
     for root, _, files in os.walk(str(folder)):
-        name_dict = dict()
-        nums_list = list()
-        digs_list = list()
+        name_dict: dict[str, int] = {}
+        nums_list: list[int] = []
+        digs_list: list[int] = []
         counter = 0
         for name in files:
             (file_name, file_ext) = os.path.splitext(name)
