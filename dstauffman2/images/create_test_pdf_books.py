@@ -180,3 +180,21 @@ if __name__ == "__main__":
         rotate="None",
         debug=debug,
     )
+
+    # %% Quad 4x6
+    # no border horizontal
+
+    # %% Quad 4x6
+    # with border horizontal
+
+    # %% Quad 4x6
+    # with border horizontal and center offset
+
+    # %% Quad 4x6
+    # no border vertical
+
+    # %% Quad 4x6
+    # with border vertical
+
+    # %% Quad 4x6
+    # with border vertical and center offset

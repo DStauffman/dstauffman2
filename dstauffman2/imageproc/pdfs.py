@@ -180,6 +180,50 @@ def _build_triplet_page(
     return new_image
 
 
+# %% Functions - _build_quad_page
+def _build_quad_page(
+    new_image: Image,
+    images: list[Image],
+    *,
+    width: int,
+    height: int,
+    border: int,
+    center_offset: int,
+    background_color: _C,
+    right: bool,
+    debug: bool,
+) -> Image:
+    """Add up to four photos to the given page in a 2x2 grid."""
+    def _add_image(new_image: Image, this_image: Image, offsets: tuple[int, int], debug: bool, is_horizontal: bool):
+        new_image.paste(this_image, offsets)
+        if debug:
+            draw = ImageDraw.Draw(new_image)
+            big = max(width, height)
+            sml = min(width, height)
+            temp = (big, sml) if is_horizontal else (sml, big)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+
+    is_horizontal = [image.size[0] >= image.size[1] for image in images]
+    offset1 = border
+    offset2 = 2 * border + height
+    offset_left1 = border
+    offset_right1 = border + center_offset
+    offset_left2 = 2 * border + width
+    offset_right2 = 2 * border + width + center_offset
+    assert len(images) == 4, "Expect four images in quad layout."
+    offsets = (offset_right1, offset1) if right else (offset_left1, offset1)
+    _add_image(new_image, images[0], offsets, debug, is_horizontal[0])
+    offsets = (offset_right2, offset1) if right else (offset_left2, offset1)
+    _add_image(new_image, images[1], offsets, debug, is_horizontal[1])
+    offsets = (offset_right1, offset2) if right else (offset_left1, offset2)
+    _add_image(new_image, images[2], offsets, debug, is_horizontal[2])
+    offsets = (offset_right2, offset2) if right else (offset_left2, offset2)
+    _add_image(new_image, images[3], offsets, debug, is_horizontal[3])
+    new_image.paste(images[3], offsets)
+
+    return new_image
+
+
 # %% Functions - _build_single_page
 def _build_single_page(
     files: list[Path],
@@ -262,11 +306,17 @@ def _build_multipage(
             print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
             this_image = Image.open(file)
             if _should_rotate(rotate, height=this_image.size[1], width=this_image.size[0]):
-                this_image = this_image.rotate(90, expand=1)
-            if this_image.size[0] >= this_image.size[1]:
-                images.append(_resize_image(this_image, width=photo_width, height=photo_height))
+                if rotate.lower().endswith("clockwise"):
+                    this_image = this_image.rotate(-90, expand=1)
+                else:
+                    this_image = this_image.rotate(90, expand=1)
+            if this_image.size[0] > this_image.size[1] and photo_width < photo_height:
+                this_image = _resize_image(this_image, width=photo_height, height=photo_width)
+            elif this_image.size[0] < this_image.size[1] and photo_width > photo_height:
+                this_image = _resize_image(this_image, width=photo_height, height=photo_width)
             else:
-                images.append(_resize_image(this_image, width=photo_height, height=photo_width))
+                this_image = _resize_image(this_image, width=photo_width, height=photo_height)
+            images.append(this_image)
             ix += 1
 
         new_image = Image.new("RGB", (width, height))
@@ -285,6 +335,18 @@ def _build_multipage(
             )
         elif layout.startswith("trip"):
             _build_triplet_page(
+                new_image,
+                images,
+                width=photo_width,
+                height=photo_height,
+                border=border,
+                center_offset=center_offset,
+                right=is_right,
+                background_color=background_color,
+                debug=debug,
+            )
+        elif layout.startswith("quad"):
+            _build_quad_page(
                 new_image,
                 images,
                 width=photo_width,
@@ -398,7 +460,7 @@ def build_book(
             rotate=rotate,
             debug=debug,
         )
-    elif layout in {"dual_4x6", "triple_4x6"}:
+    elif layout in {"dual_4x6", "triple_4x6", "quad_4x6"}:
         book, book_pages = _build_multipage(
             files,  # type: ignore[arg-type]
             layout=layout,
