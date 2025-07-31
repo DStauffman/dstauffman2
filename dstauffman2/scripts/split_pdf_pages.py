@@ -7,7 +7,7 @@ Notes
 """
 
 # %% Imports
-from PyPDF2 import PdfFileReader, PdfFileWriter
+from pypdf import PdfReader, PdfWriter
 
 # %% Constants
 src_file = r"C:\Users\DStauffman\Downloads\member_list_2019-08-27_04-53.pdf"
@@ -19,10 +19,10 @@ if __name__ == "__main__":
     # open the source file
     with open(src_file, "rb") as file:
         # get reader and writers
-        reader = PdfFileReader(file)
+        reader = PdfReader(file)
         # read each desired page and send it to the writer
         for page in pages:
-            writer = PdfFileWriter()
+            writer = PdfWriter()
             writer.addPage(reader.getPage(page))
             # write out the accumulated pages to disk
             with open(out_file.format(page + 1), "wb") as out:

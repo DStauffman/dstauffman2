@@ -10,19 +10,20 @@ Notes
 import argparse
 import doctest
 import os
+from pathlib import Path
 import platform
 import subprocess
 import sys
-from typing import List
 import unittest
 
-from dstauffman import list_python_files, run_coverage, run_docstrings, run_pytests, run_unittests
+from dstauffman import run_coverage, run_docstrings, run_pytests, run_unittests
+from slog import list_python_files
 
 from dstauffman2.paths import get_root_dir, get_tests_dir
 
 
 # %% Functions - parse_tests
-def parse_tests(input_args: List[str]) -> argparse.Namespace:
+def parse_tests(input_args: list[str]) -> argparse.Namespace:
     r"""
     Parser for the tests command.
 
@@ -124,7 +125,7 @@ def execute_tests(args: argparse.Namespace) -> int:
 
 
 # %% Functions - parse_coverage
-def parse_coverage(input_args: List[str]) -> argparse.Namespace:
+def parse_coverage(input_args: list[str]) -> argparse.Namespace:
     r"""
     Parser for the coverage command.
 

@@ -10,7 +10,6 @@ Notes
 import argparse
 import doctest
 from pathlib import Path
-from typing import List
 import unittest
 
 from dstauffman2.imageproc import (
@@ -24,7 +23,7 @@ from dstauffman2.imageproc import (
 
 
 # %% Functions - parse_photos
-def parse_photos(input_args: List[str]) -> argparse.Namespace:
+def parse_photos(input_args: list[str]) -> argparse.Namespace:
     r"""
     Parser for the photos command.
 

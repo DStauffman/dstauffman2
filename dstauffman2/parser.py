@@ -13,7 +13,6 @@ from __future__ import annotations
 import argparse
 import doctest
 import sys
-from typing import List, Optional, Tuple
 import unittest
 
 from slog import ReturnCodes
@@ -25,7 +24,7 @@ _VALID_COMMANDS = frozenset({"batch_rename", "find_words", "help", "photos", "ma
 # %% Functions - _print_bad_command
 def _print_bad_command(command: str) -> None:
     r"""Prints to the command line when a command name is not understood."""
-    print('Command "{}" is not understood.'.format(command))
+    print(f'Command "{command}" is not understood.')
 
 
 # %% Functions - main
@@ -41,7 +40,7 @@ def main() -> int:
 
 
 # %% Functions - parse_wrapper
-def parse_wrapper(args: List[str]) -> Tuple[str, argparse.Namespace]:
+def parse_wrapper(args: list[str]) -> tuple[str, argparse.Namespace]:
     r"""Wrapper function to parse out the command name from the rest of the arguments."""
     # check for no command option
     if len(args) >= 1:
@@ -59,7 +58,7 @@ def parse_wrapper(args: List[str]) -> Tuple[str, argparse.Namespace]:
 
 
 # %% Functions - parse_commands
-def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
+def parse_commands(command: str, args: list[str]) -> argparse.Namespace:
     r"""
     Splits the parsing based on the name of the command.
 
@@ -78,13 +77,15 @@ def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
     Examples
     --------
     >>> from dstauffman import parse_commands
-    >>> command = 'help'
+    >>> command = "help"
     >>> args = []
     >>> parsed_args = parse_commands(command, args)
+    >>> print(parsed_args)
+    Namespace()
 
     """
     # delayed import of commands
-    import dstauffman2.commands as commands
+    import dstauffman2.commands as commands  # pylint: disable=import-outside-toplevel
 
     # check for valid commands
     if command in _VALID_COMMANDS:
@@ -92,7 +93,7 @@ def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
         func = getattr(commands, "parse_" + command)
         parsed_args: argparse.Namespace = func(args)
     else:
-        raise ValueError('Unexpected command "{}".'.format(command))
+        raise ValueError(f'Unexpected command "{command}".')
     return parsed_args
 
 
@@ -100,13 +101,13 @@ def parse_commands(command: str, args: List[str]) -> argparse.Namespace:
 def execute_command(command: str, args: argparse.Namespace) -> int:
     r"""Executes the given command."""
     # delayed import of commands
-    import dstauffman2.commands as commands
+    import dstauffman2.commands as commands  # pylint: disable=import-outside-toplevel
 
     # check for valid commands
     if command in _VALID_COMMANDS:
         # If valid, then call the appropriate method, so help calls execute_help etc.
         func = getattr(commands, "execute_" + command)
-        rc: Optional[int] = func(args)
+        rc: int | None = func(args)
     else:
         _print_bad_command(command)
         rc = ReturnCodes.bad_command

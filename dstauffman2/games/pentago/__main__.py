@@ -14,7 +14,7 @@ import os
 import sys
 import unittest
 
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QCoreApplication
 
 import dstauffman2.games.pentago as pentago
 
@@ -25,6 +25,7 @@ else:
     mode = "run"
 
 # %% Execution
+qapp: QApplication | QCoreApplication
 if mode == "run":
     # Runs the GUI application
     qapp = QApplication(sys.argv)

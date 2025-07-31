@@ -48,6 +48,7 @@ Temporary Items
 # Compiled source #
 # =========================
 *.pyc
+*.pyo
 *.nbc
 *.nbi
 *.o
@@ -72,6 +73,7 @@ dstauffman2.egg-info/*
 # =========================
 .mypy_cache/*
 .mypy_report/*
+.dmypy.json
 
 # =========================
 # LaTeX Files #

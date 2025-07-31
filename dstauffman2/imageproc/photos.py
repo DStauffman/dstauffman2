@@ -9,12 +9,12 @@ Notes
 """  # pylint: disable=C0326
 
 # %% Imports
+from collections.abc import Iterable
 import doctest
 import os
 from pathlib import Path
 import re
 import shutil
-from typing import Iterable, List, Optional, Tuple
 import unittest
 import warnings
 
@@ -39,7 +39,7 @@ def find_missing_nums(
     old_picasa: bool = True,
     digit_check: bool = True,
     process_extensions: Iterable[str] = PROCESS_EXTENSIONS,
-    folder_exclusions: Optional[Iterable[Path]] = None,
+    folder_exclusions: Iterable[Path] | None = None,
 ) -> None:
     r"""
     Finds the missing numbers in a file sequence.
@@ -655,7 +655,7 @@ def number_files(
 
 
 # %% read_exif_data
-def read_exif_data(filename: Path, field: Optional[str] = None) -> dict:
+def read_exif_data(filename: Path, field: str | None = None) -> dict:
     r"""
     Reads the EXIF data from the specified image.
 
@@ -736,7 +736,7 @@ def get_raw_file_from_datetime(
     dry_run: bool = False,
     img_extension: str = ".jpg",
     raw_extension: str = ".arw",
-) -> Tuple[List[str], List[str]]:
+) -> tuple[list[str], list[str]]:
     r"""
     Finds the RAW file that match the images in the given folder.
 

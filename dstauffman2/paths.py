@@ -34,7 +34,7 @@ def get_root_dir() -> Path:
     --------
     >>> from dstauffman2 import get_root_dir
     >>> print("p = ", repr(get_root_dir()))  # doctest: +ELLIPSIS
-    p = .../dstauffman2/dstauffman2')
+    p = .../dstauffman2')
 
     """
     # this folder is the root directory based on the location of this file (paths.py)

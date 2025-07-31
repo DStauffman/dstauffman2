@@ -1,16 +1,21 @@
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["setuptools>=77.0"]
+build-backend = "setuptools.build_meta"
 
-[tool.poetry]
+[project]
 name = "dstauffman2"
-version = "1.1.0"
+version = "1.2.0"
 description = "Vaguely useful Python utilities, plus a playground for games and miscelllaneous code."
-license = "LGPLv3"
-authors = ["David C. Stauffer <dstauffman@yahoo.com>"]
-maintainers = ["David C. Stauffer <dstauffman@yahoo.com>"]
 readme = "README.rst"
-repository = "https://github.com/DStauffman/dstauffman2"
+dependencies = ["dstauffman", "slog"]
+requires-python = ">=3.10,<4.0"
+authors = [
+  {name = "David C. Stauffer", email = "dstauffman@yahoo.com"},
+]
+maintainers = [
+  {name = "David C. Stauffer", email = "dstauffman@yahoo.com"},
+]
+license = { file = "LICENSE" }
 keywords = ["dstauffman", "dstauffman2", "games", "playground", "spyder", "configuration"]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -18,10 +23,10 @@ classifiers = [
     "Intended Audience :: Science/Research",
     "Natural Language :: English",
     "Programming Language :: Python :: 3",
-    "Programming Langauge :: Python :: 3.9",
     "Programming Langauge :: Python :: 3.10",
     "Programming Langauge :: Python :: 3.11",
     "Programming Langauge :: Python :: 3.12",
+    "Programming Langauge :: Python :: 3.13",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Astronomy",
     "Topic :: Scientific/Engineering :: Information Analysis",
@@ -31,49 +36,29 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Typing :: Typed",
 ]
-include = ["CHANGELOG.md", "LICENSE.txt", "MANIFEST.in", "pyproject.toml", "README.rst", "*.png", "*.pdf", "*.rst", "*.tex", "*.bat", "*.sh"]
 
-[tool.poetry.dependencies]
-python = ">=3.9, <3.13"
-slog = {path = "../slog/", develop = false}
-dstauffman = {path = "../dstauffman", develop = false}
-black = {version = ">23.0", optional = true}
-flake8 = {version = "^6.0", optional = true}
-h5py = {version = "^3.7", optional = true}
-isort = {version = "^5.10", optional = true}
-matplotlib = {version = "^3.7", optional = true}
-mypy = {version = "^1.5", optional = true}
-numpy = {version = "^1.24", optional = true}
-pandas = {version = "^1.5", optional = true}
-pylint = {version = "^2.16", optional = true}
-pyqt5 = {version = "^5.15.7", optional = true}
-pyqt5-stubs = {version = "^5.15", optional = true}
-pyqt5-sip = {version = "^12.11", optional = true}  # temp hack for poetry not grabbing it correctly
-pyqt5-qt5 = {version = "^5.15.7", optional = true}  # temp hack for poetry not grabbing it correctly
-pycodestyle = {version = "^2.10", optional = true}
-pytest = {version = "^7.4", optional = true}
-pytest-cov = {version = "^4.0", optional = true}
-qtpy = {version = "^2.2", optional = true}  # wraps any of PyQt5, PyQt6, PySide2, or PySide6
-scipy = {version = "^1.10", optional = true}
-spyder-kernels = {version = "^2.4", optional = true}
+[project.optional-dependencies]
+# Note: static excludes numba/datashader for mypy type checking (as they don't play well together)
+numeric = ["h5py>=3.7", "matplotlib>=3.7", "numpy>=2.0", "pandas>=2.0", "pyarrow>=14.0", "PyQt5>=5.15.11", "pyqt5-sip>=12.11", "pyqt5-qt5>=5.15.2", "qtpy>=2.2", "scipy>=1.10", "tblib>=1.7"]
+shader = ["dstauffman[numeric]", "datashader>=0.15", "numba>=0.57"]
+spyder = ["spyder-kernels>=2.4"]
+static = ["dstauffman[numeric]", "black>=25.0", "flake8>=6.0", "isort>=5.10", "mypy>=1.5", "pycodestyle>=2.10", "pylint>=2.16", "PyQt5-stubs>=5.15"]
+test = ["pytest>=7.4", "pytest-cov>=4.0"]
 
-[tool.poetry.dev-dependencies]
-pytest = "^7.4"
-pytest-cov = "^4.0"
+[project.urls]
+Repository = "https://github.com/DStauffman/dstauffman2"
+Issues = "https://github.com/DStauffman/dstauffman2/issues"
+Changelog = "https://github.com/DStauffman/dstauffman2/blob/main/CHANGELOG.md"
 
-[tool.poetry.extras]
-# Note: use combination of numeric and static for mypy type checking (excludes numba/datashader, which can confuse mypy)
-numeric = ["h5py", "matplotlib", "numpy", "pandas", "PyQt5", "pyqt5-sip", "pyqt5-qt5", "qtpy", "scipy", "tblib"]
-shader = ["datashader", "h5py", "matplotlib", "numba", "numpy", "pandas", "PyQt5", "pyqt5-sip", "pyqt5-qt5", "qtpy", "scipy", "tblib"]
-spyder = ["spyder-kernels"]
-static = ["black", "flake8", "isort", "mypy", "pycodestyle", "pylint", "PyQt5-stubs"]
-
-[tool.poetry.scripts]
+[project.scripts]
 dcs2 = "dstauffman2.__main__:main"
+
+[tool.setuptools.package-data]
+dstauffman2 = ["CHANGELOG.md", "LICENSE.txt", "pyproject.toml", "README.rst", "*.png", "*.pdf", "*.rst", "*.tex", "*.bat", "*.sh"]
 
 [tool.black]
 line-length = 128
-target_version = ["py39", "py310", "py311"]
+target_version = ["py313"]
 include = '\.pyi?$'
 
 [tool.coverage.run]
@@ -117,7 +102,7 @@ directory = "coverage_html_report"
 output = "coverage_html_report/coverage.xml"
 
 [tool.isort]
-py_version = 311
+py_version = 313
 profile = "black"
 line_length = 128
 combine_as_imports = true
@@ -137,10 +122,10 @@ warn_unused_ignores    = true
 #disallow_untyped_calls = true
 #disallow_untyped_defs  = true
 no_implicit_optional   = true
-files                  = [
-    "$MYPY_CONFIG_FILE_DIR/dstauffman2/**/*.py"]
+files                  = ["$MYPY_CONFIG_FILE_DIR/dstauffman2/**/*.py"]
 mypy_path              = [
     "$MYPY_CONFIG_FILE_DIR/../dstauffman",
+    "$MYPY_CONFIG_FILE_DIR/../nubs",
     "$MYPY_CONFIG_FILE_DIR/../slog"]
 untyped_calls_exclude  = ["matplotlib"]
 
@@ -151,10 +136,10 @@ module = [
     "datashader.*",
     "exifread.*",
     "h5py.*",
+    "nose.*",
     "pandas.*",
     "PIL.*",
     "pprofile.*",
-    "PyPDF2.*",
     "pytest.*",
     "pyximport.*",
     "qtpy.*",  # Note would be nice to get rid of this, since PyQt5 is actually stubbed
@@ -164,7 +149,7 @@ ignore_missing_imports = true
 
 [tool.pylint.messages_control]
 max-line-length = 128
-disable = ["C0103", "C0301", "C0411", "C0414", "E0401", "E1101", "E0611", "R0401", "R0402", "R0801", "R0902", "R0903", "R0912", "R0913", "R0914", "R0915", "W0511", "W0702"]
+disable = ["C0103", "C0301", "C0411", "C0414", "E0401", "E0601", "E0606", "E0611", "E1101", "R0401", "R0402", "R0801", "R0902", "R0903", "R0912", "R0913", "R0914", "R0915", "W0511", "W0702"]
 enable = ["I0021"]
 ignore-paths = "^(.*[/\\\\]|)tests[/\\\\]test_.*$"
 
@@ -173,20 +158,148 @@ inherit = false
 convention = "numpy"
 add-ignore = ["D102", "D105", "D204"]
 
-[tool.pyright]
-include = ["dstauffman2/**/*.py",
-    "scripts/*.py"]
-extraPaths = ["../dstauffman",
-    "../slog"]
-exclude = []
-venvPath = "C:\\Users\\DStauffman\\Documents\\venvs"
-venv = "everything"
-pythonVersion = "3.11"
-pythonPlatform = "Windows"
-typeCheckingMode = "basic"
-deprecateTypingAliases = true
-reportGeneralTypeIssues = false
-reportUnboundVariable = false
+[tool.ruff]
+include = ["pyproject.toml", "dstauffman2/**/*.py"]
+line-length = 128
+indent-width = 4
+target-version = "py313"
 
-enableTypeIgnoreComments = true
-reportUnnecessaryTypeIgnoreComment = false
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "D105",  # missing docstring in magic method
+    "D107",  # missing docstring in __init__
+    "D203",  # one blank line required before class docstring
+    "D212",  # multiline docstring summary should start at the first line
+    "D401",  # first line of docstring should be in imperative mood
+    "D417",  # temp, fix these
+    "E501",  # line too long, (use black to manage this)
+    "B007",
+    "B010",
+    "B018",
+    "B023",
+    "B026",
+    "B028",
+    "B030",
+    "B905",
+    "F841",
+    "G001",
+    "I001",  # Import block is un-sorted or un-formatted (use isort to manage this)
+    "N801",
+    "N802",
+    "N803",
+    "N806",
+    "N812",
+    "N816",
+    "S101",
+    "S106",
+    "S107",
+    "S110",
+    "S603",
+    "S606",
+    "S607",
+    "T201",  # `print` found
+    "ANN204",
+    "ANN401",
+    "ARG001",
+    "ARG005",
+    "ARG002",
+    "BLE001",
+    "COM812",
+    "COM819",
+    "DTZ001",
+    "DTZ005",
+    "DTZ007",
+    "EM101",
+    "EM102",
+    "EM103",
+    "ERA001",
+    "FBT001",
+    "FBT002",
+    "FBT003",
+    "FIX002",  # line contains TODO
+    "FURB105",
+    "ICN001",
+    "ISC003",
+    "PD002",
+    "PERF401",
+    "PERF403",
+    "PIE790",
+    "PIE810",
+    "PLC0206",
+    "PLC0208",
+    "PLC0414",
+    "PLC0415",
+    "PLR0402",
+    "PLR0911",
+    "PLR0912",
+    "PLR0913",
+    "PLR0915",
+    "PLR1714",
+    "PLR1730",
+    "PLR2004",
+    "PLR5501",
+    "PLW0603",
+    "PLW1641",
+    "PLW2901",
+    "PT009",  # Use assert instead of unittest assertEqual
+    "PT018",
+    "PT027",
+    "PYI032",
+    "PYI041",
+    "PYI050",
+    "RET504",
+    "RUF001",
+    "RUF005",
+    "RUF021",
+    "RUF028",
+    "RUF034",
+    "RUF100",
+    "SIM102",
+    "SIM103",
+    "SIM105",
+    "SIM108",
+    "SIM110",
+    "SIM117",
+    "SIM118",
+    "SIM210",
+    "SIM300",
+    "SLF001",
+    "TC001",
+    "TC002",
+    "TC003",
+    "TD002",  # Missing author in TODO
+    "TD003",  # Missing issue link in TODO
+    "TD005",
+    "TRY002",
+    "TRY003",
+    "TRY004",
+    "TRY203",
+    "TRY300",
+    "UP004",
+    "UP006",
+    "UP012",
+    "UP015",
+    "UP017",
+    "UP032",
+    "UP034",
+    "UP035",
+    "UP037",
+    "UP043",
+    "UP047",
+    "YTT204",
+]
+
+[tool.ruff.lint.mccabe]
+max-complexity = 30
+
+[tool.ruff.lint.per-file-ignores]
+"dstauffman2/**/__init__.py" = ["F401"]
+"dstauffman2/tests/*" = ["D102", "D205", "D400", "D415", "N801", "N802", "N806"]
+"dstauffman2/**/tests_*.py" = ["D102", "D205", "D400", "D415", "N801", "N802", "N806"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"

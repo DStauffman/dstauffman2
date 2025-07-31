@@ -1,64 +1,66 @@
 r"""
-Test file for the `commands.runtests` module of the "dstauffman2" library.  It is intented to contain
-test cases to demonstrate functionaliy and correct outcomes for all the functions within the module.
+Test file for the `runtests` module of the "dstauffman2.commands" library.
 
 Notes
 -----
 #.  Written by David C. Stauffer in March 2020.
+
 """
 
 # %% Imports
 import argparse
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import dstauffman2 as dcs2
 import dstauffman2.commands as commands
 
 
 # %% commands.parse_tests
-class Test_parse_tests(unittest.TestCase):
+class Test_commands_parse_tests(unittest.TestCase):
     r"""
-    Tests the parse_tests function with the following cases:
+    Tests the commands.parse_tests function with the following cases:
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
+        # fmt: off
         self.folder              = dcs2.get_root_dir()
         self.expected            = argparse.Namespace()
         self.expected.docstrings = False
         self.expected.library    = None
         self.expected.verbose    = False
+        # fmt: on
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         args = commands.parse_tests([])
         self.assertEqual(args, self.expected)
 
-    def test_docstrings(self):
+    def test_docstrings(self) -> None:
         self.expected.docstrings = True
         args = commands.parse_tests(["-d"])
         self.assertEqual(args, self.expected)
 
-    def test_verbose(self):
+    def test_verbose(self) -> None:
         self.expected.verbose = True
         args = commands.parse_tests(["-v"])
         self.assertEqual(args, self.expected)
 
-    def test_library(self):
+    def test_library(self) -> None:
         self.expected.library = "other"
         args = commands.parse_tests(["-l", "other"])
         self.assertEqual(args, self.expected)
 
 
 # %% commands.execute_tests
-class Test_execute_tests(unittest.TestCase):
+class Test_commands_execute_tests(unittest.TestCase):
     r"""
-    Tests the execute_tests function with the following cases:
+    Tests the commands.execute_tests function with the following cases:
         Nominal
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = dcs2.get_root_dir()
         self.args = argparse.Namespace(docstrings=False, library=None, verbose=False)
         self.patch_args = {
@@ -73,19 +75,19 @@ class Test_execute_tests(unittest.TestCase):
         }
 
     @patch("dstauffman2.commands.runtests.run_pytests")
-    def test_nominal(self, mocker):
+    def test_nominal(self, mocker: Mock) -> None:
         commands.execute_tests(self.args)
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.runtests.run_pytests")
-    def test_verbose(self, mocker):
+    def test_verbose(self, mocker: Mock) -> None:
         self.args.verbose = True
         commands.execute_tests(self.args)
         # Note: this doesn't add anything with pytest
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.runtests.run_docstrings")
-    def test_docstrings(self, mocker):
+    def test_docstrings(self, mocker: Mock) -> None:
         self.args.docstrings = True
         commands.execute_tests(self.args)
         (pos_args, kwargs) = mocker.call_args
@@ -93,7 +95,7 @@ class Test_execute_tests(unittest.TestCase):
         self.assertTrue(len(pos_args) > 0)
 
     @patch("dstauffman2.commands.runtests.run_docstrings")
-    def test_docstrings_verbose(self, mocker):
+    def test_docstrings_verbose(self, mocker: Mock) -> None:
         self.args.docstrings = True
         self.args.verbose = True
         commands.execute_tests(self.args)
@@ -102,19 +104,34 @@ class Test_execute_tests(unittest.TestCase):
         self.assertTrue(len(pos_args) > 0)
 
     @patch("dstauffman2.commands.runtests.run_pytests")
-    def test_library(self, mocker):
+    def test_library(self, mocker: Mock) -> None:
         self.args.library = "other_folder"
         commands.execute_tests(self.args)
         (pos_args, kwargs) = mocker.call_args
         self.assertEqual(len(pos_args), 1)
-        self.assertTrue(pos_args[0].endswith("other_folder"))
+        self.assertTrue(str(pos_args[0]).endswith("other_folder"))
+        self.assertEqual(kwargs, {})
 
 
 # %% commands.parse_coverage
-pass  # TODO: write thisS
+class Test_commands_parse_coverage(unittest.TestCase):
+    r"""
+    Tests the commands.parse_coverage function with the following cases:
+        TBD
+    """
+
+    pass  # TODO: write this
+
 
 # %% commands.execute_coverage
-pass  # TODO: write thisS
+class Test_commands_execute_coverage(unittest.TestCase):
+    r"""
+    Tests the commands.execute_coverage function with the following cases:
+        TBD
+    """
+
+    pass  # TODO: write this
+
 
 # %% Unit test execution
 if __name__ == "__main__":

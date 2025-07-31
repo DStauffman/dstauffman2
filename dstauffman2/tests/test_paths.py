@@ -4,6 +4,7 @@ Test file for the `paths` module of the "dstauffman2" library.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2015.
+
 """
 
 # %% Imports
@@ -39,7 +40,7 @@ class Test_get_tests_dir(unittest.TestCase):
 
     def test_function(self) -> None:
         folder = dcs2.get_tests_dir()
-        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "tests"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "tests"))  # noqa: PTH118
 
 
 # %% get_data_dir
@@ -51,7 +52,7 @@ class Test_get_data_dir(unittest.TestCase):
 
     def test_function(self) -> None:
         folder = dcs2.get_data_dir()
-        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "data"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "data"))  # noqa: PTH118
 
 
 # %% get_images_dir
@@ -63,7 +64,7 @@ class Test_get_images_dir(unittest.TestCase):
 
     def test_function(self) -> None:
         folder = dcs2.get_images_dir()
-        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "images"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "images"))  # noqa: PTH118
 
 
 # %% get_output_dir
@@ -75,7 +76,7 @@ class Test_get_output_dir(unittest.TestCase):
 
     def test_function(self) -> None:
         folder = dcs2.get_output_dir()
-        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "results"))
+        self.assertEqual(str(folder), os.path.join(str(dcs2.get_root_dir()), "results"))  # noqa: PTH118
 
 
 # %% Unit test execution

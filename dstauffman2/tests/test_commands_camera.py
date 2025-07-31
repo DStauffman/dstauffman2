@@ -10,7 +10,7 @@ Notes
 # %% Imports
 import argparse
 import unittest
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 import dstauffman2 as dcs2
 import dstauffman2.commands as commands
@@ -105,43 +105,43 @@ class Test_execute_photos(unittest.TestCase):
         commands.execute_photos(self.args)
 
     @patch("dstauffman2.commands.camera.rename_upper_ext")
-    def test_upper(self, mocker):
+    def test_upper(self, mocker: Mock) -> None:
         self.args.upper = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.camera.find_missing_nums")
-    def test_missing(self, mocker):
+    def test_missing(self, mocker: Mock) -> None:
         self.args.missing = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.camera.find_long_filenames")
-    def test_long(self, mocker):
+    def test_long(self, mocker: Mock) -> None:
         self.args.long = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.camera.find_unexpected_ext")
-    def test_unexpected(self, mocker):
+    def test_unexpected(self, mocker: Mock) -> None:
         self.args.unexpected_ext = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.camera.rename_old_picasa_files")
-    def test_picasa(self, mocker):
+    def test_picasa(self, mocker: Mock) -> None:
         self.args.picasa = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder)
 
     @patch("dstauffman2.commands.camera.batch_resize")
-    def test_resize(self, mocker):
+    def test_resize(self, mocker: Mock) -> None:
         self.args.resize = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with(self.folder, max_width=1024, max_height=768)
 
     @patch("dstauffman2.commands.camera.breakpoint")
-    def test_pause(self, mocker):
+    def test_pause(self, mocker: Mock) -> None:
         self.args.pause = True
         commands.execute_photos(self.args)
         mocker.assert_called_once_with()

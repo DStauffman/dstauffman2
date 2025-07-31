@@ -9,7 +9,7 @@ Notes
 # %% Imports
 from pathlib import Path
 
-from PyPDF2 import PdfFileMerger
+from pypdf import PdfMerger
 
 # %% Constants
 folder = Path(r"C:\Users\DStauffman\Documents\Lockheed_Martin\Security_Clearance")
@@ -18,7 +18,7 @@ folder = Path(r"C:\Users\DStauffman\Documents\Lockheed_Martin\Security_Clearance
 if __name__ == "__main__":
     files = ["2019-01 - work_experience.pdf", "2019-01 - resume_references.pdf"]
 
-    merger = PdfFileMerger()
+    merger = PdfMerger()
     for file in files:
         fullfile = folder / file
         merger.append(fullfile)

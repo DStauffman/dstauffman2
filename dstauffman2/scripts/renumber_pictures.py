@@ -7,6 +7,7 @@ Notes
 """
 
 # %% Imports
+from pathlib import Path
 import re
 
 import dstauffman2.imageproc as dip
@@ -14,9 +15,9 @@ import dstauffman2.imageproc as dip
 # %% Test script
 if __name__ == "__main__":
     # folder to process
-    folder = r"C:\Users\DStauffman\Downloads\Chrome"
+    folder = Path(r"C:\Users\DStauffman\Downloads\Chrome")
 
-    name = re.match(r".* - (?P<name>\w* \w*) - \w", folder)
+    name = re.match(r".* - (?P<name>\w* \w*) - \w", str(folder))
 
     # command
     if name:
