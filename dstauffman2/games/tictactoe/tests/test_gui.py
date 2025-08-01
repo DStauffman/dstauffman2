@@ -13,10 +13,10 @@ import copy
 import sys
 import unittest
 
-import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication, QPushButton
+import numpy as np
 
 from dstauffman import Counter
 

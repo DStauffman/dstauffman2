@@ -44,8 +44,12 @@ class Move(Frozen):
 
     def __eq__(self, other):
         r"""Equality is based on row, column, quadrant and direction, but not on power."""
-        return (self.row == other.row and self.column == other.column and self.quadrant == other.quadrant \
-            and self.direction == other.direction)
+        return (
+            self.row == other.row
+            and self.column == other.column
+            and self.quadrant == other.quadrant
+            and self.direction == other.direction
+        )
 
     def __ne__(self, other):
         r"""Inequality is based on row, column, quadrant and direction, but not on power."""

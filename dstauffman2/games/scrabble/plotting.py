@@ -56,8 +56,7 @@ def plot_board(ax, board):
     tiles = board.played.split("\n")
 
     # fill background
-    ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR["board"], \
-        edgecolor=None))
+    ax.add_patch(Rectangle((-xmin - 1, -ymin - 1), xmax - xmin, ymax - ymin, facecolor=COLOR["board"], edgecolor=None))
 
     # draw horizontal lines
     for i in range(n + 1):

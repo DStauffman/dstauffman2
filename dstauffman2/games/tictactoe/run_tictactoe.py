@@ -4,6 +4,7 @@ Runs the Tic Tac Toe GUI.
 Written by David C. Stauffer in March 2016.
 
 """
+
 # Build with:
 # pyinstaller --onefile --windowed run_tictactoe.py
 

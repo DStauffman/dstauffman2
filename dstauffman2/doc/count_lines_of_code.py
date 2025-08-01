@@ -112,7 +112,7 @@ def print_latex_tables(out, keys):
     cols = ["total", "code", "comment", "blank", "tests", "docs"]
 
     text = []
-    text += make_preamble("Count Lines of Code Breakdown","tab:cloc","lcccccc")
+    text += make_preamble("Count Lines of Code Breakdown", "tab:cloc", "lcccccc")
     text.append(r"        \textbf{Module} & \textbf{Total} & \textbf{Code} & \textbf{Comments} & \textbf{Blank} & \textbf{Tests} & \textbf{Documentation} \\ \midrule")
     for key in keys:
         lines = out[key]["lines"]
@@ -124,8 +124,8 @@ def print_latex_tables(out, keys):
             midrule = r" \midrule"
         values = " & ".join("{}".format(lines[x]) for x in cols)
         text.append(r"        \multirow{2}[3]{*}{\textbf{\texttt{" + name + r"}}} & " + values + r" \\")
-        #(100\%) & (36.0\%) & (28.6\%) & (22.4\%) & (9.3\%) & (3.7\%)
-        values = " & ".join("({:.1f}\\%)".format(100*lines[x]/lines["total"]) for x in cols)
+        # (100\%) & (36.0\%) & (28.6\%) & (22.4\%) & (9.3\%) & (3.7\%)
+        values = " & ".join("({:.1f}\\%)".format(100 * lines[x] / lines["total"]) for x in cols)
         text.append(r"        & " + values + r" \\" + midrule)
     text += make_conclusion()
 

@@ -9,19 +9,32 @@ Notes
 
 # %% Imports
 import doctest
+from enum import Enum, unique
 import glob
 import os
 import pickle
 import sys
 import unittest
-from enum import Enum, unique
 
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import (
+    QApplication,
+    QComboBox,
+    QFormLayout,
+    QGridLayout,
+    QGroupBox,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QPushButton,
+    QRadioButton,
+    QToolTip,
+    QVBoxLayout,
+    QWidget,
+)
 import matplotlib.pyplot as plt
 import numpy as np
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QComboBox, QFormLayout, QGridLayout, QGroupBox, \
-    QHBoxLayout, QLabel, QLineEdit, QMainWindow, QPushButton, QRadioButton, QToolTip, QVBoxLayout, \
-    QWidget
 
 # %% Constants
 GUI_TOKEN   = -1
@@ -81,7 +94,8 @@ class GuiSettings(object):
         with open(filename, "wb") as file:
             pickle.dump(self, file)
 
-#%% Classes - BacGui
+
+# %% Classes - BacGui
 class BacGui(QMainWindow):
     r"""The BAC GUI."""
 
@@ -92,7 +106,7 @@ class BacGui(QMainWindow):
         # call super method
         super().__init__()
         # initialize the state data
-        #self.initialize_state(filename, board, cur_move, cur_game, game_hist)
+        # self.initialize_state(filename, board, cur_move, cur_game, game_hist)
         # call init method to instantiate the GUI
         self.init()
 
@@ -226,15 +240,15 @@ class BacGui(QMainWindow):
         self.setWindowIcon(QtGui.QIcon(os.path.join(get_root_dir(), "bac_gui.png")))
         self.show()
 
-    #%% Other initializations
+    # %% Other initializations
     def initialize_profiles(self):
         r"""Gets the list of all current profiles that exist in the folder."""
         # Check to see if the Default profile exists, and if so load it, else create it
         folder = get_root_dir()
         filename = os.path.join(folder, "Default.pkl")
-        if os.path.isfile(filename): # pragma: no cover
+        if os.path.isfile(filename):  # pragma: no cover
             self.gui_settings = GuiSettings.load(filename)
-        else: # pragma: no cover
+        else:  # pragma: no cover
             self.gui_settings.save(filename)
         # Find all the pickle files that exist, and make them into profiles
         profiles = glob.glob(os.path.join(folder, "*.pkl"))
@@ -243,7 +257,7 @@ class BacGui(QMainWindow):
         profiles = ["Default"] + sorted(profiles) + ["New+"]
         return profiles
 
-    #%% wrapper
+    # %% wrapper
     def wrapper(self):
         r"""Acts as a wrapper to everything the GUI needs to do."""
         # Note: nothing is done to update the profile field, it's assumed to correct already
@@ -262,15 +276,15 @@ class BacGui(QMainWindow):
         elif self.gui_settings.gender == Gender.male:
             if self.radio_fmal.isChecked():
                 self.radio_male.setChecked(True)
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise ValueError('Unexpected value for gender: "{}".'.format(self.gui_settings.gender))
 
-    #%% Other callbacks - closing
+    # %% Other callbacks - closing
     def closeEvent(self, event):
         r"""Things in here happen on GUI closing."""
         event.accept()
 
-    #%% Other callbacks - center the GUI on the screen
+    # %% Other callbacks - center the GUI on the screen
     def center(self):
         r"""Makes the GUI centered on the active screen."""
         frame_gm = self.frameGeometry()
@@ -279,7 +293,7 @@ class BacGui(QMainWindow):
         frame_gm.moveCenter(center_point)
         self.move(frame_gm.topLeft())
 
-    #%% Other callbacks - dislaying an error for invalid edit box entries
+    # %% Other callbacks - dislaying an error for invalid edit box entries
     def display_text_error(self, field):
         r"""Displays a temporary message for invalid characters within the line edit boxes."""
         field.setStyleSheet("color: white; background-color: red; font: bold;")
@@ -290,7 +304,7 @@ class BacGui(QMainWindow):
         self.timer.start()
         self.wrapper()
 
-    #%% Other callbacks - updating the selected profile name
+    # %% Other callbacks - updating the selected profile name
     def onActivated(self, value):
         r"""Controls behavior when mode combobox is changed."""
         # check if "New+" was selected
@@ -298,7 +312,7 @@ class BacGui(QMainWindow):
             # get the current items
             items = [self.popup_profile.itemText(i) for i in range(self.popup_profile.count())]
             # ask for a new profile
-            text, ok = QtGui.QInputDialog.getText(self, "Profile Name",  "Enter a new profile:")
+            text, ok = QtGui.QInputDialog.getText(self, "Profile Name", "Enter a new profile:")
             if not ok or not text:
                 # put back to last choice
                 ix = items.index(self.gui_settings.profile)
@@ -317,7 +331,7 @@ class BacGui(QMainWindow):
                     self.gui_settings = gui_settings
                     # find where to insert in GUI and insert
                     i = 1
-                    while i < len(items)-1 and items[i] < text:
+                    while i < len(items) - 1 and items[i] < text:
                         i += 1
                     self.popup_profile.insertItem(i, text)
                     self.popup_profile.setCurrentIndex(i)
@@ -329,11 +343,11 @@ class BacGui(QMainWindow):
         # update the GUI to reflect any new settings
         self.wrapper()
 
-    #%% Other callbacks - update the line edit boxes
+    # %% Other callbacks - update the line edit boxes
     def text_finished(self):
         r"""Updates gui_settings for LineEdit text changes that happen when you leave the box."""
-        sender  = self.sender()
-        fields  = self.gui_settings.get_text_fields()
+        sender = self.sender()
+        fields = self.gui_settings.get_text_fields()
         senders = [getattr(self, "lne_" + field) for field in fields]
         for ix in range(len(senders)):
             if sender == senders[ix]:
@@ -349,19 +363,20 @@ class BacGui(QMainWindow):
                 else:
                     setattr(self.gui_settings, fields[ix], value)
                     break
-        else: # pragma: no cover
+        else:  # pragma: no cover
             raise ValueError("Unexpected field went into this method.")
 
         # check for conditions to update the BMI
         if sender == self.lne_height or sender == self.lne_weight:
             if self.gui_settings.height != GUI_TOKEN and self.gui_settings.weight != GUI_TOKEN:
                 if self.gui_settings.bmi == GUI_TOKEN:
-                    self.gui_settings.bmi = calculate_bmi(self.gui_settings.height, self.gui_settings.weight, \
-                        self.gui_settings.gender, BMI_CONV)
+                    self.gui_settings.bmi = calculate_bmi(
+                        self.gui_settings.height, self.gui_settings.weight, self.gui_settings.gender, BMI_CONV
+                    )
         # call the wrapper to update all the possible field changes
         self.wrapper()
 
-    #%% Other callbacks - Updating the gender button group
+    # %% Other callbacks - Updating the gender button group
     def radio_toggle(self):
         r"""Controls the gender radio button group."""
         # assert that only one of the button group is checked
@@ -369,17 +384,17 @@ class BacGui(QMainWindow):
         # determine which button is checked and update the settings accordingly
         if self.radio_fmal.isChecked():
             self.gui_settings.gender = Gender.female
-        elif self.radio_male.isChecked(): # pragma: no branch
+        elif self.radio_male.isChecked():  # pragma: no branch
             self.gui_settings.gender = Gender.male
         self.wrapper()
 
-    #%% Other callbacks - Save button
+    # %% Other callbacks - Save button
     def btn_save_function(self):
         r"""Saves the current settings to the specified profile."""
         # save the profile
         self.gui_settings.save(os.path.join(get_root_dir(), self.gui_settings.profile + ".pkl"))
 
-    #%% Other callbacks - Plot button
+    # %% Other callbacks - Plot button
     def btn_plot_function(self):
         r"""Plots the results and saves to a .png file."""
         # call the plotting function
@@ -388,7 +403,8 @@ class BacGui(QMainWindow):
         filename = os.path.join(get_root_dir(), fig.canvas.manager.get_window_title() + ".png")
         fig.savefig(filename, dpi=160, bbox_inches="tight")
 
-#%% Functions - get_root_dir
+
+# %% Functions - get_root_dir
 def get_root_dir():
     r"""
     Returns the folder that contains this source file and thus the root folder for the whole code.
@@ -408,7 +424,8 @@ def get_root_dir():
     folder = os.path.realpath(os.path.join(os.getcwd(), os.path.dirname(__file__)))
     return folder
 
-#%% Functions - calculate_bmi
+
+# %% Functions - calculate_bmi
 def calculate_bmi(height, weight, gender, conv=BMI_CONV):
     r"""
     Calculates the BMI (Body Mass Index) for someone based on their height and weight.
@@ -448,7 +465,8 @@ def calculate_bmi(height, weight, gender, conv=BMI_CONV):
     bmi = weight / height**2 * conv
     return bmi
 
-#%% Functions - calculate_bac
+
+# %% Functions - calculate_bac
 def calculate_bac(time_drinks, drinks, time_out, body_weight):
     r"""
     Calculates a BAC (Blood Alcohol Content) over time.
@@ -467,8 +485,8 @@ def calculate_bac(time_drinks, drinks, time_out, body_weight):
 
     """
     # hard-coded values
-    drink_weight_conv = 0.0375 # converts standard drinks consumed per pound to BAC
-    burn_up = 0.00015 # alcohol content burned up per hour
+    drink_weight_conv = 0.0375  # converts standard drinks consumed per pound to BAC
+    burn_up = 0.00015  # alcohol content burned up per hour
 
     # potentially expand time and data vectors
     if time_drinks[0] > time_out[0]:
@@ -492,7 +510,8 @@ def calculate_bac(time_drinks, drinks, time_out, body_weight):
 
     return bac
 
-#%% Function - plot_bac
+
+# %% Function - plot_bac
 def plot_bac(gui_settings, legal_limit=None):
     r"""
     Plots the BAC over time.
@@ -525,7 +544,7 @@ def plot_bac(gui_settings, legal_limit=None):
     >>> plt.close(fig)
 
     """
-    #% hard-coded values
+    # % hard-coded values
     time_drinks = np.array([1, 2, 3, 4, 5, 6])
     time_out    = np.linspace(0, 12, 1000)
     ratio2per   = 100
@@ -564,7 +583,8 @@ def plot_bac(gui_settings, legal_limit=None):
 
     return fig
 
-#%% Unit Test
+
+# %% Unit Test
 if __name__ == "__main__":
     # turn interactive plotting off
     plt.ioff()

@@ -67,7 +67,7 @@ if __name__ == "__main__":
     t = timeit.timeit("knight.solve_min_puzzle(board2)", setup="import dstauffman2.games.knight as knight; " + \
         "board2=knight.char_board_to_nums(knight.BOARD2); " +
         "board2[0, 0] = knight.Piece.start; board2[11, -1] = knight.Piece.final;", number=5)
-    print(t/5)
+    print(t / 5)
 
     # Save profile results
     profile.dump_stats(os.path.join(folder, "profile_results.txt"))

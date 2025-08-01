@@ -14,13 +14,24 @@ import os
 import sys
 import unittest
 
-import numpy as np
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import (
+    QAction,
+    QApplication,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QMainWindow,
+    QMessageBox,
+    QPushButton,
+    QToolTip,
+    QVBoxLayout,
+    QWidget,
+)
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import Axes
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QAction, QApplication, QGridLayout, QHBoxLayout, QLabel, QMainWindow, \
-    QMessageBox, QPushButton, QToolTip, QVBoxLayout, QWidget
+import numpy as np
 
 from dstauffman import Counter
 
@@ -405,8 +416,7 @@ class TicTacToeGui(QMainWindow):
         # check that move is on a free square
         if self.state.board[x, y] == PLAYER["none"]:
             # make the move
-            make_move(self.board_axes, self.state.board, x, y, self.state.cur_move, \
-                self.state.cur_game, self.state.game_hist)
+            make_move(self.board_axes, self.state.board, x, y, self.state.cur_move, self.state.cur_game, self.state.game_hist)
         # redraw the game/board
         self.wrapper()
 

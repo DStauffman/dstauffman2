@@ -20,6 +20,7 @@ def reload_ghap(line):
     r"""Force reloading of `ghap` module."""
     from dstauffman import reload_package
     import ghap
+
     reload_package(ghap)
 
 
@@ -29,6 +30,7 @@ def reload_cromo(line):
     r"""Force reloading of `cromo` module."""
     from dstauffman import reload_package
     import cromo
+
     reload_package(cromo)
 
 
@@ -48,6 +50,7 @@ def cc(line):
     from IPython import get_ipython
     import dstauffman
     import ghap
+
     dstauffman.reload_package(ghap, disp_reloads=False)
     dstauffman.reload_package(dstauffman, disp_reloads=False)
     get_ipython().magic("%reset -f")

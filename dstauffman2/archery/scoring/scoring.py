@@ -560,8 +560,8 @@ span.white {color: #ffffff;}
                 table1 = table1 + "  <td>{}</td>\n".format(np.sum(this_nums[j - 2 : j + 1]))
         num_tens = np.count_nonzero([x == "10" for x in this_data])
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1])
-        table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1]-num_tens)
-        table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(np.count_nonzero([x.lower()=="x" for x in this_data]))
+        table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1] - num_tens)
+        table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(np.count_nonzero([x.lower() == "x" for x in this_data]))
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(num_tens)
         table1 = table1 + " </tr>\n <tr>\n"
         for j in range(len(this_data)):
@@ -570,18 +570,18 @@ span.white {color: #ffffff;}
         table1 = table1 + " </tr>\n"
         table2 = table2 + "<tr>"
         table2 = table2 + "<td>" + names[i] + "</td>\n"
-        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x.lower()=="x" for x in this_data]))
-        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x=="10" for x in this_data]))
-        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x=="9" for x in this_data]))
-        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x=="8" for x in this_data]))
-        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x=="7" for x in this_data]))
-        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x=="6" for x in this_data]))
-        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x=="5" for x in this_data]))
-        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x=="4" for x in this_data]))
-        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x=="3" for x in this_data]))
-        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x=="2" for x in this_data]))
-        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x=="1" for x in this_data]))
-        table2 = table2 + '<td class="W"><span class="red">{}</span></td>\n'.format(np.count_nonzero([x.lower()=="m" or x == "0" for x in this_data]))
+        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x.lower() == "x" for x in this_data]))
+        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x == "10" for x in this_data]))
+        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x == "9" for x in this_data]))
+        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x == "8" for x in this_data]))
+        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x == "7" for x in this_data]))
+        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x == "6" for x in this_data]))
+        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x == "5" for x in this_data]))
+        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x == "4" for x in this_data]))
+        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x == "3" for x in this_data]))
+        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x == "2" for x in this_data]))
+        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x == "1" for x in this_data]))
+        table2 = table2 + '<td class="W"><span class="red">{}</span></td>\n'.format(np.count_nonzero([x.lower() == "m" or x == "0" for x in this_data]))
         table2 = table2 + "</tr>\n"
     table1 = table1 + "</table>\n"
 

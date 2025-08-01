@@ -492,8 +492,7 @@ class Test__sort_best_moves(unittest.TestCase):
         self.sorted_moves = np.array([2, -3, -2, 3, -4, 4, -1, 1], dtype=int)
 
     def test_nominal(self):
-        sorted_moves = knight._sort_best_moves(self.board, self.moves, self.costs, self.transports, \
-            self.start_x, self.start_y)
+        sorted_moves = knight._sort_best_moves(self.board, self.moves, self.costs, self.transports, self.start_x, self.start_y)
         np.testing.assert_array_equal(sorted_moves, self.sorted_moves)
 
     def test_small_board(self):
@@ -504,8 +503,7 @@ class Test__sort_best_moves(unittest.TestCase):
         self.start_x = 0
         self.start_y = 0
         self.sorted_moves = np.array([2], dtype=int)
-        sorted_moves = knight._sort_best_moves(self.board, self.moves, self.costs, self.transports, \
-            self.start_x, self.start_y)
+        sorted_moves = knight._sort_best_moves(self.board, self.moves, self.costs, self.transports, self.start_x, self.start_y)
         np.testing.assert_array_equal(sorted_moves, self.sorted_moves)
 
 

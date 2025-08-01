@@ -587,7 +587,11 @@ def convert_tif_to_jpg(
 
 # %% number_files
 def number_files(
-    folder: Path, prefix: str = "Image ", start: int = 1, digits: int = 2, process_extensions: Iterable[str] = PROCESS_EXTENSIONS
+    folder: Path,
+    prefix: str = "Image ",
+    start: int = 1,
+    digits: int = 2,
+    process_extensions: Iterable[str] = PROCESS_EXTENSIONS,
 ) -> None:
     r"""
     Numbers the files in the folder using the given prefix, starting value, and number of digits.
@@ -816,14 +820,14 @@ def get_raw_file_from_datetime(
                 shutil.copyfile(old_file, new_file)
         else:
             missed.append(old_file)
-            print(' File: "{}" has a time stamp of {} and was not matched to anything in the raw folder.'.format(img_times[name], name))
+            print(' File: "{}" has a time stamp of {} and was not matched to anything in the raw folder.'.format(img_times[name], name))  # fmt: skip
 
     # give a warning for those that were missed or could be wrong
     if missed:
-        message = "The following files did not match any raw file and were skipped:\n" + "\n".join((" {}".format(x) for x in missed))
+        message = "The following files did not match any raw file and were skipped:\n" + "\n".join((" {}".format(x) for x in missed))  # fmt: skip
         warnings.warn(message)
     if possibly_wrong:
-        message = "The following files could not be uniquely determined and might be wrong:\n" + "\n".join((" {}".format(x) for x in possibly_wrong))
+        message = "The following files could not be uniquely determined and might be wrong:\n" + "\n".join((" {}".format(x) for x in possibly_wrong))  # fmt: skip
         warnings.warn(message)
     return (missed, possibly_wrong)
 

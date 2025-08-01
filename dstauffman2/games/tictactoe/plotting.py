@@ -47,8 +47,7 @@ def plot_cur_move(ax, move):
     box_size = SIZES["square"]
 
     # fill background
-    ax.add_patch(Rectangle((-box_size/2, -box_size/2), box_size, box_size, \
-        facecolor=COLOR["board"], edgecolor="k"))
+    ax.add_patch(Rectangle((-box_size / 2, -box_size / 2), box_size, box_size, facecolor=COLOR["board"], edgecolor="k"))
 
     # draw the piece
     if move == PLAYER["x"]:
@@ -109,7 +108,7 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         coords2 = [(c[0]*size/2+hc, c[1]*size/2+vc) for c in [(-1, 1), (-1+width, 1), (1, -1), (1-width, -1), (-1, 1)]]
     if shape == PLAYER["o"]:
         # plot an O
-        patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor="k")
+        patch1 = Wedge((hc, vc), size / 2, 0, 360, width=size * width / 2, facecolor=color, edgecolor="k")
         piece = [patch1]
     elif shape == PLAYER["x"]:
         # plot an X
@@ -119,7 +118,7 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         ax
     elif shape == PLAYER["draw"]:
         # plot a combined O and X
-        patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor="k")
+        patch1 = Wedge((hc, vc), size / 2, 0, 360, width=size * width / 2, facecolor=color, edgecolor="k")
         patch2 = Polygon(coords1, True, facecolor=color, edgecolor="k")
         patch3 = Polygon(coords2, True, facecolor=color, edgecolor="k")
         piece = [patch1, patch2, patch3]
@@ -172,8 +171,7 @@ def plot_board(ax, board):
     ymax = n - 1 + s
 
     # fill background
-    ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR["board"], \
-        edgecolor=None))
+    ax.add_patch(Rectangle((-xmin - 1, -ymin - 1), xmax - xmin, ymax - ymin, facecolor=COLOR["board"], edgecolor=None))
 
     # draw minor horizontal lines
     ax.plot([1 - s, 1 - s], [ymin, ymax], color=COLOR["edge"], linewidth=2)

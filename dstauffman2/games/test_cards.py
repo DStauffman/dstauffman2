@@ -72,7 +72,8 @@ class Test_card(unittest.TestCase):
         self.assertGreaterEqual(self.cards[4], self.cards[5])
         self.assertFalse(self.cards[0] >= self.cards[1])
 
-#%% Deck
+
+# %% Deck
 class Test_Deck(unittest.TestCase):
     r"""
     Tests the Deck class with the following cases:

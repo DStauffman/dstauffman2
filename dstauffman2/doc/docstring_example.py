@@ -9,6 +9,7 @@ extend over multiple lines, the closing three quotation marks must be on
 a line by itself, preferably preceeded by a blank line.
 
 """
+
 import os  # standard library imports first
 
 # Do NOT import using *, e.g. from numpy import *

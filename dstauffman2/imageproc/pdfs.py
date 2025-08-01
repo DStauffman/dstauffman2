@@ -54,9 +54,7 @@ def _resize_image(image: Image, *, width: int, height: int) -> Image:
 
 
 # %% Functions - _build_full_page
-def _build_full_page(
-    this_image: Image, *, width: int, height: int, background_color: _C, border: int, debug: bool
-) -> Image:
+def _build_full_page(this_image: Image, *, width: int, height: int, background_color: _C, border: int, debug: bool) -> Image:
     """Builds a full page from the given image."""
     new_image = Image.new("RGB", (width, height))
     new_image.paste(background_color, (0, 0, width, height))
@@ -101,12 +99,12 @@ def _build_dual_page(
         new_image.paste(images[0], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
         offsets = (offset_right, offset2) if right else (offset_left, offset2)
         new_image.paste(images[1], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
     else:
         if right:
             offsets = (offset_right, offset1 + offset_delta // 2)
@@ -115,7 +113,7 @@ def _build_dual_page(
         new_image.paste(images[0], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + height, offsets[1] + width), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + height, offsets[1] + width), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
 
     return new_image
 
@@ -141,7 +139,7 @@ def _build_triplet_page(
     offset_left = border
     offset_right = border + center_offset
     offset_delta = width - height
-    offset_half = 3*border + 3*height - width  # full page height - border - width
+    offset_half = 3 * border + 3 * height - width  # full page height - border - width
     if all(is_horizontal):
         assert len(images) == 3, "Expect three images if all horizontal."
     else:
@@ -155,7 +153,7 @@ def _build_triplet_page(
     if debug:
         draw = ImageDraw.Draw(new_image)
         temp = (width, height) if is_horizontal[0] else (height, width)
-        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
     if is_horizontal[0]:
         if is_horizontal[1]:
             offsets = (offset_right, offset2) if right else (offset_left, offset2)
@@ -170,13 +168,13 @@ def _build_triplet_page(
     if debug:
         draw = ImageDraw.Draw(new_image)
         temp = (width, height) if is_horizontal[1] else (height, width)
-        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+        draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
     if all(is_horizontal):
         offsets = (offset_right, offset3) if right else (offset_left, offset3)
         new_image.paste(images[2], offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + width, offsets[1] + height), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
 
     return new_image
 
@@ -195,6 +193,7 @@ def _build_quad_page(
     debug: bool,
 ) -> Image:
     """Add up to four photos to the given page in a 2x2 grid."""
+
     def _add_image(new_image: Image, this_image: Image, offsets: tuple[int, int], debug: bool, is_horizontal: bool):
         new_image.paste(this_image, offsets)
         if debug:
@@ -202,7 +201,7 @@ def _build_quad_page(
             big = max(width, height)
             sml = min(width, height)
             temp = (big, sml) if is_horizontal else (sml, big)
-            draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)
+            draw.rectangle((offsets[0], offsets[1], offsets[0] + temp[0], offsets[1] + temp[1]), outline=DEBUG_COLOR, width=DEBUG_WIDTH)  # fmt: skip
 
     is_horizontal = [image.size[0] >= image.size[1] for image in images]
     offset1 = border
@@ -265,7 +264,7 @@ def _build_single_page(
             # save for next loop
             left = new_image
         else:
-            full = Image.new("RGB", (2*width, height))
+            full = Image.new("RGB", (2 * width, height))
             full.paste(left, (0, 0))
             full.paste(new_image, (width, 0))
             if line_color is not None:
@@ -373,7 +372,7 @@ def _build_multipage(
             # is the last page, and it's only the left, then save
             book_pages.append(new_image)
             break
-        full = Image.new("RGB", (2*width, height))
+        full = Image.new("RGB", (2 * width, height))
         full.paste(left, (0, 0))
         full.paste(new_image, (width, 0))
         if line_color is not None:
@@ -389,10 +388,10 @@ def build_book(
     files: list[Path] | list[list[Path]],
     pdf_filename: Path,
     *,
-    width: int = 300*12,
-    height: int = 300*12,
-    photo_width: int = 300*12,
-    photo_height: int = 300*12,
+    width: int = 300 * 12,
+    height: int = 300 * 12,
+    photo_width: int = 300 * 12,
+    photo_height: int = 300 * 12,
     border: int = 0,
     dpi: int = 300,
     layout: str = "full",

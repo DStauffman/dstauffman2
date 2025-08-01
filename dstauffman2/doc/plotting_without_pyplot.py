@@ -10,13 +10,13 @@ Notes
 # %% Imports
 import os
 
-import numpy as np
-from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
-from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
-from matplotlib.figure import Figure
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
+from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.figure import Figure
+import numpy as np
 
 from dstauffman import close_all, get_images_dir
 

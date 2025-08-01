@@ -12,8 +12,10 @@ Notes
 """
 
 # %% Imports
+# fmt: off
 from .scoring import get_root_dir, score_text_to_number, convert_data_to_scores, plot_mean_and_std, \
     normal_curve, excel_date_to_str, read_from_excel_datafile, create_scoresheet
+# fmt: on
 
 # %% Unit test
 if __name__ == "__main__":

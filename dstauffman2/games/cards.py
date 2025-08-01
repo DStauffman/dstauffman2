@@ -72,7 +72,7 @@ RANK_SYMBOL[Rank.QUEEN] = "Q"
 RANK_SYMBOL[Rank.KING]  = "K"
 RANK_SYMBOL[Rank.ACE]   = "A"
 # all possible straights
-STRAIGHTS = [set(range(i, i+5)) for i in range(9)]
+STRAIGHTS = [set(range(i, i + 5)) for i in range(9)]
 
 
 # %% Classes - Card

@@ -15,11 +15,11 @@ import os
 import sys
 import unittest
 
-import matplotlib.pyplot as plt
-import numpy as np
 from PyQt5 import QtCore
 from PyQt5.QtTest import QTest
 from PyQt5.QtWidgets import QApplication
+import matplotlib.pyplot as plt
+import numpy as np
 
 import dstauffman2.apps.bac_gui as bac
 

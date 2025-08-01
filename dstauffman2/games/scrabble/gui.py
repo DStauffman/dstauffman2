@@ -14,13 +14,24 @@ import pickle
 import sys
 import unittest
 
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import (
+    QAction,
+    QApplication,
+    QGridLayout,
+    QHBoxLayout,
+    QLabel,
+    QLineEdit,
+    QMainWindow,
+    QPushButton,
+    QToolTip,
+    QVBoxLayout,
+    QWidget,
+)
 from matplotlib import colors
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import Axes
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QAction, QApplication, QGridLayout, QHBoxLayout, QLabel, QLineEdit, \
-    QMainWindow, QPushButton, QToolTip, QVBoxLayout, QWidget
 
 from dstauffman import pprint_dict
 

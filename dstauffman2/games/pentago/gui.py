@@ -14,12 +14,12 @@ import os
 import sys
 import unittest
 
-import numpy as np
+from PyQt5 import QtCore, QtGui
+from PyQt5.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QToolTip, QWidget
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import Axes
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QToolTip, QWidget
+import numpy as np
 
 from dstauffman import Counter
 

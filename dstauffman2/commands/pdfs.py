@@ -7,17 +7,18 @@ Notes
 
 """
 
-#%% Imports
+# %% Imports
 import argparse
 import doctest
 import os
 from typing import List, Tuple
 import unittest
 
-from pypdf import PdfReader, PdfMerger, PdfWriter
+from pypdf import PdfMerger, PdfReader, PdfWriter
 
-#%% Functions - split_pdf
-def split_pdf(src_file: str, pages: Tuple[int], out_file:str = "out.pdf") -> None:
+
+# %% Functions - split_pdf
+def split_pdf(src_file: str, pages: Tuple[int], out_file: str = "out.pdf") -> None:
     r"""Splits a given PDF file into pieces."""
     # open the source file
     with open(src_file, "rb") as file:
@@ -28,11 +29,12 @@ def split_pdf(src_file: str, pages: Tuple[int], out_file:str = "out.pdf") -> Non
             writer = PdfWriter()
             writer.addPage(reader.getPage(page))
             # write out the accumulated pages to disk
-            with open(out_file.format(page+1), "wb") as out:
+            with open(out_file.format(page + 1), "wb") as out:
                 writer.write(out)
 
-#%% Functions - combine_pdf
-def combine_pdf(folder: str, files: List[str], out_file:str = "out.pdf"):
+
+# %% Functions - combine_pdf
+def combine_pdf(folder: str, files: List[str], out_file: str = "out.pdf"):
     r"""Combines the given files into a master file"""
     merger = PdfMerger()
     out_file = out_file if os.path.pathsep in out_file else os.path.join(folder, out_file)
@@ -41,7 +43,8 @@ def combine_pdf(folder: str, files: List[str], out_file:str = "out.pdf"):
         merger.append(fullfile)
     merger.write(out_file)
 
-#%% Functions - parse_pdf
+
+# %% Functions - parse_pdf
 def parse_pdf(input_args: List[str]) -> argparse.Namespace:
     r"""
     Parser for the PDF command.
@@ -84,7 +87,8 @@ def parse_pdf(input_args: List[str]) -> argparse.Namespace:
     args = parser.parse_args(input_args)
     return args
 
-#%% Functions - execute_pdf
+
+# %% Functions - execute_pdf
 def execute_pdf(args: argparse.Namespace) -> int:
     r"""
     Executes the PDF processing commands.
@@ -113,18 +117,21 @@ def execute_pdf(args: argparse.Namespace) -> int:
 
     """
     # alias options
+    # fmt: off
     command  = args.command
     folder   = os.path.abspath(args.folder)
     src_file = args.src_file
     out_file = args.out_file
     pages    = args.pages
+    # fmt: on
 
     if command == "split":
         split_pdf(src_file=src_file, pages=pages, out_file=out_file)
     elif command == "combine":
         combine_pdf(folder=folder, files=src_file, out_file=out_file)
 
-#%% Unit test
+
+# %% Unit test
 if __name__ == "__main__":
     unittest.main(module="dstauffman2.tests.test_commands_pdf", exit=False)
     doctest.testmod(verbose=False)

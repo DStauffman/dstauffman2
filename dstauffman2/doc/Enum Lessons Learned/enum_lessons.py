@@ -75,9 +75,12 @@ class TbStatus2(IntEnum):
 # %% Functions
 def get_those_infected(tb_status):
     r"""Finds anyone who is infected with TB."""
-    ix_infected = (tb_status == TbStatus.latent_recent) | (tb_status == \
-        TbStatus.latent_remote) | (tb_status == TbStatus.active_treated) | \
-        (tb_status == TbStatus.active_untreat)
+    ix_infected = (
+        (tb_status == TbStatus.latent_recent)
+        | (tb_status == TbStatus.latent_remote)
+        | (tb_status == TbStatus.active_treated)
+        | (tb_status == TbStatus.active_untreat)
+    )
     return ix_infected
 
 
@@ -93,7 +96,7 @@ if __name__ == "__main__":
     tb_status = np.full(num, TbStatus.null, dtype=int)
     ix = np.random.rand(num)
     tb_status[ix >= 0.5] = TbStatus.active_treated
-    tb_status[ix <  0.5] = TbStatus.uninfected
+    tb_status[ix <  0.5] = TbStatus.uninfected  # fmt: skip
 
     ix_infected1 = tb_status > 0
     ix_infected2 = get_those_infected(tb_status)

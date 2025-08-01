@@ -10,6 +10,7 @@ from dstauffman2 import get_images_dir
 # %% Constants
 _C = tuple[int, int, int]
 
+
 # %% Functions - draw_gradient
 def draw_gradient(width: int, height: int, color_one: _C, color_two: _C, direction: str) -> Image:
     base = Image.new("RGB", (width, height), color_one)
@@ -30,7 +31,7 @@ def draw_gradient(width: int, height: int, color_one: _C, color_two: _C, directi
 
 
 # %% Functions
-def create_test_images(folder: Path, *, width: int = 4*300, height: int = 6*300, dpi: int = 300) -> None:
+def create_test_images(folder: Path, *, width: int = 4 * 300, height: int = 6 * 300, dpi: int = 300) -> None:
     """Create a bunch of simple images for use in testing."""
     # create black image
     black = Image.new("RGB", (width, height))

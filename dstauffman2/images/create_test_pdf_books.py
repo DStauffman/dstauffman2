@@ -15,8 +15,8 @@ if __name__ == "__main__":
 
     dpi = 300
     border = dpi // 4
-    height = 4*dpi
-    width = 6*dpi
+    height = 4 * dpi
+    width = 6 * dpi
     background_color = (255, 255, 255)
     line_color = (0, 0, 0)
     debug = True
@@ -25,10 +25,10 @@ if __name__ == "__main__":
     build_book(
         files,
         folder / "Full Page.pdf",
-        height=12*dpi,
-        width=12*dpi,
-        photo_height=12*dpi,
-        photo_width=12*dpi,
+        height=12 * dpi,
+        width=12 * dpi,
+        photo_height=12 * dpi,
+        photo_width=12 * dpi,
         border=0,
         layout="full",
         background_color=(0, 0, 0),
@@ -116,7 +116,7 @@ if __name__ == "__main__":
         photo_height=height,
         photo_width=width,
         border=border,
-        center_offset=3*border,
+        center_offset=3 * border,
         layout="dual_4x6",
         background_color=(255, 255, 255),
         line_color=(63, 63, 63),
