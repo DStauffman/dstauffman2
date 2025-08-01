@@ -4,6 +4,7 @@ Script for combining some PDFs together.
 Notes
 -----
 #.  Written by David C. Stauffer in June 2017.
+
 """
 
 # %% Imports

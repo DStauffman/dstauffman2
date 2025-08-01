@@ -6,6 +6,7 @@ Notes
 #.  Adapted to a __main__ function by David C. Stauffer in February 2016.
 #.  This model has three methods of running based on command arguments, 'null', 'test' or 'run'.
     The 'run' is the default.  'test' executes the unit tests, and 'null' does nothing.
+
 """
 
 # %% Imports

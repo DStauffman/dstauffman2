@@ -4,6 +4,7 @@ Enum lessons learned examples.
 Notes
 -----
 #.  Written by David C. Stauffer in April 2015.
+
 """
 
 # %% Imports
@@ -47,7 +48,9 @@ class TbStatus(_IntEnumPlus):
     -----
     #.  Negative values are uninfected, positive values are infected, zero
         is undefined.
+
     """
+
     null           =  0  # not set, used for preallocation
     uninfected     = -1  # never been infected
     recovered      = -2  # currently uninfected, but have been infected in the past
@@ -59,6 +62,7 @@ class TbStatus(_IntEnumPlus):
 
 class TbStatus2(IntEnum):
     r"""Standard Enumerator."""
+
     null           =  0
     uninfected     = -1
     recovered      = -2

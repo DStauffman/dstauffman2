@@ -5,6 +5,7 @@ the rest of the code.
 Notes
 -----
 #.  Written by David C. Stauffer in February 2015.
+
 """
 
 # %% Imports

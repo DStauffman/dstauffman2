@@ -4,6 +4,7 @@ Test file to execute all the docstrings within the pentago code.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports

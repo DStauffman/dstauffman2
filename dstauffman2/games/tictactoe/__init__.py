@@ -4,6 +4,7 @@ Tic Tac Toe board game as a Python GUI.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Logging

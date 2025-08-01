@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -55,7 +56,7 @@ class Test_SCORING(unittest.TestCase):
     """
 
     def setUp(self):
-        self.expected_keys = set(['win', 'block_win', 'win_in_two', 'block_in_two', 'normal_line', 'block_line'])
+        self.expected_keys = set(["win", "block_win", "win_in_two", "block_in_two", "normal_line", "block_line"])
 
     def test_expected(self):
         keys = set(ttt.SCORING)

@@ -4,6 +4,7 @@ Plotting module file for the "tictactoe" game.  It defines the plotting function
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -47,7 +48,7 @@ def plot_cur_move(ax, move):
 
     # fill background
     ax.add_patch(Rectangle((-box_size/2, -box_size/2), box_size, box_size, \
-        facecolor=COLOR['board'], edgecolor='k'))
+        facecolor=COLOR["board"], edgecolor="k"))
 
     # draw the piece
     if move == PLAYER["x"]:
@@ -103,12 +104,12 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         width = 0.2  # normalized units
     else:
         width = 0.1
-    if shape != PLAYER['o']:
+    if shape != PLAYER["o"]:
         coords1 = [(c[0]*size/2+hc, c[1]*size/2+vc) for c in [(1, 1), (-1+width, -1), (-1, -1), (1-width, 1), (1, 1)]]
         coords2 = [(c[0]*size/2+hc, c[1]*size/2+vc) for c in [(-1, 1), (-1+width, 1), (1, -1), (1-width, -1), (-1, 1)]]
-    if shape == PLAYER['o']:
+    if shape == PLAYER["o"]:
         # plot an O
-        patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor='k')
+        patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor="k")
         piece = [patch1]
     elif shape == PLAYER["x"]:
         # plot an X
@@ -118,9 +119,9 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         ax
     elif shape == PLAYER["draw"]:
         # plot a combined O and X
-        patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor='k')
-        patch2 = Polygon(coords1, True, facecolor=color, edgecolor='k')
-        patch3 = Polygon(coords2, True, facecolor=color, edgecolor='k')
+        patch1 = Wedge((hc, vc), size/2, 0, 360, width=size*width/2, facecolor=color, edgecolor="k")
+        patch2 = Polygon(coords1, True, facecolor=color, edgecolor="k")
+        patch3 = Polygon(coords2, True, facecolor=color, edgecolor="k")
         piece = [patch1, patch2, patch3]
     else:
         raise ValueError("Unexpected shape.")
@@ -171,7 +172,7 @@ def plot_board(ax, board):
     ymax = n - 1 + s
 
     # fill background
-    ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR['board'], \
+    ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR["board"], \
         edgecolor=None))
 
     # draw minor horizontal lines
@@ -271,13 +272,13 @@ def plot_possible_win(ax, o_moves, x_moves):
 
     # plot the whole pieces
     for pos in pos_o ^ pos_both:
-        plot_piece(ax, pos.row, pos.column, SIZES['piece'], COLOR['win_o'], PLAYER['o'], thick=False)
+        plot_piece(ax, pos.row, pos.column, SIZES["piece"], COLOR["win_o"], PLAYER["o"], thick=False)
     for pos in pos_x ^ pos_both:
-        plot_piece(ax, pos.row, pos.column, SIZES['piece'], COLOR['win_x'], PLAYER['x'], thick=False)
+        plot_piece(ax, pos.row, pos.column, SIZES["piece"], COLOR["win_x"], PLAYER["x"], thick=False)
 
     # plot the pieces that would win for either player
     for pos in pos_both:
-        plot_piece(ax, pos.row, pos.column, SIZES['piece'], COLOR['win_ox'], PLAYER['draw'], thick=False)
+        plot_piece(ax, pos.row, pos.column, SIZES["piece"], COLOR["win_ox"], PLAYER["draw"], thick=False)
 
 
 # %% plot_powers
@@ -306,11 +307,11 @@ def plot_powers(ax, board, o_moves, x_moves):
 
     """
     for this_move in o_moves:
-        ax.annotate('{}'.format(this_move.power), xy=(this_move.column-0.4, this_move.row-0.4), \
-            xycoords='data', horizontalalignment='left', verticalalignment='center', fontsize=15, color='b')
+        ax.annotate("{}".format(this_move.power), xy=(this_move.column-0.4, this_move.row-0.4), \
+            xycoords="data", horizontalalignment="left", verticalalignment="center", fontsize=15, color="b")
     for this_move in x_moves:
-        ax.annotate('{}'.format(this_move.power), xy=(this_move.column+0.4, this_move.row+0.4), \
-            xycoords='data', horizontalalignment='right', verticalalignment='center', fontsize=15, color='k')
+        ax.annotate("{}".format(this_move.power), xy=(this_move.column+0.4, this_move.row+0.4), \
+            xycoords="data", horizontalalignment="right", verticalalignment="center", fontsize=15, color="k")
 
 
 # %% Unit Test

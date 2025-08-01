@@ -4,6 +4,7 @@ Simulations module file for the "dstauffman2.archery" library.  It defines const
 Notes
 -----
 #.  Written by David C. Stauffer in March 2015.
+
 """
 
 # %% Imports

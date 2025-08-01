@@ -4,6 +4,7 @@ Classes module file for the "pentago" game.  It defines the classes used by the 
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -58,26 +59,25 @@ class Move(Frozen):
         else:
             if other.power is None:
                 return False
-            else:
-                if self.power < other.power:
-                    return True
-                elif self.power > other.power:
-                    return False
+            if self.power < other.power:
+                return True
+            if self.power > other.power:
+                return False
         if self.row < other.row:
             return True
-        elif self.row > other.row:
+        if self.row > other.row:
             return False
         if self.column < other.column:
             return True
-        elif self.column > other.column:
+        if self.column > other.column:
             return False
         if self.quadrant < other.quadrant:
             return True
-        elif self.quadrant > other.quadrant:
+        if self.quadrant > other.quadrant:
             return False
         if self.direction < other.direction:
             return True
-        elif self.direction < other.direction:
+        if self.direction < other.direction:
             return False
         return False  # make True if __le__
 

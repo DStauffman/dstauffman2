@@ -7,6 +7,7 @@ The "bac_gui" is a GUI for calculating and displaying your Blood Alcohol Content
 Notes
 -----
 #.  Written by David C. Stauffer in June 2016.
+
 """
 
 # %% Imports

@@ -4,6 +4,7 @@ Scrabble or Words With Friends Solver with graphics support.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Logging

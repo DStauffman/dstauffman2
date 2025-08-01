@@ -4,6 +4,7 @@ Splits the given pages of a PDF file into a new output file.
 Notes
 -----
 #.  Written by David C. Stauffer in February 2018.
+
 """
 
 # %% Imports

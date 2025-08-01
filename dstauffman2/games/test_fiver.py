@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in November 2015.
+
 """
 
 # %% Imports
@@ -313,6 +314,7 @@ class Test_find_all_valid_locations(unittest.TestCase):
     Tests the find_all_valid_locations function with the following cases:
         TBD
     """
+
     pass  # TODO: write this
 
 
@@ -322,6 +324,7 @@ class Test_solve_puzzle(unittest.TestCase):
     Tests the solve_puzzle function with the following cases:
         TBD
     """
+
     pass  # TODO: write this
 
 
@@ -331,6 +334,7 @@ class Test_plot_board(unittest.TestCase):
     Tests the plot_board function with the following cases:
         TBD
     """
+
     pass  # TODO: write this
 
 

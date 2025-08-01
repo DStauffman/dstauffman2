@@ -4,6 +4,7 @@ GUI module file for the "pentago" game.  It defines the GUI.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -90,7 +91,7 @@ class PentagoGui(QWidget):
         # ask if loading
         elif OPTIONS["load_previous_game"] == "Ask":
             widget = QWidget()
-            reply = QMessageBox.question(widget, 'Message', \
+            reply = QMessageBox.question(widget, "Message", \
                 "Do you want to load the previous game?", QMessageBox.Yes | \
                 QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.Yes:
@@ -109,7 +110,7 @@ class PentagoGui(QWidget):
                 self.state.cur_move    = Counter(len(self.state.game_hist[-1].move_list))
                 self.state.board       = create_board_from_moves(self.state.game_hist[-1].move_list, \
                     self.state.game_hist[-1].first_move)
-                self.state.move_status = {'ok': False, 'pos': None, 'patch_object': None}
+                self.state.move_status = {"ok": False, "pos": None, "patch_object": None}
             else:
                 raise ValueError(f'Could not find file: "{filename}"')  # pragma: no cover
 
@@ -283,8 +284,8 @@ class PentagoGui(QWidget):
         self.btn_4L.setGeometry(730, 489, SIZES["button"], SIZES["button"])
         self.btn_4L.clicked.connect(self.btn_rot_function)
         # buttons dictionary for use later
-        self.rot_buttons = {'1L':self.btn_1L, '2L':self.btn_2L, '3L':self.btn_3L, '4L':self.btn_4L, \
-            '1R':self.btn_1R, '2R':self.btn_2R, '3R':self.btn_3R, '4R':self.btn_4R}
+        self.rot_buttons = {"1L":self.btn_1L, "2L":self.btn_2L, "3L":self.btn_3L, "4L":self.btn_4L, \
+            "1R":self.btn_1R, "2R":self.btn_2R, "3R":self.btn_3R, "4R":self.btn_4R}
 
         # %% Finalization
         # Call wrapper to initialize GUI
@@ -307,7 +308,7 @@ class PentagoGui(QWidget):
             event.accept()
         else:
             # Alternative with user choice
-            reply = QMessageBox.question(self, 'Message', \
+            reply = QMessageBox.question(self, "Message", \
                 "Are you sure to quit?", QMessageBox.Yes | \
                 QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.Yes:
@@ -492,8 +493,8 @@ class PentagoGui(QWidget):
             rotate_board(self.state.board, quadrant, direction)
             # increment move list
             assert self.state.game_hist[self.state.cur_game].num_moves >= self.state.cur_move, \
-                'Number of moves = {}, Current Move = {}'.format(self.state.game_hist[self.state.cur_game].num_moves, self.state.cur_move)
-            this_move = Move(self.state.move_status['pos'][0], self.state.move_status['pos'][1], quadrant, direction)
+                "Number of moves = {}, Current Move = {}".format(self.state.game_hist[self.state.cur_game].num_moves, self.state.cur_move)
+            this_move = Move(self.state.move_status["pos"][0], self.state.move_status["pos"][1], quadrant, direction)
             if self.state.game_hist[self.state.cur_game].num_moves == self.state.cur_move:
                 self.state.game_hist[self.state.cur_game].add_move(this_move)
             else:

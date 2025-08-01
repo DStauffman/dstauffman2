@@ -4,6 +4,7 @@ Utils module file for the "tictactoe" game.  It defines the generic utility func
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -126,8 +127,8 @@ def check_for_win(board):
     if winner == PLAYER["none"]:
         win_mask = np.zeros((3, 3), dtype=bool)
     else:
-        logging.debug('Win detected.  Winner is {}.'.format(list(PLAYER)[list(PLAYER.values()).index(winner)]))
-        win_mask = np.reshape(np.sum(WIN[:, x], axis=1) + np.sum(WIN[:, o], axis=1), (SIZES['board'], SIZES['board'])) != 0
+        logging.debug("Win detected.  Winner is {}.".format(list(PLAYER)[list(PLAYER.values()).index(winner)]))
+        win_mask = np.reshape(np.sum(WIN[:, x], axis=1) + np.sum(WIN[:, o], axis=1), (SIZES["board"], SIZES["board"])) != 0
 
     return (winner, win_mask)
 
@@ -214,8 +215,8 @@ def find_moves(board):
     o_moves = []
     x_moves = []
     for this_move in open_moves:
-        row     = this_move // SIZES['board']
-        column  = np.mod(this_move, SIZES['board'])
+        row     = this_move // SIZES["board"]
+        column  = np.mod(this_move, SIZES["board"])
         o_score = calculate_move_score(o_win, x_win, o_win_in_two, x_win_in_two, o_scores[this_move], x_scores[this_move])
         x_score = calculate_move_score(x_win, o_win, x_win_in_two, o_win_in_two, x_scores[this_move], o_scores[this_move])
         o_moves.append(Move(row, column, o_score))

@@ -4,6 +4,7 @@ Functions related to processing photos from my digital camera.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2020.
+
 """
 
 #%% Imports
@@ -16,10 +17,10 @@ import unittest
 from pypdf import PdfReader, PdfMerger, PdfWriter
 
 #%% Functions - split_pdf
-def split_pdf(src_file: str, pages: Tuple[int], out_file:str = 'out.pdf') -> None:
+def split_pdf(src_file: str, pages: Tuple[int], out_file:str = "out.pdf") -> None:
     r"""Splits a given PDF file into pieces."""
     # open the source file
-    with open(src_file, 'rb') as file:
+    with open(src_file, "rb") as file:
         # get reader and writers
         reader = PdfReader(file)
         # read each desired page and send it to the writer
@@ -27,11 +28,11 @@ def split_pdf(src_file: str, pages: Tuple[int], out_file:str = 'out.pdf') -> Non
             writer = PdfWriter()
             writer.addPage(reader.getPage(page))
             # write out the accumulated pages to disk
-            with open(out_file.format(page+1), 'wb') as out:
+            with open(out_file.format(page+1), "wb") as out:
                 writer.write(out)
 
 #%% Functions - combine_pdf
-def combine_pdf(folder: str, files: List[str], out_file:str = 'out.pdf'):
+def combine_pdf(folder: str, files: List[str], out_file:str = "out.pdf"):
     r"""Combines the given files into a master file"""
     merger = PdfMerger()
     out_file = out_file if os.path.pathsep in out_file else os.path.join(folder, out_file)
@@ -68,17 +69,17 @@ def parse_pdf(input_args: List[str]) -> argparse.Namespace:
     Namespace(folder='.', upper=False, missing=False, unexpected_ext=False, picasa=False, long=False, resize=False)
 
     """
-    parser = argparse.ArgumentParser(prog='dcs2 pdf', description='PDF processing.')
+    parser = argparse.ArgumentParser(prog="dcs2 pdf", description="PDF processing.")
 
-    parser.add_argument('command', help='PDF command to run, from {combine, split}.', choices={'combine', 'split'})
+    parser.add_argument("command", help="PDF command to run, from {combine, split}.", choices={"combine", "split"})
 
-    parser.add_argument('folder', help='Folder to search for source files')
+    parser.add_argument("folder", help="Folder to search for source files")
 
-    parser.add_argument('-o', '--output', help='Output file to write the results to.', default='out.pdf', type='int')
+    parser.add_argument("-o", "--output", help="Output file to write the results to.", default="out.pdf", type="int")
 
-    parser.add_argument('-s', '--source', help='Source file(s) to use in the command.')
+    parser.add_argument("-s", "--source", help="Source file(s) to use in the command.")
 
-    parser.add_argument('-p', '--pages', nargs='+', help='Pages to split into the output file.', required=False)
+    parser.add_argument("-p", "--pages", nargs="+", help="Pages to split into the output file.", required=False)
 
     args = parser.parse_args(input_args)
     return args
@@ -118,12 +119,12 @@ def execute_pdf(args: argparse.Namespace) -> int:
     out_file = args.out_file
     pages    = args.pages
 
-    if command == 'split':
+    if command == "split":
         split_pdf(src_file=src_file, pages=pages, out_file=out_file)
-    elif command == 'combine':
+    elif command == "combine":
         combine_pdf(folder=folder, files=src_file, out_file=out_file)
 
 #%% Unit test
-if __name__ == '__main__':
-    unittest.main(module='dstauffman2.tests.test_commands_pdf', exit=False)
+if __name__ == "__main__":
+    unittest.main(module="dstauffman2.tests.test_commands_pdf", exit=False)
     doctest.testmod(verbose=False)

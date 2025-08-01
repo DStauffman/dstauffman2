@@ -8,6 +8,7 @@ Notes
 #.  Written by David C. Stauffer in March 2015.
 #.  Adapted into dstauffman library by David C. Stauffer in October 2015.
 #.  Moved to dstauffman2 library by David C. Stauffer in November 2016.
+
 """
 
 # %% Imports

@@ -5,6 +5,7 @@ The "brick" file solves the 3D red and gray brick puzzle that I have.
 Notes
 -----
 #.  Written by David C. Stauffer in June 2015 after he crashed his bike and had nothing to do for a bit.
+
 """
 
 # %% Imports
@@ -96,6 +97,7 @@ def _support_rot_piece():
     #.  Written by David C. Stauffer in June 2015.
     #.  This function is not intended to be used, but is reference for where the maps came from
         for rotating the pieces.
+
     """
     # start indices
     x = np.arange(0, 27).reshape(SIZE_PIECES)
@@ -234,9 +236,8 @@ def _check_seams(piece_combos, this_soln):
         if intersect:
             # if the seams overlap, then this is not valid and you can exit
             return False
-        else:
-            # if they don't overlap, then combine the sets and go to the next piece
-            seams = seams | this_set
+        # if they don't overlap, then combine the sets and go to the next piece
+        seams = seams | this_set
     return True
 
 
@@ -472,6 +473,7 @@ def get_all_positions(piece):
         Notes
         -----
         #.  Modifies `all_pos` in-place.
+
         """
         # loop through the current list (use index to avoid infinite loops while growing in place)
         for i in range(len(all_pos)):
@@ -510,6 +512,7 @@ def get_all_positions(piece):
         -----
         #.  Written by David C. Stauffer in June 2015.
         #.  Modifies `all_pos` in-place.
+
         """
         # translate all rotations
         for i in range(len(all_pos)):
@@ -532,6 +535,7 @@ def get_all_positions(piece):
         -----
         #.  Written by David C. Stauffer in 2015.
         #.  Does not take symmetry into account.
+
         """
         # convert to N positions by 27 element linear array
         all_rows = np.array([x.ravel() for x in all_pos])
@@ -968,11 +972,11 @@ if __name__ == "__main__":
             for i in range(NUM_PIECES):
                 print("Piece {}, position {}".format(i + 1, soln_pieces[j][unsort_ix[i]] + 1))
                 if make_plots:
-                    old_name = os.path.join(opts.save_path, '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
-                    new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - P{} position {}.png'.format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
+                    old_name = os.path.join(opts.save_path, "{} - P{} position {}.png".format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
+                    new_name = os.path.join(opts.save_path, "soln{}".format(j+1), "{} - P{} position {}.png".format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
                     shutil.copyfile(old_name, new_name)
             print("")
             if make_plots:
-                old_name = os.path.join(opts.save_path, '{} - Final Solution.png'.format(opts.case_name))
-                new_name = os.path.join(opts.save_path, 'soln{}'.format(j+1), '{} - Final Solution.png'.format(opts.case_name))
+                old_name = os.path.join(opts.save_path, "{} - Final Solution.png".format(opts.case_name))
+                new_name = os.path.join(opts.save_path, "soln{}".format(j+1), "{} - Final Solution.png".format(opts.case_name))
                 shutil.copyfile(old_name, new_name)

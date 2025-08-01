@@ -4,6 +4,7 @@ Constants module file for the "tictactoe" game.  It defines constants.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports

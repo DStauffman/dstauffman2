@@ -4,6 +4,7 @@ GUI module file for the "scrabble" game.  It defines the GUI.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports
@@ -67,6 +68,7 @@ class GuiSettings(object):
 # %% Classes - ScrabbleGui
 class ScrabbleGui(QMainWindow):
     r"""The Scrabble GUI."""
+
     # Create GUI setting defaults for the class
     gui_settings = GuiSettings()
 

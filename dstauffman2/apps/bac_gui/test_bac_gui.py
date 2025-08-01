@@ -5,6 +5,7 @@ demonstrate functionaliy and correct outcomes for all the classes and functions 
 Notes
 -----
 #.  Written by David C. Stauffer in June 2016.
+
 """
 
 # %% Imports

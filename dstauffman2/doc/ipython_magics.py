@@ -7,6 +7,7 @@ Notes
 #.  This file is best placed in the iPython startup folder, somewhere like:
     C:\Users\DStauffman\.ipython\profile_default\startup ~or~
     C:\Programs\WinPython-64bit-3.6.1.0Qt5\settings\.ipython\profile_default\startup
+
 """
 
 # %% Imports

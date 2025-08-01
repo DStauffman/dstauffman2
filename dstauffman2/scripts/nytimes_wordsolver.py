@@ -4,6 +4,7 @@ Example script for how to solve one of the puzzles in the New York Times Sunday 
 Notes
 -----
 #.  Written by David C. Stauffer in April 2020.
+
 """
 
 # %% Imports

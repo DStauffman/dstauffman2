@@ -31,12 +31,11 @@ def zero_order_hold_simple(x, xp, yp):
 
     if isinstance(x, float):
         return func(x)
-    elif isinstance(x, list):
+    if isinstance(x, list):
         return [func(x) for x in x]
-    elif isinstance(x, np.ndarray):
+    if isinstance(x, np.ndarray):
         return np.asarray([func(x) for x in x])
-    else:
-        raise TypeError("argument must be float, list, or ndarray")
+    raise TypeError("argument must be float, list, or ndarray")
 
 
 def zero_order_hold_deque(x, xp, yp):

@@ -5,6 +5,7 @@ and manipulating images.
 Notes
 -----
 #.  Updated by David C. Stauffer in July 2016 to be in a submodule not imported by default.
+
 """
 
 # %% Imports

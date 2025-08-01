@@ -40,12 +40,11 @@ def is_str_one_off(str1, str2):
         # if the characters are the same, then continue to the next one
         if str1[ix] == str2[ix]:
             continue
-        else:
-            # if not the same, increment the counter
-            diff += 1
-            # check for too many differences
-            if diff > 1:
-                return False
+        # if not the same, increment the counter
+        diff += 1
+        # check for too many differences
+        if diff > 1:
+            return False
     # if you got here, then there is exactly one difference and it's a good result
     return True
 
@@ -123,15 +122,13 @@ def stringsRearrangement(input_array):
             if done:
                 # solution was found
                 return done
-        else:
-            # if no valid steps, determine if we are done or need to backtrack
-            if items:
-                # backtrack
-                items.insert(last, key)
-                return False
-            else:
-                # success
-                return True
+        # if no valid steps, determine if we are done or need to backtrack
+        if items:
+            # backtrack
+            items.insert(last, key)
+            return False
+        # success
+        return True
         # no steps and no backtracking
         return False
 

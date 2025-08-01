@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports

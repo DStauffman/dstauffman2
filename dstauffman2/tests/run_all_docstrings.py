@@ -4,6 +4,7 @@ Test file to execute all the docstrings within the dstauffman2 code.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2015.
+
 """
 
 # %% Imports

@@ -4,6 +4,7 @@ Plotting module file for the "scrabble" game.  It defines the plotting functions
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports
@@ -59,10 +60,10 @@ def plot_board(ax, board):
         edgecolor=None))
 
     # draw horizontal lines
-    for i in range(0, n + 1):
+    for i in range(n + 1):
         ax.plot([i - hs, i - hs], [ymin, ymax], color=COLOR["edge"], linewidth=1)
     # draw vertical lines
-    for i in range(0, m + 1):
+    for i in range(m + 1):
         ax.plot([xmin, xmax], [i - hs, i - hs], color=COLOR["edge"], linewidth=1)
 
     # loop through and place pieces

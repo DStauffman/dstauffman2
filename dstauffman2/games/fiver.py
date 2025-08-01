@@ -7,6 +7,7 @@ Notes
 -----
 #.  Written by David C. Stauffer in October 2015 when he found the puzzle on his dresser while
     acquiring and rearranging some furniture.
+
 """
 
 # %% Imports
@@ -309,8 +310,7 @@ def _display_progress(ix, nums, last_ratio=0):
     if np.round(1000 * ratio) > np.round(1000 * last_ratio):
         print("Progess: {:.1f}%".format(ratio * 100))
         return ratio
-    else:
-        return last_ratio
+    return last_ratio
 
 
 # %% Functions - _blobbing
@@ -684,7 +684,7 @@ def plot_board(board, title, opts=None):
         for j in range(board.shape[1]):
             # add the rectangle patch to the existing axis
             ax.add_patch(Rectangle((box_size*i,box_size*j),box_size, box_size, \
-                facecolor=COLORS[board[i,j]], edgecolor='k'))
+                facecolor=COLORS[board[i,j]], edgecolor="k"))
     # make square
     ax.set_aspect("equal")
     # set limits

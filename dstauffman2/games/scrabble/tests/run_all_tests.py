@@ -4,6 +4,7 @@ Test file to execute all the tests from the unittest library within the scrabble
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports

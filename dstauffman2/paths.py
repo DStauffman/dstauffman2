@@ -6,6 +6,7 @@ Notes
 #.  Written by David C. Stauffer in November 2016.
 #.  Renamed to paths by David C. Stauffer in May 2020.
 #.  Updated to use pathlib.Path by David C. Stauffer in November 2023.
+
 """
 
 # %% Imports

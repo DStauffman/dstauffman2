@@ -4,6 +4,7 @@ The main module file for the BAC GUI.  It defines the GUI and it's behavior and 
 Notes
 -----
 #.  Written by David C. Stauffer in June 2016.
+
 """
 
 # %% Imports
@@ -32,6 +33,7 @@ BMI_CONV    = 703.0704
 @unique
 class Gender(Enum):
     r"""Enumerator definitions for the possible gender conditions."""
+
     male   = 1 # uncircumcised male
     female = 2 # female
 
@@ -41,7 +43,7 @@ class GuiSettings(object):
     r"""Settings that capture the current state of the GUI."""
 
     def __init__(self):
-        self.profile     = 'Default'
+        self.profile     = "Default"
         self.height      = GUI_TOKEN
         self.weight      = GUI_TOKEN
         self.gender      = Gender.female
@@ -56,32 +58,33 @@ class GuiSettings(object):
 
     def __str__(self):
         r"""Prints all the settings out."""
-        text = ['GuiSettings:']
+        text = ["GuiSettings:"]
         for key in sorted(vars(self)):
-            text.append('    {}: {}'.format(key, getattr(self, key)))
-        return '\n'.join(text)
+            text.append("    {}: {}".format(key, getattr(self, key)))
+        return "\n".join(text)
 
     @staticmethod
     def get_text_fields():
         r"""Returns the names of all the line edit widgets."""
-        return ['height', 'weight', 'age', 'bmi', 'hr1', 'hr2', 'hr3', 'hr4', 'hr5', 'hr6']
+        return ["height", "weight", "age", "bmi", "hr1", "hr2", "hr3", "hr4", "hr5", "hr6"]
 
     @staticmethod
     def load(filename):
         r"""Loads a instance of the class from a given filename."""
-        with open(filename, 'rb') as file:
+        with open(filename, "rb") as file:
             gui_settings = pickle.load(file)
         assert isinstance(gui_settings, GuiSettings)
         return gui_settings
 
     def save(self, filename):
         r"""Saves an instance of the class to the given filename."""
-        with open(filename, 'wb') as file:
+        with open(filename, "wb") as file:
             pickle.dump(self, file)
 
 #%% Classes - BacGui
 class BacGui(QMainWindow):
     r"""The BAC GUI."""
+
     # Create GUI setting defaults for the class
     gui_settings = GuiSettings()
 
@@ -100,15 +103,15 @@ class BacGui(QMainWindow):
         self.timer = QtCore.QTimer(self)
 
         # properties
-        QToolTip.setFont(QtGui.QFont('SansSerif', 10))
+        QToolTip.setFont(QtGui.QFont("SansSerif", 10))
 
         # Central Widget
         self.gui_widget = QWidget(self)
         self.setCentralWidget(self.gui_widget)
 
         # Panels (group boxes)
-        self.grp_profile = QGroupBox('Profile')
-        self.grp_consump = QGroupBox('Consumption')
+        self.grp_profile = QGroupBox("Profile")
+        self.grp_consump = QGroupBox("Consumption")
         self.grp_plotter = QWidget()
 
         # Layouts
@@ -118,21 +121,21 @@ class BacGui(QMainWindow):
         layout_plotter = QVBoxLayout(self.grp_plotter)
 
         # Labels
-        lbl_profile  = QLabel('Profile:')
-        lbl_height   = QLabel('Height:')
-        lbl_weight   = QLabel('Weight:')
-        lbl_age      = QLabel('Age:')
-        lbl_bmi      = QLabel('BMI:')
-        lbl_gender   = QLabel('Gender:')
+        lbl_profile  = QLabel("Profile:")
+        lbl_height   = QLabel("Height:")
+        lbl_weight   = QLabel("Weight:")
+        lbl_age      = QLabel("Age:")
+        lbl_bmi      = QLabel("BMI:")
+        lbl_gender   = QLabel("Gender:")
 
-        lbl_hr1      = QLabel('Hour 1:')
-        lbl_hr2      = QLabel('Hour 2:')
-        lbl_hr3      = QLabel('Hour 3:')
-        lbl_hr4      = QLabel('Hour 4:')
-        lbl_hr5      = QLabel('Hour 5:')
-        lbl_hr6      = QLabel('Hour 6:')
+        lbl_hr1      = QLabel("Hour 1:")
+        lbl_hr2      = QLabel("Hour 2:")
+        lbl_hr3      = QLabel("Hour 3:")
+        lbl_hr4      = QLabel("Hour 4:")
+        lbl_hr5      = QLabel("Hour 5:")
+        lbl_hr6      = QLabel("Hour 6:")
 
-        lbl_drink = QLabel('One Drink is:\n1 oz of 100 proof\n5 oz of wine\n12 oz of regular beer')
+        lbl_drink = QLabel("One Drink is:\n1 oz of 100 proof\n5 oz of wine\n12 oz of regular beer")
 
         # Fields
         self.popup_profile = QComboBox()
@@ -142,44 +145,44 @@ class BacGui(QMainWindow):
         self.popup_profile.setCurrentIndex(0)
         self.popup_profile.activated.connect(self.onActivated)
 
-        self.lne_height = QLineEdit('')
-        self.lne_weight = QLineEdit('')
-        self.lne_age    = QLineEdit('')
-        self.lne_bmi    = QLineEdit('')
+        self.lne_height = QLineEdit("")
+        self.lne_weight = QLineEdit("")
+        self.lne_age    = QLineEdit("")
+        self.lne_bmi    = QLineEdit("")
 
         self.radio_gender = QWidget()
         layout_gender   = QHBoxLayout(self.radio_gender)
-        self.radio_fmal = QRadioButton('Female')
+        self.radio_fmal = QRadioButton("Female")
         self.radio_fmal.setChecked(True)
         self.radio_fmal.toggled.connect(self.radio_toggle)
-        self.radio_male = QRadioButton('Male')
+        self.radio_male = QRadioButton("Male")
         self.radio_male.toggled.connect(self.radio_toggle)
         layout_gender.addWidget(self.radio_fmal)
         layout_gender.addWidget(self.radio_male)
 
-        self.lne_hr1 = QLineEdit('')
-        self.lne_hr2 = QLineEdit('')
-        self.lne_hr3 = QLineEdit('')
-        self.lne_hr4 = QLineEdit('')
-        self.lne_hr5 = QLineEdit('')
-        self.lne_hr6 = QLineEdit('')
+        self.lne_hr1 = QLineEdit("")
+        self.lne_hr2 = QLineEdit("")
+        self.lne_hr3 = QLineEdit("")
+        self.lne_hr4 = QLineEdit("")
+        self.lne_hr5 = QLineEdit("")
+        self.lne_hr6 = QLineEdit("")
 
-        lnes = [getattr(self, 'lne_' + field) for field in self.gui_settings.get_text_fields()]
+        lnes = [getattr(self, "lne_" + field) for field in self.gui_settings.get_text_fields()]
         for this_lne in lnes:
             this_lne.setAlignment(QtCore.Qt.AlignCenter)
             this_lne.editingFinished.connect(self.text_finished)
 
         # Buttons - Save Profile button
-        self.btn_save = QPushButton('Save Profile')
-        self.btn_save.setToolTip('Saves the current profile to disk.')
+        self.btn_save = QPushButton("Save Profile")
+        self.btn_save.setToolTip("Saves the current profile to disk.")
         self.btn_save.setMaximumWidth(120)
-        self.btn_save.setStyleSheet('color: black; background-color: #00bfbf; font: bold;')
+        self.btn_save.setStyleSheet("color: black; background-color: #00bfbf; font: bold;")
         self.btn_save.clicked.connect(self.btn_save_function)
         # Buttons - Plot button
-        self.btn_plot = QPushButton('Plot')
-        self.btn_plot.setToolTip('Plots the BAC over time with the given information.')
+        self.btn_plot = QPushButton("Plot")
+        self.btn_plot.setToolTip("Plots the BAC over time with the given information.")
         self.btn_plot.setMaximumWidth(200)
-        self.btn_plot.setStyleSheet('color: black; background-color: #009900; font: bold;')
+        self.btn_plot.setStyleSheet("color: black; background-color: #009900; font: bold;")
         self.btn_plot.clicked.connect(self.btn_plot_function)
 
         # Populate widgets - profile
@@ -219,8 +222,8 @@ class BacGui(QMainWindow):
 
         # GUI final layout properties
         self.center()
-        self.setWindowTitle('BAC GUI')
-        self.setWindowIcon(QtGui.QIcon(os.path.join(get_root_dir(), 'bac_gui.png')))
+        self.setWindowTitle("BAC GUI")
+        self.setWindowIcon(QtGui.QIcon(os.path.join(get_root_dir(), "bac_gui.png")))
         self.show()
 
     #%% Other initializations
@@ -228,16 +231,16 @@ class BacGui(QMainWindow):
         r"""Gets the list of all current profiles that exist in the folder."""
         # Check to see if the Default profile exists, and if so load it, else create it
         folder = get_root_dir()
-        filename = os.path.join(folder, 'Default.pkl')
+        filename = os.path.join(folder, "Default.pkl")
         if os.path.isfile(filename): # pragma: no cover
             self.gui_settings = GuiSettings.load(filename)
         else: # pragma: no cover
             self.gui_settings.save(filename)
         # Find all the pickle files that exist, and make them into profiles
-        profiles = glob.glob(os.path.join(folder, '*.pkl'))
+        profiles = glob.glob(os.path.join(folder, "*.pkl"))
         profiles = [os.path.normpath(x).split(os.path.sep)[-1][:-4] for x in profiles]
-        profiles = set(profiles) ^ {'Default'}
-        profiles = ['Default'] + sorted(profiles) + ['New+']
+        profiles = set(profiles) ^ {"Default"}
+        profiles = ["Default"] + sorted(profiles) + ["New+"]
         return profiles
 
     #%% wrapper
@@ -247,11 +250,11 @@ class BacGui(QMainWindow):
         # loop through and update the text fields
         for field in self.gui_settings.get_text_fields():
             this_value = getattr(self.gui_settings, field)
-            this_lne = getattr(self, 'lne_' + field)
+            this_lne = getattr(self, "lne_" + field)
             if this_value == GUI_TOKEN:
-                this_lne.setText('')
+                this_lne.setText("")
             else:
-                this_lne.setText('{:g}'.format(this_value))
+                this_lne.setText("{:g}".format(this_value))
         # update the gender button group
         if self.gui_settings.gender == Gender.female:
             if self.radio_male.isChecked():
@@ -279,8 +282,8 @@ class BacGui(QMainWindow):
     #%% Other callbacks - dislaying an error for invalid edit box entries
     def display_text_error(self, field):
         r"""Displays a temporary message for invalid characters within the line edit boxes."""
-        field.setStyleSheet('color: white; background-color: red; font: bold;')
-        reset = lambda: field.setStyleSheet('color: black; background-color: white; font: normal;')
+        field.setStyleSheet("color: white; background-color: red; font: bold;")
+        reset = lambda: field.setStyleSheet("color: black; background-color: white; font: normal;")
         self.timer.setInterval(300)
         self.timer.setSingleShot(True)
         self.timer.timeout.connect(reset)
@@ -295,7 +298,7 @@ class BacGui(QMainWindow):
             # get the current items
             items = [self.popup_profile.itemText(i) for i in range(self.popup_profile.count())]
             # ask for a new profile
-            text, ok = QtGui.QInputDialog.getText(self, 'Profile Name',  'Enter a new profile:')
+            text, ok = QtGui.QInputDialog.getText(self, "Profile Name",  "Enter a new profile:")
             if not ok or not text:
                 # put back to last choice
                 ix = items.index(self.gui_settings.profile)
@@ -304,13 +307,13 @@ class BacGui(QMainWindow):
                 if text in items:
                     # if already an existing profile, then load the old one
                     print('Profile "{}" already exists and is being loaded.'.format(text))
-                    self.gui_settings = self.gui_settings.load(os.path.join(get_root_dir(), text + '.pkl'))
+                    self.gui_settings = self.gui_settings.load(os.path.join(get_root_dir(), text + ".pkl"))
                 else:
                     # create the new profile
                     gui_settings = GuiSettings()
                     gui_settings.profile = text
                     # if successful in saving, then update the working copy
-                    gui_settings.save(os.path.join(get_root_dir(), text + '.pkl'))
+                    gui_settings.save(os.path.join(get_root_dir(), text + ".pkl"))
                     self.gui_settings = gui_settings
                     # find where to insert in GUI and insert
                     i = 1
@@ -322,7 +325,7 @@ class BacGui(QMainWindow):
             # changed to the desired existing profile
             text = self.popup_profile.currentText()
             if text != self.gui_settings.profile:
-                self.gui_settings = self.gui_settings.load(os.path.join(get_root_dir(), text + '.pkl'))
+                self.gui_settings = self.gui_settings.load(os.path.join(get_root_dir(), text + ".pkl"))
         # update the GUI to reflect any new settings
         self.wrapper()
 
@@ -331,11 +334,11 @@ class BacGui(QMainWindow):
         r"""Updates gui_settings for LineEdit text changes that happen when you leave the box."""
         sender  = self.sender()
         fields  = self.gui_settings.get_text_fields()
-        senders = [getattr(self, 'lne_' + field) for field in fields]
+        senders = [getattr(self, "lne_" + field) for field in fields]
         for ix in range(len(senders)):
             if sender == senders[ix]:
                 text = sender.text()
-                if text == '':
+                if text == "":
                     setattr(self.gui_settings, fields[ix], GUI_TOKEN)
                     break
                 try:
@@ -347,7 +350,7 @@ class BacGui(QMainWindow):
                     setattr(self.gui_settings, fields[ix], value)
                     break
         else: # pragma: no cover
-            raise ValueError('Unexpected field went into this method.')
+            raise ValueError("Unexpected field went into this method.")
 
         # check for conditions to update the BMI
         if sender == self.lne_height or sender == self.lne_weight:
@@ -362,7 +365,7 @@ class BacGui(QMainWindow):
     def radio_toggle(self):
         r"""Controls the gender radio button group."""
         # assert that only one of the button group is checked
-        assert self.radio_fmal.isChecked() ^ self.radio_male.isChecked(), 'Only one button may be checked.'
+        assert self.radio_fmal.isChecked() ^ self.radio_male.isChecked(), "Only one button may be checked."
         # determine which button is checked and update the settings accordingly
         if self.radio_fmal.isChecked():
             self.gui_settings.gender = Gender.female
@@ -374,7 +377,7 @@ class BacGui(QMainWindow):
     def btn_save_function(self):
         r"""Saves the current settings to the specified profile."""
         # save the profile
-        self.gui_settings.save(os.path.join(get_root_dir(), self.gui_settings.profile + '.pkl'))
+        self.gui_settings.save(os.path.join(get_root_dir(), self.gui_settings.profile + ".pkl"))
 
     #%% Other callbacks - Plot button
     def btn_plot_function(self):
@@ -382,8 +385,8 @@ class BacGui(QMainWindow):
         # call the plotting function
         fig = plot_bac(self.gui_settings, LEGAL_LIMIT)
         # save the figure
-        filename = os.path.join(get_root_dir(), fig.canvas.manager.get_window_title() + '.png')
-        fig.savefig(filename, dpi=160, bbox_inches='tight')
+        filename = os.path.join(get_root_dir(), fig.canvas.manager.get_window_title() + ".png")
+        fig.savefig(filename, dpi=160, bbox_inches="tight")
 
 #%% Functions - get_root_dir
 def get_root_dir():
@@ -540,21 +543,21 @@ def plot_bac(gui_settings, legal_limit=None):
     bac = ratio2per * calculate_bac(time_drinks, drinks, time_out, body_weight)
 
     # create the figure and axis
-    fig = plt.figure(facecolor='w')
-    this_title = 'BAC vs. Time for {}'.format(name)
+    fig = plt.figure(facecolor="w")
+    this_title = "BAC vs. Time for {}".format(name)
     fig.canvas.manager.set_window_title(this_title)
     ax = fig.add_subplot(111)
 
     # plot the data
-    ax.plot(time_out, bac, '.-', label='BAC')
+    ax.plot(time_out, bac, ".-", label="BAC")
     if legal_limit is not None:
-        ax.plot(np.array([time_out[0], time_out[-1]]), np.full(2, ratio2per*legal_limit), '--', \
-            label='Legal Limit', color='red', linewidth=2)
+        ax.plot(np.array([time_out[0], time_out[-1]]), np.full(2, ratio2per*legal_limit), "--", \
+            label="Legal Limit", color="red", linewidth=2)
 
     # add some labels and such
     ax.set_title(this_title)
-    ax.set_xlabel('Time [hr]')
-    ax.set_ylabel('BAC [%]')
+    ax.set_xlabel("Time [hr]")
+    ax.set_ylabel("BAC [%]")
     ax.grid(True)
     ax.legend()
     plt.show(block=False)
@@ -562,7 +565,7 @@ def plot_bac(gui_settings, legal_limit=None):
     return fig
 
 #%% Unit Test
-if __name__ == '__main__':
+if __name__ == "__main__":
     # turn interactive plotting off
     plt.ioff()
     # open a qapp
@@ -571,7 +574,7 @@ if __name__ == '__main__':
     else:
         qapp = QApplication.instance()
     # run the tests
-    unittest.main(module='dstauffman2.apps.bac_gui.test_bac_gui', exit=False)
+    unittest.main(module="dstauffman2.apps.bac_gui.test_bac_gui", exit=False)
     doctest.testmod(verbose=False)
     # close the qapp
     qapp.closeAllWindows()

@@ -1,4 +1,5 @@
-"""This is the docstring for the example.py module.  Modules names should
+"""
+This is the docstring for the example.py module.  Modules names should
 have short, all-lowercase names.  The module name may have underscores if
 this improves readability.
 
@@ -34,7 +35,8 @@ import matplotlib.pyplot as plt
 from my_module import my_func, other_func
 
 def foo(var1, var2, long_var_name="hi"):
-    r"""A one-line summary that does not use variable names or the
+    r"""
+    A one-line summary that does not use variable names or the
     function name.
 
     Several sentences providing an extended description. Refer to
@@ -118,5 +120,4 @@ def foo(var1, var2, long_var_name="hi"):
     b
 
     """
-
     pass

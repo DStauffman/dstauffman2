@@ -4,6 +4,7 @@ Classes module file for the "scrabble" game.  It defines the classes used by the
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports

@@ -4,6 +4,7 @@ Resizes all the photos within the given folder to a maximum height and width whi
 Notes
 -----
 #.  Written by David C. Stauffer in December 2013.
+
 """
 
 # %% Imports

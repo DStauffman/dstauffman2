@@ -5,6 +5,7 @@ test cases to demonstrate functionaliy and correct outcomes for all the function
 Notes
 -----
 #.  Written by David C. Stauffer in October 2015.
+
 """
 
 # %% Imports
@@ -64,7 +65,7 @@ class Test_score_text_to_number(unittest.TestCase):
             self.assertEqual(num, this_num)
 
     def test_int_to_int_usaa(self):
-        for this_num in range(0, 11):
+        for this_num in range(11):
             num = arch.score_text_to_number(this_num, flag="usaa")
             if this_num == 10:
                 self.assertEqual(num, 9)
@@ -159,6 +160,7 @@ class Test_read_from_excel_datafile(unittest.TestCase):
     Tests the read_from_excel_datafile function with these cases:
         TBD
     """
+
     pass
 
 
@@ -168,6 +170,7 @@ class Test_create_scoresheet(unittest.TestCase):
     Tests the create_scoresheet function with these cases:
         TBD
     """
+
     pass
 
 

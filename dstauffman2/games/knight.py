@@ -69,6 +69,7 @@ Level 4: Now repeat the Level 3 task for this 32x32 board.  Also, modify
     . . . . . . . . . . . B . . . . . . . . . . . . . . . . . . . .
 Level 5 [HARD]: Compute the longest sequence of moves to complete Level 3 without
     visiting the same square twice.  Use the 32x32 board.
+
 """
 
 # %% Imports
@@ -174,6 +175,7 @@ MOVES = [-4, -3, -2, -1, 1, 2, 3, 4]
 @unique
 class Piece(IntEnum):
     r"""Enumerator for all the possible types of squares within the board, including start and end positions."""
+
     null      = 0  # Empty square that has never been used
     start     = 1  # Original starting position
     final     = 2  # Final ending position
@@ -190,6 +192,7 @@ class Piece(IntEnum):
 @unique
 class Move(IntEnum):
     r"""Enumerator for all the cost outcomes for moving a piece."""
+
     off_board = -2
     blocked   = -1
     visited   = 0
@@ -245,7 +248,7 @@ def _board_to_costs(board):
             this_piece = board[i, j]
             if this_piece in {Piece.rock, Piece.barrier}:
                 continue
-            elif this_piece in {Piece.null, Piece.final}:
+            if this_piece in {Piece.null, Piece.final}:
                 costs[i, j] = COST_DICT["normal"]
             elif this_piece == Piece.start:
                 costs[i, j] = COST_DICT["start"]
@@ -1234,35 +1237,34 @@ def _solve_next_move(board, data, start_x, start_y):
             logging.debug(log_message + " - invalid")
             continue  # pragma: no cover - Actually covered, error in coverage tool
         # valid move
+        # determine if move was to a previously visited square of worse cost than another sequence
+        if is_repeat or data["current_cost"] + abs(cost) >= data["best_costs"][new_x, new_y]:
+            logging.debug(log_message + " - worse repeat")
+            # reject move and re-establish the visited state
+            _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
+            if cost > 0 and is_repeat:
+                board[new_x, new_y] = Piece2["visited"]
+            continue  # pragma: no cover - Actually covered, error in coverage tool
+        # optional logging for debugging
+        if cost < 0:
+            logging.debug(log_message + " - solution")
+            logging.debug("Potential solution found, moves = {} + {}".format(data["moves"], this_move))
+        elif is_repeat:
+            logging.debug(log_message + " - better repeat")
         else:
-            # determine if move was to a previously visited square of worse cost than another sequence
-            if is_repeat or data["current_cost"] + abs(cost) >= data["best_costs"][new_x, new_y]:
-                logging.debug(log_message + " - worse repeat")
-                # reject move and re-establish the visited state
-                _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
-                if cost > 0 and is_repeat:
-                    board[new_x, new_y] = Piece2["visited"]
-                continue  # pragma: no cover - Actually covered, error in coverage tool
-            # optional logging for debugging
-            if cost < 0:
-                logging.debug(log_message + " - solution")
-                logging.debug("Potential solution found, moves = {} + {}".format(data["moves"], this_move))
-            elif is_repeat:
-                logging.debug(log_message + " - better repeat")
-            else:
-                logging.debug(log_message + " - new step")
-            # move is new or better, update current and best costs and append move
-            assert data["best_costs"][new_x, new_y] > 50000
-            data["best_costs"][new_x, new_y] = data["current_cost"] + cost
-            data["all_moves"][new_x][new_y] = data["moves"][:] + [this_move]
-            data["all_boards"][:, :, new_x, new_y] = board.copy()
-            if cost < 0:
-                print("Solution found for cost of: {}.".format(data["current_cost"] + abs(cost)))
-                data["is_solved"] = True
-                _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
-            else:
-                # undo board as prep for next move
-                _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
+            logging.debug(log_message + " - new step")
+        # move is new or better, update current and best costs and append move
+        assert data["best_costs"][new_x, new_y] > 50000
+        data["best_costs"][new_x, new_y] = data["current_cost"] + cost
+        data["all_moves"][new_x][new_y] = data["moves"][:] + [this_move]
+        data["all_boards"][:, :, new_x, new_y] = board.copy()
+        if cost < 0:
+            print("Solution found for cost of: {}.".format(data["current_cost"] + abs(cost)))
+            data["is_solved"] = True
+            _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
+        else:
+            # undo board as prep for next move
+            _undo_move(board, this_move, data["original_board"], data["transports"], new_x, new_y)
 
 
 # %% Functions - solve_min_puzzle

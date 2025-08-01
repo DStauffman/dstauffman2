@@ -4,6 +4,7 @@ Copies in the raw files based on the time stamps from the given jpg's.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2018.
+
 """
 
 # %% Imports

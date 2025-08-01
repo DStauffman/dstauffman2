@@ -4,6 +4,7 @@ Renumbers the pictures in the given folder with a new prefix.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2018.
+
 """
 
 # %% Imports

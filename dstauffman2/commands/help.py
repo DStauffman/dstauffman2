@@ -4,6 +4,7 @@ Functions related to `help` and `version` commands.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2020.
+
 """
 
 # %% Imports
@@ -46,7 +47,8 @@ def print_help(help_file: Path | None = None) -> int:
 
 # %% Functions - print_version
 def print_version() -> int:
-    r"""Prints the version of the library.
+    r"""
+    Prints the version of the library.
 
     Returns
     -------

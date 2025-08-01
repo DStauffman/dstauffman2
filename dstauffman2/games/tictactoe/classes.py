@@ -4,6 +4,7 @@ Classes module file for the "tictactoe" game.  It defines the classes used by th
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -21,6 +22,7 @@ from dstauffman2.games.tictactoe.constants import PLAYER
 # %% Options
 class Options(Frozen):
     r"""Class that keeps track of the options for the game."""
+
     # Gameplay default options
     load_previous_game = "No"  # from ["Yes","No","Ask"]
     plot_best_moves    = False
@@ -74,18 +76,17 @@ class Move(Frozen):
         else:
             if other.power is None:
                 return False
-            else:
-                if self.power < other.power:
-                    return True
-                elif self.power > other.power:
-                    return False
+            if self.power < other.power:
+                return True
+            if self.power > other.power:
+                return False
         if self.row < other.row:
             return True
-        elif self.row > other.row:
+        if self.row > other.row:
             return False
         if self.column < other.column:
             return True
-        elif self.column > other.column:
+        if self.column > other.column:
             return False
         return False
 

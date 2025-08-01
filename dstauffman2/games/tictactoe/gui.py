@@ -4,6 +4,7 @@ GUI module file for the "tictactoe" game.  It defines the GUI.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -70,7 +71,7 @@ class TicTacToeGui(QMainWindow):
         # ask if loading
         elif OPTS.load_previous_game == "Ask":
             self.load_widget = QWidget()
-            reply = QMessageBox.question(self.load_widget, 'Message', \
+            reply = QMessageBox.question(self.load_widget, "Message", \
                 "Do you want to load the previous game?", QMessageBox.Yes | \
                 QMessageBox.No, QMessageBox.No)
             if reply == QMessageBox.Yes:
@@ -463,9 +464,9 @@ class TicTacToeGui(QMainWindow):
         (winner, current_player) = sub_wrapper(self)
 
         # make computer AI move
-        while winner == PLAYER['none'] and (\
-            (OPTS.o_is_computer and current_player == PLAYER['o']) or \
-            (OPTS.x_is_computer and current_player == PLAYER['x'])):
+        while winner == PLAYER["none"] and (\
+            (OPTS.o_is_computer and current_player == PLAYER["o"]) or \
+            (OPTS.x_is_computer and current_player == PLAYER["x"])):
             play_ai_game(self.board_axes, self.state.board, self.state.cur_move, \
                 self.state.cur_game, self.state.game_hist)
             (winner, current_player) = sub_wrapper(self)

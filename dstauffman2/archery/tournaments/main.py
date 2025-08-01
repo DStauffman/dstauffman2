@@ -5,6 +5,7 @@ functions.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2014.
+
 """
 
 # %% Imports
@@ -32,6 +33,7 @@ def _set_seeds(data, max_seed=None):
     Notes
     -----
     #. Assumes the dataFrame is already subselected to only be one division and gender combination.
+
     """
     # Sort the data by total score and then total X count
     data.sort([COL_SCORE_TOT, COL_X_COUNT_TOT], ascending=[False, False], inplace=True)
@@ -115,6 +117,7 @@ def update_teams(data_indiv, data_teams):
     Notes
     -----
     #. Substitutions are handled outside of this function.
+
     """
     # pull out the relevant subgroups
     grouped = data_indiv.groupby([COL_DIVISION, COL_GENDER, COL_SCHOOL], group_keys=False)
@@ -168,6 +171,7 @@ def update_mixed(data_indiv, data_mixed):
     Notes
     -----
     #. Substitutions are handled outside of this function.
+
     """
     # pull out the relevant subgroups
     grouped = data_indiv.groupby([COL_DIVISION, COL_SCHOOL], group_keys=False)

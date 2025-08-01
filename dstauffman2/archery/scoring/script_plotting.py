@@ -21,8 +21,8 @@ if __name__ == "__main__":
 
     # %% folder and file locations
     username      = getpass.getuser()
-    folder        = os.path.join(r'C:\Users', username, r'Google Drive\Python\2015-16_Indoor_Scores')
-    xlsx_datafile = os.path.join(folder, '2015-16 Indoor Scorecards.xlsx')
+    folder        = os.path.join(r"C:\Users", username, r"Google Drive\Python\2015-16_Indoor_Scores")
+    xlsx_datafile = os.path.join(folder, "2015-16 Indoor Scorecards.xlsx")
 
     # %% opts settings for plots
     opts = Opts()
@@ -92,8 +92,8 @@ if __name__ == "__main__":
 
     # plot data
     norm = ax.plot(score_range, num2per*score.normal_curve(score_range, inner10_mean, inner10_std), \
-        color='#396AB1', label='Normal', linewidth=3)
-    acts = ax.bar(act_range, num2per*inner10_acts, color='#7293CB', label='Actuals', width=0.9)
+        color="#396AB1", label="Normal", linewidth=3)
+    acts = ax.bar(act_range, num2per*inner10_acts, color="#7293CB", label="Actuals", width=0.9)
 
     # plot tournament scores
     val = 1 / len(inner10)
@@ -104,8 +104,8 @@ if __name__ == "__main__":
         this_patch = Rectangle((this_score, 0), 0.8, num2per * val * num_this_one, facecolor="#D35E60", label=label)
         patches.append(this_patch)
         ax.add_patch(this_patch)
-        ax.text(this_score+0.1, 0.25, 'Session {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
-            fontsize=12, color='w', fontweight='bold')
+        ax.text(this_score+0.1, 0.25, "Session {}".format(len(patches)), rotation=90, ha="left", va="bottom", \
+            fontsize=12, color="w", fontweight="bold")
 
     # add labels and legends
     ax.set_xlabel("Score", fontsize=14)
@@ -146,8 +146,8 @@ if __name__ == "__main__":
 
     # plot data
     ax.plot(score_range, num2per*score.normal_curve(score_range, outer10_mean, outer10_std), \
-        color='#396AB1', label='Normal', linewidth=3)
-    ax.bar(act_range, num2per*outer10_acts, color='#7293CB', label='Actuals', width=0.9)
+        color="#396AB1", label="Normal", linewidth=3)
+    ax.bar(act_range, num2per*outer10_acts, color="#7293CB", label="Actuals", width=0.9)
 
     # plot tournament scores
     val = 1 / len(outer10)
@@ -158,8 +158,8 @@ if __name__ == "__main__":
         this_patch = Rectangle((this_score, 0), 0.8, num2per * val * num_this_one, facecolor="#D35E60", label=label)
         patches.append(this_patch)
         ax.add_patch(this_patch)
-        ax.text(this_score+0.1, 0.25, 'Day {}'.format(len(patches)), rotation=90, ha='left', va='bottom', \
-            fontsize=12, color='w', fontweight='bold')
+        ax.text(this_score+0.1, 0.25, "Day {}".format(len(patches)), rotation=90, ha="left", va="bottom", \
+            fontsize=12, color="w", fontweight="bold")
 
     # add labels and legends
     ax.set_xlabel("Score", fontsize=14)

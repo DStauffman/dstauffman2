@@ -4,6 +4,7 @@ Moves the files from any folders up to the root level.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2018.
+
 """
 
 # %% Imports

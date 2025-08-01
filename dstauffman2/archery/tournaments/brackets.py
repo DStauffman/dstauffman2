@@ -5,6 +5,7 @@ brackets based on individual seed order.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2015.
+
 """
 
 # %% Imports
@@ -75,7 +76,7 @@ def write_brackets(data, filename="", team="indiv", display=True):
                 text   = []
                 places = ["1st", "2nd", "3rd", "4th"]
                 for [ix, this_seed] in enumerate(all_seeds[-1]):
-                    text.append(' {} Place: {}'.format(places[ix], get_name_by_index(data, this_seed-1) if this_seed-1 < num else ''))
+                    text.append(" {} Place: {}".format(places[ix], get_name_by_index(data, this_seed-1) if this_seed-1 < num else ""))
                 all_texts[0] = text
                 if display:
                     print("\n".join(text) + "\n")
@@ -123,29 +124,26 @@ def determine_seed_winners(data, seeds, waves):
         if pairing[0] and not pairing[1]:
             if not flip:
                 return pair[0]
-            else:
-                return pair[1]
-        elif pairing[1] and not pairing[0]:
+            return pair[1]
+        if pairing[1] and not pairing[0]:
             if not flip:
                 return pair[1]
-            else:
-                return pair[0]
-        else:
-            print(pairing)
-            raise ValueError("No one won?")
+            return pair[0]
+        print(pairing)
+        raise ValueError("No one won?")
 
     # preallocate
     all_seeds = [None] * (waves + 1)
     # set the given first round of seeds
     all_seeds[0] = seeds
     # loop through the waves
-    for i in range(0, waves):
+    for i in range(waves):
         # alias the last round
         last_seed = all_seeds[i]
         # initialize this round
         new_seed = []
         # loop through half the number of matches
-        for j in range(0, len(last_seed) // 2):
+        for j in range(len(last_seed) // 2):
             # find the last two pairings
             last_pair1 = last_seed[2 * j]
             last_pair2 = last_seed[2 * j + 1]
@@ -180,9 +178,8 @@ def get_name_by_index(data, index):
     # check that the index exists, or return an empty string
     if index >= len(data):
         return ""
-    else:
-        # get the "Lastname, Firstname" for the desired individual
-        return "{}, {}".format(data[COL_LASTNAME][index], data[COL_FIRSTNAME][index])
+    # get the "Lastname, Firstname" for the desired individual
+    return "{}, {}".format(data[COL_LASTNAME][index], data[COL_FIRSTNAME][index])
 
 
 # %% Functions - validate_brackets
@@ -230,11 +227,11 @@ def replace_bracket_tokens(html, title, names=[]):
     # replace the title
     html = html.replace("Text_Title_X1", title)
     # loop through the 2D list of names
-    for i in range(0, len(names)):
+    for i in range(len(names)):
         # inner loop on names
         if names[i] is None:
             break
-        for j in range(0, len(names[i])):
+        for j in range(len(names[i])):
             # alias this name
             this_name = names[i][j]
             # find the token letter for the string to replace

@@ -4,6 +4,7 @@ Utils module file for the "pentago" game.  It defines the generic utility functi
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -111,8 +112,8 @@ def check_for_win(board):
     if winner == PLAYER["none"]:
         win_mask = np.zeros((SIZES["board"], SIZES["board"]), dtype=bool)
     else:
-        logger.debug('Win detected.  Winner is {}.'.format(list(PLAYER)[list(PLAYER.values()).index(winner)]))
-        win_mask = np.reshape(np.sum(WIN[:, white], axis=1) + np.sum(WIN[:, black], axis=1), (SIZES['board'], SIZES['board'])) != 0
+        logger.debug("Win detected.  Winner is {}.".format(list(PLAYER)[list(PLAYER.values()).index(winner)]))
+        win_mask = np.reshape(np.sum(WIN[:, white], axis=1) + np.sum(WIN[:, black], axis=1), (SIZES["board"], SIZES["board"])) != 0
 
     return (winner, win_mask)
 

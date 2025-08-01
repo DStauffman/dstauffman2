@@ -4,6 +4,7 @@ Copies changes any *.JPG to *.jpg and shows any missing numbers.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2013.
+
 """
 
 # %% Imports

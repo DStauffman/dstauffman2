@@ -4,6 +4,7 @@ Demonstrates how to make a plot without ever importing matplotlib.pyplot.
 Notes
 -----
 #.  Written by David C. Stauffer in April 2017.
+
 """
 
 # %% Imports

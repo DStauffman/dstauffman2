@@ -4,6 +4,7 @@ Constants module file for the "pentago" game.  It defines constants.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports

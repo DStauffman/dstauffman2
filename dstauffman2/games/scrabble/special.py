@@ -4,6 +4,7 @@ Special module file for the "scrabble" game.  It defines the functions that find
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports
@@ -111,7 +112,7 @@ def find_all_vowel_words(words=None):
 
 # %% find_all_q_without_u_words
 def find_all_q_without_u_words(words=None):
-    return find_all(words, func=lambda x: "q" in x and not "u" in x)
+    return find_all(words, func=lambda x: "q" in x and "u" not in x)
 
 
 # %% find_starting_with_de

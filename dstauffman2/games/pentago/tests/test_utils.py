@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -121,7 +122,7 @@ class Test_rotate_board(unittest.TestCase):
         for ix, (quad, dir_) in enumerate(quad_dirs):
             temp = temp_board.copy()
             pentago.rotate_board(temp, quadrant=quad, direction=dir_)
-            np.testing.assert_array_equal(temp[:, ix], expected_board[:, ix], 'Quad {}, Dir {}, ix {}'.format(quad, dir_, ix))
+            np.testing.assert_array_equal(temp[:, ix], expected_board[:, ix], "Quad {}, Dir {}, ix {}".format(quad, dir_, ix))
 
     def test_not_inplace(self):
         expected_board = self.board.copy()

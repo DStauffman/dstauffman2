@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in March 2015.
+
 """
 
 # %% Imports
@@ -620,7 +621,8 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
 
 # %% number_files
 class Test_number_files(unittest.TestCase):
-    r"""Tests the number_files function with the following cases:
+    r"""
+    Tests the number_files function with the following cases:
         Nominal
     """
 

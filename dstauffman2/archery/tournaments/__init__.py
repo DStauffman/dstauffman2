@@ -22,6 +22,7 @@ Notes
     for other people and other tournaments.
 #.  Ported to the "dstauffman" library by David C. Stauffer in June 2015.
 #.  Moved to the "dstauffman2" library by David C. Stauffer in November 2016.
+
 """
 
 # %% Relative imports

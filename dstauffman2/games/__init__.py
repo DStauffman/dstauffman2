@@ -9,6 +9,7 @@ The "rubik" file solves Rubik's Cube related permutation puzzles.
 Notes
 -----
 #.  Written by David C. Stauffer in June 2015.
+
 """
 
 # %% Imports

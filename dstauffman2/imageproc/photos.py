@@ -6,6 +6,7 @@ Contains a collection of commands that are useful for maintaining photo gallerie
 Notes
 -----
 #.  Written by David C. Stauffer in December 2013.
+
 """  # pylint: disable=C0326
 
 # %% Imports
@@ -97,7 +98,7 @@ def find_missing_nums(
             if len(nums) > 1:
                 print('Weird numbering: "{}"'.format(os.path.join(root, name)))
                 continue
-            elif len(nums) == 0:
+            if len(nums) == 0:
                 print('No number found: "{}"'.format(os.path.join(root, name)))
                 continue
             nums = nums[0]
@@ -120,7 +121,7 @@ def find_missing_nums(
             nums = nums_list[name_dict[nams]]
             digs = digs_list[name_dict[nams]]
             missing = set(nums) ^ set(range(1, max(nums) + 1))
-            digits = [nums[i] for i in range(0, len(digs)) if digs[i] != max(digs)]
+            digits = [nums[i] for i in range(len(digs)) if digs[i] != max(digs)]
             if missing:
                 print('Missing: "{}": '.format(os.path.join(root, nams)), end="")
                 if len(missing) < 21:
@@ -390,7 +391,7 @@ def batch_resize(
         # check if valid image file
         if image.is_dir():
             continue
-        elif image.suffix not in process_extensions:
+        if image.suffix not in process_extensions:
             print(' Skipping file   : "{}"'.format(image.name))
             continue
 
@@ -511,7 +512,7 @@ def convert_tif_to_jpg(
         # check if valid image tif file
         if image.is_dir():
             continue
-        elif image.suffix not in {".tif", ".tiff"}:
+        if image.suffix not in {".tif", ".tiff"}:
             print(' Skipping file   : "{}"'.format(image.name))
             continue
 
@@ -637,7 +638,7 @@ def number_files(
         # check if valid image file
         if image.is_dir():
             continue
-        elif file_ext not in process_extensions:
+        if file_ext not in process_extensions:
             print(' Skipping file   : "{}"'.format(image))
             continue
 
@@ -691,8 +692,7 @@ def read_exif_data(filename: Path, field: str | None = None) -> dict:
     # return all the data, or just the specified field name
     if field is None:
         return exif
-    else:
-        return exif[field]
+    return exif[field]
 
 
 # %% get_image_datetime
@@ -781,7 +781,7 @@ def get_raw_file_from_datetime(
         # check if valid image file
         if image.is_dir():
             continue
-        elif image.suffix != img_extension:
+        if image.suffix != img_extension:
             print(' Skipping file   : "{}"'.format(image))
             continue
         # read exif data
@@ -793,9 +793,7 @@ def get_raw_file_from_datetime(
     raw_times = {}
     duplicates = set()
     for image in raw_folder.glob("*"):
-        if image.is_dir():
-            continue
-        elif image.suffix != raw_extension:
+        if image.is_dir() or image.suffix != raw_extension:
             continue
         raw_time_stamp = get_image_datetime(image)
         if raw_time_stamp not in raw_times:

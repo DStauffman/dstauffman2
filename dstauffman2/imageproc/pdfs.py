@@ -6,6 +6,7 @@ Contains a collection of functions for building, spliting, and combining PDF fil
 Notes
 -----
 #.  Written by David C. Stauffer in March 2024.
+
 """  # pylint: disable=C0326
 
 # %% Imports
@@ -363,16 +364,15 @@ def _build_multipage(
             # first page, just keep image
             book = new_image
             continue
-        elif not is_right:
+        if not is_right:
             # save for next loop
             left = new_image
             if ix < num_images:
                 # not the last page, then continue
                 continue
-            else:
-                # is the last page, and it's only the left, then save
-                book_pages.append(new_image)
-                break
+            # is the last page, and it's only the left, then save
+            book_pages.append(new_image)
+            break
         full = Image.new("RGB", (2*width, height))
         full.paste(left, (0, 0))
         full.paste(new_image, (width, 0))

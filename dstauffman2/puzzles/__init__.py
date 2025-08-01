@@ -5,6 +5,7 @@ different logic puzzles.
 Notes
 -----
 #.  Written by David C. Stauffer in December 2016.
+
 """
 
 # %% Imports

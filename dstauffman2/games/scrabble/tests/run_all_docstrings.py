@@ -4,6 +4,7 @@ Test file to execute all the docstrings within the scrabble code.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports

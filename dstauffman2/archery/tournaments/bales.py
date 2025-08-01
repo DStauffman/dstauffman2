@@ -5,6 +5,7 @@ bales based on the list of registered archers.
 Notes
 -----
 #.  Written by David C. Stauffer in Feb 2015.
+
 """
 
 # %% Imports
@@ -50,7 +51,7 @@ def validate_bales(data):
     # ix    = data['Bale'].index
     num_bales = max(bales)
     print("Validating Bale assignments ...")
-    for i in range(0, num_bales):
+    for i in range(num_bales):
         sub_ix = [a for a, b in enumerate(bales) if b == i + 1]
         count = len(sub_ix)
         if count == 0:

@@ -5,6 +5,7 @@ Notes
 -----
 #.  Written by David C. Stauffer in September 2015 after he found some old school files of Rubik's
     cube permutations.
+
 """
 
 # %% Imports

@@ -5,6 +5,7 @@ the Python `unittest` library.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports

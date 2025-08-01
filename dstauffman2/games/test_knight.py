@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in September 2015.
+
 """
 
 # %% Imports
@@ -681,12 +682,12 @@ class Test_print_sequence(unittest.TestCase):
         self.board[0, 0] = knight.Piece.start
         self.board[2, 4] = knight.Piece.final
         self.moves       = [2, 2]
-        self.output      = 'Starting position:\nS . . . .\n. . . . .\n. . . . E\n\n' + \
-            'After move 1, cost: 1\nx . . . .\n. . K . .\n. . . . E\n\nAfter move 2, cost: 2\n' + \
-            'x . . . .\n. . x . .\n. . . . K'
-        self.output2     = 'Starting position:\nS W W W W\nW W W W W\nW W W W E\n\n' + \
-            'After move 1, cost: 2\nx W W W W\nW W K W W\nW W W W E\n\nAfter move 2, cost: 3\n' + \
-            'x W W W W\nW W x W W\nW W W W K'
+        self.output      = "Starting position:\nS . . . .\n. . . . .\n. . . . E\n\n" + \
+            "After move 1, cost: 1\nx . . . .\n. . K . .\n. . . . E\n\nAfter move 2, cost: 2\n" + \
+            "x . . . .\n. . x . .\n. . . . K"
+        self.output2     = "Starting position:\nS W W W W\nW W W W W\nW W W W E\n\n" + \
+            "After move 1, cost: 2\nx W W W W\nW W K W W\nW W W W E\n\nAfter move 2, cost: 3\n" + \
+            "x W W W W\nW W x W W\nW W W W K"
 
     def test_normal(self):
         with capture_output() as ctx:

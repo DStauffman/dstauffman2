@@ -5,6 +5,7 @@ cases to demonstrate functionaliy and correct outcomes for all the functions wit
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -149,7 +150,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         ttt.Options.load_previous_game = "Yes"
         self.gui = ttt.TicTacToeGui()
 
-    @unittest.skip("Don" "t know how to implement this one yet.")
+    @unittest.skip("Don't know how to implement this one yet.")
     def test_ask_game_load(self):
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True

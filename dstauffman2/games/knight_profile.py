@@ -4,6 +4,7 @@ The "profile_knight" file runs a subset of knight code using 'pprofile' to do a 
 Notes
 -----
 #.  Written by David C. Stauffer in June 2015.
+
 """
 
 # %% Imports
@@ -63,9 +64,9 @@ if __name__ == "__main__":
             knight.print_sequence(board2, moves4)
 
     # timing
-    t = timeit.timeit('knight.solve_min_puzzle(board2)', setup='import dstauffman2.games.knight as knight; ' + \
-        'board2=knight.char_board_to_nums(knight.BOARD2); ' +
-        'board2[0, 0] = knight.Piece.start; board2[11, -1] = knight.Piece.final;', number=5)
+    t = timeit.timeit("knight.solve_min_puzzle(board2)", setup="import dstauffman2.games.knight as knight; " + \
+        "board2=knight.char_board_to_nums(knight.BOARD2); " +
+        "board2[0, 0] = knight.Piece.start; board2[11, -1] = knight.Piece.final;", number=5)
     print(t/5)
 
     # Save profile results

@@ -8,6 +8,7 @@ Notes
 #.  Written by David C. Stauffer in March 2015.
 #.  Adapted into dstauffman library by David C. Stauffer in October 2015.
 #.  Moved into dstauffman2 library by David C. Stauffer in November 2016.
+
 """
 
 # %% Imports
@@ -92,20 +93,17 @@ def score_text_to_number(text, flag="nfaa"):
         # check for specific values, or convert to int
         if text == "x":
             return 10
-        elif text == "10" and flag == "usaa":
+        if text == "10" and flag == "usaa":
             return 9
-        elif text == "m":
+        if text == "m":
             return 0
-        else:
-            return int(text)
-    else:
-        # assume anything else is numeric and force it to be an int
-        value = int(text)
-        # check for USAA conversion case, otherwise return numeric value
-        if value == 10 and flag == "usaa":
-            return 9
-        else:
-            return value
+        return int(text)
+    # assume anything else is numeric and force it to be an int
+    value = int(text)
+    # check for USAA conversion case, otherwise return numeric value
+    if value == 10 and flag == "usaa":
+        return 9
+    return value
 
 
 # %% Functions - convert_data_to_scores
@@ -269,7 +267,7 @@ def normal_curve(x, mu=0, sigma=1):
     """
     if sigma < 0:
         raise ValueError("The sigma must be positive, not {}.".format(sigma))
-    elif sigma == 0:
+    if sigma == 0:
         y = np.where(x == mu, 1, 0)
     else:
         y = 1 / (sigma * np.sqrt(2 * np.pi)) * np.exp(-((x - mu) ** 2) / (2 * sigma**2))
@@ -526,16 +524,16 @@ span.white {color: #ffffff;}
  </thead>
 """
 
-    plot1 = """<p><img src=""" + plotname.replace(' ','%20') + """ alt="Normal Distribution plot" height="597" width="800"> </p>
+    plot1 = """<p><img src=""" + plotname.replace(" ","%20") + """ alt="Normal Distribution plot" height="597" width="800"> </p>
 """
 
-    for i in range(0, len(scores)):
-        table1 = table1 + ' <tr>\n  <td rowspan="2">' + names[i] + '</td>\n'
+    for i in range(len(scores)):
+        table1 = table1 + ' <tr>\n  <td rowspan="2">' + names[i] + "</td>\n"
         this_data   = scores[i]
         this_data   = [x if isinstance(x,str) else str(int(x)) for x in this_data]
         this_nums   = [score_text_to_number(x) for x in this_data]
         this_cumsum = np.cumsum(this_nums)
-        for j in range(0,len(this_data)):
+        for j in range(len(this_data)):
             this_text = this_data[j]
             if this_text in {"X", "x", "10", "9"}:
                 c = "Y"
@@ -563,33 +561,33 @@ span.white {color: #ffffff;}
         num_tens = np.count_nonzero([x == "10" for x in this_data])
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1])
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(this_cumsum[-1]-num_tens)
-        table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(np.count_nonzero([x.lower()=='x' for x in this_data]))
+        table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(np.count_nonzero([x.lower()=="x" for x in this_data]))
         table1 = table1 + '  <td rowspan="2">{}</td>\n'.format(num_tens)
-        table1 = table1 + ' </tr>\n <tr>\n'
-        for j in range(0, len(this_data)):
+        table1 = table1 + " </tr>\n <tr>\n"
+        for j in range(len(this_data)):
             if j % 3 == 2:
-                table1 = table1 + '  <td colspan="4">' + '{}'.format(this_cumsum[j]) + '</td>\n'
-        table1 = table1 + ' </tr>\n'
-        table2 = table2 + '<tr>'
-        table2 = table2 + '<td>' + names[i] + '</td>\n'
-        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x.lower()=='x' for x in this_data]))
-        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x=='10' for x in this_data]))
-        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x=='9' for x in this_data]))
-        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x=='8' for x in this_data]))
-        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x=='7' for x in this_data]))
-        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x=='6' for x in this_data]))
-        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x=='5' for x in this_data]))
-        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x=='4' for x in this_data]))
-        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x=='3' for x in this_data]))
-        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x=='2' for x in this_data]))
-        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x=='1' for x in this_data]))
-        table2 = table2 + '<td class="W"><span class="red">{}</span></td>\n'.format(np.count_nonzero([x.lower()=='m' or x == '0' for x in this_data]))
-        table2 = table2 + '</tr>\n'
-    table1 = table1 + '</table>\n'
+                table1 = table1 + '  <td colspan="4">' + "{}".format(this_cumsum[j]) + "</td>\n"
+        table1 = table1 + " </tr>\n"
+        table2 = table2 + "<tr>"
+        table2 = table2 + "<td>" + names[i] + "</td>\n"
+        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x.lower()=="x" for x in this_data]))
+        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x=="10" for x in this_data]))
+        table2 = table2 + '<td class="Y">{}</td>\n'.format(np.count_nonzero([x=="9" for x in this_data]))
+        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x=="8" for x in this_data]))
+        table2 = table2 + '<td class="R">{}</td>\n'.format(np.count_nonzero([x=="7" for x in this_data]))
+        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x=="6" for x in this_data]))
+        table2 = table2 + '<td class="B">{}</td>\n'.format(np.count_nonzero([x=="5" for x in this_data]))
+        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x=="4" for x in this_data]))
+        table2 = table2 + '<td class="K"><span class="white">{}</span></td>\n'.format(np.count_nonzero([x=="3" for x in this_data]))
+        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x=="2" for x in this_data]))
+        table2 = table2 + '<td class="W">{}</td>\n'.format(np.count_nonzero([x=="1" for x in this_data]))
+        table2 = table2 + '<td class="W"><span class="red">{}</span></td>\n'.format(np.count_nonzero([x.lower()=="m" or x == "0" for x in this_data]))
+        table2 = table2 + "</tr>\n"
+    table1 = table1 + "</table>\n"
 
-    table2 = table2 + '</table>\n'
+    table2 = table2 + "</table>\n"
 
-    htm = htm + table1 + '<br /><br />\n' + table2 + '<br /><br />' + plot1 + '</body>\n\n</html>\n'
+    htm = htm + table1 + "<br /><br />\n" + table2 + "<br /><br />" + plot1 + "</body>\n\n</html>\n"
 
     # write text to file
     if make_file:

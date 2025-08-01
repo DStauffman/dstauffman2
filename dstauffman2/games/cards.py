@@ -5,6 +5,7 @@ games such as poker.
 Notes
 -----
 #.  Written by David C. Stauffer in May 2016.
+
 """
 
 # %% Imports
@@ -19,6 +20,7 @@ import unittest
 @unique
 class Suit(IntEnum):
     r"""Enumerator definitions for the possible card suits."""
+
     CLUBS    = 0
     DIAMONDS = 1
     HEARTS   = 2
@@ -29,6 +31,7 @@ class Suit(IntEnum):
 @unique
 class Rank(IntEnum):
     r"""Enumerator definitions for the possible hand ranks."""
+
     TWO   = 0
     THREE = 1
     FOUR  = 2
@@ -244,6 +247,7 @@ class Hand(object):
 # %% Classes - WarGame
 class WarGame(object):
     r"""The game of War implemented as a class."""
+
     war_downs = 3
 
     def __init__(self):
@@ -330,19 +334,19 @@ class WarGame(object):
         Notes
         -----
         #.  A game can theoretically draw with repeated wars such that both players run out of cards.
+
         """
         n1 = self._hand1.num_cards
         n2 = self._hand2.num_cards
         if n1 > 0 and n2 == 0:
             return "Player 1 won!"
-        elif n1 == 0 and n2 > 0:
+        if n1 == 0 and n2 > 0:
             return "Player 2 won!"
-        elif n1 == 0 and n2 == 0:
+        if n1 == 0 and n2 == 0:
             return "Draw game!"
-        else:
-            print("Card count: ", end="")
-            self.print_card_count()
-            raise ValueError("Undetermined winner!")
+        print("Card count: ", end="")
+        self.print_card_count()
+        raise ValueError("Undetermined winner!")
 
     def play_game(self):
         r"""Wrapper function that plays a game until a winner is determined."""

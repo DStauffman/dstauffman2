@@ -5,6 +5,7 @@ Notes
 -----
 #.  Written by David C. Stauffer in April 2017.
 #.  Updated by David C. Stauffer in March 2019 to process pyhesat.
+
 """
 
 # %% Imports
@@ -24,6 +25,7 @@ def process_repo(name, root, tests, exclude):
     -----
     #.  All lines in the tests folder are considered "tests".
     #.  All lines in .tex, .xml, and .md files are considered "docs".
+
     """
     # hard-coded values
     langs = frozenset({"Python", "MATLAB", "DOS Batch", "Bourne Shell"})
@@ -83,11 +85,11 @@ def print_results(name, lines, files):
     print(f"******** {name} ********")
     print(f" Files: {files['total']}, ({100*files['tests']/files['total']:.1f}% tests)")
     print(f" Total lines of code: {lines['total']}")
-    print('  Code: {} ({:.1f}%), Comments: {} ({:.1f}%), Blank: {} ({:.1f}%), Tests: {} ({:.1f}%), Documentation: {} ({:.1f}%)'.format(\
-         lines['code'], 100*lines['code']/lines['total'], lines['comment'], 100*lines['comment']/lines['total'], \
-         lines['blank'], 100*lines['blank']/lines['total'], lines['tests'], 100*lines['tests']/lines['total'], \
-         lines['docs'], 100*lines['docs']/lines['total']))
-    print('')
+    print("  Code: {} ({:.1f}%), Comments: {} ({:.1f}%), Blank: {} ({:.1f}%), Tests: {} ({:.1f}%), Documentation: {} ({:.1f}%)".format(\
+         lines["code"], 100*lines["code"]/lines["total"], lines["comment"], 100*lines["comment"]/lines["total"], \
+         lines["blank"], 100*lines["blank"]/lines["total"], lines["tests"], 100*lines["tests"]/lines["total"], \
+         lines["docs"], 100*lines["docs"]/lines["total"]))
+    print("")
 
 
 # %% Functions - combine_results
@@ -110,24 +112,24 @@ def print_latex_tables(out, keys):
     cols = ["total", "code", "comment", "blank", "tests", "docs"]
 
     text = []
-    text += make_preamble('Count Lines of Code Breakdown','tab:cloc','lcccccc')
-    text.append(r'        \textbf{Module} & \textbf{Total} & \textbf{Code} & \textbf{Comments} & \textbf{Blank} & \textbf{Tests} & \textbf{Documentation} \\ \midrule')
+    text += make_preamble("Count Lines of Code Breakdown","tab:cloc","lcccccc")
+    text.append(r"        \textbf{Module} & \textbf{Total} & \textbf{Code} & \textbf{Comments} & \textbf{Blank} & \textbf{Tests} & \textbf{Documentation} \\ \midrule")
     for key in keys:
-        lines = out[key]['lines']
-        if '+' in key:
-            name = 'total'
-            midrule = ''
+        lines = out[key]["lines"]
+        if "+" in key:
+            name = "total"
+            midrule = ""
         else:
             name = key
-            midrule = r' \midrule'
-        values = ' & '.join('{}'.format(lines[x]) for x in cols)
-        text.append(r'        \multirow{2}[3]{*}{\textbf{\texttt{' + name + r'}}} & ' + values + r' \\')
+            midrule = r" \midrule"
+        values = " & ".join("{}".format(lines[x]) for x in cols)
+        text.append(r"        \multirow{2}[3]{*}{\textbf{\texttt{" + name + r"}}} & " + values + r" \\")
         #(100\%) & (36.0\%) & (28.6\%) & (22.4\%) & (9.3\%) & (3.7\%)
-        values = ' & '.join('({:.1f}\\%)'.format(100*lines[x]/lines['total']) for x in cols)
-        text.append(r'        & ' + values + r' \\' + midrule)
+        values = " & ".join("({:.1f}\\%)".format(100*lines[x]/lines["total"]) for x in cols)
+        text.append(r"        & " + values + r" \\" + midrule)
     text += make_conclusion()
 
-    text = '\n'.join(text)
+    text = "\n".join(text)
     print(text)
 
     return text

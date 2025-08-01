@@ -4,6 +4,7 @@ Constants module file for the "dstauffman2.archery" library.  It defines constan
 Notes
 -----
 #.  Written by David C. Stauffer in February 2015.
+
 """
 
 # %% Constants

@@ -4,6 +4,7 @@ Constants module file for the "scrabble" game.  It defines constants.
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports

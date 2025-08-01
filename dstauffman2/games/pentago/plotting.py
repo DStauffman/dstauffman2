@@ -4,6 +4,7 @@ Plotting module file for the "pentago" game.  It defines the plotting functions.
 Notes
 -----
 #.  Written by David C. Stauffer in January 2016.
+
 """
 
 # %% Imports
@@ -24,7 +25,7 @@ def plot_cur_move(ax, move):
 
     # fill background
     ax.add_patch(Rectangle((-box_size/2, -box_size/2), box_size, box_size, \
-        facecolor=COLOR['board'], edgecolor='k'))
+        facecolor=COLOR["board"], edgecolor="k"))
 
     # draw the piece
     if move == PLAYER["white"]:
@@ -103,8 +104,8 @@ def plot_board(ax, board):
     ymax = n - 1 + s
 
     # fill background
-    ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR['board'], \
-        edgecolor=COLOR['maj_edge']))
+    ax.add_patch(Rectangle((-xmin-1, -ymin-1), xmax-xmin, ymax-ymin, facecolor=COLOR["board"], \
+        edgecolor=COLOR["maj_edge"]))
 
     # draw minor horizontal lines
     ax.plot([1 - s, 1 - s], [ymin, ymax], color=COLOR["min_edge"])
@@ -216,14 +217,14 @@ def plot_possible_win(ax, rot_buttons, white_moves, black_moves, cur_move, cur_g
     next_move = calc_cur_move(cur_move, cur_game)
     if next_move == PLAYER["white"]:
         for this_move in pos_both:
-            plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_wht'])
-            plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_blk'], half=True)
-            rot_buttons[this_move.rot_key].overlay = 'w_b'
-    elif next_move == PLAYER['black']:
+            plot_piece(ax, this_move.row, this_move.column, SIZES["win"], COLOR["win_wht"])
+            plot_piece(ax, this_move.row, this_move.column, SIZES["win"], COLOR["win_blk"], half=True)
+            rot_buttons[this_move.rot_key].overlay = "w_b"
+    elif next_move == PLAYER["black"]:
         for this_move in pos_both:
-            plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_blk'])
-            plot_piece(ax, this_move.row, this_move.column, SIZES['win'], COLOR['win_wht'], half=True)
-            rot_buttons[this_move.rot_key].overlay = 'b_w'
+            plot_piece(ax, this_move.row, this_move.column, SIZES["win"], COLOR["win_blk"])
+            plot_piece(ax, this_move.row, this_move.column, SIZES["win"], COLOR["win_wht"], half=True)
+            rot_buttons[this_move.rot_key].overlay = "b_w"
     else:
         raise ValueError("Unexpected next player.")
 

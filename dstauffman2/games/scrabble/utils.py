@@ -4,6 +4,7 @@ Utils module file for the "scrabble" game.  It defines the generic utility funct
 Notes
 -----
 #.  Written by David C. Stauffer in March 2017.
+
 """
 
 # %% Imports
@@ -121,7 +122,7 @@ def get_raw_dictionary(filename=None, min_len=2, max_len=20):
         filename = get_dict_path()
     words = set()
     with open(filename, "rt") as file:
-        for line in file.readlines():
+        for line in file:
             word = line.rstrip("\n")
             if min_len <= len(word) <= max_len:
                 words.add(word)

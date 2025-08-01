@@ -17,7 +17,7 @@ def digit_sum(num):
 # %% Functions - brute_force
 def brute_force(sum_, num_len):
     out = 0
-    for i in range(0, 10**num_len):
+    for i in range(10**num_len):
         this_sum = digit_sum(i)
         if this_sum == sum_:
             out += 1

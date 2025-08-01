@@ -18,19 +18,19 @@ import dstauffman2.archery.tournaments as arch
 SIMULATE = True
 # folder and file locations
 folder              = arch.get_root_dir()
-output_folder       = os.path.realpath(os.path.join(folder, '..', 'output'))
-file                = r'Test_Case_4.xlsx'
-test_file           = os.path.join(folder, 'tests', file)
+output_folder       = os.path.realpath(os.path.join(folder, "..", "output"))
+file                = r"Test_Case_4.xlsx"
+test_file           = os.path.join(folder, "tests", file)
 if not os.path.isfile(test_file):
     raise ValueError('The specfied test file "{}" was not found.'.format(test_file))
 output_file         = os.path.join(output_folder, file)
-output_file_indiv   = output_file.replace('.xlsx', '_indiv.csv')
-output_file_teams   = output_file.replace('.xlsx', '_teams.csv')
-output_file_mixed   = output_file.replace('.xlsx', '_mixed.csv')
+output_file_indiv   = output_file.replace(".xlsx", "_indiv.csv")
+output_file_teams   = output_file.replace(".xlsx", "_teams.csv")
+output_file_mixed   = output_file.replace(".xlsx", "_mixed.csv")
 # HTML output files
-file_registered     = os.path.join(output_folder, 'Registered Archers.htm')
-file_reg_bales      = os.path.join(output_folder, 'Individual Bale Assignments.htm')
-file_indiv_res      = os.path.join(output_folder, 'Individual Results.htm')
+file_registered     = os.path.join(output_folder, "Registered Archers.htm")
+file_reg_bales      = os.path.join(output_folder, "Individual Bale Assignments.htm")
+file_indiv_res      = os.path.join(output_folder, "Individual Results.htm")
 # bracket lists
 # ex: Individual Brackets Female Bare Bow.htm
 file_list_indiv = {}
@@ -41,7 +41,7 @@ for div in arch.DIVISIONS:
         file_list_indiv[sex + " " + div] = os.path.join(output_folder, "Individual Brackets " + sex + " " + div + ".htm")
         file_list_teams[sex + " " + div] = os.path.join(output_folder, "Team Brackets " + sex + " " + div + ".htm")
         if sex == arch.GENDERS[0]:
-            file_list_mixed[div]         = os.path.join(output_folder, 'Mixed Team Brackets ' + div + '.htm')
+            file_list_mixed[div]         = os.path.join(output_folder, "Mixed Team Brackets " + div + ".htm")
 
 # %% Output folder
 # create the output folder if it doesn't already exist
