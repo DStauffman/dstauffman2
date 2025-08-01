@@ -25,13 +25,13 @@ class _pad_piece(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.piece = np.array([[1, 1, 1, 1], [0, 0, 0, 1]], dtype=int)
         self.max_size = 5
         self.new_piece = np.array([[1, 1, 1, 1, 0], [0, 0, 0, 1, 0], [0, 0, 0, 0, 0], \
             [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], dtype=int)
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         new_piece = fiver._pad_piece(self.piece, self.max_size)
         np.testing.assert_array_equal(new_piece, self.new_piece)
 
@@ -43,13 +43,13 @@ class _shift_piece(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.x = np.zeros((5, 5), dtype=int)
         self.x[1, :] = 1
         self.y = np.array([[1, 1, 1, 1, 1], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], \
             [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], dtype=int)
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         y = fiver._shift_piece(self.x)
         np.testing.assert_array_equal(y, self.y)
 
@@ -61,12 +61,12 @@ class Test__rotate_piece(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.x = np.arange(25).reshape((5, 5))
         self.y = np.array([[4, 9, 14, 19, 24], [3, 8, 13, 18, 23], [2, 7, 12, 17, 22], \
             [1, 6, 11, 16, 21], [0, 5, 10, 15, 20]], dtype=int)
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         y = fiver._rotate_piece(self.x)
         np.testing.assert_array_equal(y, self.y)
 
@@ -78,12 +78,12 @@ class Test__flip_piece(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.x = np.arange(25).reshape((5, 5))
         self.y = np.array([[20, 21, 22, 23, 24], [15, 16, 17, 18, 19], [10, 11, 12, 13, 14], \
             [5, 6, 7, 8, 9], [0, 1, 2, 3, 4]], dtype=int)
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         y = fiver._flip_piece(self.x)
         np.testing.assert_array_equal(y, self.y)
 
@@ -95,14 +95,14 @@ class Test__get_unique_pieces(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.pieces = np.zeros((3, 5, 5), dtype=int)
         self.pieces[0, :, 0] = 1
         self.pieces[1, :, 1] = 1
         self.pieces[2, :, 0] = 1
         self.ix_unique = [0, 1]
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         ix_unique = fiver._get_unique_pieces(self.pieces)
         np.testing.assert_array_equal(ix_unique, self.ix_unique)
 
@@ -114,12 +114,12 @@ class Test__display_progress(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.ix = np.array([1, 0, 4, 0])
         self.nums = np.array([2, 4, 8, 16])
         self.ratio = (512 + 64) / 1024
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             ratio = fiver._display_progress(self.ix, self.nums)
         output = ctx.get_output()
@@ -135,7 +135,7 @@ class Test__blobbing(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         # board 1, whole row
         self.board1       = np.zeros((3, 5), dtype=bool)
         self.board1[1, :] = 1
@@ -156,27 +156,27 @@ class Test__blobbing(unittest.TestCase):
         # board 6, multiple blobs, some invalid
         self.board6 = np.vstack((self.board1, self.board4))
 
-    def test_1(self):
+    def test_1(self) -> None:
         out = fiver._blobbing(self.board1)
         self.assertTrue(out)
 
-    def test_2(self):
+    def test_2(self) -> None:
         out = fiver._blobbing(self.board2)
         self.assertTrue(out)
 
-    def test_3(self):
+    def test_3(self) -> None:
         out = fiver._blobbing(self.board3)
         self.assertFalse(out)
 
-    def test_4(self):
+    def test_4(self) -> None:
         out = fiver._blobbing(self.board4)
         self.assertFalse(out)
 
-    def test_5(self):
+    def test_5(self) -> None:
         out = fiver._blobbing(self.board5)
         self.assertTrue(out)
 
-    def test_6(self):
+    def test_6(self) -> None:
         out = fiver._blobbing(self.board6)
         self.assertFalse(out)
 
@@ -188,14 +188,14 @@ class Test__save_solution(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.this_board1 = np.arange(25).reshape((5, 5))
         self.this_board2 = np.ones((5, 5), dtype=int)
         self.this_board3 = np.rot90(self.this_board1, 2)
         self.this_board4 = np.fliplr(self.this_board1)
         self.solutions = [self.this_board1]
 
-    def test_is_new(self):
+    def test_is_new(self) -> None:
         solutions = self.solutions[:]
         self.assertEqual(len(solutions), 1)
         with capture_output() as ctx:
@@ -205,13 +205,13 @@ class Test__save_solution(unittest.TestCase):
         self.assertEqual(len(solutions), 2)
         self.assertEqual(output, "Solution 2 found!")
 
-    def test_not_new1(self):
+    def test_not_new1(self) -> None:
         solutions = self.solutions[:]
         self.assertEqual(len(solutions), 1)
         fiver._save_solution(solutions, self.this_board3)
         self.assertEqual(len(solutions), 1)
 
-    def test_not_new2(self):
+    def test_not_new2(self) -> None:
         solutions = self.solutions[:]
         self.assertEqual(len(solutions), 1)
         fiver._save_solution(solutions, self.this_board4)
@@ -225,11 +225,11 @@ class Test_make_all_pieces(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.pieces0 = np.array([[1, 1, 1, 1, 1], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], \
             [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]], dtype=int)
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         pieces = fiver.make_all_pieces()
         np.testing.assert_array_equal(pieces[0], self.pieces0)
         # TODO: assert better tests?
@@ -242,10 +242,10 @@ class Test_make_all_permutations(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.pieces = fiver.make_all_pieces()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         all_pieces = fiver.make_all_permutations(self.pieces)
         # TODO: assert something
 
@@ -257,7 +257,7 @@ class Test_is_valid(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         # board 1, internal 3x3
         self.board1 = np.ones((5, 5), dtype=int)
         self.board1[1:-1, 1:-1] = 0
@@ -275,35 +275,35 @@ class Test_is_valid(unittest.TestCase):
         self.piece3[0] = self.piece1.copy()
         self.piece3[1] = self.piece2.copy()
 
-    def test_single1(self):
+    def test_single1(self) -> None:
         out = fiver.is_valid(self.board1, self.piece1, use_blobbing=False)
         self.assertTrue(out)
 
-    def test_single2(self):
+    def test_single2(self) -> None:
         out = fiver.is_valid(self.board1, self.piece1, use_blobbing=True)
         self.assertFalse(out)
 
-    def test_single3(self):
+    def test_single3(self) -> None:
         out = fiver.is_valid(self.board2, self.piece1, use_blobbing=True)
         self.assertTrue(out)
 
-    def test_invalid1(self):
+    def test_invalid1(self) -> None:
         out = fiver.is_valid(self.board1, self.piece2, use_blobbing=False)
         self.assertFalse(out)
 
-    def test_invalid2(self):
+    def test_invalid2(self) -> None:
         out = fiver.is_valid(self.board1, self.piece2, use_blobbing=True)
         self.assertFalse(out)
 
-    def test_3d1(self):
+    def test_3d1(self) -> None:
         out = fiver.is_valid(self.board1, self.piece3, use_blobbing=False)
         np.testing.assert_array_equal(out, np.array([True, False], dtype=bool))
 
-    def test_3d2(self):
+    def test_3d2(self) -> None:
         out = fiver.is_valid(self.board1, self.piece3, use_blobbing=True)
         np.testing.assert_array_equal(out, np.array([False, False], dtype=bool))
 
-    def test_3d3(self):
+    def test_3d3(self) -> None:
         out = fiver.is_valid(self.board2, self.piece3, use_blobbing=True)
         np.testing.assert_array_equal(out, np.array([True, False], dtype=bool))
 

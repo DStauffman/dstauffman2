@@ -20,12 +20,12 @@ class Test_letters(unittest.TestCase):
     Tests the letter sets for valid settings.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.letters    = scrab.LETTERS
         self.vowels     = scrab.VOWELS
         self.consonants = scrab.CONSONANTS
 
-    def test_letters(self):
+    def test_letters(self) -> None:
         for num in range(ord("a"), ord("z") + 1):
             letter = chr(num)
             self.assertIn(letter, self.letters)
@@ -34,7 +34,7 @@ class Test_letters(unittest.TestCase):
             letter = chr(num)
             self.assertNotIn(letter, self.letters)
 
-    def test_vowels(self):
+    def test_vowels(self) -> None:
         c = 0
         for letter in "aeiou":
             if letter in self.vowels:
@@ -42,7 +42,7 @@ class Test_letters(unittest.TestCase):
         self.assertEqual(c, 5)
         self.assertEqual(c, len(self.vowels))
 
-    def test_consonants(self):
+    def test_consonants(self) -> None:
         c = 0
         for num in range(ord("a"), ord("z") + 1):
             letter = chr(num)
@@ -75,10 +75,10 @@ class Test_boards(unittest.TestCase):
     Tests all the given boards for validity.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.boards = [scrab.WWF_BOARD, scrab.WWF_SMALL_BOARD, scrab.SCRAB_BOARD]
 
-    def test_valid(self):
+    def test_valid(self) -> None:
         for board in self.boards:
             scrab.validate_board(board)
 
@@ -89,22 +89,22 @@ class Test_defaults(unittest.TestCase):
     Tests that the defaults are valid.
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.board  = scrab.BOARD
         self.scores = scrab.SCORES
         self.counts = scrab.COUNTS
         self.dict   = scrab.DICT
 
-    def test_board(self):
+    def test_board(self) -> None:
         pass
 
-    def test_scores(self):
+    def test_scores(self) -> None:
         pass
 
-    def test_counts(self):
+    def test_counts(self) -> None:
         pass
 
-    def test_dict(self):
+    def test_dict(self) -> None:
         pass
 
 

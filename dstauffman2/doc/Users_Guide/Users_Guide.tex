@@ -340,7 +340,7 @@ class Test_rms(unittest.TestCase):
         rms on complex numbers
         rms on complex numbers that would return a real if done incorrectly
     """
-    def setUp(self):
+    def setUp(self) -> None:
         self.inputs1   = np.array([0, 1, 0., -1])
         self.outputs1  = np.sqrt(2)/2
         self.inputs2   = [[0, 1, 0., -1], [1., 1, 1, 1]]
@@ -349,47 +349,47 @@ class Test_rms(unittest.TestCase):
         self.outputs2c = np.array([np.sqrt(2)/2, 1])
         self.outputs2d = np.matrix([[np.sqrt(2)/2], [1]])
 
-    def test_scalar_input(self):
+    def test_scalar_input(self) -> None:
         out = dcs.rms(-1.5)
         self.assertEqual(out, 1.5)
 
-    def test_rms_series(self):
+    def test_rms_series(self) -> None:
         out = dcs.rms(self.inputs1)
         self.assertAlmostEqual(out, self.outputs1)
 
-    def test_axis_drop1a(self):
+    def test_axis_drop1a(self) -> None:
         out = dcs.rms(self.inputs1, axis=0)
         self.assertAlmostEqual(out, self.outputs1)
 
-    def test_axis_drop1b(self):
+    def test_axis_drop1b(self) -> None:
         with self.assertRaises(IndexError):
             dcs.rms(self.inputs1, axis=1)
 
-    def test_axis_drop2a(self):
+    def test_axis_drop2a(self) -> None:
         out = dcs.rms(self.inputs2)
         self.assertAlmostEqual(out, self.outputs2a)
 
-    def test_axis_drop2b(self):
+    def test_axis_drop2b(self) -> None:
         out = dcs.rms(self.inputs2, axis=0, keepdims=False)
         for (ix, val) in enumerate(out):
             self.assertAlmostEqual(val, self.outputs2b[ix])
 
-    def test_axis_drop2c(self):
+    def test_axis_drop2c(self) -> None:
         out = dcs.rms(self.inputs2, axis=1, keepdims=False)
         for (ix, val) in enumerate(out):
             self.assertAlmostEqual(val, self.outputs2c[ix])
 
-    def test_axis_keep(self):
+    def test_axis_keep(self) -> None:
         out = dcs.rms(self.inputs2, axis=1, keepdims=True)
         for i in range(0, len(out)):
             for j in range(0, len(out[i])):
                 self.assertAlmostEqual(out[i, j], self.outputs2d[i, j])
 
-    def test_complex_rms(self):
+    def test_complex_rms(self) -> None:
         out = dcs.rms(1.5j)
         self.assertEqual(out, np.complex(1.5, 0))
 
-    def test_complex_conj(self):
+    def test_complex_conj(self) -> None:
         out = dcs.rms(np.array([1+1j, 1-1j]))
         self.assertAlmostEqual(out, np.sqrt(2))
 \end{Python}

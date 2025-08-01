@@ -30,12 +30,12 @@ class Test_Constants(unittest.TestCase):
     Tests the defined constants to verify that they can be used.
     """
 
-    def test_init(self):
+    def test_init(self) -> None:
         self.assertEqual(bac.GUI_TOKEN, -1)
         self.assertAlmostEqual(bac.LEGAL_LIMIT, 0.0008)
         self.assertAlmostEqual(bac.BMI_CONV, 703.0704)
 
-    def test_enums(self):
+    def test_enums(self) -> None:
         m = bac.Gender.male
         f = bac.Gender.female
         self.assertNotEqual(m, f)
@@ -51,29 +51,29 @@ class Test_GuiSettings(unittest.TestCase):
         Saving and loading
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.gui_settings = bac.GuiSettings()
         self.filename = os.path.join(bac.get_root_dir(), "TestGuiSettingsFile.pkl")
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         self.assertTrue(isinstance(self.gui_settings, bac.GuiSettings))
 
-    def test_text_field(self):
+    def test_text_field(self) -> None:
         fields = bac.GuiSettings.get_text_fields()
         self.assertEqual(fields, ["height", "weight", "age", "bmi", "hr1", "hr2", "hr3", "hr4", "hr5", "hr6"])
 
-    def test_printing(self):
+    def test_printing(self) -> None:
         text = str(self.gui_settings)
         self.assertTrue(text.startswith("GuiSettings:\n    age: -1\n"))
         self.assertTrue(text.endswith("\n    weight: -1"))
 
-    def test_save_and_load(self):
+    def test_save_and_load(self) -> None:
         self.gui_settings.save(self.filename)
         gui_settings2 = bac.GuiSettings.load(self.filename)
         for key in vars(self.gui_settings):
             self.assertEqual(getattr(self.gui_settings, key), getattr(gui_settings2, key))
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         if os.path.isfile(self.filename):
             os.remove(self.filename)
 
@@ -85,18 +85,18 @@ class Test_BacGui(unittest.TestCase):
         TBD
     """
 
-    def _reset(self):
+    def _reset(self) -> None:
         self.gui.gui_settings = bac.GuiSettings()
         self.gui.wrapper()
 
-    def _compare(self, gui_settings):
+    def _compare(self, gui_settings: bac.GuiSettings) -> None:
         equal = True
         for key in vars(self.gui_settings):
             if getattr(self.gui_settings, key) != getattr(gui_settings, key):
                 equal = False
         return equal
 
-    def test_sequence(self):
+    def test_sequence(self) -> None:
         # instantiate the GUI
         self.gui = bac.BacGui()
         # copy the original state for reference
@@ -190,7 +190,7 @@ class Test_BacGui(unittest.TestCase):
             # Change again, this time with "Temp 1" and it already exists, check that restores values
             # TODO: write this, and also capture the output or change the print statement
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         QApplication.instance().closeAllWindows()
         folder = bac.get_root_dir()
         files = ["Temp 1.pkl", "Temp 2.pkl", "Default.pkl", "BAC vs. Time for Temp 1.png"]
@@ -207,7 +207,7 @@ class Test_get_root_dir(unittest.TestCase):
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         filepath = inspect.getfile(bac.get_root_dir)
         expected_root = os.path.split(filepath)[0]
         folder = bac.get_root_dir()
@@ -223,18 +223,18 @@ class Test_calculate_bmi(unittest.TestCase):
         Specified conv
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.height = 69
         self.weight = 161
         self.gender = bac.Gender.male
         self.bmi    = 23.77532753623188
         self.bmi2   = 0.033816425120772944
 
-    def test_default_conv(self):
+    def test_default_conv(self) -> None:
         bmi = bac.calculate_bmi(self.height, self.weight, self.gender)
         self.assertAlmostEqual(bmi, self.bmi)
 
-    def test_specified_conv(self):
+    def test_specified_conv(self) -> None:
         bmi = bac.calculate_bmi(self.height, self.weight, self.gender, conv=1)
         self.assertAlmostEqual(bmi, self.bmi2)
 
@@ -248,7 +248,7 @@ class Test_calculate_bac(unittest.TestCase):
         Add time to end
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.time_drinks = np.array([1, 2, 3, 4, 5, 6])
         self.drinks = np.array([1, 1.5, 2.2, 0.5, 0, 0])
         self.time_out = self.time_drinks.copy()
@@ -256,19 +256,19 @@ class Test_calculate_bac(unittest.TestCase):
         self.bac_func = lambda drinks, weight, time: drinks.cumsum() / weight * 0.0375 - 0.00015 * time
         self.bac_ = self.drinks.cumsum() / self.body_weight * 0.0375 - 0.00015 * self.time_out
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         bac1 = bac.calculate_bac(self.time_drinks, self.drinks, self.time_out, self.body_weight)
         bac2 = self.bac_func(self.drinks, self.body_weight, self.time_drinks)
         np.testing.assert_array_almost_equal(bac1, bac2)
 
-    def test_no_t_zero(self):
+    def test_no_t_zero(self) -> None:
         time_out = np.array([0, 1, 2, 3, 4, 5, 6])
         bac1 = bac.calculate_bac(self.time_drinks, self.drinks, time_out, self.body_weight)
         bac2 = self.bac_func(self.drinks, self.body_weight, self.time_drinks)
         self.assertEqual(bac1[0], 0)
         np.testing.assert_array_almost_equal(bac1[1:], bac2)
 
-    def test_no_t_final(self):
+    def test_no_t_final(self) -> None:
         time_out = np.array([1, 2, 3, 4, 5, 6, 7])
         bac1 = bac.calculate_bac(self.time_drinks, self.drinks, time_out, self.body_weight)
         bac2 = self.bac_func(self.drinks, self.body_weight, self.time_drinks)
@@ -284,7 +284,7 @@ class Test_plot_bac(unittest.TestCase):
         With legal limit
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.gui_settings = bac.GuiSettings()
         self.gui_settings.height = 69
         self.gui_settings.weight = 161
@@ -293,13 +293,13 @@ class Test_plot_bac(unittest.TestCase):
         self.gui_settings.gender = bac.Gender.male
         self.fig = None
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         self.fig = bac.plot_bac(self.gui_settings)
 
-    def test_legal_limit(self):
+    def test_legal_limit(self) -> None:
         self.fig = bac.plot_bac(self.gui_settings, legal_limit=0.0008)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 

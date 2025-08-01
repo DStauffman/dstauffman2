@@ -24,7 +24,7 @@ class Test_get_root_dir(unittest.TestCase):
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         folder = arch.get_root_dir()
         self.assertTrue(folder)  # TODO: don't know an independent way to test this
 
@@ -42,29 +42,29 @@ class Test_score_text_to_number(unittest.TestCase):
         Bad string (raises ValueError)
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         # fmt: off
         self.text_scores = ["X", "10", "9", "8", "7", "6", "5", "4", "3", "2", "1", "0", "M", "x", "m"]
         self.num_scores  = [ 10,   10,   9,   8,   7,   6,   5,   4,   3,   2,   1,   0,   0,  10,   0]
         self.usaa_scores = [ 10,    9,   9,   8,   7,   6,   5,   4,   3,   2,   1,   0,   0,  10,   0]
         # fmt: on
 
-    def test_conversion(self):
+    def test_conversion(self) -> None:
         for this_text, this_num in zip(self.text_scores, self.num_scores):
             num = arch.score_text_to_number(this_text)
             self.assertEqual(num, this_num)
 
-    def test_usaa_conversion(self):
+    def test_usaa_conversion(self) -> None:
         for this_text, this_num in zip(self.text_scores, self.usaa_scores):
             num = arch.score_text_to_number(this_text, flag="usaa")
             self.assertEqual(num, this_num)
 
-    def test_int_to_int(self):
+    def test_int_to_int(self) -> None:
         for this_num in self.num_scores:
             num = arch.score_text_to_number(this_num)
             self.assertEqual(num, this_num)
 
-    def test_int_to_int_usaa(self):
+    def test_int_to_int_usaa(self) -> None:
         for this_num in range(11):
             num = arch.score_text_to_number(this_num, flag="usaa")
             if this_num == 10:
@@ -72,15 +72,15 @@ class Test_score_text_to_number(unittest.TestCase):
             else:
                 self.assertEqual(num, this_num)
 
-    def test_large_values(self):
+    def test_large_values(self) -> None:
         num = arch.score_text_to_number("1001")
         self.assertEqual(num, 1001)
 
-    def test_bad_float(self):
+    def test_bad_float(self) -> None:
         with self.assertRaises(ValueError):
             arch.score_text_to_number("10.8")
 
-    def test_bad_value(self):
+    def test_bad_value(self) -> None:
         with self.assertRaises(ValueError):
             arch.score_text_to_number("z")
 
@@ -92,12 +92,12 @@ class Test_convert_data_to_scores(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.scores = [10 * ["X", 10, 9], 10 * [9, 9, 9]]
         self.nfaa_scores = [290, 270]
         self.usaa_scores = [280, 270]
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         (nfaa_score, usaa_score) = arch.convert_data_to_scores(self.scores)
         np.testing.assert_array_equal(nfaa_score, self.nfaa_scores)
         np.testing.assert_array_equal(usaa_score, self.usaa_scores)
@@ -110,16 +110,16 @@ class Test_plot_mean_and_std(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.scores = [10 * ["X", 10, 9], 10 * [9, 9, 9]]
         self.fig = None
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         self.fig = arch.plot_mean_and_std(self.scores)
 
     # TODO: write more of these
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         if self.fig is not None:
             plt.close(self.fig)
 
@@ -131,22 +131,22 @@ class Test_normal_curve(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.x = np.arange(-5, 5.01, 0.01)
         self.mu = 0
         self.sigma = 1
         self.y = np.exp(-self.x**2 / 2) / np.sqrt(2 * np.pi)
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         y = arch.normal_curve(self.x, self.mu, self.sigma)
         np.testing.assert_array_almost_equal(y, self.y)
 
-    def test_nonzero_mean(self):
+    def test_nonzero_mean(self) -> None:
         offset = 2.5
         y = arch.normal_curve(self.x + offset, self.mu + offset, self.sigma)
         np.testing.assert_array_almost_equal(y, self.y)
 
-    def test_no_std(self):
+    def test_no_std(self) -> None:
         y = arch.normal_curve(self.x, 3.3, 0)
         out = np.zeros(self.x.shape)
         ix = np.flatnonzero(y == 3.3)

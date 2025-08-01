@@ -27,27 +27,27 @@ class Test_card(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.ranks = [R.TWO, R.ACE, R.TWO, R.ACE, R.FIVE, R.FIVE]
         self.suits = [S.CLUBS, S.CLUBS, S.SPADES, S.SPADES, S.HEARTS, S.DIAMONDS]
         self.num   = len(self.ranks)
         self.cards = [C(self.ranks[i], self.suits[i]) for i in range(self.num)]
 
-    def test_card_number(self):
+    def test_card_number(self) -> None:
         self.assertEqual(self.cards[0]._card, 0)
         self.assertEqual(self.cards[1]._card, 12)
         self.assertEqual(self.cards[2]._card, 39)
         self.assertEqual(self.cards[3]._card, 51)
 
-    def test_rank(self):
+    def test_rank(self) -> None:
         for i in range(self.num):
             self.assertEqual(self.cards[i].get_rank(), self.ranks[i])
 
-    def test_suit(self):
+    def test_suit(self) -> None:
         for i in range(self.num):
             self.assertEqual(self.cards[i].get_suit(), self.suits[i])
 
-    def test_equalities(self):
+    def test_equalities(self) -> None:
         # equal
         self.assertEqual(self.cards[0], self.cards[0])
         self.assertEqual(self.cards[0], self.cards[2])
@@ -80,16 +80,16 @@ class Test_Deck(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.deck = cards.Deck()
         self.sorted_deck = "A♠, K♠, Q♠, J♠, 10♠, 9♠, 8♠, 7♠, 6♠, 5♠, 4♠, 3♠, 2♠, " + \
             "A♥, K♥, Q♥, J♥, 10♥, 9♥, 8♥, 7♥, 6♥, 5♥, 4♥, 3♥, 2♥, A♦, K♦, Q♦, J♦, 10♦, " + \
             "9♦, 8♦, 7♦, 6♦, 5♦, 4♦, 3♦, 2♦, A♣, K♣, Q♣, J♣, 10♣, 9♣, 8♣, 7♣, 6♣, 5♣, 4♣, 3♣, 2♣"
 
-    def test_creation(self):
+    def test_creation(self) -> None:
         self.assertEqual(str(self.deck), self.sorted_deck)
 
-    def test_shuffle(self):
+    def test_shuffle(self) -> None:
         self.deck.shuffle()
         self.assertNotEqual(str(self.deck), self.sorted_deck)
 
@@ -99,7 +99,7 @@ class Test_Deck(unittest.TestCase):
     #    self.deck.sort()
     #    self.assertEqual(str(self.deck), self.sorted_deck)
 
-    def test_reset(self):
+    def test_reset(self) -> None:
         self.assertEqual(str(self.deck), self.sorted_deck)
         self.deck.shuffle()
         self.assertNotEqual(str(self.deck), self.sorted_deck)
@@ -114,26 +114,26 @@ class Test_Hand(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.hand = cards.Hand()
         self.card1 = cards.Card(R.ACE, S.SPADES)
         self.card2 = cards.Card(R.FOUR, S.HEARTS)
 
-    def test_creation(self):
+    def test_creation(self) -> None:
         self.assertEqual(len(self.hand._cards), 0)
 
-    def test_num_cards(self):
+    def test_num_cards(self) -> None:
         self.assertEqual(self.hand.num_cards, 0)
         self.hand.add_card(self.card1)
         self.assertEqual(len(self.hand._cards), 1)
         self.assertEqual(self.hand.num_cards, 1)
 
-    def test_add_card(self):
+    def test_add_card(self) -> None:
         self.hand.add_card(self.card1)
         self.assertEqual(self.hand.num_cards, 1)
         self.assertTrue(self.hand._cards[0] is self.card1)
 
-    def test_play_card(self):
+    def test_play_card(self) -> None:
         self.hand.add_card(self.card1)
         self.hand.add_card(self.card2)
         self.hand.add_card(self.card2)
@@ -147,7 +147,7 @@ class Test_Hand(unittest.TestCase):
         with self.assertRaises(IndexError):
             self.hand.play_card()
 
-    def test_remove_card(self):
+    def test_remove_card(self) -> None:
         self.hand.add_card(self.card1)
         self.hand.add_card(self.card2)
         self.assertEqual(self.hand.num_cards, 2)
@@ -160,21 +160,21 @@ class Test_Hand(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.hand.remove_card(self.card1)
 
-    def test_get_ranks(self):
+    def test_get_ranks(self) -> None:
         self.hand.add_card(self.card1)
         self.hand.add_card(self.card2)
         ranks = self.hand.get_ranks()
         self.assertEqual(ranks[0], R.ACE)
         self.assertEqual(ranks[1], R.FOUR)
 
-    def test_get_suits(self):
+    def test_get_suits(self) -> None:
         self.hand.add_card(self.card1)
         self.hand.add_card(self.card2)
         suits = self.hand.get_suits()
         self.assertEqual(suits[0], S.SPADES)
         self.assertEqual(suits[1], S.HEARTS)
 
-    def test_shuffle(self):
+    def test_shuffle(self) -> None:
         self.hand.add_card(self.card1)
         self.hand.add_card(self.card1)
         self.hand.add_card(self.card1)
@@ -204,7 +204,7 @@ class Test_Hand(unittest.TestCase):
     # 2. two pair
     # 1. pair
     # 0. high card
-    def test_score_five_of_kind(self):
+    def test_score_five_of_kind(self) -> None:
         hand1 = H([C(R.ACE, S.SPADES), C(R.ACE, S.DIAMONDS), C(R.ACE, S.CLUBS), C(R.ACE, S.HEARTS), C(R.ACE, S.SPADES)])
         hand2 = H([C(R.TEN, S.SPADES), C(R.TEN, S.DIAMONDS), C(R.TEN, S.CLUBS), C(R.TEN, S.HEARTS), C(R.TEN, S.SPADES)])
         score1 = hand1.score_hand()

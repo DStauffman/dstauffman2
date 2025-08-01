@@ -21,8 +21,8 @@ from matplotlib.patches import Rectangle
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dstauffman import setup_dir
 from dstauffman.plotting import ColorMap, Opts, setup_plots
+from slog import wipe_dir
 
 from dstauffman2 import get_root_dir
 
@@ -733,7 +733,7 @@ if __name__ == "__main__":
     opts.show_plot = False
     # Save plots of the possible piece orientations
     if make_plots:
-        setup_dir(opts.save_path, rec=True)
+        wipe_dir(opts.save_path, recursive=True)
         for ix, these_pieces in enumerate(all_pieces):
             for ix2 in range(these_pieces.shape[0]):
                 this_title = "Piece {}, Permutation {}".format(ix + 1, ix2 + 1)
