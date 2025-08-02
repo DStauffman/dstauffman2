@@ -11,9 +11,10 @@ Notes
 from pypdf import PdfReader, PdfWriter
 
 # %% Constants
-src_file = r"C:\Users\DStauffman\Downloads\member_list_2019-08-27_04-53.pdf"
-out_file = r"C:\Users\DStauffman\Downloads\member_list_2019-08-27_page{}.pdf"
-pages = [0, 1, 2, 3, 4, 5]
+src_file = r"C:\Users\DStauffman\Documents\GitHub\dstauffman2\Clarinet 3.pdf"
+out_file = r"C:\Users\DStauffman\Documents\GitHub\dstauffman2\Clarinet_3_subset_print.pdf"
+pages = [1, 2, 3, 4, None, 5, 6, 13, 14]  # pages is one based, instead of default python zero based
+compress = True
 
 # %% Script
 if __name__ == "__main__":
@@ -22,9 +23,15 @@ if __name__ == "__main__":
         # get reader and writers
         reader = PdfReader(file)
         # read each desired page and send it to the writer
-        for page in pages:
-            writer = PdfWriter()
-            writer.addPage(reader.getPage(page))
-            # write out the accumulated pages to disk
-            with open(out_file.format(page + 1), "wb") as out:
-                writer.write(out)
+        writer = PdfWriter()
+        for page_num in pages:
+            if page_num is None:
+                writer.add_blank_page()
+                continue
+            this_page = reader.pages[page_num - 1]
+            if compress:
+                this_page.compress_content_streams()
+            writer.add_page(this_page)
+        # write out the accumulated pages to disk
+        with open(out_file, "wb") as out:
+            writer.write(out)
