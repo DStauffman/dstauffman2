@@ -38,7 +38,7 @@ def write_brackets(data, filename="", team="indiv", display=True):
             num   = len(ix)
             if num > 0:
                 # calculate the number of waves needed for this number of people
-                waves = int(math.ceil(math.log(num, 2)))
+                waves = int(math.ceil(math.log2(num)))
                 # throw an error if this is above 5 (1/16 round)
                 if waves > MAX_WAVES:
                     raise ValueError("Code currently assumes a 1/{} round as the highest round".format(2 ** (MAX_WAVES - 1)))

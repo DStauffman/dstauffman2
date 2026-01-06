@@ -94,7 +94,8 @@ def get_those_uninfected(tb_status):
 if __name__ == "__main__":
     num = 100
     tb_status = np.full(num, TbStatus.null, dtype=int)
-    ix = np.random.rand(num)
+    prng = np.random.default_rng()
+    ix = prng.random(num)
     tb_status[ix >= 0.5] = TbStatus.active_treated
     tb_status[ix <  0.5] = TbStatus.uninfected  # fmt: skip
 

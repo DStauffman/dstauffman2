@@ -52,6 +52,7 @@ from dstauffman2.games.tictactoe.utils import (
 
 # %% Globals
 logger = logging.getLogger(__name__)
+prng = np.random.default_rng()  # TODO: spawn one for each GUI?
 
 # %% Option instance
 OPTS = Options()
@@ -478,7 +479,7 @@ class TicTacToeGui(QMainWindow):
             (OPTS.o_is_computer and current_player == PLAYER["o"]) or \
             (OPTS.x_is_computer and current_player == PLAYER["x"])):
             play_ai_game(self.board_axes, self.state.board, self.state.cur_move, \
-                self.state.cur_game, self.state.game_hist)
+                self.state.cur_game, self.state.game_hist, prng)
             (winner, current_player) = sub_wrapper(self)
 
 

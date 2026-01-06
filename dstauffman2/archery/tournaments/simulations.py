@@ -21,15 +21,15 @@ MAX_CUM         = 150
 
 
 # %% Functions - simulate_individual_scores
-def simulate_individual_scores(data):
+def simulate_individual_scores(data, prng):
     r"""Simulates the individual scoring rounds."""
     # get the number of archers
     num_archers           = len(data)
     # generate random scores and X counts
-    random_scores1        = np.random.randint(0, MAX_INDIV_SCORE, size=num_archers)
-    random_x1             = np.random.randint(0, MAX_INDIV_X,     size=num_archers)
-    random_scores2        = np.random.randint(0, MAX_INDIV_SCORE, size=num_archers)
-    random_x2             = np.random.randint(0, MAX_INDIV_X,     size=num_archers)
+    random_scores1        = prng.integers(0, MAX_INDIV_SCORE, size=num_archers)
+    random_x1             = prng.integers(0, MAX_INDIV_X,     size=num_archers)
+    random_scores2        = prng.integers(0, MAX_INDIV_SCORE, size=num_archers)
+    random_x2             = prng.integers(0, MAX_INDIV_X,     size=num_archers)
     # update the scores
     data[COL_SCORE1]      = random_scores1
     data[COL_X_COUNT1]    = random_x1

@@ -315,7 +315,7 @@ def make_move(ax, board, x, y, cur_move, cur_game, game_hist):
 
 
 # %% play_ai_game
-def play_ai_game(ax, board, cur_move, cur_game, game_hist):
+def play_ai_game(ax, board, cur_move, cur_game, game_hist, prng):
     r"""
     Computer AI based play.
 
@@ -331,6 +331,8 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist):
         Current game number
     game_hist : list of class GameStats
         Game history of statistics for each game
+    prng : np.random.Generator
+        Pseudo-random number generator
 
     Notes
     -----
@@ -352,9 +354,10 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist):
     >>> cur_move = Counter(0)
     >>> cur_game = Counter(0)
     >>> game_hist = [GameStats(1, PLAYER['o'])]
+    >>> prng = np.random.default_rng()
     >>> Options.o_is_computer = True
     >>> Options.x_is_computer = True
-    >>> play_ai_game(ax, board, cur_move, cur_game, game_hist) # doesn't play move as it's not the computers turn
+    >>> play_ai_game(ax, board, cur_move, cur_game, game_hist, prng)  # doesn't play move as it's not the computers turn
 
     >>> print(board)
     [[0 0 0]
@@ -381,7 +384,7 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist):
     # potentially pick another equivalent move
     for next_move in moves[1:]:
         if next_move.power == this_move.power:
-            if np.random.rand() < 0.5:
+            if prng.random() < 0.5:
                 this_move = next_move
     make_move(ax, board, this_move.row, this_move.column, cur_move, cur_game, game_hist)
 

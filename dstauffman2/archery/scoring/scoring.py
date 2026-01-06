@@ -357,7 +357,7 @@ def read_from_excel_datafile(filename):
     data = pd.read_excel(filename, sheet_name="Scorecard", usecols="B:AT", skiprows=2)
 
     # get index to rows with valid scores
-    ix = data["Archer"].notnull()
+    ix = data["Archer"].notna()
 
     # reduce data
     subdata = data[ix]
@@ -369,10 +369,10 @@ def read_from_excel_datafile(filename):
     cols = sorted(np.concatenate((range(1, 40, 4), range(2, 40, 4), range(3, 40, 4))))
 
     # pull out scores
-    scores = subdata.iloc[:, cols].values
+    scores = subdata.iloc[:, cols].to_numpy()
 
     # pull out names
-    names = subdata["Archer"].values
+    names = subdata["Archer"].to_numpy()
 
     # convert names to dates
     dates = [datetime.strptime(this_name.split(" ")[0], "%m/%d/%Y") for this_name in names]

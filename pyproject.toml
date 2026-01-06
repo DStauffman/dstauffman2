@@ -27,6 +27,7 @@ classifiers = [
     "Programming Langauge :: Python :: 3.11",
     "Programming Langauge :: Python :: 3.12",
     "Programming Langauge :: Python :: 3.13",
+    "Programming Langauge :: Python :: 3.14",
     "Topic :: Scientific/Engineering",
     "Topic :: Scientific/Engineering :: Astronomy",
     "Topic :: Scientific/Engineering :: Information Analysis",
@@ -41,6 +42,8 @@ classifiers = [
 # Note: static excludes numba/datashader for mypy type checking (as they don't play well together)
 numeric = ["h5py>=3.7", "matplotlib>=3.7", "numpy>=2.0", "pandas>=2.0", "pyarrow>=14.0", "PyQt5>=5.15.11", "pyqt5-sip>=12.11", "pyqt5-qt5>=5.15.2", "qtpy>=2.2", "scipy>=1.10", "tblib>=1.7"]
 shader = ["dstauffman[numeric]", "datashader>=0.15", "numba>=0.57"]
+
+[project.dependency-groups]
 spyder = ["spyder-kernels>=2.4"]
 static = ["dstauffman[numeric]", "black>=25.0", "flake8>=6.0", "isort>=5.10", "mypy>=1.5", "pycodestyle>=2.10", "pylint>=2.16", "PyQt5-stubs>=5.15"]
 test = ["pytest>=7.4", "pytest-cov>=4.0"]
@@ -58,7 +61,7 @@ dstauffman2 = ["CHANGELOG.md", "LICENSE.txt", "pyproject.toml", "README.rst", "*
 
 [tool.black]
 line-length = 128
-target_version = ["py313"]
+target_version = ["py314"]
 include = '\.pyi?$'
 
 [tool.coverage.run]
@@ -162,28 +165,49 @@ add-ignore = ["D102", "D105", "D204"]
 include = ["pyproject.toml", "dstauffman2/**/*.py"]
 line-length = 128
 indent-width = 4
-target-version = "py313"
+target-version = "py310"
 
 [tool.ruff.lint]
 select = ["ALL"]
 ignore = [
+    "D100",
+    "D102",
+    "D103",
     "D105",  # missing docstring in magic method
     "D107",  # missing docstring in __init__
+    "D200",
     "D203",  # one blank line required before class docstring
+    "D205",
     "D212",  # multiline docstring summary should start at the first line
+    "D400",
     "D401",  # first line of docstring should be in imperative mood
+    "D404",
+    "D415",
     "D417",  # temp, fix these
-    "E501",  # line too long, (use black to manage this)
+    "B006",
     "B007",
     "B010",
     "B018",
     "B023",
     "B026",
-    "B028",
+    "B028",  # no explicit stacklevel keyword argument
     "B030",
-    "B905",
+    "B905",  # zip without an explicit strict parameter
+    "C401",
+    "C403",
+    "C405",
+    "C414",
+    "E402",
+    "E501",  # line too long, (use black to manage this)
+    "E701",
+    "E722",
+    "E731",
+    "E741",
+    "F401",
     "F841",
     "G001",
+    "G003",
+    "G004",
     "I001",  # Import block is un-sorted or un-formatted (use isort to manage this)
     "N801",
     "N802",
@@ -191,96 +215,130 @@ ignore = [
     "N806",
     "N812",
     "N816",
-    "S101",
+    "S101",  # Use of assert
+    "S105",
     "S106",
     "S107",
     "S110",
+    "S301",
+    "S307",
+    "S311",
     "S603",
     "S606",
     "S607",
+    "T100",
     "T201",  # `print` found
+    "ANN001",
+    "ANN002",
+    "ANN003",
+    "ANN201",
+    "ANN202",
     "ANN204",
-    "ANN401",
+    "ANN205",
+    "ANN401",  # dynamically typed expressions (Any) are disallowed in kwargs
     "ARG001",
     "ARG005",
     "ARG002",
     "BLE001",
-    "COM812",
+    "COM812",  # Add trailing comma
     "COM819",
-    "DTZ001",
-    "DTZ005",
+    "DTZ001",  # datetime called without a tzinfo argument
+    "DTZ005",  # datetime.now called without a tz argument
     "DTZ007",
-    "EM101",
-    "EM102",
+    "EM101",  # exception must not use string literal
+    "EM102",  # exception must not use f-string
     "EM103",
-    "ERA001",
-    "FBT001",
-    "FBT002",
-    "FBT003",
+    "ERA001",  # found commented-out code
+    "FBT001",  # boolean type in positional argument
+    "FBT002",  # boolean default in positional argument
+    "FBT003",  # boolean value in functional call
     "FIX002",  # line contains TODO
     "FURB105",
     "ICN001",
     "ISC003",
+    "LOG015",
     "PD002",
+    "PD007",
     "PERF401",
     "PERF403",
     "PIE790",
     "PIE810",
     "PLC0206",
     "PLC0208",
-    "PLC0414",
+    "PLC0414",  # import alias does not rename original package
     "PLC0415",
     "PLR0402",
     "PLR0911",
-    "PLR0912",
-    "PLR0913",
-    "PLR0915",
+    "PLR0912",  # too many branches
+    "PLR0913",  # too many arguments in function definition
+    "PLR0915",  # too many statements
     "PLR1714",
     "PLR1730",
-    "PLR2004",
+    "PLR2004",  # magic value
     "PLR5501",
     "PLW0603",
+    "PLW1510",
     "PLW1641",
     "PLW2901",
     "PT009",  # Use assert instead of unittest assertEqual
     "PT018",
-    "PT027",
+    "PT027",  # Use raises instead of assertRaises
+    "PTH100",
+    "PTH102",
+    "PTH104",
+    "PTH106",
+    "PTH107",
+    "PTH109",
+    "PTH112",
+    "PTH113",
+    "PTH118",
+    "PTH120",
+    "PTH122",
+    "PTH123",
+    "PTH207",
+    "PTH208",
     "PYI032",
     "PYI041",
     "PYI050",
-    "RET504",
+    "RET503",
+    "RET504",  # Unnecessary assignment before return
     "RUF001",
     "RUF005",
+    "RUF015",
     "RUF021",
     "RUF028",
     "RUF034",
+    "RUF046",
+    "RUF059",
     "RUF100",
     "SIM102",
     "SIM103",
     "SIM105",
     "SIM108",
     "SIM110",
+    "SIM114",
     "SIM117",
     "SIM118",
     "SIM210",
     "SIM300",
     "SLF001",
-    "TC001",
-    "TC002",
-    "TC003",
+    "TC001",  # Move application import into type checking block
+    "TC002",  # Move third party import into type checking block
+    "TC003",  # Move standard library import into type checking block
     "TD002",  # Missing author in TODO
     "TD003",  # Missing issue link in TODO
     "TD005",
     "TRY002",
-    "TRY003",
+    "TRY003",  # Avoid specifying long messages outside exceptions
     "TRY004",
     "TRY203",
     "TRY300",
     "UP004",
     "UP006",
     "UP012",
-    "UP015",
+    "UP015",  # Unnecessary mode argument
     "UP017",
+    "UP030",
     "UP032",
     "UP034",
     "UP035",
@@ -295,11 +353,48 @@ max-complexity = 30
 
 [tool.ruff.lint.per-file-ignores]
 "dstauffman2/**/__init__.py" = ["F401"]
-"dstauffman2/tests/*" = ["D102", "D205", "D400", "D415", "N801", "N802", "N806"]
-"dstauffman2/**/tests_*.py" = ["D102", "D205", "D400", "D415", "N801", "N802", "N806"]
+"dstauffman2/tests/*" = ["D102", "D205", "D400", "D415", "N801", "N802", "N806", "ANN206"]
+"dstauffman2/**/test_*.py" = ["D102", "D205", "D400", "D415", "N801", "N802", "N806", "ANN206"]
+"dstauffman2/doc/*.py" = ["INP001"]
+"dstauffman2/images/*.py" = ["INP001"]
+"dstauffman2/music/*.py" = ["INP001"]
+"dstauffman2/scripts/*.py" = ["INP001"]
+"dstauffman2/**/script_*.py" = ["INP001"]
 
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
+
+[tool.ty.environment]
+python-version = "3.14"
+root = ["./dstauffman2"]
+
+# Strict rules for source code
+[[tool.ty.overrides]]
+include = ["dstauffman2", "scripts"]
+
+[tool.ty.overrides.rules]
+invalid-argument-type = "ignore"
+invalid-assignment = "ignore"
+invalid-return-type = "ignore"
+invalid-type-form = "ignore"
+missing-argument = "ignore"
+no-matching-overload = "ignore"
+possibly-missing-import = "ignore"
+unknown-argument = "ignore"
+unresolved-attribute = "ignore"
+unresolved-import = "ignore"
+
+# Relax rules for test files
+[[tool.ty.overrides]]
+include = ["**/tests/test_*.py"]
+
+[tool.ty.overrides.rules]
+unresolved-import = "ignore"
+
+[tool.uv.sources]
+dstauffman = { path = "../dstauffman" }
+nubs = { path = "../nubs" }
+slog = { path = "../slog" }

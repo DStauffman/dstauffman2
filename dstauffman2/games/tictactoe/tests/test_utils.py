@@ -345,6 +345,7 @@ class Test_play_ai_game(unittest.TestCase):
         self.cur_move = Counter(0)
         self.cur_game = Counter(0)
         self.game_hist = [ttt.GameStats(1, o)]
+        self.prng = np.random.default_rng()
 
     def test_nominal(self):
         # set AI options
@@ -352,7 +353,7 @@ class Test_play_ai_game(unittest.TestCase):
         ttt.Options.o_is_computer = True
         # play game
         board = self.board.copy()
-        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist)
+        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist, self.prng)
         self.board[1, 1] = o
         np.testing.assert_array_equal(board, self.board)
         self.assertEqual(self.cur_move, 1)
@@ -364,10 +365,10 @@ class Test_play_ai_game(unittest.TestCase):
         ttt.Options.o_is_computer = True
         # play game
         board = self.board.copy()
-        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist)
+        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist, self.prng)
         self.assertEqual(self.cur_move, 1)
         self.assertEqual(self.cur_game, 0)
-        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist)
+        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist, self.prng)
         self.assertEqual(self.cur_move, 2)
         self.assertEqual(self.cur_game, 0)
 
@@ -377,7 +378,7 @@ class Test_play_ai_game(unittest.TestCase):
         ttt.Options.o_is_computer = False
         # play game
         board = self.board.copy()
-        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist)
+        ttt.play_ai_game(self.ax, board, self.cur_move, self.cur_game, self.game_hist, self.prng)
         np.testing.assert_array_equal(board, self.board)
         self.assertEqual(self.cur_move, 0)
         self.assertEqual(self.cur_game, 0)
