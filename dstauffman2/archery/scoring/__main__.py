@@ -13,10 +13,11 @@ Notes
 import doctest
 import getpass
 import os
+from pathlib import Path
 import sys
 import unittest
 
-from dstauffman import Opts
+from dstauffman.plotting import Opts
 
 import dstauffman2.archery.scoring as score
 
@@ -37,7 +38,7 @@ if mode == "run":
     # opts settings for plots
     opts = Opts()
     opts.case_name = "David"
-    opts.save_path = folder
+    opts.save_path = Path(folder)
     opts.save_plot = True
     opts.plot_type = "png"
 

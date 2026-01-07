@@ -10,7 +10,7 @@ Notes
 # %% Imports
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtWidgets import QApplication
 import nose
 
 import dstauffman2.games.scrabble as scrab
@@ -21,7 +21,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     nose.run(scrab)
     # close the qapp

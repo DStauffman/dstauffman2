@@ -16,8 +16,6 @@ import unittest
 import matplotlib.pyplot as plt
 import numpy as np
 
-from dstauffman import Counter
-
 import dstauffman2.games.tictactoe as ttt
 
 # %% Aliases
@@ -292,8 +290,8 @@ class Test_make_move(unittest.TestCase):
         board = self.board.copy()
         xc = 1
         yc = 0
-        cur_move = Counter(0)
-        cur_game = Counter(0)
+        cur_move = np.array(0, dtype=int)
+        cur_game = np.array(0, dtype=int)
         game_hist = [ttt.GameStats(1, o)]
         self.assertEqual(cur_move, 0)
         self.assertEqual(len(game_hist[0].move_list), 0)
@@ -314,8 +312,8 @@ class Test_make_move(unittest.TestCase):
         board = self.board.copy()
         xc = 2
         yc = 2
-        cur_move = Counter(1)  # 2 would be the next move, 1 makes this replace the last move
-        cur_game = Counter(1)
+        cur_move = np.array(1, dtype=int)  # 2 would be the next move, 1 makes this replace the last move
+        cur_game = np.array(1, dtype=int)
         game_hist = [ttt.GameStats(1, o), ttt.GameStats(2, x)]
         game_hist[1].add_move(ttt.Move(0, 0))
         game_hist[1].add_move(ttt.Move(1, 1))  # setting a move that will be replaced
@@ -342,8 +340,8 @@ class Test_play_ai_game(unittest.TestCase):
     def setUp(self):
         (self.fig, self.ax) = _make_board()
         self.board = np.full((3, 3), n, dtype=int)
-        self.cur_move = Counter(0)
-        self.cur_game = Counter(0)
+        self.cur_move = np.array(0, dtype=int)
+        self.cur_game = np.array(0, dtype=int)
         self.game_hist = [ttt.GameStats(1, o)]
         self.prng = np.random.default_rng()
 

@@ -23,7 +23,7 @@ CONSONANTS = frozenset(LETTERS - VOWELS - {"?"})
 WWF_SCORES = {"a": 1, "b": 4, "c": 4, "d": 2, "e": 1, "f": 4, "g": 3, "h": 3, "i": 1, "j": 10, \
           "k": 5, "l": 2, "m": 4, "n": 2, "o": 1, "p": 4, "q": 10, "r": 1, "s": 1, "t": 1, \
           "u": 2, "v": 5, "w": 4, "x": 8, "y": 3, "z": 10, "?": 0}
-SCRAB_SCORES = {}
+SCRAB_SCORES: dict[str, int] = {}
 
 # %% Tile counts
 WWF_COUNTS = {"a": 9, "b": 2, "c": 2, "d": 5, "e": 13, "f": 2, "g": 3, "h": 4, "i": 8, "j": 1, \
@@ -33,7 +33,7 @@ WWF_COUNTS = {"a": 9, "b": 2, "c": 2, "d": 5, "e": 13, "f": 2, "g": 3, "h": 4, "
 WWF_SMALL_COUNTS = {"a": 9, "b": 2, "c": 2, "d": 5, "e": 13, "f": 2, "g": 3, "h": 4, "i": 8, "j": 1, \
           "k": 1, "l": 4, "m": 2, "n": 5, "o": 8, "p": 2, "q": 1, "r": 6, "s": 5, "t": 7, \
           "u": 4, "v": 2, "w": 2, "x": 1, "y": 2, "z": 1, "?": 2}
-SCRAB_COUNTS = {}
+SCRAB_COUNTS: dict[str, int] = {}
 
 # %% color definitions
 COLOR          = {}

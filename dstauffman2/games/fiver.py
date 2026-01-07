@@ -268,7 +268,7 @@ def _get_unique_pieces(pieces):
 
 
 # %% Functions - _display_progress
-def _display_progress(ix, nums, last_ratio=0):
+def _display_progress(ix, nums, last_ratio=0.0):
     r"""
     Displays the total progress to the command window.
 
@@ -278,6 +278,8 @@ def _display_progress(ix, nums, last_ratio=0):
         Index into which pieces are being evaluated
     nums : 1D ndarray of int
         Possible permutations for each individual piece
+    last_ratio: float, optional
+        The last ratio that has been previously printed to the screen
 
     Returns
     -------
@@ -294,7 +296,7 @@ def _display_progress(ix, nums, last_ratio=0):
     >>> import numpy as np
     >>> ix = np.array([1, 0, 4, 0])
     >>> nums = np.array([2, 4, 8, 16])
-    >>> ratio = _display_progress(ix, nums) # ratio = (512+64)/1024
+    >>> ratio = _display_progress(ix, nums)  # ratio = (512+64)/1024
     Progess: 56.2%
 
     """
@@ -728,7 +730,7 @@ if __name__ == "__main__":
     # Create and set Opts
     date = datetime.now()
     opts = Opts()
-    opts.save_path = os.path.join(get_root_dir(), "results", date.strftime("%Y-%m-%d") + "_fiver")
+    opts.save_path = get_root_dir().joinpath("results", date.strftime("%Y-%m-%d") + "_fiver")
     opts.save_plot = True
     opts.show_plot = False
     # Save plots of the possible piece orientations
@@ -756,9 +758,9 @@ if __name__ == "__main__":
 
     # save the results
     if save_results:
-        with open(os.path.join(opts.save_path, "solutions1.pkl"), "wb") as file:
+        with opts.save_path.joinpath("solutions1.pkl").open("wb") as file:
             pickle.dump(solutions1, file)
-        with open(os.path.join(opts.save_path, "solutions2.pkl"), "wb") as file:
+        with opts.save_path.joinpath("solutions2.pkl").open("wb") as file:
             pickle.dump(solutions2, file)
 
     # plot the results

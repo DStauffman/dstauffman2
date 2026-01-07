@@ -16,8 +16,7 @@ import unittest
 from PIL import Image
 import numpy as np
 
-from dstauffman import write_text_file
-from slog import capture_output
+from slog import capture_output, write_text_file
 
 from dstauffman2 import get_data_dir, get_images_dir, get_tests_dir
 import dstauffman2.imageproc as dip
@@ -255,16 +254,16 @@ class Test_batch_resize(unittest.TestCase):
             img = Image.open(file)
             img.load()
             img = img.convert("RGB")  # remove transparency (alpha) channel to allow JPG saving
-        new_img = img.resize((cls.size1, cls.size1), Image.LANCZOS)
+        new_img = img.resize((cls.size1, cls.size1), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name1)
         new_img.save(cls.folder / cls.name6)
-        new_img = img.resize((cls.size2, cls.size1), Image.LANCZOS)
+        new_img = img.resize((cls.size2, cls.size1), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name2)
-        new_img = img.resize((cls.size1, cls.size2), Image.LANCZOS)
+        new_img = img.resize((cls.size1, cls.size2), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name3)
-        new_img = img.resize((cls.size1, cls.size6), Image.LANCZOS)
+        new_img = img.resize((cls.size1, cls.size6), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name4)
-        new_img = img.resize((cls.size6, cls.size1), Image.LANCZOS)
+        new_img = img.resize((cls.size6, cls.size1), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name5)
         img.close()
         new_img.close()
@@ -445,16 +444,16 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
             img = Image.open(file)
             img.load()
             img = img.convert("RGB")  # remove transparency (alpha) channel to allow JPG saving
-        new_img = img.resize((cls.size1, cls.size1), Image.LANCZOS)
+        new_img = img.resize((cls.size1, cls.size1), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name1)
         new_img.save(cls.folder / cls.name6)
-        new_img = img.resize((cls.size2, cls.size1), Image.LANCZOS)
+        new_img = img.resize((cls.size2, cls.size1), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name2)
-        new_img = img.resize((cls.size1, cls.size2), Image.LANCZOS)
+        new_img = img.resize((cls.size1, cls.size2), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name3)
-        new_img = img.resize((cls.size1, cls.size6), Image.LANCZOS)
+        new_img = img.resize((cls.size1, cls.size6), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name4)
-        new_img = img.resize((cls.size6, cls.size1), Image.LANCZOS)
+        new_img = img.resize((cls.size6, cls.size1), Image.Resampling.LANCZOS)
         new_img.save(cls.folder / cls.name5)
         img.close()
         new_img.close()

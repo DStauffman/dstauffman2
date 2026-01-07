@@ -79,7 +79,8 @@ if __name__ == "__main__":
     # create figure
     fig = plt.figure(facecolor="w")
     title = "Tulare Score Distribution vs. Expectation"
-    fig.canvas.manager.set_window_title(title)
+    if fig.canvas.manager is not None:
+        fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines
@@ -97,7 +98,7 @@ if __name__ == "__main__":
 
     # plot tournament scores
     val = 1 / len(inner10)
-    patches = []
+    patches: list[Rectangle] = []
     for this_score in tulare:  # set(tulare)
         num_this_one = tulare.count(this_score)
         label = "Tournament" if len(patches) == 0 else ""
@@ -133,7 +134,8 @@ if __name__ == "__main__":
     # create figure
     fig = plt.figure(facecolor="w")
     title = "Vegas Score Distribution vs. Expectation"
-    fig.canvas.manager.set_window_title(title)
+    if fig.canvas.manager is not None:
+        fig.canvas.manager.set_window_title(title)
     ax = fig.add_subplot(111)
 
     # remove plot frame lines

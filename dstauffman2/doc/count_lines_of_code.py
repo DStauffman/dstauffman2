@@ -10,10 +10,12 @@ Notes
 
 # %% Imports
 import json
-import os
+from pathlib import Path
 import subprocess
+from typing import Any
 
-from dstauffman import get_root_dir, make_conclusion, make_preamble
+from dstauffman import get_root_dir
+from dhealth import make_conclusion, make_preamble
 
 
 # %% Functions
@@ -34,7 +36,7 @@ def process_repo(name, root, tests, exclude):
     types = frozenset({"blank", "comment", "code"})
 
     # get test folder results
-    test_root = os.path.join(root, tests)
+    test_root = Path(root).joinpath(tests)
     command   = [cloc, test_root, "--json"]
     result    = subprocess.run(command, stdout=subprocess.PIPE)
     json_text = result.stdout.decode("utf-8")
@@ -139,19 +141,19 @@ def print_latex_tables(out, keys):
 if __name__ == "__main__":
     # Constants
     # location of cloc utility
-    root = os.path.sep.join(get_root_dir().split(os.path.sep)[:-2])
-    cloc = os.path.join(root, "cloc-1.70.exe")
+    root = get_root_dir().parent.parent
+    cloc = root.joinpath("cloc-1.82.exe")
     # repositories to process
-    repos = {k: {} for k in ["dstauffman", "hesat"]}
+    repos: dict[str, dict[str, Any]] = {k: {} for k in ["dstauffman", "hesat"]}
 
     # test folder and other exclusion settings
     repos["dstauffman"]["name"]    = "dstauffman"
-    repos["dstauffman"]["root"]    = os.path.join(root, "dstauffman", "dstauffman")
+    repos["dstauffman"]["root"]    = root.joinpath("dstauffman", "dstauffman")
     repos["dstauffman"]["tests"]   = "tests"
     repos["dstauffman"]["exclude"] = ["data", "images", "output", "results", "temp"]
 
     repos["hesat"]["name"]    = "hesat"
-    repos["hesat"]["root"]    = os.path.join(root, "pyhesat", "hesat")
+    repos["hesat"]["root"]    = root.joinpath("pyhesat", "hesat")
     repos["hesat"]["tests"]   = "tests"
     repos["hesat"]["exclude"] = ["data", "output"]
 

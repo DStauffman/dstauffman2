@@ -13,12 +13,10 @@ import copy
 import sys
 import unittest
 
-from PyQt5 import QtCore
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QApplication, QPushButton
+from qtpy import QtCore
+from qtpy.QtTest import QTest
+from qtpy.QtWidgets import QApplication, QPushButton
 import numpy as np
-
-from dstauffman import Counter
 
 import dstauffman2.games.tictactoe as ttt
 
@@ -49,8 +47,8 @@ class Test_TicTacToeGui(unittest.TestCase):
 
     def _reset(self):
         # press the reset button
-        self.gui.state.cur_game = Counter(0)
-        self.gui.state.cur_move = Counter(0)
+        self.gui.state.cur_game = np.array(0, dtype=int)
+        self.gui.state.cur_move = np.array(0, dtype=int)
         self.gui.state.board    = np.full((3, 3), n, dtype=int)
         self._default()
 
@@ -181,7 +179,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     unittest.main(exit=False)
     # close the qapp

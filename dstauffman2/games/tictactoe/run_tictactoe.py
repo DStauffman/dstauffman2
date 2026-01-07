@@ -11,7 +11,7 @@ Written by David C. Stauffer in March 2016.
 # %% Imports
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtWidgets import QApplication
 
 from dstauffman2.games.tictactoe import TicTacToeGui
 

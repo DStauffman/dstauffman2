@@ -10,7 +10,7 @@ Notes
 # %% Imports
 import sys
 
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtWidgets import QApplication
 import pytest
 
 from dstauffman2 import get_root_dir
@@ -21,8 +21,8 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
-    pytest.main([get_root_dir()])
+    pytest.main([str(get_root_dir())])
     # close the qapp
     qapp.closeAllWindows()

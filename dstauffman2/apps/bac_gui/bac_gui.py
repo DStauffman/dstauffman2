@@ -16,8 +16,8 @@ import pickle
 import sys
 import unittest
 
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import (
+from qtpy import QtCore, QtGui
+from qtpy.QtWidgets import (
     QApplication,
     QComboBox,
     QFormLayout,
@@ -480,7 +480,8 @@ def calculate_bac(time_drinks, drinks, time_out, body_weight):
     >>> time_out = time_drinks.copy()
     >>> body_weight = 105
     >>> bac = calculate_bac(time_drinks, drinks, time_out, body_weight)
-    >>> print(bac) # doctest: +NORMALIZE_WHITESPACE
+    >>> with np.printoptions(precision=8):
+    ...     print(bac) # doctest: +NORMALIZE_WHITESPACE
     [0.00020714 0.00059286 0.00122857 0.00125714 0.00110714 0.00095714]
 
     """
@@ -564,7 +565,8 @@ def plot_bac(gui_settings, legal_limit=None):
     # create the figure and axis
     fig = plt.figure(facecolor="w")
     this_title = "BAC vs. Time for {}".format(name)
-    fig.canvas.manager.set_window_title(this_title)
+    if fig.canvas.manager is not None:
+        fig.canvas.manager.set_window_title(this_title)
     ax = fig.add_subplot(111)
 
     # plot the data
@@ -592,7 +594,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     unittest.main(module="dstauffman2.apps.bac_gui.test_bac_gui", exit=False)
     doctest.testmod(verbose=False)

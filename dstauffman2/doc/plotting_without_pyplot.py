@@ -10,15 +10,16 @@ Notes
 # %% Imports
 import os
 
-from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
+from qtpy.QtCore import QSize
+from qtpy.QtGui import QIcon
+from qtpy.QtWidgets import QMainWindow, QPushButton, QVBoxLayout, QWidget
 from matplotlib.backends.backend_qt5 import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import numpy as np
 
-from dstauffman import close_all, get_images_dir
+from dstauffman import get_images_dir
+from dstauffman.plotting import close_all
 
 # %% Constants
 plt = None
@@ -154,7 +155,8 @@ if __name__ == "__main__":
     # create figure
     fig = Figure()
     fig.canvas = FigureCanvas(fig)
-    fig.canvas.manager.set_window_title(this_title)
+    if fig.canvas.manager is not None:
+        fig.canvas.manager.set_window_title(this_title)
     fig.canvas.toolbar = NavigationToolbar(fig.canvas, frame)
 
     # add figure to GUI
@@ -176,7 +178,7 @@ if __name__ == "__main__":
     ax.grid(True)
 
     # add a custom toolbar
-    fig.toolbar_custom_ = MyCustomToolbar(fig.canvas.toolbar)
+    fig.toolbar_custom_ = MyCustomToolbar(fig.canvas.toolbar)  # type: ignore[attr-defined]
 
     # show the plot
     frame.show()

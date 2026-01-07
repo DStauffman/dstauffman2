@@ -11,7 +11,7 @@ Notes
 """
 
 # %% Imports
-from IPython.core.magic import register_line_magic
+from IPython.core.magic import register_line_magic  # type: ignore[import-not-found]
 
 
 # %% Custom Magic Commands - reload_ghap
@@ -19,17 +19,17 @@ from IPython.core.magic import register_line_magic
 def reload_ghap(line):
     r"""Force reloading of `ghap` module."""
     from dstauffman import reload_package
-    import ghap
+    import ghap  # type: ignore[import-not-found]
 
     reload_package(ghap)
 
 
-# %% Custom Magic Commands - reload_ghap
+# %% Custom Magic Commands - reload_cromo
 @register_line_magic
 def reload_cromo(line):
     r"""Force reloading of `cromo` module."""
     from dstauffman import reload_package
-    import cromo
+    import cromo  # type: ignore[import-not-found]
 
     reload_package(cromo)
 
@@ -47,7 +47,7 @@ def reload_dstauffman(line):
 @register_line_magic
 def cc(line):
     r"""Like Matlab CC command."""
-    from IPython import get_ipython
+    from IPython import get_ipython  # type: ignore[import-not-found]
     import dstauffman
     import ghap
 

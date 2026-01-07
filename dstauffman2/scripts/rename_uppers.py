@@ -8,11 +8,13 @@ Notes
 """
 
 # %% Imports
+from pathlib import Path
+
 import dstauffman2.imageproc as dip
 
 # %% Test script
 if __name__ == "__main__":
-    folder = r"C:\Users\DStauffman\Desktop\Camera"
+    folder = Path(r"C:\Users\DStauffman\Desktop\Camera")
     dip.rename_upper_ext(folder)
     dip.find_missing_nums(folder)
     # dip.find_unexpected_ext(folder)

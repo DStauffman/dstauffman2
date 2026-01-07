@@ -33,7 +33,7 @@ PLAYER["none"]  = 0
 PLAYER["draw"]  = 2
 
 # scoring
-SCORING                 = {}
+SCORING: dict[str, int | float] = {}
 SCORING["win"]          = 100
 SCORING["block_win"]    = 10
 SCORING["win_in_two"]   = 6

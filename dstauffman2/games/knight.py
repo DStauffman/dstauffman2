@@ -87,7 +87,7 @@ if use_cython:
     import pyximport
 
     pyximport.install()
-    from dstauffman2.games.knight2 import check_board_boundaries as _check_board_boundaries2
+    from dstauffman2.games.knight2 import check_board_boundaries as _check_board_boundaries2  # type: ignore[import-not-found]
 
 # %% Logging
 logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.WARNING)
@@ -367,6 +367,8 @@ def _get_new_position(x, y, move, transports):
         Current Y position
     move : int
         Move to be performed
+    transports : (int, int), optional
+        Transport locations
 
     Returns
     -------
@@ -731,6 +733,7 @@ def _undo_move(board, last_move, original_board, transports, start_x, start_y):
 def _get_move_inverse(move):
     r"""
     Gets the inverse move to go back where you were.
+
         -/+1 <-> -/+3
         -/+2 <-> -/+4
 
@@ -813,7 +816,7 @@ def _predict_cost(board):
 # %% _sort_best_moves
 def _sort_best_moves(board, moves, costs, transports, start_x, start_y):
     r"""
-    Sorts the given moves into the most likely best order based on a predicted cost
+    Sorts the given moves into the most likely best order based on a predicted cost.
 
     Parameters
     ----------
@@ -1198,8 +1201,10 @@ def _solve_next_move(board, data, start_x, start_y):
         Board layout
     data : dict
         Mutable internal data dictionary for storing information throughout solver calls, see _initialize_data
-    cur_pos : 2 element tuple of int
-        Current x and y position
+    start_x : int
+        Current x position
+    start_y : int
+        Current y position
 
     Notes
     -----

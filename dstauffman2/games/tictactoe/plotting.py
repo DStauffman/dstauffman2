@@ -82,6 +82,8 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         RGB triplet color
     shape : int
         type of piece to plot
+    thick : bool, optional
+        Whether the lines should be thicker or not
 
     Examples
     --------
@@ -112,15 +114,15 @@ def plot_piece(ax, vc, hc, size, color, shape, thick=True):
         piece = [patch1]
     elif shape == PLAYER["x"]:
         # plot an X
-        patch1 = Polygon(coords1, True, facecolor=color, edgecolor="k")
-        patch2 = Polygon(coords2, True, facecolor=color, edgecolor="k")
+        patch1 = Polygon(coords1, closed=True, facecolor=color, edgecolor="k")
+        patch2 = Polygon(coords2, closed=True, facecolor=color, edgecolor="k")
         piece = [patch1, patch2]
         ax
     elif shape == PLAYER["draw"]:
         # plot a combined O and X
         patch1 = Wedge((hc, vc), size / 2, 0, 360, width=size * width / 2, facecolor=color, edgecolor="k")
-        patch2 = Polygon(coords1, True, facecolor=color, edgecolor="k")
-        patch3 = Polygon(coords2, True, facecolor=color, edgecolor="k")
+        patch2 = Polygon(coords1, closed=True, facecolor=color, edgecolor="k")
+        patch3 = Polygon(coords2, closed=True, facecolor=color, edgecolor="k")
         piece = [patch1, patch2, patch3]
     else:
         raise ValueError("Unexpected shape.")

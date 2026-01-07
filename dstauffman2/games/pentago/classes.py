@@ -14,7 +14,7 @@ import unittest
 
 import numpy as np
 
-from dstauffman import Counter, Frozen
+from dstauffman import Frozen
 
 from dstauffman2.games.pentago.constants import PLAYER, SIZES
 
@@ -25,8 +25,8 @@ class State(Frozen):
 
     def __init__(self):
         self.board       = np.full((SIZES["board"], SIZES["board"]), PLAYER["none"], dtype=int)
-        self.cur_move    = Counter(0)
-        self.cur_game    = Counter(0)
+        self.cur_move    = np.array(0, dtype=int)
+        self.cur_game    = np.array(0, dtype=int)
         self.move_status = {"ok": False, "pos": None, "patch_object": None}
         self.game_hist   = [GameStats(number=self.cur_game, first_move=PLAYER["white"])]
 

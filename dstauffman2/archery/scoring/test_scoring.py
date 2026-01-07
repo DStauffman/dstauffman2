@@ -112,7 +112,7 @@ class Test_plot_mean_and_std(unittest.TestCase):
 
     def setUp(self) -> None:
         self.scores = [10 * ["X", 10, 9], 10 * [9, 9, 9]]
-        self.fig = None
+        self.fig: plt.Figure | None = None
 
     def test_nominal(self) -> None:
         self.fig = arch.plot_mean_and_std(self.scores)

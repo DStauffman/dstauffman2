@@ -1,5 +1,6 @@
 """
 The "brick" file solves the 3D red and gray brick puzzle that I have.
+
 (I don't actually remember the original name of the puzzle.)
 
 Notes
@@ -15,10 +16,11 @@ import os
 import shutil
 
 import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d.art3d import Line3DCollection, Poly3DCollection
+from mpl_toolkits.mplot3d.art3d import Line3DCollection, Poly3DCollection  # type: ignore[import-untyped]
 import numpy as np
 
-from dstauffman import Opts, setup_dir, setup_plots
+from dstauffman.plotting import Opts, setup_plots
+from slog import make_dir, wipe_dir
 
 from dstauffman2 import get_root_dir
 
@@ -172,8 +174,9 @@ def _draw_cube(ax, xs=0, ys=0, zs=0, color="k"):
 
 def _check_seams(piece_combos, this_soln):
     r"""
-    Checks that the solution set is physically able to be built based on where the seams
-    on the individual pieces are located.
+    Checks that the solution set is physically able to be built.
+
+    This check is based on where the seams on the individual pieces are located.
 
     Parameters
     ----------
@@ -571,7 +574,7 @@ def plot_cube(piece, title=None, opts=None):
 
     Parameters
     ----------
-    cube : (3,3,3) ndarray of int
+    piece : (3,3,3) ndarray of int
         Piece layout
     title : str, optional
         Title to put on the plot and use to save to disk
@@ -648,6 +651,8 @@ def print_combos(piece_combos, text):
     ----------
     piece_combos : list of (3,3,3) ndarray of int
         All the possible piece combinations
+    text : str
+        Extra text to print at the end of the combos
 
     Notes
     -----
@@ -910,11 +915,11 @@ if __name__ == "__main__":
         date = datetime.now()
         opts = Opts()
         opts.case_name = "Brick"
-        opts.save_path = os.path.join(get_root_dir(), "results", date.strftime("%Y-%m-%d") + "_brick")
+        opts.save_path = get_root_dir().joinpath("results", date.strftime("%Y-%m-%d") + "_brick")
         opts.save_plot = True
         opts.show_plot = False
         if make_plots:
-            setup_dir(opts.save_path, rec=True)
+            wipe_dir(opts.save_path)
 
         # Solve for the center color
         soln[1, 1, 1] = solve_center(pieces)
@@ -967,16 +972,16 @@ if __name__ == "__main__":
         unsort_ix = np.argsort(sort_ix)
         for j in range(len(soln_pieces)):
             if make_plots:
-                setup_dir(os.path.join(opts.save_path, "soln{}".format(j + 1)))
+                make_dir(opts.save_path.joinpath("soln{}".format(j + 1)))
             print("Solution #{}".format(j + 1))
             for i in range(NUM_PIECES):
                 print("Piece {}, position {}".format(i + 1, soln_pieces[j][unsort_ix[i]] + 1))
-                if make_plots:
-                    old_name = os.path.join(opts.save_path, "{} - P{} position {}.png".format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
-                    new_name = os.path.join(opts.save_path, "soln{}".format(j+1), "{} - P{} position {}.png".format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
+                if make_plots and opts.save_path is not None:
+                    old_name = opts.save_path.joinpath("{} - P{} position {}.png".format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
+                    new_name = opts.save_path.joinpath("soln{}".format(j+1), "{} - P{} position {}.png".format(opts.case_name, i+1, soln_pieces[j][unsort_ix[i]]+1))
                     shutil.copyfile(old_name, new_name)
             print("")
-            if make_plots:
-                old_name = os.path.join(opts.save_path, "{} - Final Solution.png".format(opts.case_name))
-                new_name = os.path.join(opts.save_path, "soln{}".format(j+1), "{} - Final Solution.png".format(opts.case_name))
+            if make_plots and opts.save_path is not None:
+                old_name = opts.save_path.joinpath("{} - Final Solution.png".format(opts.case_name))
+                new_name = opts.save_path.joinpath("soln{}".format(j+1), "{} - Final Solution.png".format(opts.case_name))
                 shutil.copyfile(old_name, new_name)

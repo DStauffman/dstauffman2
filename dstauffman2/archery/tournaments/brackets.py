@@ -14,7 +14,7 @@ import math
 import os
 
 # model imports
-from dstauffman import read_text_file, write_text_file
+from slog import read_text_file, write_text_file
 
 from dstauffman2.archery.tournaments.bales import assign_bales, validate_bales
 from dstauffman2.archery.tournaments.constants import COL_01_WIN, COL_02_WIN, COL_04_WIN, \

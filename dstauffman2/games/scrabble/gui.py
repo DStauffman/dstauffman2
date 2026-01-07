@@ -14,8 +14,8 @@ import pickle
 import sys
 import unittest
 
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import (
+from qtpy import QtCore, QtGui
+from qtpy.QtWidgets import (
     QAction,
     QApplication,
     QGridLayout,
@@ -336,7 +336,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     unittest.main(module="dstauffman2.games.scrabble.tests.test_gui", exit=False)
     doctest.testmod(verbose=False)

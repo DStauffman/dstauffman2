@@ -40,7 +40,7 @@ def _should_rotate(rotate: str, *, height: int, width: int) -> bool:
 
 
 # %% Functions - _resize_image
-def _resize_image(image: Image, *, width: int, height: int) -> Image:
+def _resize_image(image: Image.Image, *, width: int, height: int) -> Image.Image:
     """Resize the image, which will also upsample if necessary."""
     # Note: thumbnial will not increase size
     image.thumbnail((width, height), Image.Resampling.LANCZOS)
@@ -54,7 +54,7 @@ def _resize_image(image: Image, *, width: int, height: int) -> Image:
 
 
 # %% Functions - _build_full_page
-def _build_full_page(this_image: Image, *, width: int, height: int, background_color: _C, border: int, debug: bool) -> Image:
+def _build_full_page(this_image: Image.Image, *, width: int, height: int, background_color: _C, border: int, debug: bool) -> Image.Image:
     """Builds a full page from the given image."""
     new_image = Image.new("RGB", (width, height))
     new_image.paste(background_color, (0, 0, width, height))
@@ -70,8 +70,8 @@ def _build_full_page(this_image: Image, *, width: int, height: int, background_c
 
 # %% Functions - _build_dual_page
 def _build_dual_page(
-    new_image: Image,
-    images: list[Image],
+    new_image: Image.Image,
+    images: list[Image.Image],
     *,
     width: int,
     height: int,
@@ -80,7 +80,7 @@ def _build_dual_page(
     background_color: _C,
     right: bool,
     debug: bool,
-) -> Image:
+) -> Image.Image:
     """Add up to three photos to the given page."""
     is_horizontal = [image.size[0] >= image.size[1] for image in images]
     offset1 = border
@@ -120,8 +120,8 @@ def _build_dual_page(
 
 # %% Functions - _build_triplet_page
 def _build_triplet_page(
-    new_image: Image,
-    images: list[Image],
+    new_image: Image.Image,
+    images: list[Image.Image],
     *,
     width: int,
     height: int,
@@ -130,7 +130,7 @@ def _build_triplet_page(
     background_color: _C,
     right: bool,
     debug: bool,
-) -> Image:
+) -> Image.Image:
     """Add up to three photos to the given page."""
     is_horizontal = [image.size[0] >= image.size[1] for image in images]
     offset1 = border
@@ -181,8 +181,8 @@ def _build_triplet_page(
 
 # %% Functions - _build_quad_page
 def _build_quad_page(
-    new_image: Image,
-    images: list[Image],
+    new_image: Image.Image,
+    images: list[Image.Image],
     *,
     width: int,
     height: int,
@@ -191,10 +191,10 @@ def _build_quad_page(
     background_color: _C,
     right: bool,
     debug: bool,
-) -> Image:
+) -> Image.Image:
     """Add up to four photos to the given page in a 2x2 grid."""
 
-    def _add_image(new_image: Image, this_image: Image, offsets: tuple[int, int], debug: bool, is_horizontal: bool):
+    def _add_image(new_image: Image.Image, this_image: Image.Image, offsets: tuple[int, int], debug: bool, is_horizontal: bool):
         new_image.paste(this_image, offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)
@@ -235,7 +235,7 @@ def _build_single_page(
     line_color: _OC,
     rotate: str,
     debug: bool,
-) -> tuple[Image, list[Image]]:
+) -> tuple[Image.Image, list[Image.Image]]:
     """Create single image pages for book."""
     num_images = len(files)
     book_pages = []
@@ -243,7 +243,7 @@ def _build_single_page(
     page = 1
     for ix, file in enumerate(files):
         print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
-        this_image = Image.open(file)
+        this_image: Image.Image = Image.open(file)
         if _should_rotate(rotate, height=this_image.size[1], width=this_image.size[0]):
             if rotate.lower().endswith("clockwise"):
                 this_image = this_image.rotate(-90, expand=1)
@@ -291,7 +291,7 @@ def _build_multipage(
     line_color: _OC,
     rotate: str,
     debug: bool,
-) -> tuple[Image, list[Image]]:
+) -> tuple[Image.Image, list[Image.Image]]:
     """Create multi-image pages for book."""
     num_images = sum(len(page) for page in files)
     book_pages = []
@@ -304,7 +304,7 @@ def _build_multipage(
         images = []
         for file in subfiles:
             print(f" Processing image {ix+1} of {num_images}, Page {page}, ({file})")
-            this_image = Image.open(file)
+            this_image: Image.Image = Image.open(file)
             if _should_rotate(rotate, height=this_image.size[1], width=this_image.size[0]):
                 if rotate.lower().endswith("clockwise"):
                     this_image = this_image.rotate(-90, expand=1)
@@ -418,10 +418,14 @@ def build_book(
         Photo width in pixels
     photo_height : int
         Photo height in pixels
+    border: int
+        Border width in pixels
     dpi : int
         Pixels per inch
     layout : str
         Layout of pages, from {"full", "dual_4x6", "triple_4x6"}
+    center_offset : int
+        The offset from center in pixels
     background_color : tuple[int, int, int]
         Background color as integer RGB, default is black
     line_color : tuple[int, int, int], optional
@@ -429,6 +433,8 @@ def build_book(
     rotate : str, optional, default is "None"
         Whether to rotate the photo to maximize its size on the page,
         from {"None", "Horizontal", "Vertical", "horizontal_clockwise", "vertical_clockwise"}
+    debug : bool, optional, default is False
+        Whether to print debug information
 
     Notes
     -----

@@ -16,6 +16,7 @@ import os
 from pathlib import Path
 import re
 import shutil
+from typing import Any
 import unittest
 import warnings
 
@@ -60,6 +61,10 @@ def find_missing_nums(
     digit_check : bool, optional
         Determines if checking for a consistent number of digits in the numbering
         01, 02, 03 versus 001, 02, 003, etc. Default is True
+    process_extensions : Iterable str, optional
+        List of extensions to process
+    folder_exclusions : Iterable Path, optional
+        Folders to exclude from processing
 
     Notes
     -----
@@ -75,8 +80,8 @@ def find_missing_nums(
     """
     for root, _, files in os.walk(str(folder)):
         name_dict: dict[str, int] = {}
-        nums_list: list[int] = []
-        digs_list: list[int] = []
+        nums_list: list[list[int]] = []
+        digs_list: list[list[int]] = []
         counter = 0
         for name in files:
             (file_name, file_ext) = os.path.splitext(name)
@@ -94,14 +99,14 @@ def find_missing_nums(
             parts = file_name.split()
             text = r" ".join([s for s in parts if not s.isdigit()])
             strs = [s for s in parts if s.isdigit()]
-            nums = [int(s) for s in strs]
-            if len(nums) > 1:
+            temp = [int(s) for s in strs]
+            if len(temp) > 1:
                 print('Weird numbering: "{}"'.format(os.path.join(root, name)))
                 continue
-            if len(nums) == 0:
+            if len(temp) == 0:
                 print('No number found: "{}"'.format(os.path.join(root, name)))
                 continue
-            nums = nums[0]
+            nums = temp[0]
             digs = len(strs[0])
             if text not in name_dict:
                 name_dict[text] = counter
@@ -118,10 +123,10 @@ def find_missing_nums(
                 nums_list.append([nums])
                 digs_list.append([digs])
         for nams in name_dict:
-            nums = nums_list[name_dict[nams]]
-            digs = digs_list[name_dict[nams]]
-            missing = set(nums) ^ set(range(1, max(nums) + 1))
-            digits = [nums[i] for i in range(len(digs)) if digs[i] != max(digs)]
+            this_nums = nums_list[name_dict[nams]]
+            this_digs = digs_list[name_dict[nams]]
+            missing = set(this_nums) ^ set(range(1, max(this_nums) + 1))
+            digits = [this_nums[i] for i in range(len(this_digs)) if this_digs[i] != max(this_digs)]
             if missing:
                 print('Missing: "{}": '.format(os.path.join(root, nams)), end="")
                 if len(missing) < 21:
@@ -444,10 +449,10 @@ def batch_resize(
             print(status_msg)
 
         # Resize it.
-        new_img = img.resize((new_width, new_height), Image.LANCZOS)
+        new_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
 
         # Create the output folder if necessary
-        # (Avoid using setup_dir, as this is currently the only dstauffman dependency)
+        # (Avoid using make_dir, as this is currently the only dstauffman/slog dependency)
         if not folder.joinpath("resized").is_dir():
             folder.joinpath("resized").mkdir()
 
@@ -573,7 +578,7 @@ def convert_tif_to_jpg(
             print(status_msg)
 
         # Resize it.
-        new_img = img.resize((new_width, new_height), Image.LANCZOS)
+        new_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
 
         # Save it back to disk.
         new_img.save(new_name)
@@ -660,7 +665,7 @@ def number_files(
 
 
 # %% read_exif_data
-def read_exif_data(filename: Path, field: str | None = None) -> dict:
+def read_exif_data(filename: Path, field: str | None = None) -> dict[Any, Any] | Any:
     r"""
     Reads the EXIF data from the specified image.
 
@@ -721,7 +726,7 @@ def get_image_datetime(filename: Path) -> str:
     """
     if False:
         # using PIL
-        time_stamp = read_exif_data(filename, "DateTime")
+        time_stamp = read_exif_data(filename, "DateTime")  # type: ignore[unreachable]
     else:
         # using exifread
         assert HAS_EXIFREAD, "Must have the exifread library to run this code."
@@ -729,7 +734,7 @@ def get_image_datetime(filename: Path) -> str:
             tags = exifread.process_file(file, stop_tag="DateTime", strict=True)
         temp = tags["Image DateTime"]
         result = re.search(r".*=(.*) @.*", repr(temp))
-        time_stamp = result.group(1)
+        time_stamp = result.group(1)  # type: ignore[union-attr]
     return time_stamp
 
 
@@ -813,7 +818,7 @@ def get_raw_file_from_datetime(
             old_file = raw_times[name]
             new_file = folder.joinpath(img_names[name].replace(img_extension, raw_extension))
             if name in duplicates:
-                possibly_wrong.append(new_file)
+                possibly_wrong.append(str(new_file))
             print(' File: "{}" has a time stamp of {} and was matched to "{}".'.format(img_times[name], name, raw_times[name]))
             print('  Copying "{}" to "{}".'.format(old_file, new_file))
             if not dry_run:

@@ -1,12 +1,18 @@
-import os
+"""Clean-up the whitespace in the given folder."""
 
-from dstauffman import find_tabs
+# %% Imports
+from pathlib import Path
 
-root_folder = r"C:\Users\DStauffman\Documents\GitHub"
+from drepo import find_repo_issues
+
+# %% Settings
+root_folder = Path(r"C:\Users\DStauffman\Documents\GitHub")
 trailing = True
 list_all = False
 eol = "\n"
 
-find_tabs(os.path.join(root_folder, "matlab"), trailing=trailing, list_all=list_all, check_eol=eol)
-find_tabs(os.path.join(root_folder, "matlab2"), trailing=trailing, list_all=list_all, check_eol=eol)
-find_tabs(os.path.join(root_folder, "hesat"), trailing=trailing, list_all=list_all, check_eol=eol)
+# %% Script
+if __name__ == "__main__":
+    find_repo_issues(root_folder.joinpath("matlab"), trailing=trailing, list_all=list_all, check_eol=eol)
+    find_repo_issues(root_folder.joinpath("matlab2"), trailing=trailing, list_all=list_all, check_eol=eol)
+    find_repo_issues(root_folder.joinpath("hesat"), trailing=trailing, list_all=list_all, check_eol=eol)

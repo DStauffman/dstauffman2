@@ -14,7 +14,9 @@ import os
 from typing import List, Tuple
 import unittest
 
-from pypdf import PdfMerger, PdfReader, PdfWriter
+from pypdf import PdfReader, PdfWriter
+
+from slog import ReturnCodes
 
 
 # %% Functions - split_pdf
@@ -27,7 +29,7 @@ def split_pdf(src_file: str, pages: Tuple[int], out_file: str = "out.pdf") -> No
         # read each desired page and send it to the writer
         for page in pages:
             writer = PdfWriter()
-            writer.addPage(reader.getPage(page))
+            writer.add_page(reader.get_page(page))
             # write out the accumulated pages to disk
             with open(out_file.format(page + 1), "wb") as out:
                 writer.write(out)
@@ -35,8 +37,8 @@ def split_pdf(src_file: str, pages: Tuple[int], out_file: str = "out.pdf") -> No
 
 # %% Functions - combine_pdf
 def combine_pdf(folder: str, files: List[str], out_file: str = "out.pdf"):
-    r"""Combines the given files into a master file"""
-    merger = PdfMerger()
+    r"""Combines the given files into a master file."""
+    merger = PdfWriter()
     out_file = out_file if os.path.pathsep in out_file else os.path.join(folder, out_file)
     for file in files:
         fullfile = os.path.join(folder, file)
@@ -129,6 +131,7 @@ def execute_pdf(args: argparse.Namespace) -> int:
         split_pdf(src_file=src_file, pages=pages, out_file=out_file)
     elif command == "combine":
         combine_pdf(folder=folder, files=src_file, out_file=out_file)
+    return ReturnCodes.clean
 
 
 # %% Unit test

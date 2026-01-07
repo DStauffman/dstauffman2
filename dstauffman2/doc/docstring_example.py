@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 # be able to paste and execute docstrings after importing only the
 # numpy module itself, unabbreviated.
 
-from my_module import my_func, other_func
+from my_module import my_func, other_func  # type: ignore[import-not-found]
 
 def foo(var1, var2, long_var_name="hi"):
     r"""

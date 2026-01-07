@@ -15,7 +15,7 @@ import os
 import sys
 import unittest
 
-from PyQt5.QtWidgets import QApplication
+from qtpy.QtWidgets import QApplication
 
 import dstauffman2.apps.bac_gui as bac
 
@@ -38,7 +38,7 @@ elif mode == "test":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # find the test cases
     test_suite = unittest.TestLoader().discover("dstauffman2.apps.bac_gui")
     # run the tests

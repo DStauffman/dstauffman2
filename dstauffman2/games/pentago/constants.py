@@ -48,7 +48,7 @@ SIZES["board"]  = 6
 SIZES["button"] = 71  # number of pixels on rotation buttons
 
 # Gameplay options
-OPTIONS                       = {}
+OPTIONS: dict[str, str | bool] = {}
 OPTIONS["load_previous_game"] = "Ask" # from ["Yes","No","Ask"]
 OPTIONS["plot_winning_moves"] = True
 

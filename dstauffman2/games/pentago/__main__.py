@@ -15,7 +15,7 @@ import os
 import sys
 import unittest
 
-from PyQt5.QtWidgets import QApplication, QCoreApplication
+from qtpy.QtWidgets import QApplication
 
 import dstauffman2.games.pentago as pentago
 
@@ -26,7 +26,6 @@ else:
     mode = "run"
 
 # %% Execution
-qapp: QApplication | QCoreApplication
 if mode == "run":
     # Runs the GUI application
     qapp = QApplication(sys.argv)
@@ -39,7 +38,7 @@ elif mode == "test":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # find the test cases
     test_suite = unittest.TestLoader().discover("dstauffman2.games.pentago.tests")
     # run the tests

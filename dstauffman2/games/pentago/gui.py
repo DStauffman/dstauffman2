@@ -14,14 +14,12 @@ import os
 import sys
 import unittest
 
-from PyQt5 import QtCore, QtGui
-from PyQt5.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QToolTip, QWidget
+from qtpy import QtCore, QtGui
+from qtpy.QtWidgets import QApplication, QLabel, QMessageBox, QPushButton, QToolTip, QWidget
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from matplotlib.pyplot import Axes
 import numpy as np
-
-from dstauffman import Counter
 
 from dstauffman2 import get_images_dir, get_output_dir
 from dstauffman2.games.pentago.classes import GameStats, Move, State
@@ -106,8 +104,8 @@ class PentagoGui(QWidget):
                 filename = os.path.join(get_output_dir(), "pentago.pkl")
             if os.path.isfile(filename):
                 self.state.game_hist   = GameStats.load(filename)
-                self.state.cur_game    = Counter(len(self.state.game_hist)-1)
-                self.state.cur_move    = Counter(len(self.state.game_hist[-1].move_list))
+                self.state.cur_game    = np.array(len(self.state.game_hist)-1, dtype=int)
+                self.state.cur_move    = np.array(len(self.state.game_hist[-1].move_list), dtype=int)
                 self.state.board       = create_board_from_moves(self.state.game_hist[-1].move_list, \
                     self.state.game_hist[-1].first_move)
                 self.state.move_status = {"ok": False, "pos": None, "patch_object": None}
@@ -398,7 +396,7 @@ class PentagoGui(QWidget):
         next_lead = PLAYER["black"] if last_lead == PLAYER["white"] else PLAYER["white"]
         assert len(self.state.game_hist) == self.state.cur_game + 1
         self.state.cur_game += 1
-        self.state.cur_move = Counter(0)
+        self.state.cur_move = np.array(0, dtype=int)
         self.state.game_hist.append(GameStats(number=self.state.cur_game, first_move=next_lead, winner=PLAYER["none"]))
         self.state.board = np.full((SIZES["board"], SIZES["board"]), PLAYER["none"], dtype=int)
         # call GUI wrapper
@@ -556,7 +554,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     unittest.main(module="dstauffman2.games.pentago.tests.test_gui", exit=False)
     doctest.testmod(verbose=False)

@@ -9,7 +9,9 @@ Created on Mon Dec 15 13:21:07 2014
 # %% Imports
 import os
 
-from dstauffman import setup_dir
+import numpy as np
+
+from slog import make_dir
 
 import dstauffman2.archery.tournaments as arch
 
@@ -46,7 +48,7 @@ for div in arch.DIVISIONS:
 # %% Output folder
 # create the output folder if it doesn't already exist
 if not os.path.isdir(output_folder):
-    setup_dir(output_folder)
+    make_dir(output_folder)
 
 # %% Process data
 # import data from excel
@@ -71,7 +73,8 @@ arch.write_registered_archers(data_indiv, filename=file_reg_bales, show_bales=Tr
 
 # enter scores (simulated)
 if SIMULATE:
-    arch.simulate_individual_scores(data_indiv)
+    prng = np.random.default_rng()
+    arch.simulate_individual_scores(data_indiv, prng)
 else:
     # read by in from updated excel file
     pass

@@ -21,8 +21,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from dstauffman import setup_dir
 from dstauffman.plotting import Opts, setup_plots
+from slog import make_dir
 
 # %% Constants
 PLOT_LIMITS  = [250, 300]
@@ -593,7 +593,7 @@ span.white {color: #ffffff;}
     if make_file:
         folder = os.path.split(filename)[0]
         if not os.path.isdir(folder):
-            setup_dir(folder)
+            make_dir(folder)
         with open(filename, "w") as file:
             file.write(htm)
 

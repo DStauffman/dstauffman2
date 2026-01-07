@@ -1,5 +1,7 @@
-from Cython.Build import cythonize
-from distutils.core import setup
+"""Use Cython to build the code into a standalone app."""
+
+from Cython.Build import cythonize  # type: ignore[import-not-found]
+from distutils.core import setup  # type: ignore[import-not-found]
 import numpy
 
 setup(

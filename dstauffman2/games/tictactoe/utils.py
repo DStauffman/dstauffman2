@@ -257,7 +257,6 @@ def make_move(ax, board, x, y, cur_move, cur_game, game_hist):
     Examples
     --------
     >>> from dstauffman2.games.tictactoe import make_move, PLAYER, GameStats
-    >>> from dstauffman import Counter
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()
@@ -269,8 +268,8 @@ def make_move(ax, board, x, y, cur_move, cur_game, game_hist):
     >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
     >>> x = 1
     >>> y = 0
-    >>> cur_move = Counter(0)
-    >>> cur_game = Counter(0)
+    >>> cur_move = np.array(0, dtype=int)
+    >>> cur_game = np.array(0, dtype=int)
     >>> game_hist = [GameStats(1, PLAYER['o'])]
     >>> make_move(ax, board, x, y, cur_move, cur_game, game_hist)
 
@@ -341,7 +340,6 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist, prng):
     Examples
     --------
     >>> from dstauffman2.games.tictactoe import play_ai_game, PLAYER, GameStats, Options
-    >>> from dstauffman import Counter
     >>> import numpy as np
     >>> import matplotlib.pyplot as plt
     >>> plt.ioff()
@@ -351,8 +349,8 @@ def play_ai_game(ax, board, cur_move, cur_game, game_hist, prng):
     >>> _ = ax.set_ylim(-0.5, 2.5)
     >>> ax.invert_yaxis()
     >>> board = np.full((3, 3), PLAYER['none'], dtype=int)
-    >>> cur_move = Counter(0)
-    >>> cur_game = Counter(0)
+    >>> cur_move = np.array(0, dtype=int)
+    >>> cur_game = np.array(0, dtype=int)
     >>> game_hist = [GameStats(1, PLAYER['o'])]
     >>> prng = np.random.default_rng()
     >>> Options.o_is_computer = True

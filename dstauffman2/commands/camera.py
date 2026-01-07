@@ -13,6 +13,8 @@ import doctest
 from pathlib import Path
 import unittest
 
+from slog import ReturnCodes
+
 from dstauffman2.imageproc import (
     batch_resize,
     find_long_filenames,
@@ -127,6 +129,7 @@ def execute_photos(args: argparse.Namespace) -> int:
         batch_resize(folder, max_width=resize, max_height=resize)
     if pause:
         breakpoint()
+    return ReturnCodes.clean
 
 
 # %% Unit test

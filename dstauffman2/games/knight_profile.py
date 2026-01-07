@@ -13,7 +13,9 @@ import timeit
 
 import pprofile
 
-from dstauffman2 import get_output_dir, setup_dir
+from slog import make_dir
+
+from dstauffman2 import get_output_dir
 import dstauffman2.games.knight as knight
 
 # %% Script
@@ -26,7 +28,7 @@ if __name__ == "__main__":
 
     # create the output folder
     folder = os.path.join(get_output_dir(), "knight")
-    setup_dir(folder)
+    make_dir(folder)
 
     # create profiler
     profile = pprofile.Profile()

@@ -14,7 +14,7 @@ import unittest
 
 import numpy as np
 
-from dstauffman import Counter, Frozen
+from dstauffman import Frozen
 
 from dstauffman2.games.tictactoe.constants import PLAYER
 
@@ -46,8 +46,8 @@ class State(Frozen):
 
     def __init__(self):
         self.board     = np.full((3, 3), PLAYER["none"], dtype=int)
-        self.cur_move  = Counter(0)
-        self.cur_game  = Counter(0)
+        self.cur_move  = np.array(0, dtype=int)
+        self.cur_game  = np.array(0, dtype=int)
         self.game_hist = [GameStats(number=self.cur_game, first_move=PLAYER["o"])]
 
 

@@ -265,8 +265,8 @@ class Test_find_moves(unittest.TestCase):
 
     def setUp(self) -> None:
         self.board = np.zeros((6, 6), dtype=int)
-        self.white_moves = []
-        self.black_moves = []
+        self.white_moves: list[pentago.Move] = []
+        self.black_moves: list[pentago.Move] = []
 
     def test_no_wins(self) -> None:
         (white_moves, black_moves) = pentago.find_moves(self.board)

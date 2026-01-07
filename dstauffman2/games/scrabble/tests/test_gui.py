@@ -12,9 +12,9 @@ Notes
 import sys
 import unittest
 
-from PyQt5 import QtCore
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QApplication, QPushButton
+from qtpy import QtCore
+from qtpy.QtTest import QTest
+from qtpy.QtWidgets import QApplication, QPushButton
 
 import dstauffman2.games.scrabble as scrab
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     unittest.main(exit=False)
     # close the qapp

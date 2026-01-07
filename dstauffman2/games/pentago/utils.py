@@ -245,8 +245,8 @@ def find_moves(board):
         black_set.add(this_move)
 
     # convert to list, sort by power, such that ties go at the end
-    white_moves = sorted(list(white_set))
-    black_moves = sorted(list(black_set))
+    white_moves = sorted(white_set)
+    black_moves = sorted(black_set)
 
     return (white_moves, black_moves)
 

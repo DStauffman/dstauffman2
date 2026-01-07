@@ -129,7 +129,9 @@ files                  = ["$MYPY_CONFIG_FILE_DIR/dstauffman2/**/*.py"]
 mypy_path              = [
     "$MYPY_CONFIG_FILE_DIR/../dstauffman",
     "$MYPY_CONFIG_FILE_DIR/../nubs",
-    "$MYPY_CONFIG_FILE_DIR/../slog"]
+    "$MYPY_CONFIG_FILE_DIR/../slog",
+    "$MYPY_CONFIG_FILE_DIR/../drepo",
+    "$MYPY_CONFIG_FILE_DIR/../dhealth"]
 untyped_calls_exclude  = ["matplotlib"]
 
 [[tool.mypy.overrides]]
@@ -139,7 +141,9 @@ module = [
     "datashader.*",
     "exifread.*",
     "h5py.*",
+    "keras.*",
     "nose.*",
+    "numba.*",
     "pandas.*",
     "PIL.*",
     "pprofile.*",
@@ -147,6 +151,7 @@ module = [
     "pyximport.*",
     "qtpy.*",  # Note would be nice to get rid of this, since PyQt5 is actually stubbed
     "scipy.*",
+    "tblib.*",
 ]
 ignore_missing_imports = true
 
@@ -369,7 +374,7 @@ line-ending = "auto"
 
 [tool.ty.environment]
 python-version = "3.14"
-root = ["./dstauffman2"]
+root = ["."]
 
 # Strict rules for source code
 [[tool.ty.overrides]]

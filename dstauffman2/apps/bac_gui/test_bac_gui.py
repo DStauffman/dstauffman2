@@ -15,9 +15,9 @@ import os
 import sys
 import unittest
 
-from PyQt5 import QtCore
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QApplication
+from qtpy import QtCore
+from qtpy.QtTest import QTest
+from qtpy.QtWidgets import QApplication
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -26,9 +26,7 @@ import dstauffman2.apps.bac_gui as bac
 
 # %% Constants
 class Test_Constants(unittest.TestCase):
-    r"""
-    Tests the defined constants to verify that they can be used.
-    """
+    r"""Tests the defined constants to verify that they can be used."""
 
     def test_init(self) -> None:
         self.assertEqual(bac.GUI_TOKEN, -1)
@@ -89,7 +87,7 @@ class Test_BacGui(unittest.TestCase):
         self.gui.gui_settings = bac.GuiSettings()
         self.gui.wrapper()
 
-    def _compare(self, gui_settings: bac.GuiSettings) -> None:
+    def _compare(self, gui_settings: bac.GuiSettings) -> bool:
         equal = True
         for key in vars(self.gui_settings):
             if getattr(self.gui_settings, key) != getattr(gui_settings, key):
@@ -103,7 +101,7 @@ class Test_BacGui(unittest.TestCase):
         self.gui_settings = copy.deepcopy(self.gui.gui_settings)
         if False:
             # Create a new profile
-            self.gui.onActivated(self.gui.popup_profile.count() - 1)
+            self.gui.onActivated(self.gui.popup_profile.count() - 1)  # type: ignore[unreachable]
             # Enter a name for the new profile
             # QTest.keyClicks(widget, "Temp 1") TODO: make this work!
             # QtCore.QTimer.singleShot(0, button.clicked)
@@ -191,7 +189,9 @@ class Test_BacGui(unittest.TestCase):
             # TODO: write this, and also capture the output or change the print statement
 
     def tearDown(self) -> None:
-        QApplication.instance().closeAllWindows()
+        qapp = QApplication.instance()
+        if qapp is not None:
+            qapp.closeAllWindows()  # type: ignore[attr-defined]
         folder = bac.get_root_dir()
         files = ["Temp 1.pkl", "Temp 2.pkl", "Default.pkl", "BAC vs. Time for Temp 1.png"]
         for file in files:
@@ -309,7 +309,7 @@ if __name__ == "__main__":
     if QApplication.instance() is None:
         qapp = QApplication(sys.argv)
     else:
-        qapp = QApplication.instance()
+        qapp = QApplication.instance()  # type: ignore[assignment]
     # run the tests
     unittest.main(exit=False)
     # close the qapp

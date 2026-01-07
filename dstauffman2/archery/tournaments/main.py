@@ -13,7 +13,8 @@ import os
 
 import pandas as pd
 
-from dstauffman import write_text_file
+from slog import write_text_file
+
 from dstauffman2.archery.tournaments.constants import COL_BALE, COL_DIVISION, \
     COL_FEMALE_FIRSTNAME, COL_FEMALE_LASTNAME, COL_FEMALE_SCORE, COL_FEMALE_X_COUNT, \
     COL_FIRSTNAME, COL_FIRSTNAME1, COL_FIRSTNAME2, COL_FIRSTNAME3, COL_GENDER, COL_LASTNAME, \
