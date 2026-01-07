@@ -350,6 +350,7 @@ def batch_resize(
     max_height: int = 8192,
     process_extensions: Iterable[str] = PROCESS_EXTENSIONS,
     enlarge: bool = False,
+    noop: str = "skip",  # from {"skip", "copy", "resave"}
 ) -> None:
     r"""
     Resize the specified folder of images to the given max width and height.
@@ -366,6 +367,8 @@ def batch_resize(
         List of extensions to be processed within the folder
     enlarge : bool
         Enlarge smaller images to the max size (True), or only shrink large ones (False)
+    noop : str
+        Whether to copy skip, copy or resave unchanged files
 
     Notes
     -----
@@ -376,6 +379,7 @@ def batch_resize(
         rewritten to use the better resize options of QImage if desired.
     #.  Updated by David C. Stauffer in June 2016 to go back to PIL now that it (finally) supports
         Python 3.X.
+    #.  Updated by David C. Stauffer in September 2025 for better copy options for no-op commands.
 
     Examples
     --------
@@ -437,16 +441,24 @@ def batch_resize(
         assert new_width == max_width or new_height == max_height, 'New width: "{}" is not max_width: "{}" or new height "{}" is not max_height: "{}"'.format(new_width, max_width, new_height, max_height)
 
         # Update status, with options for enlarging or not
-        status_msg = ' Resizing image  : "{}"'.format(image.name)
-        if new_width > cur_width or new_height > cur_height:
+        if new_width == cur_width and new_height == cur_height:
+            if noop == "skip":
+                print(f' Skipping image  : "{image.name}"')
+            else:
+                print(f' Copying image   : "{image.name}"')
+            process = False
+        elif new_width > cur_width or new_height > cur_height:
             if not enlarge:
-                print(' Not enlarging   : "{}"'.format(image.name))
+                print(f' Not enlarging   : "{image.name}"')
                 new_width  = cur_width
                 new_height = cur_height
+                process = False
             else:
-                print(status_msg)
+                print(f' Enlarging image : "{image.name}"')
+                process = True
         else:
-            print(status_msg)
+            print(f' Resizing image  : "{image.name}"')
+            process = True
 
         # Resize it.
         new_img = img.resize((new_width, new_height), Image.Resampling.LANCZOS)
@@ -457,10 +469,13 @@ def batch_resize(
             folder.joinpath("resized").mkdir()
 
         # Save it back to disk (and include original exif data)
-        if "exif" in img.info:
-            new_img.save(folder.joinpath("resized", image.name), exif=img.info["exif"], quality=95)
-        else:
-            new_img.save(folder.joinpath("resized", image.name), quality=95)
+        if process or noop == "resave":
+            if "exif" in img.info:
+                new_img.save(folder.joinpath("resized", image.name), exif=img.info["exif"], quality=95)
+            else:
+                new_img.save(folder.joinpath("resized", image.name), quality=95)
+        elif noop == "copy":
+            shutil.copy(folder.joinpath(image.name), folder.joinpath("resized", image.name))
 
         # Close objects
         img.close()
