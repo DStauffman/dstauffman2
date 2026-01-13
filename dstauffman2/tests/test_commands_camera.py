@@ -24,7 +24,7 @@ class Test_parse_photos(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = dcs2.get_root_dir()
         self.expected = argparse.Namespace()
         self.expected.folder = self.folder
@@ -36,46 +36,46 @@ class Test_parse_photos(unittest.TestCase):
         self.expected.resize = None
         self.expected.pause = False
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         args = commands.parse_photos([self.folder])
         self.assertEqual(args, self.expected)
 
-    def test_upper(self):
+    def test_upper(self) -> None:
         self.expected.upper = True
         args = commands.parse_photos([self.folder, "-u"])
         self.assertEqual(args, self.expected)
 
-    def test_missing(self):
+    def test_missing(self) -> None:
         self.expected.missing = True
         args = commands.parse_photos([self.folder, "-m"])
         self.assertEqual(args, self.expected)
 
-    def test_unexpected(self):
+    def test_unexpected(self) -> None:
         self.expected.unexpected_ext = True
         args = commands.parse_photos([self.folder, "-x"])
         self.assertEqual(args, self.expected)
 
-    def test_picasa(self):
+    def test_picasa(self) -> None:
         self.expected.picasa = True
         args = commands.parse_photos([self.folder, "-c"])
         self.assertEqual(args, self.expected)
 
-    def test_long(self):
+    def test_long(self) -> None:
         self.expected.long = True
         args = commands.parse_photos([self.folder, "-l"])
         self.assertEqual(args, self.expected)
 
-    def test_resize(self):
+    def test_resize(self) -> None:
         self.expected.resize = 1200
         args = commands.parse_photos([self.folder, "-r"])
         self.assertEqual(args, self.expected)
 
-    def test_resize2(self):
+    def test_resize2(self) -> None:
         self.expected.resize = 1400
         args = commands.parse_photos([self.folder, "-r", "1400"])
         self.assertEqual(args, self.expected)
 
-    def test_pause(self):
+    def test_pause(self) -> None:
         self.expected.pause = True
         args = commands.parse_photos([self.folder, "-p"])
         self.assertEqual(args, self.expected)
@@ -89,7 +89,7 @@ class Test_execute_photos(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = dcs2.get_root_dir()
         self.args = argparse.Namespace(
             folder=self.folder,
@@ -102,7 +102,7 @@ class Test_execute_photos(unittest.TestCase):
             pause=False,
         )
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         commands.execute_photos(self.args)
 
     @patch("dstauffman2.commands.camera.rename_upper_ext")

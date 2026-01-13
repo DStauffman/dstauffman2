@@ -34,7 +34,7 @@ class Test_find_missing_nums(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         cls.folder = get_tests_dir()
         cls.folder_exclusions = [
             cls.folder / "temp_dir",
@@ -55,7 +55,7 @@ class Test_find_missing_nums(unittest.TestCase):
         for this_file in cls.files:
             write_text_file(this_file, "")
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             dip.find_missing_nums(self.folder)
         output = ctx.get_output()
@@ -74,7 +74,7 @@ class Test_find_missing_nums(unittest.TestCase):
         self.assertTrue(lines[3].startswith('Inconsistent digits: "'))
         self.assertTrue(lines[4].startswith('No number found: "'))
 
-    def test_folder_exclusions(self):
+    def test_folder_exclusions(self) -> None:
         with capture_output() as ctx:
             dip.find_missing_nums(self.folder, folder_exclusions=self.folder_exclusions)
         output = ctx.get_output()
@@ -93,7 +93,7 @@ class Test_find_missing_nums(unittest.TestCase):
         self.assertTrue(lines[3].startswith('Inconsistent digits: "'))
         self.assertTrue(len(lines) < 5)
 
-    def test_ignore_digits(self):
+    def test_ignore_digits(self) -> None:
         with capture_output() as ctx:
             dip.find_missing_nums(self.folder, digit_check=False)
         output = ctx.get_output()
@@ -111,7 +111,7 @@ class Test_find_missing_nums(unittest.TestCase):
         self.assertTrue(lines[2].endswith('": {3, 5}'))
         self.assertFalse(lines[3].startswith('Inconsistent digits: "'))
 
-    def test_nothing_missing(self):
+    def test_nothing_missing(self) -> None:
         with capture_output() as ctx:
             dip.find_missing_nums(self.folder_exclusions[0])
         output = ctx.get_output()
@@ -120,7 +120,7 @@ class Test_find_missing_nums(unittest.TestCase):
         self.assertTrue(lines[0].startswith('No number found: "'))
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         for this_file in cls.files:
             if os.path.isfile(this_file):
                 os.remove(this_file)
@@ -135,10 +135,10 @@ class Test_find_unexpected_ext(unittest.TestCase):
         Nominal Usage
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = get_tests_dir()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             dip.find_unexpected_ext(self.folder)
         output = ctx.get_output()
@@ -154,20 +154,20 @@ class Test_rename_old_picasa_files(unittest.TestCase):
         Nominal Usage
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = get_tests_dir()
         self.file_old = os.path.join(self.folder, "Picasa.ini")
         self.file_new = os.path.join(self.folder, ".picasa.ini")
         write_text_file(self.file_old, "")
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             dip.rename_old_picasa_files(self.folder)
         output = ctx.get_output()
         ctx.close()
         self.assertTrue(output.startswith('Renaming: "'))
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         if os.path.isfile(self.file_new):
             os.remove(self.file_new)
 
@@ -179,13 +179,13 @@ class Test_rename_upper_ext(unittest.TestCase):
         Nominal Usage
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = get_tests_dir()
         self.file_old = os.path.join(self.folder, "temp image 01.JPG")
         self.file_new = os.path.join(self.folder, "temp image 01.jpg")
         write_text_file(self.file_old, "")
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             dip.rename_upper_ext(self.folder)
         output = ctx.get_output()
@@ -193,7 +193,7 @@ class Test_rename_upper_ext(unittest.TestCase):
         self.assertTrue(output.startswith('Searching for file extensions to rename...\n Renaming: "'))
         self.assertTrue(output.endswith("\nDone."))
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         if os.path.isfile(self.file_new):
             os.remove(self.file_new)
 
@@ -205,10 +205,10 @@ class Test_find_long_filenames(unittest.TestCase):
         Nominal Usage
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder = get_tests_dir()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             dip.find_long_filenames(self.folder)
         output = ctx.get_output()
@@ -231,7 +231,7 @@ class Test_batch_resize(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         cls.source = get_images_dir() / "python.png"
         cls.name1 = "image1.jpg"
         cls.name2 = "image2.jpg"
@@ -268,7 +268,7 @@ class Test_batch_resize(unittest.TestCase):
         img.close()
         new_img.close()
 
-    def test_resize(self):
+    def test_resize(self) -> None:
         with capture_output() as ctx:
             dip.batch_resize(self.folder, self.size3, self.size3)
         output = ctx.get_output()
@@ -309,7 +309,7 @@ class Test_batch_resize(unittest.TestCase):
         np.testing.assert_array_equal(img.size, [self.size6 // 4, self.size3])
         img.close()
 
-    def test_no_images(self):
+    def test_no_images(self) -> None:
         with capture_output() as ctx:
             dip.batch_resize(get_data_dir())
         output = ctx.get_output()
@@ -320,7 +320,7 @@ class Test_batch_resize(unittest.TestCase):
         for this_line in lines:
             self.assertFalse(this_line.startswith(" Resizing image"))
 
-    def test_no_upscale(self):
+    def test_no_upscale(self) -> None:
         with capture_output() as ctx:
             dip.batch_resize(self.folder, max_width=self.size4, max_height=self.size4, enlarge=False)
         output = ctx.get_output()
@@ -360,7 +360,7 @@ class Test_batch_resize(unittest.TestCase):
         np.testing.assert_array_equal(img.size, [self.size6, self.size1])
         img.close()
 
-    def test_upscale(self):
+    def test_upscale(self) -> None:
         with capture_output() as ctx:
             dip.batch_resize(self.folder, max_width=self.size4, max_height=self.size4, enlarge=True)
         output = ctx.get_output()
@@ -402,7 +402,7 @@ class Test_batch_resize(unittest.TestCase):
         img.close()
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         if cls.extra.is_dir():
             shutil.rmtree(cls.extra)
         if cls.output.is_dir():
@@ -422,7 +422,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
     """
 
     @classmethod
-    def setUpClass(cls):
+    def setUpClass(cls) -> None:
         cls.source = get_images_dir() / "python.png"
         cls.name1 = "image1.tif"
         cls.name2 = "image2.tif"
@@ -458,7 +458,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
         img.close()
         new_img.close()
 
-    def test_resize(self):
+    def test_resize(self) -> None:
         with capture_output() as ctx:
             dip.convert_tif_to_jpg(self.folder, self.size3, self.size3, replace=True)
         output = ctx.get_output()
@@ -499,7 +499,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
         np.testing.assert_array_equal(img.size, [self.size6 // 4, self.size3])
         img.close()
 
-    def test_no_images(self):
+    def test_no_images(self) -> None:
         with capture_output() as ctx:
             dip.convert_tif_to_jpg(get_data_dir())
         output = ctx.get_output()
@@ -510,7 +510,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
         for this_line in lines:
             self.assertFalse(this_line.startswith(" Resizing image"))
 
-    def test_no_upscale(self):
+    def test_no_upscale(self) -> None:
         with capture_output() as ctx:
             dip.convert_tif_to_jpg(self.folder, max_width=self.size4, max_height=self.size4, enlarge=False, replace=True)
         output = ctx.get_output()
@@ -550,7 +550,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
         np.testing.assert_array_equal(img.size, [self.size6, self.size1])
         img.close()
 
-    def test_upscale(self):
+    def test_upscale(self) -> None:
         with capture_output() as ctx:
             dip.convert_tif_to_jpg(self.folder, max_width=self.size4, max_height=self.size4, enlarge=True, replace=True)
         output = ctx.get_output()
@@ -591,7 +591,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
         np.testing.assert_array_equal(img.size, [self.size6 * 2, self.size4])
         img.close()
 
-    def test_noreplace(self):
+    def test_noreplace(self) -> None:
         with capture_output() as ctx:
             dip.convert_tif_to_jpg(self.folder, self.size3, self.size3, replace=False)
         output = ctx.get_output()
@@ -611,7 +611,7 @@ class Test_convert_tif_to_jpg(unittest.TestCase):
             self.assertTrue(False, 'File "{}" was not skipped.'.format(self.name6))
 
     @classmethod
-    def tearDownClass(cls):
+    def tearDownClass(cls) -> None:
         if cls.extra.is_dir():
             shutil.rmtree(cls.extra)
         if cls.folder.is_dir():
@@ -625,7 +625,7 @@ class Test_number_files(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.folder    = get_tests_dir()
         self.file_old1 = os.path.join(self.folder, "temp image A.jpg")
         self.file_old2 = os.path.join(self.folder, "temp xtra image B.jpg")
@@ -637,7 +637,7 @@ class Test_number_files(unittest.TestCase):
         write_text_file(self.file_old1, "")
         write_text_file(self.file_old2, "")
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         with capture_output() as ctx:
             dip.number_files(self.folder, self.prefix, self.start, self.digits)
         output = ctx.get_output()
@@ -656,7 +656,7 @@ class Test_number_files(unittest.TestCase):
             self.assertTrue(False, 'File "{}" was not renamed.'.format(self.file_old2))
         self.assertTrue(output.endswith("Batch processing complete."))
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         files = [self.file_new1, self.file_new2]
         for this_file in files:
             if os.path.isfile(this_file):

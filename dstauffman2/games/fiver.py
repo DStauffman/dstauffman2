@@ -1,7 +1,9 @@
 """
-The "fiver" file solves the geometric puzzle with twelve pieces made of all unique combinations of
-five squares that share adjacent edges.  Then these 12 pieces are layed out into boards of sixty
-possible places in different orientations.  I'm unaware of a generic name for this game.
+The "fiver" file solves the geometric puzzle with twelve pieces of five piece shapes.
+
+The 12 pieces are made of all unique combinations of 5 squares that share adjacent edges.
+Then these 12 pieces are layed out into boards of sixty possible places in different orientations.
+I'm unaware of a generic name for this game.
 
 Notes
 -----
@@ -11,10 +13,13 @@ Notes
 """
 
 # %% Imports
+from __future__ import annotations
+
 from datetime import datetime
 import doctest
 import os
 import pickle
+from typing import Final, TYPE_CHECKING
 import unittest
 
 from matplotlib.patches import Rectangle
@@ -26,23 +31,33 @@ from slog import wipe_dir
 
 from dstauffman2 import get_root_dir
 
+if TYPE_CHECKING:
+    from numpy.typing import NDArray
+
+    _B = NDArray[np.bool_]
+    _I = NDArray[np.int_]  # 1D
+    _I2 = NDArray[np.int_]  # 2D
+    _I3 = NDArray[np.int_]  # 3D
+
 # %% Hard-coded values
-SIZE_PIECES = 5
-NUM_PIECES  = 12
-NUM_ORIENTS = 8
+# fmt: off
+SIZE_PIECES: Final = 5
+NUM_PIECES: Final  = 12
+NUM_ORIENTS: Final = 8
 # build colormap
 cm = ColorMap("Paired", 0, NUM_PIECES - 1)
 COLORS = ["w"] + [cm.get_color(i) for i in range(NUM_PIECES)] + ["k"]
 # make boards
-BOARD1             = np.full((14, 18), NUM_PIECES+1, dtype=int)
-BOARD1[4:10,4:14]  = 0
-BOARD2             = np.full((16, 16), NUM_PIECES+1, dtype=int)
+BOARD1             = np.full((14, 18), NUM_PIECES + 1, dtype=int)
+BOARD1[4:10, 4:14] = 0
+BOARD2             = np.full((16, 16), NUM_PIECES + 1, dtype=int)
 BOARD2[4:12, 4:12] = 0
-BOARD2[7:9, 7:9]   = NUM_PIECES+1
+BOARD2[7:9, 7:9]   = NUM_PIECES + 1
+# fmt: on
 
 
 # %% Functions - _pad_piece
-def _pad_piece(piece, max_size, pad_value=0):
+def _pad_piece(piece: _I2, max_size: int | tuple[int, int], pad_value: int = 0) -> _I2:
     r"""
     Pads a piece to a given size.
 
@@ -81,7 +96,8 @@ def _pad_piece(piece, max_size, pad_value=0):
     """
     # determine if max_size is a scalar or specified per axis
     if np.isscalar(max_size):
-        max_size = [max_size, max_size]
+        max_size = (max_size, max_size)  # type: ignore[assignment]
+    assert not isinstance(max_size, int)  # typing assistance
     # get the current size
     (i, j) = piece.shape
     # initialize the output
@@ -97,7 +113,7 @@ def _pad_piece(piece, max_size, pad_value=0):
 
 
 # %% Functions - _shift_piece
-def _shift_piece(piece):
+def _shift_piece(piece: _I2) -> _I2:
     r"""
     Shifts a piece to the most upper left location within an array.
 
@@ -140,7 +156,7 @@ def _shift_piece(piece):
 
 
 # %% Functions - _rotate_piece
-def _rotate_piece(piece):
+def _rotate_piece(piece: _I2) -> _I2:
     r"""
     Rotates a piece 90 degrees to the left.
 
@@ -180,7 +196,7 @@ def _rotate_piece(piece):
 
 
 # %% Functions - _flip_piece
-def _flip_piece(piece):
+def _flip_piece(piece: _I2) -> _I2:
     r"""
     Flips a piece about the horizontal axis.
 
@@ -217,7 +233,7 @@ def _flip_piece(piece):
 
 
 # %% Functions - _get_unique_pieces
-def _get_unique_pieces(pieces):
+def _get_unique_pieces(pieces: _I3) -> list[int]:
     r"""
     Returns the indices to the first dimension for the unique pieces.
 
@@ -268,7 +284,7 @@ def _get_unique_pieces(pieces):
 
 
 # %% Functions - _display_progress
-def _display_progress(ix, nums, last_ratio=0.0):
+def _display_progress(ix: _I, nums: _I, last_ratio: float = 0.0) -> float:
     r"""
     Displays the total progress to the command window.
 
@@ -307,7 +323,7 @@ def _display_progress(ix, nums, last_ratio=0.0):
     for i in range(len(ix)):
         done = done + ix[i] * complete[i] / nums[i]
     # determine the completion ratio
-    ratio = done / complete[0]
+    ratio = float(done / complete[0])
     # print the status
     if np.round(1000 * ratio) > np.round(1000 * last_ratio):
         print("Progess: {:.1f}%".format(ratio * 100))
@@ -316,12 +332,12 @@ def _display_progress(ix, nums, last_ratio=0.0):
 
 
 # %% Functions - _blobbing
-def _blobbing(board):
+def _blobbing(board: _I2) -> bool:
     r"""Blobbing algorithm 2.  Checks that all empty blobs are multiples of 5 squares."""
     # set sizes
     (m, n) = board.shape
     # initialize some lists, labels and counter
-    linked  = []
+    linked: list[set[int]] = []
     labels  = np.zeros((m, n), dtype=int)
     counter = 0
     # first pass
@@ -379,7 +395,7 @@ def _blobbing(board):
 
 
 # %% Functions - _save_solution
-def _save_solution(solutions, this_board):
+def _save_solution(solutions: list[_I2], this_board: _I2) -> None:
     r"""Saves the given solution if it's unique."""
     if len(solutions) == 0:
         # if this is the first solution, then simply save it
@@ -409,7 +425,7 @@ def _save_solution(solutions, this_board):
 
 
 # %% Functions - make_all_pieces
-def make_all_pieces():
+def make_all_pieces() -> _I3:
     r"""
     Makes all the possible pieces of the game.
 
@@ -458,7 +474,7 @@ def make_all_pieces():
 
 
 # %% Functions - make_all_permutations
-def make_all_permutations(pieces):
+def make_all_permutations(pieces: _I3) -> list[_I2]:
     r"""
     Makes all the possible permutations of every possible piece.
 
@@ -484,7 +500,7 @@ def make_all_permutations(pieces):
 
     """
     # initialize the output
-    all_pieces = []
+    all_pieces: list[_I2] = []
     # loop through all the pieces
     for ix in range(NUM_PIECES):
         # preallocate the array
@@ -511,7 +527,7 @@ def make_all_permutations(pieces):
 
 
 # %% Functions - is_valid
-def is_valid(board, piece, use_blobbing=True):
+def is_valid(board: _I2, piece: _I2, use_blobbing: bool = True) -> _B:
     r"""
     Determines if the piece is valid for the given board.
 
@@ -564,11 +580,11 @@ def is_valid(board, piece, use_blobbing=True):
                     out[k] = _blobbing((board + piece[k]) == 0)
     else:
         raise ValueError('Unexpected number of dimensions for piece = "{}"'.format(piece.ndim))
-    return out
+    return out  # type: ignore[no-any-return]
 
 
 # %% Functions - find_all_valid_locations
-def find_all_valid_locations(board, all_pieces):
+def find_all_valid_locations(board: _I2, all_pieces: list[_I3]) -> list[_I3]:
     r"""Finds all the valid locations for each piece on the board."""
     (m, n) = board.shape
     max_pieces = (m - SIZE_PIECES - 1) * (n - SIZE_PIECES - 1) * NUM_ORIENTS
@@ -597,16 +613,16 @@ def find_all_valid_locations(board, all_pieces):
 
 
 # %% Functions - solve_puzzle
-def solve_puzzle(board, locations, find_all=False):
+def solve_puzzle(board: _I2, locations: list[_I3], find_all: bool = False) -> list[_I3]:
     r"""Solves the puzzle for the given board and all possible piece locations."""
     # initialize the solutions
-    solutions = []
+    solutions: list[_I3] = []
     # create a working board
     this_board = board.copy()
     # get the number of permutations for each piece
     nums = np.array([x.shape[0] for x in locations])
     # start solving
-    last_ratio = 0
+    last_ratio = 0.0
     ix0 = np.arange(locations[0].shape[0])
     for i0 in ix0:
         np.add(this_board, locations[0][i0], this_board)
@@ -665,7 +681,7 @@ def solve_puzzle(board, locations, find_all=False):
 
 
 # %% Functions - plot_board
-def plot_board(board, title, opts=None):
+def plot_board(board: _I2, title: str, opts: Opts | None = None) -> plt.Figure:
     r"""Plots the board or the individual pieces."""
     # hard-coded square size
     box_size = 1
@@ -679,7 +695,8 @@ def plot_board(board, title, opts=None):
     # create the axis
     ax = fig.add_subplot(111)
     # set the title
-    fig.canvas.manager.set_window_title(title)
+    if fig.canvas.manager is not None:
+        fig.canvas.manager.set_window_title(title)
     ax.set_title(title)
     # draw each square
     for i in range(board.shape[0]):
@@ -703,7 +720,7 @@ def plot_board(board, title, opts=None):
 
 
 # %% Functions - test_docstrings
-def test_docstrings():
+def test_docstrings() -> None:
     r"""Tests the docstrings within this file."""
     unittest.main(module="dstauffman2.games.test_fiver", exit=False)
     doctest.testmod(verbose=False)

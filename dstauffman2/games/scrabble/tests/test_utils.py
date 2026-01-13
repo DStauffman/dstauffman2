@@ -31,23 +31,23 @@ class Test_find_all_words(unittest.TestCase):
 
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.tiles = ["w", "o", "r", "d", "s"]
         self.words = words
         self.out   = ["sword", "words", "dors", "dows", "rods", "rows", "sord", "word", "dor", \
             "dos", "dow", "ods", "ors", "rod", "row", "sod", "sow", "wos", "do", "od", "or", "os", \
             "ow", "so", "wo"]
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         out = scrab.find_all_words(self.tiles, self.words)
         np.testing.assert_array_equal(out, self.out)
 
-    def test_pattern(self):
+    def test_pattern(self) -> None:
         out = scrab.find_all_words(self.tiles, self.words, pattern=r"a..$")
         np.testing.assert_array_equal(out, ["draws", "roads", "sward", "woads", "daws", "oars", \
             "rads", "raws", "sard", "wads", "ward", "wars", "ado", "ads", "ars"])
 
-    def test_one_blank(self):
+    def test_one_blank(self) -> None:
         tiles = ["a", "b", "c", "?"]
         out = scrab.find_all_words(tiles, self.words)
         expected = ["bach", "back", "cabs", "carb", "crab", "scab", \
@@ -61,7 +61,7 @@ class Test_find_all_words(unittest.TestCase):
             "pa", "ta", "ya", "za"]
         np.testing.assert_array_equal(out, expected)
 
-    def test_two_blanks(self):
+    def test_two_blanks(self) -> None:
         tiles = ["x", "z", "z", "?", "?"]
         out = scrab.find_all_words(tiles, self.words)
         expected = ["buzz", "fizz", "fuzz", "jazz", "razz", \

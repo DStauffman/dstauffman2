@@ -37,13 +37,13 @@ logger = logging.getLogger(__name__)
 class RotationButton(QPushButton):
     r"""Custom QPushButton to allow drawing multiple images on the buttons for plotting possible winning rotations."""
 
-    def __init__(self, text, parent, quadrant, direction):
+    def __init__(self, text, parent, quadrant, direction) -> None:
         super().__init__(text, parent)
         self.quadrant  = quadrant
         self.direction = direction
         self.overlay   = None
 
-    def paintEvent(self, event):
+    def paintEvent(self, event) -> None:
         r"""Custom paint event to update the buttons."""
         # call super method
         QPushButton.paintEvent(self, event)
@@ -67,7 +67,7 @@ class RotationButton(QPushButton):
 class PentagoGui(QWidget):
     r"""The Pentago GUI."""
 
-    def __init__(self, filename=None, **kwargs):
+    def __init__(self, filename=None, **kwargs) -> None:
         # call super method
         super().__init__(**kwargs)
         # initialize the state data
@@ -78,7 +78,7 @@ class PentagoGui(QWidget):
         self.init()
 
     # %% State initialization
-    def initialize_state(self, filename):
+    def initialize_state(self, filename) -> None:
         r"""Loads the previous game based on settings and whether the file exists."""
         # preallocate to not load
         load_game = False
@@ -113,7 +113,7 @@ class PentagoGui(QWidget):
                 raise ValueError(f'Could not find file: "{filename}"')  # pragma: no cover
 
     # %% load_images
-    def load_images(self):
+    def load_images(self) -> None:
         r"""
         Loads the images for use later on.
 
@@ -146,7 +146,7 @@ class PentagoGui(QWidget):
         self.images["b_w"] = QtGui.QIcon(os.path.join(images_dir, "cyan_blue_button.png"))
 
     # %% GUI initialization
-    def init(self):
+    def init(self) -> None:
         r"""Initializes the GUI."""
         # %% properties
         QToolTip.setFont(QtGui.QFont("SansSerif", 10))
@@ -297,7 +297,7 @@ class PentagoGui(QWidget):
         self.show()
 
     # %% Other callbacks - closing
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         r"""Things in here happen on GUI closing."""
         close_immediately = True
         filename = os.path.join(get_output_dir(), "pentago.pkl")
@@ -316,7 +316,7 @@ class PentagoGui(QWidget):
                 event.ignore()
 
     # %% Other callbacks - center the GUI on the screen
-    def center(self):
+    def center(self) -> None:
         r"""Makes the GUI centered on the active screen."""
         frame_gm = self.frameGeometry()
         screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
@@ -325,7 +325,7 @@ class PentagoGui(QWidget):
         self.move(frame_gm.topLeft())
 
     # %% Other callbacks - setup_axes
-    def setup_axes(self):
+    def setup_axes(self) -> None:
         r"""Sets up the axes for the board and move."""
         # setup board axes
         self.board_axes.clear()
@@ -341,7 +341,7 @@ class PentagoGui(QWidget):
         self.move_axes.set_aspect("equal")
 
     # %% Other callbacks - display_controls
-    def display_controls(self):
+    def display_controls(self) -> None:
         r"""Determines what controls to display on the GUI."""
         # show/hide New Game Button
         if self.state.game_hist[self.state.cur_game].winner == PLAYER["none"]:
@@ -362,7 +362,7 @@ class PentagoGui(QWidget):
             self.btn_redo.hide()
 
     # %% Other callbacks - update_game_stats
-    def update_game_stats(self, results):
+    def update_game_stats(self, results) -> None:
         r"""Updates the game stats on the left of the GUI."""
         # calculate the number of wins
         white_wins = np.count_nonzero(results == PLAYER["white"])
@@ -375,7 +375,7 @@ class PentagoGui(QWidget):
         self.lbl_games_tied.setText("{}".format(games_tied))
 
     # %% Button callbacks
-    def btn_undo_function(self):
+    def btn_undo_function(self) -> None:
         r"""Function that executes on undo button press."""
         # get last move
         last_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move - 1]
@@ -389,7 +389,7 @@ class PentagoGui(QWidget):
         # call GUI wrapper
         self.wrapper()
 
-    def btn_new_function(self):
+    def btn_new_function(self) -> None:
         r"""Function that executes on new game button press."""
         # update values
         last_lead = self.state.game_hist[self.state.cur_game].first_move
@@ -402,7 +402,7 @@ class PentagoGui(QWidget):
         # call GUI wrapper
         self.wrapper()
 
-    def btn_redo_function(self):
+    def btn_redo_function(self) -> None:
         r"""Function that executes on redo button press."""
         # get next move
         redo_move = self.state.game_hist[self.state.cur_game].move_list[self.state.cur_move]
@@ -416,7 +416,7 @@ class PentagoGui(QWidget):
         # call GUI wrapper
         self.wrapper()
 
-    def btn_rot_function(self):
+    def btn_rot_function(self) -> None:
         r"""Functions that executes on rotation button press."""
         # determine sending button
         button = self.sender()
@@ -429,7 +429,7 @@ class PentagoGui(QWidget):
     pass  # TODO: write this
 
     # %% mouse_click_callback
-    def mouse_click_callback(self, event):
+    def mouse_click_callback(self, event) -> None:
         r"""Function that executes on mouse click on the board axes.  Ends up placing a piece on the board."""
         # ignore events that are outside the axes
         if event.xdata is None or event.ydata is None:
@@ -476,7 +476,7 @@ class PentagoGui(QWidget):
         self.board_canvas.draw()
 
     # %% execute_move
-    def execute_move(self, *, quadrant, direction):
+    def execute_move(self, *, quadrant, direction) -> None:
         r"""Tests and then executes a move."""
         if self.state.move_status["ok"]:
             logger.debug("Rotating Quadrant {} in Direction {}.".format(quadrant, direction))
@@ -507,7 +507,7 @@ class PentagoGui(QWidget):
             logger.debug("No move to execute.")
 
     # %% wrapper
-    def wrapper(self):
+    def wrapper(self) -> None:
         r"""Acts as a wrapper to everything the GUI needs to do."""
         # clean up an existing artifacts
         self.setup_axes()

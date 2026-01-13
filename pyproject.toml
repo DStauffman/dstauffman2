@@ -144,13 +144,11 @@ module = [
     "keras.*",
     "nose.*",
     "numba.*",
-    "pandas.*",
     "PIL.*",
     "pprofile.*",
     "pytest.*",
     "pyximport.*",
     "qtpy.*",  # Note would be nice to get rid of this, since PyQt5 is actually stubbed
-    "scipy.*",
     "tblib.*",
 ]
 ignore_missing_imports = true

@@ -41,26 +41,26 @@ class Test_plot_cur_move(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(111)
         self.ax.set_xlim(-0.5, 0.5)
         self.ax.set_ylim(-0.5, 0.5)
 
-    def test_x(self):
+    def test_x(self) -> None:
         ttt.plot_cur_move(self.ax, x)
 
-    def test_o(self):
+    def test_o(self) -> None:
         ttt.plot_cur_move(self.ax, o)
 
-    def test_none(self):
+    def test_none(self) -> None:
         ttt.plot_cur_move(self.ax, n)
 
-    def test_bad_value(self):
+    def test_bad_value(self) -> None:
         with self.assertRaises(ValueError):
             ttt.plot_cur_move(self.ax, 999)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -71,23 +71,23 @@ class Test_plot_piece(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
 
-    def test_x(self):
+    def test_x(self) -> None:
         ttt.plot_piece(self.ax, 1, 1, 0.9, (0, 0, 1), x)
 
-    def test_o(self):
+    def test_o(self) -> None:
         ttt.plot_piece(self.ax, 1, 1, 0.9, (0, 0, 1), o, thick=False)
 
-    def test_draw(self):
+    def test_draw(self) -> None:
         ttt.plot_piece(self.ax, 1, 1, 0.9, (0, 0, 1), ttt.PLAYER["draw"])
 
-    def test_bad_player(self):
+    def test_bad_player(self) -> None:
         with self.assertRaises(ValueError):
             ttt.plot_piece(self.ax, 1, 1, 0.9, (0, 0, 1), 999)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -98,22 +98,22 @@ class Test_plot_board(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         board = np.full((3, 3), n, dtype=int)
         board[0, 0:2] = x
         board[1, 1] = o
         ttt.plot_board(self.ax, board)
 
-    def test_bad_board_position(self):
+    def test_bad_board_position(self) -> None:
         board = np.full((3, 3), n, dtype=int)
         board[1, 1] = 999
         with self.assertRaises(ValueError):
             ttt.plot_board(self.ax, board)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -124,17 +124,17 @@ class Test_plot_win(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         mask = np.zeros((3, 3), dtype=bool)
         mask[0, 0:2] = True
         board = np.full((3, 3), n, dtype=int)
         board[0, 0:2] = x
         ttt.plot_win(self.ax, mask, board)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -145,20 +145,20 @@ class Test_plot_possible_win(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
 
-    def test_all_out_wins(self):
+    def test_all_out_wins(self) -> None:
         board = np.array([[x, x, n], [n, n, n], [o, o, n]], dtype=int)
         (o_moves, x_moves) = ttt.find_moves(board)
         ttt.plot_possible_win(self.ax, o_moves, x_moves)
 
-    def test_shared_wins(self):
+    def test_shared_wins(self) -> None:
         board = np.array([[x, n, o], [n, n, n], [o, n, x]], dtype=int)
         (o_moves, x_moves) = ttt.find_moves(board)
         ttt.plot_possible_win(self.ax, o_moves, x_moves)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -169,16 +169,16 @@ class Test_plot_powers(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         board = np.array([[x, n, n], [n, o, n], [n, o, n]], dtype=int)
         ttt.plot_board(self.ax, board)
         (o_moves, x_moves) = ttt.find_moves(board)
         ttt.plot_powers(self.ax, board, o_moves, x_moves)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 

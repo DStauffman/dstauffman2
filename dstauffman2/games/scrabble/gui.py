@@ -8,6 +8,8 @@ Notes
 """
 
 # %% Imports
+from __future__ import annotations
+
 import doctest
 import os
 import pickle
@@ -45,7 +47,7 @@ from dstauffman2.games.scrabble.utils import get_root_dir
 class GuiSettings(object):
     r"""Settings that capture the current state of the GUI."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.board     = Board()
         self.dict_name = DICT
         self.words     = {}
@@ -56,21 +58,21 @@ class GuiSettings(object):
         self.move      = Move()
         self.pot_moves = []
 
-    def pprint(self, return_text=False, **kwargs):
+    def pprint(self, return_text=False, **kwargs) -> str | None:
         r"""Displays a pretty print version of the class."""
         name = kwargs.pop("name") if "name" in kwargs else self.__class__.__name__
         text = pprint_dict(self.__dict__, name=name, **kwargs)
         return text if return_text else None
 
     @staticmethod
-    def load(filename):
+    def load(filename) -> GuiSettings:
         r"""Loads a instance of the class from a given filename."""
         with open(filename, "rb") as file:
             gui_settings = pickle.load(file)
         assert isinstance(gui_settings, GuiSettings)
         return gui_settings
 
-    def save(self, filename):
+    def save(self, filename) -> None:
         r"""Saves an instance of the class to the given filename."""
         with open(filename, "wb") as file:
             pickle.dump(self, file)
@@ -83,14 +85,14 @@ class ScrabbleGui(QMainWindow):
     # Create GUI setting defaults for the class
     gui_settings = GuiSettings()
 
-    def __init__(self):
+    def __init__(self) -> None:
         # call super method
         super().__init__()
         # call init method to instantiate the GUI
         self.init()
 
     # %% GUI initialization
-    def init(self):
+    def init(self) -> None:
         r"""Initializes the GUI."""
         # Check to see if the Default profile exists, and if so load it, else create it
         folder = get_root_dir()
@@ -275,7 +277,7 @@ class ScrabbleGui(QMainWindow):
         self.show()
 
     # %% Wrapper
-    def wrapper(self):
+    def wrapper(self) -> None:
         r"""Acts as a wrapper to everything the GUI needs to do."""
         # plot the board
         plot_board(self.board_axes, self.gui_settings.board)
@@ -288,12 +290,12 @@ class ScrabbleGui(QMainWindow):
         plot_move_strength(self.strength_axes, self.gui_settings.move, self.gui_settings.pot_moves)
 
     # %% Other callbacks - closing
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         r"""Things in here happen on GUI closing."""
         event.accept()
 
     # %% Other callbacks - center the GUI on the screen
-    def center(self):
+    def center(self) -> None:
         r"""Makes the GUI centered on the active screen."""
         frame_gm = self.frameGeometry()
         screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
@@ -302,30 +304,30 @@ class ScrabbleGui(QMainWindow):
         self.move(frame_gm.topLeft())
 
     # %% Other callbacks - Play Button
-    def btn_play_func(self):
+    def btn_play_func(self) -> None:
         r"""Plays the current move."""
         pass
 
-    def btn_tile_func(self, tile):
+    def btn_tile_func(self, tile) -> None:
         r"""Function for button click."""
         pass
 
-    def btn_move_func(self, move):
+    def btn_move_func(self, move) -> None:
         r"""Function for move click."""
         pass
 
-    def btn_new_function(self):
+    def btn_new_function(self) -> None:
         r"""Function that executes on new game button press."""
 
     # %% Menu action callbacks
-    def act_new_game_func(self):
+    def act_new_game_func(self) -> None:
         r"""Function that executes on new game menu selection."""
         # reset Gui Settings
 
         # call GUI wrapper
         self.wrapper()
 
-    def act_options_func(self):
+    def act_options_func(self) -> None:
         r"""Function that executes on options menu selection."""
         pass  # TODO: write this
 

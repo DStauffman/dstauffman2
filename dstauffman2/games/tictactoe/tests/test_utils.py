@@ -43,7 +43,7 @@ class Test_get_root_dir(unittest.TestCase):
         call the function
     """
 
-    def test_function(self):
+    def test_function(self) -> None:
         filepath = inspect.getfile(ttt.get_root_dir)
         expected_root = os.path.split(filepath)[0]
         folder = ttt.get_root_dir()
@@ -61,25 +61,25 @@ class Test_calc_cur_move(unittest.TestCase):
         Even game, even move
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.odd_num  = 3
         self.even_num = 4
         self.o        = o
         self.x        = x
 
-    def test_odd_odd(self):
+    def test_odd_odd(self) -> None:
         move = ttt.calc_cur_move(self.odd_num, self.odd_num)
         self.assertEqual(move, o)
 
-    def test_odd_even(self):
+    def test_odd_even(self) -> None:
         move = ttt.calc_cur_move(self.odd_num, self.even_num)
         self.assertEqual(move, x)
 
-    def test_even_odd(self):
+    def test_even_odd(self) -> None:
         move = ttt.calc_cur_move(self.even_num, self.odd_num)
         self.assertEqual(move, x)
 
-    def test_even_even(self):
+    def test_even_even(self) -> None:
         move = ttt.calc_cur_move(self.even_num, self.even_num)
         self.assertEqual(move, o)
 
@@ -97,23 +97,23 @@ class Test_check_for_win(unittest.TestCase):
         draw with simultaneous wins
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.board = np.full((3, 3), n, dtype=int)
         self.win_mask = np.zeros((3, 3), dtype=bool)
 
-    def test_no_moves(self):
+    def test_no_moves(self) -> None:
         (winner, win_mask) = ttt.check_for_win(self.board)
         self.assertEqual(winner, n)
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
-    def test_no_winner(self):
+    def test_no_winner(self) -> None:
         self.board[0, 0] = x
         self.board[1, 1] = o
         (winner, win_mask) = ttt.check_for_win(self.board)
         self.assertEqual(winner, n)
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
-    def test_x_wins(self):
+    def test_x_wins(self) -> None:
         self.board[0:3, 0] = x
         self.board[1:3, 1] = o
         self.win_mask[0:3, 0] = True
@@ -121,7 +121,7 @@ class Test_check_for_win(unittest.TestCase):
         self.assertEqual(winner, x)
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
-    def test_o_wins(self):
+    def test_o_wins(self) -> None:
         self.board[2, 0:3] = o
         self.board[1, 0:2] = x
         self.win_mask[2, 0:3] = True
@@ -129,7 +129,7 @@ class Test_check_for_win(unittest.TestCase):
         self.assertEqual(winner, o)
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
-    def test_black_wins_mult(self):
+    def test_black_wins_mult(self) -> None:
         self.board[0, 0] = o
         self.board[0, 1] = o
         self.board[0, 2] = x
@@ -144,7 +144,7 @@ class Test_check_for_win(unittest.TestCase):
         win_mask2 = self.board == x
         np.testing.assert_array_equal(win_mask, win_mask2)
 
-    def test_draw_no_moves_left(self):
+    def test_draw_no_moves_left(self) -> None:
         self.board[0, 0] = o
         self.board[0, 1] = o
         self.board[0, 2] = x
@@ -158,7 +158,7 @@ class Test_check_for_win(unittest.TestCase):
         self.assertEqual(winner, ttt.PLAYER["draw"])
         np.testing.assert_array_equal(win_mask, self.win_mask)
 
-    def test_draw_simult_wins(self):
+    def test_draw_simult_wins(self) -> None:
         self.board[0, :] = o
         self.board[1, :] = x
         (winner, win_mask) = ttt.check_for_win(self.board)
@@ -174,22 +174,22 @@ class Test_find_moves(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.board = np.zeros((3, 3), dtype=int)
 
-    def test_no_wins(self):
+    def test_no_wins(self) -> None:
         (white_moves, black_moves) = ttt.find_moves(self.board)
         self.assertEqual(white_moves[0], ttt.Move(1, 1))
         self.assertEqual(black_moves[0], ttt.Move(1, 1))
 
-    def test_already_won(self):
+    def test_already_won(self) -> None:
         self.board[1, 0] = x
         self.board[1, 1] = x
         self.board[1, 2] = x
         with self.assertRaises(ValueError):
             ttt.find_moves(self.board)
 
-    def test_o_place_to_win(self):
+    def test_o_place_to_win(self) -> None:
         self.board[2, 0] = o
         self.board[2, 1] = o
         (white_moves, black_moves) = ttt.find_moves(self.board)
@@ -198,7 +198,7 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[0].power, 100)
         self.assertEqual(black_moves[0].power, 10)
 
-    def test_wins_blocked(self):
+    def test_wins_blocked(self) -> None:
         self.board[2, 0] = o
         self.board[2, 1] = o
         self.board[2, 2] = x
@@ -206,7 +206,7 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[0], ttt.Move(1, 1))
         self.assertEqual(black_moves[0], ttt.Move(1, 1))
 
-    def test_no_valid_moves(self):
+    def test_no_valid_moves(self) -> None:
         self.board[0, 0] = x
         self.board[0, 1] = o
         self.board[0, 2] = x
@@ -219,7 +219,7 @@ class Test_find_moves(unittest.TestCase):
         with self.assertRaises(AssertionError):
             ttt.find_moves(self.board)
 
-    def test_x_place_to_win(self):
+    def test_x_place_to_win(self) -> None:
         self.board[0, 0] = x
         self.board[2, 2] = x
         (white_moves, black_moves) = ttt.find_moves(self.board)
@@ -228,7 +228,7 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[0].power, 10)
         self.assertEqual(black_moves[0].power, 100)
 
-    def test_same_win_square(self):
+    def test_same_win_square(self) -> None:
         self.board[0, 0] = x
         self.board[2, 2] = x
         self.board[1, 0] = o
@@ -239,7 +239,7 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[0].power, 100)
         self.assertEqual(black_moves[0].power, 100)
 
-    def test_one_from_win_move(self):
+    def test_one_from_win_move(self) -> None:
         self.board[0, 1] = o
         self.board[1, 2] = o
         self.board[1, 1] = x
@@ -249,7 +249,7 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[0].power, 6)
         self.assertEqual(black_moves[0].power, 5)
 
-    def test_another_off_one_win(self):
+    def test_another_off_one_win(self) -> None:
         self.board[0, 0] = o
         self.board[0, 1] = x
         self.board[1, 2] = x
@@ -259,7 +259,7 @@ class Test_find_moves(unittest.TestCase):
         self.assertEqual(white_moves[0].power, 5)
         self.assertEqual(black_moves[0].power, 6)
 
-    def test_double_win_in_two(self):
+    def test_double_win_in_two(self) -> None:
         self.board[0, 1] = o
         self.board[1, 2] = o
         self.board[1, 0] = x
@@ -282,11 +282,11 @@ class Test_make_move(unittest.TestCase):
         Nominal
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
         self.board = np.full((3, 3), n, dtype=int)
 
-    def test_first_and_second_move(self):
+    def test_first_and_second_move(self) -> None:
         board = self.board.copy()
         xc = 1
         yc = 0
@@ -308,7 +308,7 @@ class Test_make_move(unittest.TestCase):
         self.board[1, 1] = x
         np.testing.assert_array_equal(board, self.board)
 
-    def test_inserting_move(self):
+    def test_inserting_move(self) -> None:
         board = self.board.copy()
         xc = 2
         yc = 2
@@ -326,7 +326,7 @@ class Test_make_move(unittest.TestCase):
         self.board[2, 2] = o
         np.testing.assert_array_equal(board, self.board)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -337,7 +337,7 @@ class Test_play_ai_game(unittest.TestCase):
         Nominal (O to play first move)
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         (self.fig, self.ax) = _make_board()
         self.board = np.full((3, 3), n, dtype=int)
         self.cur_move = np.array(0, dtype=int)
@@ -345,7 +345,7 @@ class Test_play_ai_game(unittest.TestCase):
         self.game_hist = [ttt.GameStats(1, o)]
         self.prng = np.random.default_rng()
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         # set AI options
         ttt.Options.x_is_computer = True
         ttt.Options.o_is_computer = True
@@ -357,7 +357,7 @@ class Test_play_ai_game(unittest.TestCase):
         self.assertEqual(self.cur_move, 1)
         self.assertEqual(self.cur_game, 0)
 
-    def test_two_moves(self):
+    def test_two_moves(self) -> None:
         # set AI options
         ttt.Options.x_is_computer = True
         ttt.Options.o_is_computer = True
@@ -370,7 +370,7 @@ class Test_play_ai_game(unittest.TestCase):
         self.assertEqual(self.cur_move, 2)
         self.assertEqual(self.cur_game, 0)
 
-    def test_no_ai(self):
+    def test_no_ai(self) -> None:
         # set AI options
         ttt.Options.x_is_computer = False
         ttt.Options.o_is_computer = False
@@ -381,7 +381,7 @@ class Test_play_ai_game(unittest.TestCase):
         self.assertEqual(self.cur_move, 0)
         self.assertEqual(self.cur_game, 0)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         plt.close(self.fig)
 
 
@@ -393,11 +393,11 @@ class Test_create_board_from_moves(unittest.TestCase):
         X to move first
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.moves = [ttt.Move(0, 0), ttt.Move(1, 1), ttt.Move(2, 1)]
         self.board = np.full((3, 3), n, dtype=int)
 
-    def test_o_first(self):
+    def test_o_first(self) -> None:
         first_player     = o
         self.board[0, 0] = o
         self.board[1, 1] = x
@@ -405,7 +405,7 @@ class Test_create_board_from_moves(unittest.TestCase):
         board = ttt.create_board_from_moves(self.moves, first_player)
         np.testing.assert_array_equal(board, self.board)
 
-    def test_x_first(self):
+    def test_x_first(self) -> None:
         first_player = x
         self.board[0, 0] = x
         self.board[1, 1] = o

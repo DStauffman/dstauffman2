@@ -39,26 +39,26 @@ class Test_TicTacToeGui(unittest.TestCase):
         TODO: put in many more
     """
 
-    def _default(self):
+    def _default(self) -> None:
         # assert default starting conditions
         self.assertEqual(self.gui.state.cur_game, self.state.cur_game)
         self.assertEqual(self.gui.state.cur_move, self.state.cur_move)
         np.testing.assert_array_equal(self.gui.state.board, self.state.board)
 
-    def _reset(self):
+    def _reset(self) -> None:
         # press the reset button
         self.gui.state.cur_game = np.array(0, dtype=int)
         self.gui.state.cur_move = np.array(0, dtype=int)
         self.gui.state.board    = np.full((3, 3), n, dtype=int)
         self._default()
 
-    def _place_piece(self, row, col):
+    def _place_piece(self, row, col) -> None:
         board_width = self.gui.board_canvas.size().width()
         board_height = self.gui.board_canvas.size().height()
         pos = QtCore.QPoint((2 * col + 1) * (board_width // 6), (2 * row + 1) * (board_height // 6))
         QTest.mouseClick(self.gui.board_canvas, QtCore.Qt.LeftButton, pos=pos, delay=1)
 
-    def test_sequence(self):
+    def test_sequence(self) -> None:
         # set Options
         ttt.Options.o_is_computer = False
         ttt.Options.x_is_computer = False
@@ -130,7 +130,7 @@ class Test_TicTacToeGui(unittest.TestCase):
         self._place_piece(-1, 2)
         self.assertEqual(self.gui.state.cur_move, 1)
 
-    def test_ai_game(self):
+    def test_ai_game(self) -> None:
         # set Options
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True
@@ -142,14 +142,14 @@ class Test_TicTacToeGui(unittest.TestCase):
         # confirm that the game completed
         self.assertEqual(self.gui.state.cur_move, 9)
 
-    def test_load_game(self):
+    def test_load_game(self) -> None:
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True
         ttt.Options.load_previous_game = "Yes"
         self.gui = ttt.TicTacToeGui()
 
     @unittest.skip("Don't know how to implement this one yet.")
-    def test_ask_game_load(self):
+    def test_ask_game_load(self) -> None:
         ttt.Options.o_is_computer = True
         ttt.Options.x_is_computer = True
         ttt.Options.load_previous_game = "Ask"
@@ -164,12 +164,12 @@ class Test_TicTacToeGui(unittest.TestCase):
         self._place_piece(1, 1)
         self.assertTrue(self.gui.state.board[1, 1] != n)
 
-    def test_ask_bad_option(self):
+    def test_ask_bad_option(self) -> None:
         ttt.Options.load_previous_game = "Bad Option"
         with self.assertRaises(ValueError):
             self.gui = ttt.TicTacToeGui()
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         QApplication.instance().closeAllWindows()
 
 

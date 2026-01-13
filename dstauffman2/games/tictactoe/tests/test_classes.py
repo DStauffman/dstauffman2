@@ -29,7 +29,7 @@ class Test_Options(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.options_dict = {
             "load_previous_game": "No",
             "plot_best_moves": True,
@@ -38,17 +38,17 @@ class Test_Options(unittest.TestCase):
             "x_is_computer": True,
         }
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         opts = ttt.Options()
         self.assertTrue(isinstance(opts, ttt.Options))
 
-    def test_inputs(self):
+    def test_inputs(self) -> None:
         opts = ttt.Options(**self.options_dict)
         self.assertTrue(isinstance(opts, ttt.Options))
         for this_key in self.options_dict:
             self.assertEqual(getattr(opts, this_key), self.options_dict[this_key])
 
-    def test_bad_input(self):
+    def test_bad_input(self) -> None:
         with self.assertRaises(ValueError):
             ttt.Options(bad_input_value="Whatever")
 
@@ -60,7 +60,7 @@ class Test_State(unittest.TestCase):
         Nominal
     """
 
-    def test_nominal(self):
+    def test_nominal(self) -> None:
         self.state = ttt.State()
         self.assertTrue(isinstance(self.state, ttt.State))
 
@@ -81,28 +81,28 @@ class Test_Move(unittest.TestCase):
         repr
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.move1 = ttt.Move(0, 1)
         self.move2 = ttt.Move(1, 3, 4)
         self.move3 = ttt.Move(1, 3, 2)
 
-    def test_create1(self):
+    def test_create1(self) -> None:
         self.assertEqual(self.move1.row, 0)
         self.assertEqual(self.move1.column, 1)
         self.assertTrue(self.move1.power is None)
 
-    def test_create2(self):
+    def test_create2(self) -> None:
         self.assertEqual(self.move2.row, 1)
         self.assertEqual(self.move2.column, 3)
         self.assertEqual(self.move2.power, 4)
 
-    def test_equality(self):
+    def test_equality(self) -> None:
         self.assertTrue(self.move2 == self.move3)
 
-    def test_inequality(self):
+    def test_inequality(self) -> None:
         self.assertTrue(self.move1 != self.move2)
 
-    def test_lt(self):
+    def test_lt(self) -> None:
         self.assertTrue(self.move3 < self.move2)
         self.assertFalse(self.move1 < self.move1)
         self.assertTrue(self.move2 < ttt.Move(1, 3, 5))
@@ -112,25 +112,25 @@ class Test_Move(unittest.TestCase):
         self.assertTrue(self.move2 < ttt.Move(1, 4, 4))
         self.assertFalse(self.move2 < ttt.Move(1, 2, 4))
 
-    def test_sort(self):
+    def test_sort(self) -> None:
         ix = [self.move3, self.move1, self.move2]
         ix.sort()
         self.assertEqual(ix[0], self.move1)
         self.assertEqual(ix[1], self.move2)
         self.assertEqual(ix[2], self.move3)
 
-    def test_hash(self):
+    def test_hash(self) -> None:
         self.assertTrue(hash(self.move1))
 
-    def test_set(self):
+    def test_set(self) -> None:
         self.assertTrue(len(set([self.move1, self.move2])) == 2)
         self.assertTrue(len(set([self.move2, self.move3])) == 1)
 
-    def test_str(self):
+    def test_str(self) -> None:
         out = str(self.move1)
         self.assertEqual(out, "row: 0, col: 1")
 
-    def test_repr(self):
+    def test_repr(self) -> None:
         rep = repr(self.move1)
         self.assertEqual(rep, "<row: 0, col: 1, pwr: None>")
 
@@ -142,43 +142,43 @@ class Test_GameStats(unittest.TestCase):
         TBD
     """
 
-    def setUp(self):
+    def setUp(self) -> None:
         self.move1      = ttt.Move(0, 0)
         self.gamestats1 = ttt.GameStats(0, o, n)
         self.gamestats2 = ttt.GameStats(0, o, n, [self.move1, self.move1, self.move1])
         self.game_hist  = [self.gamestats1, self.gamestats2]
 
-    def test_add_move(self):
+    def test_add_move(self) -> None:
         self.assertTrue(len(self.gamestats1.move_list) == 0)
         self.gamestats1.add_move(self.move1)
         self.assertTrue(len(self.gamestats1.move_list) == 1)
 
-    def test_bad_add_move(self):
+    def test_bad_add_move(self) -> None:
         with self.assertRaises(AssertionError):
             self.gamestats1.add_move(1)
 
-    def test_remove_moves1(self):
+    def test_remove_moves1(self) -> None:
         self.assertEqual(self.gamestats2.num_moves, 3)
         self.gamestats2.remove_moves()
         self.assertEqual(self.gamestats2.num_moves, 2)
 
-    def test_remove_moves2(self):
+    def test_remove_moves2(self) -> None:
         self.assertEqual(self.gamestats2.num_moves, 3)
         self.gamestats2.remove_moves(1)
         self.assertEqual(self.gamestats2.num_moves, 1)
 
-    def test_remove_moves3(self):
+    def test_remove_moves3(self) -> None:
         with self.assertRaises(IndexError):
             self.gamestats1.remove_moves()
 
-    def test_num_moves(self):
+    def test_num_moves(self) -> None:
         self.assertEqual(self.gamestats2.num_moves, 3)
 
-    def test_get_results(self):
+    def test_get_results(self) -> None:
         results = ttt.GameStats.get_results(self.game_hist)
         np.testing.assert_array_equal(results, [n, n])
 
-    def test_save_and_load(self):
+    def test_save_and_load(self) -> None:
         filename = os.path.join(ttt.get_root_dir(), "tests", "temp_save.pkl")
         ttt.GameStats.save(filename, self.game_hist)
         self.assertTrue(os.path.isfile(filename))
@@ -187,7 +187,7 @@ class Test_GameStats(unittest.TestCase):
             for j in range(self.game_hist[i].num_moves):
                 self.assertEqual(self.game_hist[i].move_list[j], game_hist[i].move_list[j])
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         filename = os.path.join(ttt.get_root_dir(), "tests", "temp_save.pkl")
         if os.path.isfile(filename):
             os.remove(filename)

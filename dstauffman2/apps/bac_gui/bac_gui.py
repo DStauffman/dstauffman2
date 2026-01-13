@@ -8,12 +8,15 @@ Notes
 """
 
 # %% Imports
+from __future__ import annotations
+
 import doctest
 from enum import Enum, unique
 import glob
 import os
 import pickle
 import sys
+from typing import Final
 import unittest
 
 from qtpy import QtCore, QtGui
@@ -37,9 +40,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # %% Constants
-GUI_TOKEN   = -1
-LEGAL_LIMIT = 0.08/100
-BMI_CONV    = 703.0704
+GUI_TOKEN: Final   = -1
+LEGAL_LIMIT: Final = 0.08/100
+BMI_CONV: Final    = 703.0704
 
 
 # %% Classes - Gender
@@ -55,7 +58,7 @@ class Gender(Enum):
 class GuiSettings(object):
     r"""Settings that capture the current state of the GUI."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.profile     = "Default"
         self.height      = GUI_TOKEN
         self.weight      = GUI_TOKEN
@@ -69,7 +72,7 @@ class GuiSettings(object):
         self.hr5         = 0
         self.hr6         = 0
 
-    def __str__(self):
+    def __str__(self) -> None:
         r"""Prints all the settings out."""
         text = ["GuiSettings:"]
         for key in sorted(vars(self)):
@@ -77,19 +80,19 @@ class GuiSettings(object):
         return "\n".join(text)
 
     @staticmethod
-    def get_text_fields():
+    def get_text_fields() -> list[str]:
         r"""Returns the names of all the line edit widgets."""
         return ["height", "weight", "age", "bmi", "hr1", "hr2", "hr3", "hr4", "hr5", "hr6"]
 
     @staticmethod
-    def load(filename):
+    def load(filename) -> GuiSettings:
         r"""Loads a instance of the class from a given filename."""
         with open(filename, "rb") as file:
             gui_settings = pickle.load(file)
         assert isinstance(gui_settings, GuiSettings)
         return gui_settings
 
-    def save(self, filename):
+    def save(self, filename) -> None:
         r"""Saves an instance of the class to the given filename."""
         with open(filename, "wb") as file:
             pickle.dump(self, file)
@@ -102,7 +105,7 @@ class BacGui(QMainWindow):
     # Create GUI setting defaults for the class
     gui_settings = GuiSettings()
 
-    def __init__(self):
+    def __init__(self) -> None:
         # call super method
         super().__init__()
         # initialize the state data
@@ -111,7 +114,7 @@ class BacGui(QMainWindow):
         self.init()
 
     # GUI initialization
-    def init(self):
+    def init(self) -> None:
         r"""Initializes the GUI."""
         # initialize timer
         self.timer = QtCore.QTimer(self)
@@ -241,7 +244,7 @@ class BacGui(QMainWindow):
         self.show()
 
     # %% Other initializations
-    def initialize_profiles(self):
+    def initialize_profiles(self) -> None:
         r"""Gets the list of all current profiles that exist in the folder."""
         # Check to see if the Default profile exists, and if so load it, else create it
         folder = get_root_dir()
@@ -258,7 +261,7 @@ class BacGui(QMainWindow):
         return profiles
 
     # %% wrapper
-    def wrapper(self):
+    def wrapper(self) -> None:
         r"""Acts as a wrapper to everything the GUI needs to do."""
         # Note: nothing is done to update the profile field, it's assumed to correct already
         # loop through and update the text fields
@@ -280,12 +283,12 @@ class BacGui(QMainWindow):
             raise ValueError('Unexpected value for gender: "{}".'.format(self.gui_settings.gender))
 
     # %% Other callbacks - closing
-    def closeEvent(self, event):
+    def closeEvent(self, event) -> None:
         r"""Things in here happen on GUI closing."""
         event.accept()
 
     # %% Other callbacks - center the GUI on the screen
-    def center(self):
+    def center(self) -> None:
         r"""Makes the GUI centered on the active screen."""
         frame_gm = self.frameGeometry()
         screen = QApplication.desktop().screenNumber(QApplication.desktop().cursor().pos())
@@ -294,7 +297,7 @@ class BacGui(QMainWindow):
         self.move(frame_gm.topLeft())
 
     # %% Other callbacks - dislaying an error for invalid edit box entries
-    def display_text_error(self, field):
+    def display_text_error(self, field) -> None:
         r"""Displays a temporary message for invalid characters within the line edit boxes."""
         field.setStyleSheet("color: white; background-color: red; font: bold;")
         reset = lambda: field.setStyleSheet("color: black; background-color: white; font: normal;")
@@ -305,7 +308,7 @@ class BacGui(QMainWindow):
         self.wrapper()
 
     # %% Other callbacks - updating the selected profile name
-    def onActivated(self, value):
+    def onActivated(self, value) -> None:
         r"""Controls behavior when mode combobox is changed."""
         # check if "New+" was selected
         if value == len(self.popup_profile) - 1:
@@ -344,7 +347,7 @@ class BacGui(QMainWindow):
         self.wrapper()
 
     # %% Other callbacks - update the line edit boxes
-    def text_finished(self):
+    def text_finished(self) -> None:
         r"""Updates gui_settings for LineEdit text changes that happen when you leave the box."""
         sender = self.sender()
         fields = self.gui_settings.get_text_fields()
@@ -377,7 +380,7 @@ class BacGui(QMainWindow):
         self.wrapper()
 
     # %% Other callbacks - Updating the gender button group
-    def radio_toggle(self):
+    def radio_toggle(self) -> None:
         r"""Controls the gender radio button group."""
         # assert that only one of the button group is checked
         assert self.radio_fmal.isChecked() ^ self.radio_male.isChecked(), "Only one button may be checked."
@@ -389,13 +392,13 @@ class BacGui(QMainWindow):
         self.wrapper()
 
     # %% Other callbacks - Save button
-    def btn_save_function(self):
+    def btn_save_function(self) -> None:
         r"""Saves the current settings to the specified profile."""
         # save the profile
         self.gui_settings.save(os.path.join(get_root_dir(), self.gui_settings.profile + ".pkl"))
 
     # %% Other callbacks - Plot button
-    def btn_plot_function(self):
+    def btn_plot_function(self) -> None:
         r"""Plots the results and saves to a .png file."""
         # call the plotting function
         fig = plot_bac(self.gui_settings, LEGAL_LIMIT)

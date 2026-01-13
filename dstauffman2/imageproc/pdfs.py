@@ -194,7 +194,7 @@ def _build_quad_page(
 ) -> Image.Image:
     """Add up to four photos to the given page in a 2x2 grid."""
 
-    def _add_image(new_image: Image.Image, this_image: Image.Image, offsets: tuple[int, int], debug: bool, is_horizontal: bool):
+    def _add_image(new_image: Image.Image, this_image: Image.Image, offsets: tuple[int, int], debug: bool, is_horizontal: bool) -> None:
         new_image.paste(this_image, offsets)
         if debug:
             draw = ImageDraw.Draw(new_image)

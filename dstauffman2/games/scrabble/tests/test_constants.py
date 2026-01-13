@@ -16,9 +16,7 @@ import dstauffman2.games.scrabble as scrab
 
 # %% Test Letters
 class Test_letters(unittest.TestCase):
-    r"""
-    Tests the letter sets for valid settings.
-    """
+    r"""Tests the letter sets for valid settings."""
 
     def setUp(self) -> None:
         self.letters    = scrab.LETTERS
@@ -71,9 +69,7 @@ class Test_letters(unittest.TestCase):
 
 # %% Boards
 class Test_boards(unittest.TestCase):
-    r"""
-    Tests all the given boards for validity.
-    """
+    r"""Tests all the given boards for validity."""
 
     def setUp(self) -> None:
         self.boards = [scrab.WWF_BOARD, scrab.WWF_SMALL_BOARD, scrab.SCRAB_BOARD]
@@ -85,9 +81,7 @@ class Test_boards(unittest.TestCase):
 
 # %% Defaults
 class Test_defaults(unittest.TestCase):
-    r"""
-    Tests that the defaults are valid.
-    """
+    r"""Tests that the defaults are valid."""
 
     def setUp(self) -> None:
         self.board  = scrab.BOARD
